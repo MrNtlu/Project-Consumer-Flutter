@@ -1,0 +1,59 @@
+
+
+import 'package:watchlistfy/static/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SharedPref {
+  var _isInit = false;
+  late final SharedPreferences _sharedPreference;
+
+  SharedPref._privateConstructor();
+
+  Future init() async {
+    if (!_isInit) {
+      _sharedPreference = await SharedPreferences.getInstance().then((value) {
+        _isInit = true;
+        return value;
+      });
+    }
+  }
+
+  static final SharedPref _instance = SharedPref._privateConstructor();
+
+  factory SharedPref() {
+    return _instance;
+  }
+
+  SharedPreferences? get sharedPref => _isInit ? _sharedPreference : null;
+
+  //Dark Theme
+  void setTheme(bool isDarkTheme) {
+    sharedPref?.setBool(Constants.THEME_PREF, isDarkTheme);
+  }
+
+  bool isDarkTheme() {
+    return _sharedPreference.getBool(Constants.THEME_PREF) ?? false;
+  }
+
+  //Introduction
+  void setIsIntroductionPresented(bool isIntroductionDeleted) {
+    sharedPref?.setBool(Constants.INTRODUCTION_PREF, isIntroductionDeleted);
+  }
+
+  bool getIsIntroductionPresented() {
+    return _sharedPreference.getBool(Constants.INTRODUCTION_PREF) ?? false;
+  }
+
+  //OAuth Refresh Token
+  void setTokenCredentials(String token) {
+    sharedPref?.setString(Constants.TOKEN_PREF, token);
+  }
+
+  String? getTokenCredentials() {
+    return _sharedPreference.getString(Constants.TOKEN_PREF);
+  }
+
+  void deleteTokenCredentials(){
+    sharedPref?.remove(Constants.TOKEN_PREF);
+  }
+}
