@@ -41,18 +41,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [],
-      child: ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-        builder: (context, _) {
-          return CupertinoApp(
-            title: 'Watchlistfy',
-            theme: SharedPref().isDarkTheme() ? AppColors().darkTheme : AppColors().lightTheme,
-            home: const MyHomePage(title: 'Flutter Demo Home Page'),
-          );
-        },
-      ),
+    return ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      builder: (context, _) {
+        return CupertinoApp(
+          title: 'Watchlistfy',
+          theme: SharedPref().isDarkTheme() ? AppColors().darkTheme : AppColors().lightTheme,
+          home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        );
+      },
     );
   }
 }
@@ -78,7 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text("Title"),
+      ),
       resizeToAvoidBottomInset: true,
       child: Center(
         child: Column(

@@ -32,7 +32,7 @@ class SharedPref {
   }
 
   bool isDarkTheme() {
-    return _sharedPreference.getBool(Constants.THEME_PREF) ?? false;
+    return _sharedPreference.getBool(Constants.THEME_PREF) ?? true;
   }
 
   //Introduction

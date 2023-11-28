@@ -18,7 +18,10 @@ class AppColors {
     textTheme: CupertinoTextThemeData(
       textStyle: TextStyle(
         color: CupertinoColors.white,
-      )
+      ),
+      actionTextStyle: TextStyle(
+        color: CupertinoColors.white,
+      ),
     ),
   );
 
