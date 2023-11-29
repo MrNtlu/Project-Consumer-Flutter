@@ -8,7 +8,7 @@ class ThemeProvider with ChangeNotifier {
     this.isDarkTheme = isDarkTheme;
   }
 
-  void toggleTheme(bool isDarkTheme) {
+  void toggleTheme() {
     isDarkTheme = !isDarkTheme;
     notifyListeners();
     SharedPref().setTheme(isDarkTheme);
