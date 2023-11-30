@@ -92,6 +92,11 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - google_sign_in_ios (0.0.1):
     - Flutter
     - GoogleSignIn (~> 7.0)
@@ -172,6 +177,9 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - sqflite (0.0.3):
+    - Flutter
+    - FMDB (>= 2.7.5)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -182,6 +190,7 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -189,6 +198,7 @@ DEPENDENCIES:
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -203,6 +213,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseMessaging
     - FirebaseSessions
+    - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
@@ -228,6 +239,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   in_app_review:
@@ -242,6 +255,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
@@ -262,6 +277,8 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
   FirebaseSessions: f90fe9212ee2818641eda051c0835c9c4e30d9ae
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
   GoogleAppMeasurement: 70ce9aa438cff1cfb31ea3e660bcc67734cb716e
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
@@ -280,6 +297,7 @@ SPEC CHECKSUMS:
   RevenueCat: c1e33f4e1f1fd239ba461652f02928e220becc31
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189

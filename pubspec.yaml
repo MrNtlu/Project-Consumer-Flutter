@@ -56,6 +56,8 @@ dependencies:
   intl: ^0.18.1
   http: ^1.1.2
   firebase_core: ^2.23.0
+  flutter_local_notifications: ^16.2.0
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +82,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/lottie/loading.json
+    - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

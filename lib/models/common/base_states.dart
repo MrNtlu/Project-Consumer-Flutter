@@ -1,7 +1,15 @@
 enum BaseState {
   init,
   loading,
+  view,
   disposed
+}
+
+enum NetworkState {
+  init,
+  loading,
+  success,
+  error,
 }
 
 enum ListState {

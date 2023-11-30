@@ -9,12 +9,12 @@ class UserToken {
     return _instance;
   }
 
-  set setToken(String token) {
+  setToken(String? token) {
     _token = token;
   }
 
   get token => _token!;
-
+  
   Map<String, String> getBearerToken() => {
     "Authorization": 'Bearer $_token'
   };

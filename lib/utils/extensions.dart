@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:watchlistfy/models/common/preview_response.dart';
 
 extension DateTimeExt on DateTime {
   String dateToDaysAgo() {
@@ -82,12 +83,9 @@ extension StringExt on String {
 }
 
 extension ResponseExt on Response {
-  // BasePreviewResponse getBasePreviewResponse<T>() => BasePreviewResponse<T>(
-  //   upcomingResponse: json.decode(body)["upcoming"],
-  //   popularResponse: json.decode(body)["popular"],
-  //   topResponse: json.decode(body)["top"],
-  //   extraResponse: json.decode(body)["extra"],
-  // );
+  Preview getPreviewResponse() => Preview(
+    movieResponse: json.decode(body)["movie"],
+  );
 
   BaseMessageResponse getBaseMessageResponse() => BaseMessageResponse(
     json.decode(body)["message"],

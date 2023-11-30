@@ -73,6 +73,35 @@ class Register implements JSONConverter {
   };
 }
 
+class RefreshToken {
+  String token;
+
+  RefreshToken(this.token);
+
+  Future<TokenResponse> refresh() async {
+    try {
+      var response = await http.get(
+        Uri.parse(APIRoutes().authRoutes.refresh),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        }
+      );
+
+      return TokenResponse(
+        code: json.decode(response.body)["code"],
+        message: json.decode(response.body)["message"],
+        token: json.decode(response.body)["access_token"],
+      );
+    } catch (error) {
+      return TokenResponse(
+        code: 400,
+        message: error.toString()
+      );
+    }
+  }
+}
+
 class ChangePassword {
   final String oldPassword;
   final String newPassword;
