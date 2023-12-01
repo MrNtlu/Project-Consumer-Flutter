@@ -1,18 +1,281 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
 import 'package:watchlistfy/models/common/backend_request_mapper.dart';
+import 'package:watchlistfy/models/common/name_url.dart';
 
 class Constants {
   static const BASE_API_URL = "https://watchlistfy-01e517696b58.herokuapp.com/api/v1";
+  static const BASE_TMDB_URL = "https://www.themoviedb.org/";
+  static const BASE_IMDB_URL = "https://www.imdb.com/title/";
+  static const BASE_DOMAIN_URL = "https://watchlistfy.com";
+  static const PRIVACY_POLICY_URL = "$BASE_DOMAIN_URL/privacy-policy.html";
+  static const TERMS_CONDITIONS_URL = "$BASE_DOMAIN_URL/terms-conditions.html";
 
   static const THEME_PREF = "theme";
   static const INTRODUCTION_PREF = "is_introduction_presented";
   static const TOKEN_PREF = "refresh_token";
 
-  static final CONTENT_TYPES = [
-    BackendRequestMapper("Movie", "movie"),
-    BackendRequestMapper("TV Series", "tv"),
-    BackendRequestMapper("Anime", "anime"),
-    BackendRequestMapper("Game", "game"),
+  static final CONTENT_TAGS = ["popular", "upcoming", "top", "extra"];
+
+  final UserListStatus = [
+    BackendRequestMapper("Active", "active"),
+    BackendRequestMapper("Finished", "finished"),
+    BackendRequestMapper("Dropped", "dropped"),
+  ];
+
+    //Status Requests
+  final MovieStatusRequests = [
+    BackendRequestMapper("In Production", "production"),
+    BackendRequestMapper("Released", "released"),
+    BackendRequestMapper("Planned", "planned")
+  ];
+
+  final TVSeriesStatusRequests = [
+    BackendRequestMapper("In Production", "production"),
+    BackendRequestMapper("Ended", "ended"),
+    BackendRequestMapper("Airing", "airing")
+  ];
+
+  final AnimeStatusRequests = [
+    BackendRequestMapper("Airing", "airing"),
+    BackendRequestMapper("Upcoming", "upcoming"),
+    BackendRequestMapper("Finished", "finished")
+  ];
+
+  final GamePlatformRequests = [
+    BackendRequestMapper("PC", "PC"),
+    BackendRequestMapper("PlayStation 5", "PlayStation 5"),
+    BackendRequestMapper("PlayStation 4", "PlayStation 4"),
+    BackendRequestMapper("Xbox Series S/X", "Xbox Series S/X"),
+    BackendRequestMapper("Xbox One", "Xbox One"),
+    BackendRequestMapper("Nintendo Switch", "Nintendo Switch"),
+    BackendRequestMapper("Nintendo 3DS", "Nintendo 3DS"),
+    BackendRequestMapper("Linux", "Linux"),
+  ];
+
+  // final GamePlatformUIList = [
+  //     GamePlatformUI(BackendRequestMapper("PC", "PC"), R.drawable.steam),
+  //     GamePlatformUI(BackendRequestMapper("PlayStation 5", "PlayStation 5"), R.drawable.ps5),
+  //     GamePlatformUI(BackendRequestMapper("PlayStation 4", "PlayStation 4"), R.drawable.ps4),
+  //     GamePlatformUI(BackendRequestMapper("Xbox Series S/X", "Xbox Series S/X"), R.drawable.xbox),
+  //     GamePlatformUI(BackendRequestMapper("Xbox One", "Xbox One"), R.drawable.xbox),
+  //     GamePlatformUI(BackendRequestMapper("Nintendo Switch", "Nintendo Switch"), R.drawable.nintendo_switch),
+  //     GamePlatformUI(BackendRequestMapper("Nintendo 3DS", "Nintendo 3DS"), R.drawable.nintendo),
+  //     GamePlatformUI(BackendRequestMapper("Linux", "Linux"), R.drawable.linux),
+  // ];
+
+  // final GameStoreList = [
+  //   Pair("Steam", 1),
+  //   Pair("Xbox Store", 2),
+  //   Pair("PlayStation Store", 3),
+  //   Pair("App Store", 4),
+  //   Pair("GOG", 5),
+  //   Pair("Nintendo Store", 6),
+  //   Pair("Xbox 360 Store", 7),
+  //   Pair("Google Play", 8),
+  //   Pair("itch.io", 9),
+  //   Pair("Epic Games", 11),
+  // ];
+
+  //Sort Requests
+  final SortUpcomingRequests = BackendRequestMapper("Popularity", "popularity");
+
+  final SortRequests = [
+    BackendRequestMapper("Popularity", "popularity"),
+    BackendRequestMapper("Top Rated", "top"),
+    BackendRequestMapper("Newest", "new"),
+    BackendRequestMapper("Oldest", "old")
+  ];
+
+  final SortReviewRequests = [
+    BackendRequestMapper("Popularity", "popularity"),
+    BackendRequestMapper("Latest", "latest"),
+    BackendRequestMapper("Oldest", "oldest")
+  ];
+
+  final SortGameRequests = [
+    BackendRequestMapper("Popularity", "popularity"),
+    BackendRequestMapper("Metacritic", "top"),
+    BackendRequestMapper("Newest", "new"),
+    BackendRequestMapper("Oldest", "old")
+  ];
+
+  final SortConsumeLaterRequests = [
+    BackendRequestMapper("Newest", "new"),
+    BackendRequestMapper("Oldest", "old"),
+    BackendRequestMapper("Alphabetical", "alphabetical"),
+    BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
+  ];
+
+  final SortUserListRequests = [
+    BackendRequestMapper("Score", "score"),
+    BackendRequestMapper("Times Watched", "timeswatched"),
+  ];
+
+  //Genre List
+  static final MovieGenreList = [
+    NameUrl("Discover", "https://image.tmdb.org/t/p/w300/vv5a8u6e40kyH0Hp6HuamAgzRai.jpg"),
+    NameUrl("Action", "https://www.themoviedb.org/t/p/w300/sQ5NKzWIusrpkv6Vq1V6GT0LHCh.jpg"),
+    NameUrl("Adventure", "https://www.themoviedb.org/t/p/w300/r3pJ884C2cJ6F64X5Yd5sARuNZ6.jpg"),
+    NameUrl("Animation", "https://www.themoviedb.org/t/p/w300/lWqjXgut48IK5f5IRbDBAoO2Epp.jpg"),
+    NameUrl("Comedy", "https://www.themoviedb.org/t/p/w300/en971MEXui9diirXlogOrPKmsEn.jpg"),
+    NameUrl("Crime", "https://www.themoviedb.org/t/p/w300/dWoKkgTis8pweSv7wihq03wPTKr.jpg"),
+    NameUrl("Documentary", "https://www.themoviedb.org/t/p/w300/shtz6RdhhuXy8WXJENg1fWMG2dj.jpg"),
+    NameUrl("Drama", "https://www.themoviedb.org/t/p/w300/hO7KbdvGOtDdeg0W4Y5nKEHeDDh.jpg"),
+    NameUrl("Family", "https://www.themoviedb.org/t/p/w300/phhbtV5BEdn4TYLTMKFwYz2VSNl.jpg"),
+    NameUrl("Fantasy", "https://www.themoviedb.org/t/p/w300/2u7zbn8EudG6kLlBzUYqP8RyFU4.jpg"),
+    NameUrl("History", "https://www.themoviedb.org/t/p/w300/bdD39MpSVhKjxarTxLSfX6baoMP.jpg"),
+    NameUrl("Horror", "https://www.themoviedb.org/t/p/w300/mmd1HnuvAzFc4iuVJcnBrhDNEKr.jpg"),
+    NameUrl("Mystery", "https://www.themoviedb.org/t/p/w300/ntxArhtReGCqQSWFXk0c0Yt8uDO.jpg"),
+    NameUrl("Romance", "https://www.themoviedb.org/t/p/w300/8LVhNcU8TT7DfIu2d13muZ8AWEO.jpg"),
+    NameUrl("Science Fiction", "https://www.themoviedb.org/t/p/w300/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg"),
+    NameUrl("Thriller", "https://www.themoviedb.org/t/p/w300/hiKmpZMGZsrkA3cdce8a7Dpos1j.jpg"),
+    NameUrl("War", "https://www.themoviedb.org/t/p/w300/43qoaxPabvW2cDDI60Dam6mHV0K.jpg"),
+    NameUrl("Western", "https://www.themoviedb.org/t/p/w300/eoCSp75lxatmIa6aGqfnzwtbttd.jpg"),
+  ];
+
+  static final TVGenreList = [
+    NameUrl("Discover", "https://www.themoviedb.org/t/p/w300/q8eejQcg1bAqImEV8jh8RtBD4uH.jpg"),
+    NameUrl("Action & Adventure", "https://www.themoviedb.org/t/p/w300/bKETHQDD3QoIRTMOP4dfKwisL3g.jpg"),
+    NameUrl("Animation", "https://www.themoviedb.org/t/p/w300/8aCek7W6BovH7M4enWjqrGptvQ8.jpg"),
+    NameUrl("Comedy", "https://www.themoviedb.org/t/p/w300/bY2J2Jq8rSrKm5xCFtzYzqFh44o.jpg"),
+    NameUrl("Crime", "https://www.themoviedb.org/t/p/w300/7w165QdHmJuTHSQwEyJDBDpuDT7.jpg"),
+    NameUrl("Documentary", "https://www.themoviedb.org/t/p/w300/2Nwbv0hrN8sThLvgooShcPqmFrO.jpg"),
+    NameUrl("Drama", "https://www.themoviedb.org/t/p/w300/5NrSIzfcBOFI9HRGV4nRYgMGhDU.jpg"),
+    NameUrl("Family", "https://www.themoviedb.org/t/p/w300/70YdbMELM4b8x8VXjlubymb2bQ0.jpg"),
+    NameUrl("Kids", "https://www.themoviedb.org/t/p/w300/lhg7eA6CTOCL10QNVdKiyxkgPsL.jpg"),
+    NameUrl("Mystery", "https://www.themoviedb.org/t/p/w300/56v2KjBlU4XaOv9rVYEQypROD7P.jpg"),
+    NameUrl("Reality", "https://www.themoviedb.org/t/p/w300/mjdftSIZyG6kUItWiDKnzT9rO7F.jpg"),
+    NameUrl("Sci-Fi & Fantasy", "https://www.themoviedb.org/t/p/w300/T7dvc9hEftOB5wUvJPQfcmvzVf.jpg"),
+    NameUrl("War & Politics", "https://www.themoviedb.org/t/p/w300/3hPKf2eriMi6B2L5brfQH0A7MNe.jpg"),
+    NameUrl("Western", "https://www.themoviedb.org/t/p/w300/At6G2kZRcTFwT28OmqYBsOpSj2p.jpg"),
+  ];
+
+  static final AnimeGenreList = [
+    NameUrl("Discover", "https://www.themoviedb.org/t/p/w300/mRwV4W2BAEpte7xlawJP4fsBpmS.jpg"),
+    NameUrl("Action", "https://www.themoviedb.org/t/p/w300/xVXbesCdNt37b3Kh6d3FgOtdajB.jpg"),
+    NameUrl("Adventure", "https://www.themoviedb.org/t/p/w300/mBxsapX4DNhH1XkOlLp15He5sxL.jpg"),
+    NameUrl("Avant Garde", "https://www.themoviedb.org/t/p/w300/fGXhmKyqRmx6NN3gQHeWNmiEryl.jpg"),
+    NameUrl("Award Winning", "https://www.themoviedb.org/t/p/w300/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg"),
+    NameUrl("Comedy", "https://www.themoviedb.org/t/p/w300/s0w8JbuNNxL1YgaHeDWih12C3jG.jpg"),
+    NameUrl("Drama", "https://www.themoviedb.org/t/p/w300/mMtUybQ6hL24FXo0F3Z4j2KG7kZ.jpg"),
+    NameUrl("Fantasy", "https://www.themoviedb.org/t/p/w300/dTFnU3EQB79aDM4HnUj06Y9Xbq1.jpg"),
+    NameUrl("Horror", "https://www.themoviedb.org/t/p/w300/yOarY3Yo0NMkuTuft87M5oAZa3C.jpg"),
+    NameUrl("Mystery", "https://www.themoviedb.org/t/p/w300/rRGnjRCHdDl3m3oCVSvo5z2E5c5.jpg"),
+    NameUrl("Romance", "https://www.themoviedb.org/t/p/w300/dRGtv7BLMe00RAxtLkaWjcbzsTA.jpg"),
+    NameUrl("Sci-Fi", "https://www.themoviedb.org/t/p/w300/36Ech63X2KU8JUXIBAo167kIC2k.jpg"),
+    NameUrl("Slice of Life", "https://www.themoviedb.org/t/p/w300/4xvQGRIJpPEDf7HQdF0JkBVsmoX.jpg"),
+    NameUrl("Sports", "https://www.themoviedb.org/t/p/w300/12mYMPE7Jy7rhDv0rn95GEtF94V.jpg"),
+    NameUrl("Supernatural", "https://www.themoviedb.org/t/p/w300/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg"),
+    NameUrl("Suspense", "https://www.themoviedb.org/t/p/w300/uAjMQlbPkVHmUahhCouANlHSDW2.jpg"),
+  ];
+
+  static final GameGenreList = [
+    NameUrl("Discover", "https://media.rawg.io/media/games/ba8/ba82c971336adfd290e4c0eab6504fcf.jpg"),
+    NameUrl("Action", "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg"),
+    NameUrl("Adventure", "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg"),
+    NameUrl("Arcade", "https://media.rawg.io/media/games/b4e/b4e4c73d5aa4ec66bbf75375c4847a2b.jpg"),
+    NameUrl("Board Games", "https://media.rawg.io/media/games/742/7424c1f7d0a8da9ae29cd866f985698b.jpg"),
+    NameUrl("Card", "https://media.rawg.io/media/games/1db/1dbc3d0c9de2709e21326cdcb91468ae.jpg"),
+    NameUrl("Casual", "https://media.rawg.io/media/games/e74/e74458058b35e01c1ae3feeb39a3f724.jpg"),
+    NameUrl("Family", "https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg"),
+    NameUrl("Fighting", "https://media.rawg.io/media/games/aa3/aa36ba4b486a03ddfaef274fb4f5afd4.jpg"),
+    NameUrl("Indie", "https://media.rawg.io/media/games/1f4/1f47a270b8f241e4676b14d39ec620f7.jpg"),
+    NameUrl("Massively Multiplayer", "https://media.rawg.io/media/games/34b/34b1f1850a1c06fd971bc6ab3ac0ce0e.jpg"),
+    NameUrl("Puzzle", "https://media.rawg.io/media/games/328/3283617cb7d75d67257fc58339188742.jpg"),
+    NameUrl("Platformer", "https://media.rawg.io/media/games/942/9424d6bb763dc38d9378b488603c87fa.jpg"),
+    NameUrl("Racing", "https://media.rawg.io/media/games/082/082365507ff04d456c700157072d35db.jpg"),
+    NameUrl("RPG", "https://media.rawg.io/media/games/7cf/7cfc9220b401b7a300e409e539c9afd5.jpg"),
+    NameUrl("Shooter", "https://media.rawg.io/media/games/998/9980c4296f311d8bcc5b451ca51e4fe1.jpg"),
+    NameUrl("Simulation", "https://media.rawg.io/media/games/25c/25c4776ab5723d5d735d8bf617ca12d9.jpg"),
+    NameUrl("Sports", "https://media.rawg.io/media/games/dbc/dbcb05bcdf104264db35de68d1e73909.jpg"),
+    NameUrl("Strategy", "https://media.rawg.io/media/games/997/997ab4d67e96fb20a4092383477d4463.jpg"),
+  ];
+
+  final AnimeThemeList = [
+    BackendRequestMapper("Detective", "Detective"),
+    BackendRequestMapper("Gore", "Gore"),
+    BackendRequestMapper("Historical", "Historical"),
+    BackendRequestMapper("Isekai", "Isekai"),
+    BackendRequestMapper("Iyashikei", "Iyashikei"),
+    BackendRequestMapper("Martial Arts", "Martial Arts"),
+    BackendRequestMapper("Mecha", "Mecha"),
+    BackendRequestMapper("Military", "Military"),
+    BackendRequestMapper("Music", "Music"),
+    BackendRequestMapper("Mythology", "Mythology"),
+    BackendRequestMapper("Parody", "Parody"),
+    BackendRequestMapper("Psychological", "Psychological"),
+    BackendRequestMapper("Racing", "Racing"),
+    BackendRequestMapper("Samurai", "Samurai"),
+    BackendRequestMapper("School", "School"),
+    BackendRequestMapper("Space", "Space"),
+    BackendRequestMapper("Super Power", "Super Power"),
+    BackendRequestMapper("Team Sports", "Team Sports"),
+    BackendRequestMapper("Vampire", "Vampire"),
+    BackendRequestMapper("Video Game", "Video Game"),
+  ];
+
+  final AnimeDemographicsList = [
+    BackendRequestMapper("Seinen", "Seinen"),
+    BackendRequestMapper("Shoujo", "Shoujo"),
+    BackendRequestMapper("Shounen", "Shounen"),
+  ];
+
+  final DecadeList = [
+    BackendRequestMapper("1980s", "1980"),
+    BackendRequestMapper("1990s", "1990"),
+    BackendRequestMapper("2000s", "2000"),
+    BackendRequestMapper("2010s", "2010"),
+    BackendRequestMapper("2020s", "2020"),
+  ];
+
+  static final ProfileImageList = [
+    //Movies
+    "https://image.tmdb.org/t/p/w300/hkBaDkMWbLaf8B1lsWsKX7Ew3Xq.jpg",
+    "https://www.themoviedb.org/t/p/w300/adlPZoRdysBMVTSTsGamcn5apYt.jpg",
+    "https://www.themoviedb.org/t/p/w300/pm0RiwNpSja8gR0BTWpxo5a9Bbl.jpg",
+    "https://www.themoviedb.org/t/p/w300/bYeg8ssTvpFFFpWYbAkhrCCgedX.jpg",
+    "https://www.themoviedb.org/t/p/w300/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg",
+    "https://www.themoviedb.org/t/p/w300/cbcpDn6XJaIGoOil1bKuskU8ds4.jpg",
+    "https://www.themoviedb.org/t/p/w300/t7aX68mIQhML2xVw9y5vsMTsz5N.jpg",
+    "https://www.themoviedb.org/t/p/w300/ff2ti5DkA9UYLzyqhQfI2kZqEuh.jpg",
+    "https://www.themoviedb.org/t/p/w300/hWqju5EapuE8d9N0Cg7lsrruVH6.jpg",
+    "https://www.themoviedb.org/t/p/w300/sa4iZ5QpvWmuGT2sDjfgfqy7ArE.jpg",
+    "https://www.themoviedb.org/t/p/w300/ByDf0zjLSumz1MP1cDEo2JWVtU.jpg",
+    "https://www.themoviedb.org/t/p/w300/by5QHLRVowUr7C2HJb3T99B8djj.jpg",
+    "https://www.themoviedb.org/t/p/w300/91tAohcYYbs8CADYWC5NkAqUp4w.jpg",
+    //TVSeries
+    "https://www.themoviedb.org/t/p/w300/63FA8vwSZnXkGxedrDQwni4JuZN.jpg",
+    "https://www.themoviedb.org/t/p/w300/q8eejQcg1bAqImEV8jh8RtBD4uH.jpg",
+    "https://www.themoviedb.org/t/p/w300/9zcbqSxdsRMZWHYtyCd1nXPr2xq.jpg",
+    "https://www.themoviedb.org/t/p/w300/4oE4vT4q0AD2cX3wcMBVzCsME8G.jpg",
+    "https://www.themoviedb.org/t/p/w300/r40ke0kVPhL5b1oHgQaB5BatoSk.jpg",
+    "https://www.themoviedb.org/t/p/w300/7w165QdHmJuTHSQwEyJDBDpuDT7.jpg",
+    "https://www.themoviedb.org/t/p/w300/5jLHclxjoxvwg5uALMn2IO5HyDz.jpg",
+    "https://www.themoviedb.org/t/p/w300/AgyXlYwp2I0uw7GoImt1c0kqWYv.jpg",
+    "https://www.themoviedb.org/t/p/w300/uEYKe7kt3ngFFK2guXLRf2F3yLB.jpg",
+    "https://www.themoviedb.org/t/p/w300/qx8XQund44cecIJiX2Yb4SUeiT.jpg",
+    "https://www.themoviedb.org/t/p/w300/f2sLP1SKXdfy9tICjCpm6bVMDX2.jpg",
+    "https://www.themoviedb.org/t/p/w300/2fC21HahBFcldyVCGInf0TvOhtX.jpg",
+    //Anime
+    "https://www.themoviedb.org/t/p/w300/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg",
+    "https://www.themoviedb.org/t/p/w300/5DUMPBSnHOZsbBv81GFXZXvDpo6.jpg",
+    "https://www.themoviedb.org/t/p/w300/ie6goEzn1xXu6bqghA5EKWRksJH.jpg",
+    "https://www.themoviedb.org/t/p/w300/2yuHsYz1rDU1uiaIsmhn8WknaYK.jpg",
+    "https://www.themoviedb.org/t/p/w300/ygjjhKcImW9C67tYSFVjtGkOiIp.jpg",
+    "https://www.themoviedb.org/t/p/w300/bFKKyCI89Xq98Gul8cGox8K3sZa.jpg",
+    "https://www.themoviedb.org/t/p/w300/rdV1Cn61RIacdWMX9BnioP1LPj6.jpg",
+    "https://www.themoviedb.org/t/p/w300/dTFnU3EQB79aDM4HnUj06Y9Xbq1.jpg",
+    "https://www.themoviedb.org/t/p/w300/pj0VFMLbzCCMVhxKiKaKnowU7Iz.jpg",
+    "https://www.themoviedb.org/t/p/w300/3IqZkiolIli6yEfq3JYsnm3se00.jpg",
+    "https://www.themoviedb.org/t/p/w300/brO0acsI82ikvp7S0yszhbUupiF.jpg",
+    //Game
+    "https://upload.wikimedia.org/wikipedia/tr/f/fc/Rivyal%C4%B1_Geralt.png?20170305192601",
+    "https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg",
+    "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg",
+    "https://media.rawg.io/media/games/fc1/fc1307a2774506b5bd65d7e8424664a7.jpg",
+    "https://media.rawg.io/media/games/b8c/b8c243eaa0fbac8115e0cdccac3f91dc.jpg",
+    "https://media.rawg.io/media/games/7cf/7cfc9220b401b7a300e409e539c9afd5.jpg",
+    "https://media.rawg.io/media/games/ba8/ba82c971336adfd290e4c0eab6504fcf.jpg",
   ];
 }

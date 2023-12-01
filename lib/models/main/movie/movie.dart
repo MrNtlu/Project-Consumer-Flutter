@@ -1,9 +1,8 @@
-class Movie {
-  final String id;
-  final String description;
-  final String imageUrl;
-  final String titleEn;
-  final String titleOriginal;
+import 'package:watchlistfy/models/main/base_content.dart';
 
-  Movie(this.id, this.description, this.imageUrl, this.titleEn, this.titleOriginal);
+class Movie extends BaseContent {
+
+  Movie(
+    id, description, imageUrl, titleEn, titleOriginal
+  ):super(id, description, imageUrl, titleEn, titleOriginal);
 }

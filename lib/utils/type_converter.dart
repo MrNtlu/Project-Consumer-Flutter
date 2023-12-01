@@ -1,5 +1,6 @@
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
+import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/movie/movie.dart';
 
 class TypeConverter<T> {
@@ -28,8 +29,16 @@ class TypeConverter<T> {
         response["title_en"] ?? '', 
         response["title_original"] ?? '',
       ) as T;
-    } else if (T == BasePreviewResponse<Movie>) {
-      return BasePreviewResponse<Movie>(
+    } else if (T == BaseContent) {
+      return BaseContent(
+        response["id"] ?? '', 
+        response["description"] ?? '', 
+        response["image_url"] ?? '', 
+        response["title_en"] ?? (response["title"] ?? ''), 
+        response["title_original"] ?? '',
+      ) as T;
+    } else if (T == BasePreviewResponse<BaseContent>) {
+      return BasePreviewResponse<BaseContent>(
         upcomingResponse: response["upcoming"],
         popularResponse: response["popular"],
         topResponse: response["top"],
