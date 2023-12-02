@@ -4,15 +4,47 @@ import 'package:watchlistfy/utils/type_converter.dart';
 
 class Preview {
   late BasePreviewResponse<BaseContent>? movies;
+  late BasePreviewResponse<BaseContent>? tvSeries;
+  late BasePreviewResponse<BaseContent>? anime;
+  late BasePreviewResponse<BaseContent>? games;
   final String? error;
 
   Preview({
     Map<String, dynamic>? movieResponse,
+    Map<String, dynamic>? tvResponse,
+    Map<String, dynamic>? animeResponse,
+    Map<String, dynamic>? gameResponse,
     this.error,
   }) {
     if (movieResponse != null) {
       final typeConverter = TypeConverter<BasePreviewResponse<BaseContent>>();
       movies = typeConverter.convertToObject(movieResponse);
     }
+
+    if (tvResponse != null) {
+      final typeConverter = TypeConverter<BasePreviewResponse<BaseContent>>();
+      tvSeries = typeConverter.convertToObject(tvResponse);
+    }
+
+    if (animeResponse != null) {
+      final typeConverter = TypeConverter<BasePreviewResponse<BaseContent>>();
+      anime = typeConverter.convertToObject(animeResponse);
+    }
+
+    if (gameResponse != null) {
+      final typeConverter = TypeConverter<BasePreviewResponse<BaseContent>>();
+      games = typeConverter.convertToObject(gameResponse);
+    }
   }
+
+  //TODO Remove later
+  // factory Preview.fromJson(Map<String, dynamic> json) {
+  //   return Preview(
+  //     movieResponse: json["movie"],
+  //     tvResponse: json["tv"],
+  //     animeResponse: json["anime"],
+  //     gameResponse: json["game"],
+  //     error: json["error"],
+  //   );
+  // }
 }

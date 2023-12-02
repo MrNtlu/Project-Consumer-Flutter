@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
+import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (context) => ContentProvider()),
       ],
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),

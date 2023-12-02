@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -11,23 +14,40 @@ import 'package:watchlistfy/utils/extensions.dart';
 class PreviewProvider with ChangeNotifier {
   NetworkState networkState = NetworkState.init;
   ContentType selectedContentType = ContentType.movie;
+  
   BasePreviewResponse<BaseContent> moviePreview = BasePreviewResponse();
+  BasePreviewResponse<BaseContent> tvPreview = BasePreviewResponse();
+  BasePreviewResponse<BaseContent> animePreview = BasePreviewResponse();
+  BasePreviewResponse<BaseContent> gamePreview = BasePreviewResponse();
 
   Future<Preview> getPreviews() async {
     networkState = NetworkState.loading;
 
     try {
       final response = await http.get(Uri.parse(APIRoutes().previewRoutes.preview));
-      print("Called ${response.getPreviewResponse().movies}");
-      if (response.getPreviewResponse().movies != null) {
-        moviePreview = response.getPreviewResponse().movies!;
+      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      final previewResponse = decodedResponse.getPreviewResponse();
+
+      if (previewResponse.movies != null) {
+        moviePreview = previewResponse.movies!;
+      }
+
+      if (previewResponse.tvSeries != null) {
+        tvPreview = previewResponse.tvSeries!;
+      }
+
+      if (previewResponse.anime != null) {
+        animePreview = previewResponse.anime!;
+      }
+
+      if (previewResponse.games != null) {
+        gamePreview = previewResponse.games!;
       }
       networkState = NetworkState.success;
       
       notifyListeners();
-      return response.getPreviewResponse();
+      return previewResponse;
     } catch (error) {
-      print("Preview $error");
       networkState = NetworkState.error;
       notifyListeners();
       return Preview(error: error.toString());

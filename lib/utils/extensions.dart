@@ -82,9 +82,28 @@ extension StringExt on String {
   }
 }
 
+extension DynamicMapExt on Map<String, dynamic> {
+  Preview getPreviewResponse() => Preview(
+    movieResponse: this["movie"],
+    tvResponse: this["tv"],
+    animeResponse: this["anime"],
+    gameResponse: this["game"],
+    error: this["error"]
+  );
+}
+
 extension ResponseExt on Response {
+  //TODO Remove later, example
+  // static Preview getPreviewResponseStatic(String responseBody) {
+  //   return Preview.fromJson(json.decode(responseBody));
+  // }
+  
   Preview getPreviewResponse() => Preview(
     movieResponse: json.decode(body)["movie"],
+    tvResponse: json.decode(body)["tv"],
+    animeResponse: json.decode(body)["anime"],
+    gameResponse: json.decode(body)["game"],
+    error: json.decode(body)["error"]
   );
 
   BaseMessageResponse getBaseMessageResponse() => BaseMessageResponse(

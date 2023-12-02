@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
+import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
@@ -18,11 +21,13 @@ class PreviewList extends StatefulWidget {
 class _PreviewListState extends State<PreviewList> {
   bool isInitialized = false;
   late final PreviewProvider _previewProvider;
+  late final ContentProvider _contentProvider;
 
   @override
   void didChangeDependencies() {
     if (!isInitialized) {
       _previewProvider = Provider.of<PreviewProvider>(context); 
+      _contentProvider = Provider.of<ContentProvider>(context);
       isInitialized = true;
     }
     
@@ -35,20 +40,36 @@ class _PreviewListState extends State<PreviewList> {
       ? ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          BasePreviewResponse<BaseContent> preview;
           BaseContent data;
+
+          switch (_contentProvider.selectedContent) {
+            case ContentType.movie:
+              preview = _previewProvider.moviePreview;
+              break;
+            case ContentType.tv:
+              preview = _previewProvider.tvPreview;
+              break;
+            case ContentType.anime:
+              preview = _previewProvider.animePreview;
+              break;
+            default:
+              preview = _previewProvider.gamePreview;
+              break;
+          }
 
           switch (widget.contentTag) {
             case "popular":
-              data = _previewProvider.moviePreview.popular[index];
+              data = preview.popular[index];
               break;
             case "upcoming":
-              data = _previewProvider.moviePreview.upcoming[index];
+              data = preview.upcoming[index];
               break;
             case "extra":
-              data = _previewProvider.moviePreview.extra![index];
+              data = preview.extra![index];
               break;
             default:
-              data = _previewProvider.moviePreview.top[index];
+              data = preview.top[index];
               break;
           }
           return Padding(
