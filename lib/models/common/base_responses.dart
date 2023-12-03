@@ -27,6 +27,30 @@ class BaseNullableResponse<T> {
   }
 }
 
+class BaseListResponse<T> {
+  late List<T> data = [];
+  final String? message;
+  final int? code;
+  final String? error;
+
+  BaseListResponse({
+    List<dynamic>? response,
+    this.message,
+    this.code,
+    this.error
+  }){
+    if (response != null) {
+      var typeConverter = TypeConverter<T>();
+      
+      response.map((e) {
+        return e as Map<String, dynamic>; 
+      }).forEach((element) { 
+        data.add(typeConverter.convertToObject(element));
+      });
+    }
+  }
+}
+
 class BasePaginationResponse<T> {
   late List<T> data = [];
   late bool canNextPage;

@@ -117,6 +117,13 @@ extension ResponseExt on Response {
     response: json.decode(body)["data"],
   );
 
+  BaseListResponse<T> getBaseListResponse<T>() => BaseListResponse<T>(
+    message: json.decode(body)["message"],
+    response: json.decode(body)["data"],
+    code: json.decode(body)["code"],
+    error: json.decode(body)["error"]
+  );
+
   BasePaginationResponse<T> getBasePaginationResponse<T>() => BasePaginationResponse(
     response: json.decode(body)["data"],
     canNextPage: (json.decode(body)["pagination"]?["next"] ?? 0) > 0,

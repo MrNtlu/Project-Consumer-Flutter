@@ -12,6 +12,8 @@ class ContentSelection extends StatefulWidget {
   State<ContentSelection> createState() => _ContentSelectionState();
 }
 
+//TODO Change it to radio type button, only single selection.
+// Selected should be highlighted
 class _ContentSelectionState extends State<ContentSelection> {
   late final ContentProvider contentProvider;
   late FixedExtentScrollController scrollController;
