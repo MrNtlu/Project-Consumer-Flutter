@@ -1,10 +1,10 @@
 import 'dart:ui';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/common/name_url.dart';
-import 'package:watchlistfy/providers/main/preview_provider.dart';
+import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 
 class GenreList extends StatelessWidget {
@@ -12,9 +12,9 @@ class GenreList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final previewProvider = Provider.of<PreviewProvider>(context);
+    final contentProvider = Provider.of<ContentProvider>(context);
 
-    var genreSize = switch (previewProvider.selectedContentType) {
+    var genreSize = switch (contentProvider.selectedContent) {
       ContentType.movie => Constants.MovieGenreList.length,
       ContentType.anime => Constants.AnimeGenreList.length,
       ContentType.tv => Constants.TVGenreList.length,
@@ -29,7 +29,7 @@ class GenreList extends StatelessWidget {
         itemBuilder: (context, index) {
           List<NameUrl> genreList;
 
-          switch (previewProvider.selectedContentType) {
+          switch (contentProvider.selectedContent) {
             case ContentType.movie:
               genreList = Constants.MovieGenreList;
               break;
@@ -56,8 +56,12 @@ class GenreList extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.network(
-                    data.url
+                  CachedNetworkImage(
+                    imageUrl: data.url,
+                    cacheKey: data.url,
+                    key: ValueKey<String>(data.url),
+                    fadeInDuration: const Duration(milliseconds: 0),
+                    fadeOutDuration: const Duration(milliseconds: 0),
                   ),
                   ColoredBox(
                     color: CupertinoColors.black.withOpacity(0.5),

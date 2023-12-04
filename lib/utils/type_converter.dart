@@ -28,6 +28,7 @@ class TypeConverter<T> {
         response["image_url"] ?? '', 
         response["title_en"] ?? '', 
         response["title_original"] ?? '',
+        response["tmdb_id"],
       ) as T;
     } else if (T == BaseContent) {
       return BaseContent(
@@ -36,6 +37,8 @@ class TypeConverter<T> {
         response["image_url"] ?? '', 
         response["title_en"] ?? (response["title"] ?? ''), 
         response["title_original"] ?? '',
+        response["tmdb_id"],
+        response["mal_id"] ?? response["rawg_id"]
       ) as T;
     } else if (T == BasePreviewResponse<BaseContent>) {
       return BasePreviewResponse<BaseContent>(

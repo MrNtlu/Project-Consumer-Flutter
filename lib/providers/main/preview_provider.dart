@@ -1,10 +1,7 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/common/preview_response.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +10,6 @@ import 'package:watchlistfy/utils/extensions.dart';
 
 class PreviewProvider with ChangeNotifier {
   NetworkState networkState = NetworkState.init;
-  ContentType selectedContentType = ContentType.movie;
   
   BasePreviewResponse<BaseContent> moviePreview = BasePreviewResponse();
   BasePreviewResponse<BaseContent> tvPreview = BasePreviewResponse();

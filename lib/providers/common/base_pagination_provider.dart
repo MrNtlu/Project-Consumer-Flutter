@@ -23,7 +23,6 @@ class BasePaginationProvider<T> with ChangeNotifier {
       pitems.addAll(basePaginationResponse.data);
       notifyListeners();
 
-
       return basePaginationResponse;
     } catch(error) {
       return BasePaginationResponse(error: error.toString(), canNextPage: false);

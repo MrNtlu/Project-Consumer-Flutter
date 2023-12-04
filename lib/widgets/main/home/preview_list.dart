@@ -74,7 +74,7 @@ class _PreviewListState extends State<PreviewList> {
           }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: ContentCell(data.imageUrl),
+            child: SizedBox(height: 200, child: ContentCell(data.imageUrl, data.titleEn)),
           );
         },
       )
@@ -85,7 +85,7 @@ class _PreviewListState extends State<PreviewList> {
           child: SizedBox(
             height: 200,
             child: AspectRatio(
-              aspectRatio: 2/3,
+              aspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Shimmer.fromColors(

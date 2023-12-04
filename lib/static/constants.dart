@@ -15,34 +15,34 @@ class Constants {
   static const INTRODUCTION_PREF = "is_introduction_presented";
   static const TOKEN_PREF = "refresh_token";
 
-  static final CONTENT_TAGS = ["popular", "upcoming", "top", "extra"];
+  static final ContentTags = ["popular", "upcoming", "top", "extra"];
 
-  final UserListStatus = [
+  static final UserListStatus = [
     BackendRequestMapper("Active", "active"),
     BackendRequestMapper("Finished", "finished"),
     BackendRequestMapper("Dropped", "dropped"),
   ];
 
     //Status Requests
-  final MovieStatusRequests = [
+  static final MovieStatusRequests = [
     BackendRequestMapper("In Production", "production"),
     BackendRequestMapper("Released", "released"),
     BackendRequestMapper("Planned", "planned")
   ];
 
-  final TVSeriesStatusRequests = [
+  static final TVSeriesStatusRequests = [
     BackendRequestMapper("In Production", "production"),
     BackendRequestMapper("Ended", "ended"),
     BackendRequestMapper("Airing", "airing")
   ];
 
-  final AnimeStatusRequests = [
+  static final AnimeStatusRequests = [
     BackendRequestMapper("Airing", "airing"),
     BackendRequestMapper("Upcoming", "upcoming"),
     BackendRequestMapper("Finished", "finished")
   ];
 
-  final GamePlatformRequests = [
+  static final GamePlatformRequests = [
     BackendRequestMapper("PC", "PC"),
     BackendRequestMapper("PlayStation 5", "PlayStation 5"),
     BackendRequestMapper("PlayStation 4", "PlayStation 4"),
@@ -53,7 +53,7 @@ class Constants {
     BackendRequestMapper("Linux", "Linux"),
   ];
 
-  // final GamePlatformUIList = [
+  // static final GamePlatformUIList = [
   //     GamePlatformUI(BackendRequestMapper("PC", "PC"), R.drawable.steam),
   //     GamePlatformUI(BackendRequestMapper("PlayStation 5", "PlayStation 5"), R.drawable.ps5),
   //     GamePlatformUI(BackendRequestMapper("PlayStation 4", "PlayStation 4"), R.drawable.ps4),
@@ -64,7 +64,7 @@ class Constants {
   //     GamePlatformUI(BackendRequestMapper("Linux", "Linux"), R.drawable.linux),
   // ];
 
-  // final GameStoreList = [
+  // static final GameStoreList = [
   //   Pair("Steam", 1),
   //   Pair("Xbox Store", 2),
   //   Pair("PlayStation Store", 3),
@@ -78,36 +78,36 @@ class Constants {
   // ];
 
   //Sort Requests
-  final SortUpcomingRequests = BackendRequestMapper("Popularity", "popularity");
+  static final SortUpcomingRequests = BackendRequestMapper("Popularity", "popularity");
 
-  final SortRequests = [
+  static final SortRequests = [
     BackendRequestMapper("Popularity", "popularity"),
     BackendRequestMapper("Top Rated", "top"),
     BackendRequestMapper("Newest", "new"),
     BackendRequestMapper("Oldest", "old")
   ];
 
-  final SortReviewRequests = [
+  static final SortReviewRequests = [
     BackendRequestMapper("Popularity", "popularity"),
     BackendRequestMapper("Latest", "latest"),
     BackendRequestMapper("Oldest", "oldest")
   ];
 
-  final SortGameRequests = [
+  static final SortGameRequests = [
     BackendRequestMapper("Popularity", "popularity"),
     BackendRequestMapper("Metacritic", "top"),
     BackendRequestMapper("Newest", "new"),
     BackendRequestMapper("Oldest", "old")
   ];
 
-  final SortConsumeLaterRequests = [
+  static final SortConsumeLaterRequests = [
     BackendRequestMapper("Newest", "new"),
     BackendRequestMapper("Oldest", "old"),
     BackendRequestMapper("Alphabetical", "alphabetical"),
     BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
   ];
 
-  final SortUserListRequests = [
+  static final SortUserListRequests = [
     BackendRequestMapper("Score", "score"),
     BackendRequestMapper("Times Watched", "timeswatched"),
   ];
@@ -192,7 +192,7 @@ class Constants {
     NameUrl("Strategy", "https://media.rawg.io/media/games/997/997ab4d67e96fb20a4092383477d4463.jpg"),
   ];
 
-  final AnimeThemeList = [
+  static final AnimeThemeList = [
     BackendRequestMapper("Detective", "Detective"),
     BackendRequestMapper("Gore", "Gore"),
     BackendRequestMapper("Historical", "Historical"),
@@ -215,13 +215,13 @@ class Constants {
     BackendRequestMapper("Video Game", "Video Game"),
   ];
 
-  final AnimeDemographicsList = [
+  static final AnimeDemographicsList = [
     BackendRequestMapper("Seinen", "Seinen"),
     BackendRequestMapper("Shoujo", "Shoujo"),
     BackendRequestMapper("Shounen", "Shounen"),
   ];
 
-  final DecadeList = [
+  static final DecadeList = [
     BackendRequestMapper("1980s", "1980"),
     BackendRequestMapper("1990s", "1990"),
     BackendRequestMapper("2000s", "2000"),

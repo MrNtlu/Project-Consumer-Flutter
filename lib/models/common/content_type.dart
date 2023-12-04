@@ -1,7 +1,7 @@
 enum ContentType {
-  anime,
   movie,
   tv,
+  anime,
   game,
 }
 
