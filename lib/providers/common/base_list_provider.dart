@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/json_convert.dart';
@@ -21,8 +20,10 @@ class BaseProvider<T> with ChangeNotifier {
         Uri.parse(url),
         headers: UserToken().getBearerToken()
       );
+      
+      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
-      var baseListResponse = response.getBaseListResponse<T>();
+      var baseListResponse = decodedResponse.getBaseListResponse<T>();
       pitems.addAll(baseListResponse.data);
       notifyListeners();
 
@@ -35,13 +36,17 @@ class BaseProvider<T> with ChangeNotifier {
   @protected
   Future<BaseNullableResponse<T>> addItem<C extends JSONConverter>(C createObject, {required String url}) async {
     try {
+      final encodedRequest = await compute(json.encode, createObject.convertToJson());
+
       final response = await http.post(
         Uri.parse(url),
-        body: json.encode(createObject.convertToJson()),
+        body: encodedRequest,
         headers: UserToken().getBearerToken()
       );
 
-      var baseItemResponse = response.getBaseItemResponse<T>();
+      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+
+      var baseItemResponse = decodedResponse.getBaseItemResponse<T>();
       var data = baseItemResponse.data;
 
       if (baseItemResponse.error == null && data != null) {  

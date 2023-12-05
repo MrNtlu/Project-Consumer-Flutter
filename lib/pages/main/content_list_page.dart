@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
+import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_list_provider.dart';
@@ -194,7 +195,25 @@ class _ContentListPageState extends State<ContentListPage> {
 
             final content = data[index];
 
-            return ContentCell(content.imageUrl, content.titleEn);
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    switch (_contentProvider.selectedContent) {
+                      case ContentType.movie:
+                        return MovieDetailsPage(content.id);
+                      case ContentType.tv:
+                      case ContentType.anime:
+                      case ContentType.game: 
+                      //TODO IMPLEMENT
+                      default:
+                        return MovieDetailsPage(content.id);
+                    }
+                  })
+                );
+              },
+              child: ContentCell(content.imageUrl, content.titleEn)
+            );
           }
         );
       case ListState.empty:

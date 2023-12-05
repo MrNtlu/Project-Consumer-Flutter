@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/static/token.dart';
@@ -17,9 +18,10 @@ class BasePaginationProvider<T> with ChangeNotifier {
         Uri.parse(url),
         headers: UserToken().getBearerToken()
       );
-
-      //TODO implement with factory
-      var basePaginationResponse = response.getBasePaginationResponse<T>();
+      
+      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      
+      var basePaginationResponse = decodedResponse.getBasePaginationResponse<T>();
       pitems.addAll(basePaginationResponse.data);
       notifyListeners();
 

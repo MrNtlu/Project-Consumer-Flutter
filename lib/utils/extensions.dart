@@ -90,6 +90,30 @@ extension DynamicMapExt on Map<String, dynamic> {
     gameResponse: this["game"],
     error: this["error"]
   );
+
+  BaseMessageResponse getBaseMessageResponse() => BaseMessageResponse(
+    this["message"],
+    this["error"],
+  );
+
+  BasePaginationResponse<T> getBasePaginationResponse<T>() => BasePaginationResponse(
+    response: this["data"],
+    canNextPage: (this["pagination"]?["next"] ?? 0) > 0,
+    error: this["error"],
+  );
+
+  BaseNullableResponse<T> getBaseItemResponse<T>() => BaseNullableResponse<T>(
+    message: this["message"] ?? '',
+    error: this["error"],
+    response: this["data"],
+  );
+
+  BaseListResponse<T> getBaseListResponse<T>() => BaseListResponse<T>(
+    message: this["message"],
+    response: this["data"],
+    code: this["code"],
+    error: this["error"]
+  );
 }
 
 extension ResponseExt on Response {

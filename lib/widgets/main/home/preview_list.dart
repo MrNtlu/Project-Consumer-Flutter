@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
+import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -72,9 +73,27 @@ class _PreviewListState extends State<PreviewList> {
               data = preview.top[index];
               break;
           }
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: SizedBox(height: 200, child: ContentCell(data.imageUrl, data.titleEn)),
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(builder: (_) {
+                  switch (_contentProvider.selectedContent) {
+                    case ContentType.movie:
+                      return MovieDetailsPage(data.id);
+                    case ContentType.tv:
+                    case ContentType.anime:
+                    case ContentType.game: 
+                    //TODO IMPLEMENT
+                    default:
+                      return MovieDetailsPage(data.id);
+                  }
+                })
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: SizedBox(height: 200, child: ContentCell(data.imageUrl, data.titleEn)),
+            ),
           );
         },
       )
