@@ -58,6 +58,7 @@ dependencies:
   firebase_core: ^2.23.0
   flutter_local_notifications: ^16.2.0
   cached_network_image: ^3.3.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +85,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/lottie/loading.json
+    - assets/lottie/error.json
+    - assets/lottie/error_dialog.json
     - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -3,7 +3,7 @@ class ConsumeLater {
   final String userID;
   final String contentID;
   final String contentExternalID;
-  final int contentExternalIntID;
+  final int? contentExternalIntID;
   final String contentType;
 
   ConsumeLater(

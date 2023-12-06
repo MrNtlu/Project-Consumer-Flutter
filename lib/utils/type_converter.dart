@@ -2,7 +2,6 @@ import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
-import 'package:watchlistfy/models/main/movie/movie.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 
 class TypeConverter<T> {
@@ -23,15 +22,6 @@ class TypeConverter<T> {
         response["image"],
         response["username"],
       ) as T;
-    } else if (T == Movie) {
-      return Movie(
-        response["_id"] ?? '', 
-        response["description"] ?? '', 
-        response["image_url"] ?? '', 
-        response["title_en"] ?? '', 
-        response["title_original"] ?? '',
-        response["tmdb_id"],
-      ) as T;
     } else if (T == BaseContent) {
       return BaseContent(
         response["_id"] ?? '', 
@@ -41,6 +31,15 @@ class TypeConverter<T> {
         response["title_original"] ?? '',
         response["tmdb_id"],
         response["mal_id"] ?? response["rawg_id"]
+      ) as T;
+    } else if (T == ConsumeLater) {
+      return ConsumeLater(
+        response["_id"], 
+        response["user_id"], 
+        response["content_id"], 
+        response["content_external_id"], 
+        response["content_external_int_id"], 
+        response["content_type"]
       ) as T;
     } else if (T == MovieDetails) {
       return MovieDetails(
