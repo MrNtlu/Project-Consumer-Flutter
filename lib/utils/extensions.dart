@@ -74,6 +74,16 @@ extension IntExt on int {
   String dateDifferencePluralString(String text) {
     return '${toString()} ${this > 1 ? '${text}s' : text}';
   }
+
+  String toLength() {
+    if (this > 10) {
+      final int hours = this ~/ 60;
+      final minutes = this % 60;
+      return "${hours}h ${minutes}m";
+    } else {
+      return toString();
+    }
+  }
 }
 
 extension StringExt on String {

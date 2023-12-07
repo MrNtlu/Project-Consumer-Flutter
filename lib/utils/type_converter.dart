@@ -61,7 +61,9 @@ class TypeConverter<T> {
         response["title_original"], 
         response["tmdb_id"], 
         response["tmdb_popularity"], 
-        response["tmdb_vote"], 
+        (response["tmdb_vote"] is double)
+        ? response["tmdb_vote"]
+        : (response["tmdb_vote"] as int).toDouble(), 
         response["tmdb_vote_count"], 
         null, // response["watch_list"], 
         response["watch_later"] != null

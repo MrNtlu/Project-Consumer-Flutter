@@ -42,7 +42,7 @@ class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
 
       return baseItemResponse;
     } catch (error) {
-      return BaseNullableResponse(message: error.toString());
+      return BaseNullableResponse(message: error.toString(), error: error.toString());
     }
   }
 

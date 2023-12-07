@@ -1,15 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
+import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
+import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:expandable_text/expandable_text.dart';
+import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
+import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
+import 'package:watchlistfy/widgets/main/common/details_title.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   final String id;
@@ -75,9 +80,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       child: Consumer<MovieDetailsProvider>(
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
-            // navigationBar: CupertinoNavigationBar(
-            //   middle: ,
-            // ),
             child: CustomScrollView(
               slivers: [
                 CupertinoSliverNavigationBar(
@@ -132,7 +134,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             }
                           }
                         },
-                        child: Icon(
+                        child: provider.isLoading 
+                        ? const CupertinoActivityIndicator() 
+                        : Icon(
                           provider.item!.consumeLater != null
                           ? CupertinoIcons.bookmark_fill
                           : CupertinoIcons.bookmark
@@ -161,27 +165,64 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       case DetailState.view:
         final item = provider.item!;
 
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(CupertinoIcons.star_fill, color: CupertinoColors.systemYellow,),
-                    const SizedBox(width: 3),
-                    Text(item.tmdbVote.toStringAsFixed(2), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                  ],
-                ),
-                SizedBox(
-                  height: 125,
-                  child: ContentCell(item.imageUrl, item.title)
-                )
-              ],
-            )
-          ],
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: item.title != item.titleOriginal ? 142 : 125,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            DetailsMainInfo(
+                              item.tmdbVote.toStringAsFixed(2),
+                              item.status,
+                            ),
+                            DetailsInfoColumn(
+                              item.title != item.titleOriginal,
+                              item.titleOriginal,
+                              item.length.toLength(),
+                              DateTime.parse(item.releaseDate).dateToHumanDate()
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 125,
+                    child: ContentCell(item.imageUrl, item.title)
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16,),
+              const CustomDivider(height: 0.75),
+              const DetailsTitle("Genres"),
+              Text(
+                item.genres.join(", "),
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              const DetailsTitle("Description"),
+              ExpandableText(
+                item.description,
+                maxLines: 3,
+                expandText: "Read More",
+                collapseText: "Read Less",
+                linkColor: CupertinoColors.systemBlue,
+                style: const TextStyle(fontSize: 16),
+                linkStyle: const TextStyle(fontSize: 14),
+              )
+            ],
+          ),
         );
       case DetailState.error:
         return ErrorView(_error ?? "Unknown error", _fetchData);

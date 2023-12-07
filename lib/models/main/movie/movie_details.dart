@@ -38,7 +38,5 @@ class MovieDetails extends DetailsModel {
     // val translations: List<Translation>?,
     // val trailers: List<Trailer>,
     // val reviews: ReviewSummary,
-
-    // @SerializedName("production_companies")
     // val productionCompanies: List<ProductionAndCompany>?,
 }
