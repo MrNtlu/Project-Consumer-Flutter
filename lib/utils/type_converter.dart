@@ -2,6 +2,7 @@ import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
+import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 
 class TypeConverter<T> {
@@ -65,6 +66,14 @@ class TypeConverter<T> {
         ? response["tmdb_vote"]
         : (response["tmdb_vote"] as int).toDouble(), 
         response["tmdb_vote_count"], 
+        response["recommendations"] != null
+        ? ((
+          response["recommendations"] as List).map((e) => Recommendation(
+          response["recommendations"]["description"], response["recommendations"]["tmdb_id"], 
+          response["recommendations"]["title_en"], response["recommendations"]["title_original"], 
+          response["recommendations"]["release_date"], response["recommendations"]["image_url"]
+        )).toList())
+        : [],
         null, // response["watch_list"], 
         response["watch_later"] != null
         ? ConsumeLater(
