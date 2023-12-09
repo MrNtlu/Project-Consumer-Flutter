@@ -1,8 +1,10 @@
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
+import 'package:watchlistfy/models/main/common/actor.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
+import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 
 class TypeConverter<T> {
@@ -65,15 +67,35 @@ class TypeConverter<T> {
         (response["tmdb_vote"] is double)
         ? response["tmdb_vote"]
         : (response["tmdb_vote"] as int).toDouble(), 
-        response["tmdb_vote_count"], 
+        response["tmdb_vote_count"],
         response["recommendations"] != null
         ? ((
           response["recommendations"] as List).map((e) => Recommendation(
-          response["recommendations"]["description"], response["recommendations"]["tmdb_id"], 
-          response["recommendations"]["title_en"], response["recommendations"]["title_original"], 
-          response["recommendations"]["release_date"], response["recommendations"]["image_url"]
+          e["description"], e["tmdb_id"], 
+          e["title_en"], e["title_original"], 
+          e["release_date"], e["image_url"]
         )).toList())
         : [],
+        response["actors"] != null
+        ? ((response["actors"] as List).map((e) => Actor(
+          e["tmdb_id"], 
+          e["name"], 
+          e["image"],
+          e["character"]
+        )).toList())
+        : [],
+        ReviewSummary(
+          (response["reviews"]["avg_star"] as int).toDouble(),
+          response["reviews"]["total_votes"], 
+          response["reviews"]["is_reviewed"], 
+          StarCounts(
+            response["reviews"]["star_counts"]["one_star"], 
+            response["reviews"]["star_counts"]["two_star"], 
+            response["reviews"]["star_counts"]["three_star"], 
+            response["reviews"]["star_counts"]["four_star"], 
+            response["reviews"]["star_counts"]["five_star"]
+          )
+        ),
         null, // response["watch_list"], 
         response["watch_later"] != null
         ? ConsumeLater(

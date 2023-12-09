@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
@@ -12,6 +13,7 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
@@ -220,7 +222,24 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 linkColor: CupertinoColors.systemBlue,
                 style: const TextStyle(fontSize: 16),
                 linkStyle: const TextStyle(fontSize: 14),
-              )
+              ),
+              const DetailsTitle("Actors"),
+              SizedBox(
+                height: 110,
+                child: DetailsCharacterList(
+                  item.actors.length,
+                  (index) {
+                    return item.actors[index].image;
+                  },
+                  (index) {
+                    return item.actors[index].name;
+                  },
+                  (index) {
+                    return item.actors[index].character;
+                  },
+                )
+              ),
+              const DetailsTitle("Recommendations"),
             ],
           ),
         );
