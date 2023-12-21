@@ -226,8 +226,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
               const DetailsTitle("Actors"),
               SizedBox(
                 height: 110,
-                child: DetailsCharacterList(
-                  item.actors.length,
+                child: DetailsCommonList(
+                  true, item.actors.length,
                   (index) {
                     return item.actors[index].image;
                   },
@@ -240,6 +240,25 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 )
               ),
               const DetailsTitle("Recommendations"),
+              if(item.productionCompanies != null)
+              const DetailsTitle("Production"),
+              if(item.productionCompanies != null)
+              SizedBox(
+                height: 130,
+                child: DetailsCommonList(
+                  false, item.productionCompanies!.length,
+                  (index) {
+                    return item.productionCompanies![index].logo;
+                  },
+                  (index) {
+                    return item.productionCompanies![index].name;
+                  },
+                  (index) {
+                    return item.productionCompanies![index].originCountry;
+                  },
+                  placeHolderIcon: Icons.business_rounded,
+                )
+              ),
             ],
           ),
         );
