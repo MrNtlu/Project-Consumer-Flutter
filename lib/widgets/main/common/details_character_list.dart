@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:watchlistfy/static/colors.dart';
 
 class DetailsCommonList extends StatelessWidget {
   final bool isAvatar;
@@ -53,13 +52,13 @@ class DetailsCommonList extends StatelessWidget {
                 )
                 : Container(
                   decoration: BoxDecoration(
-                    color: CupertinoTheme.of(context).onBgColor.withOpacity(0.7),
+                    color: CupertinoColors.white.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     placeHolderIcon, 
                     size: 64, 
-                    color: CupertinoTheme.of(context).bgTextColor
+                    color: CupertinoColors.black
                   ),
                 ),
                 const SizedBox(height: 6),

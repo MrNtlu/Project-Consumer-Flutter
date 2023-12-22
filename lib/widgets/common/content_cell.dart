@@ -9,8 +9,9 @@ import 'package:watchlistfy/static/colors.dart';
 class ContentCell extends StatelessWidget {
   final String url;
   final String title;
+  final double cornerRadius;
 
-  const ContentCell(this.url, this.title, {super.key});
+  const ContentCell(this.url, this.title, {this.cornerRadius = 12, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class ContentCell extends StatelessWidget {
     return AspectRatio(
       aspectRatio: provider.selectedContent != ContentType.game ? 2/3 : 16/9,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(cornerRadius),
         child: provider.selectedContent == ContentType.game
         ? Stack(children: [
           _image(provider.selectedContent),
