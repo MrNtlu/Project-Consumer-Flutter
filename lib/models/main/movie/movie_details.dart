@@ -2,6 +2,7 @@ import 'package:watchlistfy/models/main/base_details.dart';
 import 'package:watchlistfy/models/main/common/actor.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
 import 'package:watchlistfy/models/main/common/production_company.dart';
+import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
@@ -28,6 +29,8 @@ class MovieDetails extends DetailsModel {
   final ReviewSummary reviewSummary;
   final List<Streaming>? streaming;
   final List<ProductionAndCompany>? productionCompanies;
+  final List<Streaming>? streaming;
+  final List<ProductionAndCompany>? productionCompanies;
 
   @override
   BaseUserList? userList;
@@ -43,6 +46,7 @@ class MovieDetails extends DetailsModel {
     this.productionCompanies, this.userList, this.consumeLater,
   );
 
+    //TODO List implementation https://github.com/MrNtlu/Asset-Manager-Flutter/blob/0699c81d620d1d96d04073c6cfbc3afe6202b8bb/lib/common/models/response.dart#L374
     //TODO List implementation https://github.com/MrNtlu/Asset-Manager-Flutter/blob/0699c81d620d1d96d04073c6cfbc3afe6202b8bb/lib/common/models/response.dart#L374
     // val translations: List<Translation>?,
     // val trailers: List<Trailer>,
