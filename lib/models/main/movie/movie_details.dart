@@ -2,7 +2,6 @@ import 'package:watchlistfy/models/main/base_details.dart';
 import 'package:watchlistfy/models/main/common/actor.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
 import 'package:watchlistfy/models/main/common/production_company.dart';
-import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
@@ -27,8 +26,6 @@ class MovieDetails extends DetailsModel {
   final List<Recommendation> recommendations;
   final List<Actor> actors;
   final ReviewSummary reviewSummary;
-  final List<Streaming>? streaming;
-  final List<ProductionAndCompany>? productionCompanies;
   final List<Streaming>? streaming;
   final List<ProductionAndCompany>? productionCompanies;
 
