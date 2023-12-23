@@ -8,9 +8,10 @@ class AnonymousHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       child: const Text(
-        "Login/Register",
+        "Login / Register",
         style: TextStyle(
           fontWeight: FontWeight.bold,
+          color: CupertinoColors.activeBlue,
           fontSize: 16
         ),
       ), 

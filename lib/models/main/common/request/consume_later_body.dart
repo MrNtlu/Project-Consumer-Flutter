@@ -15,6 +15,4 @@ class ConsumeLaterBody extends JSONConverter {
     "content_external_id": contentExternalID,
     "content_type": contentType
   };
-
-
 }

@@ -27,71 +27,109 @@ class _PreviewListState extends State<PreviewList> {
   @override
   void didChangeDependencies() {
     if (!isInitialized) {
-      _previewProvider = Provider.of<PreviewProvider>(context); 
+      _previewProvider = Provider.of<PreviewProvider>(context);
       _contentProvider = Provider.of<ContentProvider>(context);
       isInitialized = true;
     }
-    
+
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    int listCount;
+
+    if (_previewProvider.networkState == NetworkState.success) {
+      BasePreviewResponse<BaseContent> preview;
+      
+      switch (_contentProvider.selectedContent) {
+        case ContentType.movie:
+          preview = _previewProvider.moviePreview;
+          break;
+        case ContentType.tv:
+          preview = _previewProvider.tvPreview;
+          break;
+        case ContentType.anime:
+          preview = _previewProvider.animePreview;
+          break;
+        default:
+          preview = _previewProvider.gamePreview;
+          break;
+      }
+
+      switch (widget.contentTag) {
+        case "popular":
+          listCount = preview.popular.length;
+          break;
+        case "upcoming":
+          listCount = preview.upcoming.length;
+          break;
+        case "extra":
+          listCount = preview.extra?.length ?? 0;
+          break;
+        default:
+          listCount = preview.top.length;
+          break;
+      }
+    } else {
+      listCount = 20;
+    }
+
     return _previewProvider.networkState == NetworkState.success
-      ? ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          BasePreviewResponse<BaseContent> preview;
-          BaseContent data;
+        ? ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: listCount,
+            itemBuilder: (context, index) {
+              BasePreviewResponse<BaseContent> preview;
+              BaseContent data;
 
-          switch (_contentProvider.selectedContent) {
-            case ContentType.movie:
-              preview = _previewProvider.moviePreview;
-              break;
-            case ContentType.tv:
-              preview = _previewProvider.tvPreview;
-              break;
-            case ContentType.anime:
-              preview = _previewProvider.animePreview;
-              break;
-            default:
-              preview = _previewProvider.gamePreview;
-              break;
-          }
+              switch (_contentProvider.selectedContent) {
+                case ContentType.movie:
+                  preview = _previewProvider.moviePreview;
+                  break;
+                case ContentType.tv:
+                  preview = _previewProvider.tvPreview;
+                  break;
+                case ContentType.anime:
+                  preview = _previewProvider.animePreview;
+                  break;
+                default:
+                  preview = _previewProvider.gamePreview;
+                  break;
+              }
 
-          switch (widget.contentTag) {
-            case "popular":
-              data = preview.popular[index];
-              break;
-            case "upcoming":
-              data = preview.upcoming[index];
-              break;
-            case "extra":
-              data = preview.extra![index];
-              break;
-            default:
-              data = preview.top[index];
-              break;
-          }
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(builder: (_) {
-                  switch (_contentProvider.selectedContent) {
-                    case ContentType.movie:
-                      return MovieDetailsPage(data.id);
-                    case ContentType.tv:
-                    case ContentType.anime:
-                    case ContentType.game: 
-                    //TODO IMPLEMENT
-                    default:
-                      return MovieDetailsPage(data.id);
-                  }
-                })
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
+              switch (widget.contentTag) {
+                case "popular":
+                  data = preview.popular[index];
+                  break;
+                case "upcoming":
+                  data = preview.upcoming[index];
+                  break;
+                case "extra":
+                  data = preview.extra![index];
+                  break;
+                default:
+                  data = preview.top[index];
+                  break;
+              }
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .push(CupertinoPageRoute(builder: (_) {
+                    switch (_contentProvider.selectedContent) {
+                      case ContentType.movie:
+                        return MovieDetailsPage(data.id);
+                      case ContentType.tv:
+                      case ContentType.anime:
+                      case ContentType.game:
+                      //TODO IMPLEMENT
+                      default:
+                        return MovieDetailsPage(data.id);
+                    }
+                  }));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
               child: SizedBox(height: 200, child: ContentCell(data.imageUrl, data.titleEn)),
             ),
           );
@@ -99,7 +137,7 @@ class _PreviewListState extends State<PreviewList> {
       )
       : ListView(
         scrollDirection: Axis.horizontal,
-        children: List.generate(20, (index) => Padding(
+        children: List.generate(listCount, (index) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 3),
           child: SizedBox(
             height: 200,

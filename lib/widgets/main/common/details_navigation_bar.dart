@@ -27,7 +27,7 @@ class DetailsNavigationBar extends StatelessWidget {
             padding: EdgeInsets.zero,
             onPressed: onListTap,
             child: Icon(
-              provider.item!.watchList != null
+              provider.item!.userList != null
               ? CupertinoIcons.heart_fill
               : CupertinoIcons.heart
             ),

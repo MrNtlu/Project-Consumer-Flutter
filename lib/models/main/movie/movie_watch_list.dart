@@ -1,14 +1,26 @@
-class MovieWatchList {
+import 'package:watchlistfy/models/main/base_details.dart';
+
+class MovieWatchList extends BaseUserList {
+  @override
   final String id;
-  final String movieID;
-  final String tmdbID;
-  final int timesFinished;
-  final String status;
+  @override
+  final String contentID;
+  @override
+  final String externalID;
+  @override
+  int timesFinished;
+  @override
+  String status;
+  @override
   final String createdAt;
-  final int score;
+  @override
+  int? score;
+
+  @override int? watchedEpisodes;
+  @override int? watchedSeasons;
 
   MovieWatchList(
-    this.id, this.movieID, this.tmdbID, this.timesFinished,
+    this.id, this.contentID, this.externalID, this.timesFinished,
     this.status, this.createdAt, this.score,
   );
 }

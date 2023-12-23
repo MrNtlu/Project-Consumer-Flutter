@@ -3,8 +3,11 @@ import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/common/actor.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
+import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
+import 'package:watchlistfy/models/main/common/streaming.dart';
+import 'package:watchlistfy/models/main/common/streaming_platform.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 
 class TypeConverter<T> {
@@ -96,6 +99,36 @@ class TypeConverter<T> {
             response["reviews"]["star_counts"]["five_star"]
           )
         ),
+        response["streaming"] != null
+        ? ((response["streaming"] as List).map((e) => Streaming(
+          e["country_code"], 
+          e["buy_options"] != null
+          ? (e["buy_options"] as List).map((se) => StreamingPlatform(
+            se["logo"],
+            se["name"]
+          )).toList()
+          : null,
+          e["rent_options"] != null
+          ? (e["rent_options"] as List).map((se) => StreamingPlatform(
+            se["logo"],
+            se["name"]
+          )).toList()
+          : null,
+          e["streaming_platforms"] != null
+          ? (e["streaming_platforms"] as List).map((se) => StreamingPlatform(
+            se["logo"],
+            se["name"]
+          )).toList()
+          : null,
+        )).toList())
+        : null,
+        response["production_companies"] != null
+        ? ((response["production_companies"] as List).map((e) => ProductionAndCompany(
+          e["logo"],
+          e["name"],
+          e["origin_country"]
+        )).toList())
+        : null,
         null, // response["watch_list"], 
         response["watch_later"] != null
         ? ConsumeLater(

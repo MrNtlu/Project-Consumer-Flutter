@@ -1,13 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DetailsCharacterList extends StatelessWidget {
+class DetailsCommonList extends StatelessWidget {
+  final bool isAvatar;
   final int listCount;
+  final IconData placeHolderIcon;
   final String? Function(int) getImage;
   final String Function(int) getName;
   final String Function(int)? getCharacter;
 
-  const DetailsCharacterList(this.listCount, this.getImage, this.getName, this.getCharacter, {super.key});
+  const DetailsCommonList(
+    this.isAvatar, this.listCount, this.getImage,
+    this.getName, this.getCharacter, {this.placeHolderIcon = Icons.person, super.key}
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +31,40 @@ class DetailsCharacterList extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 getImage(index) != null
-                ? CircleAvatar(
-                  radius: 32,
-                  backgroundImage: NetworkImage(getImage(index)!),
+                ? (isAvatar
+                  ? CircleAvatar(
+                    radius: 32,
+                    backgroundImage: NetworkImage(
+                      getImage(index)!,
+                    ),
+                  )
+                  : Container(
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.white.withOpacity(0.75),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.all(3),
+                    child: Image.network(
+                      getImage(index)!,
+                      height: 64,
+                    ),
+                  )
                 )
-                : const Icon(Icons.person, size: 32,),
+                : Container(
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    placeHolderIcon, 
+                    size: 64, 
+                    color: CupertinoColors.black
+                  ),
+                ),
                 const SizedBox(height: 6),
                 AutoSizeText(
                   getName(index),
-                  maxLines: 1,
+                  maxLines: isAvatar ? 1 : 2,
                   maxFontSize: 16,
                   minFontSize: 14,
                   overflow: TextOverflow.ellipsis,
