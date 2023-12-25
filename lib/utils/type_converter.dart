@@ -9,6 +9,7 @@ import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
 import 'package:watchlistfy/models/main/common/streaming_platform.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
+import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
 
 class TypeConverter<T> {
   T convertToObject(Map<String, dynamic> response) {
@@ -46,6 +47,16 @@ class TypeConverter<T> {
         response["content_external_id"], 
         response["content_external_int_id"], 
         response["content_type"]
+      ) as T;
+    } else if (T == MovieWatchList) {
+      return MovieWatchList(
+        response["_id"],
+        response["movie_id"],
+        response["movie_tmdb_id"],
+        response["times_finished"],
+        response["status"],
+        response["created_at"],
+        response["score"]
       ) as T;
     } else if (T == MovieDetails) {
       return MovieDetails(
@@ -129,7 +140,9 @@ class TypeConverter<T> {
           e["origin_country"]
         )).toList())
         : null,
-        null, // response["watch_list"], 
+        response["watch_list"] != null
+        ? TypeConverter<MovieWatchList>().convertToObject(response["watch_list"])
+        : null, 
         response["watch_later"] != null
         ? ConsumeLater(
           response["watch_later"]["_id"], 

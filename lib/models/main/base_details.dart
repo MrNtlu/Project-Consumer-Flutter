@@ -1,14 +1,15 @@
 import 'package:watchlistfy/models/main/common/consume_later.dart';
 
-abstract class DetailsModel {
-  abstract BaseUserList? userList;
+abstract class DetailsModel<UserList extends BaseUserList> {
+  abstract UserList? userList;
   abstract ConsumeLater? consumeLater;
 }
 
 abstract class BaseUserList {
   abstract final String id;
   abstract final String contentID;
-  abstract final String externalID;
+  abstract final String? externalID;
+  abstract final int? externalIntID;
   abstract int timesFinished;
   abstract String status;
   abstract final String createdAt;

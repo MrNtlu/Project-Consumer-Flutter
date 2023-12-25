@@ -18,6 +18,7 @@ class MovieWatchList extends BaseUserList {
 
   @override int? watchedEpisodes;
   @override int? watchedSeasons;
+  @override int? externalIntID;
 
   MovieWatchList(
     this.id, this.contentID, this.externalID, this.timesFinished,

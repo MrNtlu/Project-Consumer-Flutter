@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
+import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
@@ -15,7 +17,7 @@ import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
-import 'package:watchlistfy/widgets/common/user_list_add_sheet.dart';
+import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
@@ -104,21 +106,25 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       CupertinoButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          if (!provider.isLoading && _authProvider.isAuthenticated) {
+                          if (!provider.isUserListLoading && _authProvider.isAuthenticated) {
                             final item = provider.item;
 
                             if (item != null && item.userList != null) {
-                              final status = item.userList!.status;
-                              final score = item.userList!.score;
+                              final status = Constants.UserListStatus.firstWhere((element) => element.request == item.userList!.status).name;
+                              final score = item.userList!.score ?? 'Not Scored';
                               final timesFinished = item.userList!.timesFinished;
 
                               showCupertinoModalPopup(
                                 context: context, 
                                 builder: (context) {
                                   return UserListViewSheet(
+                                    _provider,
+                                    _provider.item!.id, 
                                     _provider.item!.title,
                                     "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)",
-                                    _provider.item!.userList!
+                                    _provider.item!.userList!,
+                                    externalID: _provider.item!.tmdbID,
+                                    contentType: ContentType.movie,
                                   );
                                 }
                               );
@@ -127,7 +133,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (context) {
-                                  return const UserListAddSheet();
+                                  return MovieWatchListSheet(_provider, _provider.item!.id, _provider.item!.tmdbID);
                                 }
                               );
                             }
@@ -138,7 +144,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             );
                           }
                         },
-                        child: Icon(
+                        child: provider.isUserListLoading 
+                        ? const CupertinoActivityIndicator() 
+                        : Icon(
                           provider.item!.userList != null
                           ? CupertinoIcons.heart_fill
                           : CupertinoIcons.heart

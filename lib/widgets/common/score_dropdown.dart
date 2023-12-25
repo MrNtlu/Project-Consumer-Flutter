@@ -80,7 +80,7 @@ class _ScoreDropdownState extends State<ScoreDropdown> {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: CupertinoTheme.of(context).bgColor,
           borderRadius: BorderRadius.circular(8)

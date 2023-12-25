@@ -12,6 +12,7 @@ class UserListRoutes {
     _baseUserListRoute = '$baseURL/list';
 
     userList = _baseUserListRoute;
+    deleteUserList = _baseUserListRoute;
     movieUserList = '$_baseUserListRoute/movie';
     tvUserList = '$_baseUserListRoute/tv';
     animeUserList = '$_baseUserListRoute/anime';

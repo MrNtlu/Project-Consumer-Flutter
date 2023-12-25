@@ -5,8 +5,9 @@ import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
+import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
 
-class MovieDetails extends DetailsModel {
+class MovieDetails extends DetailsModel<MovieWatchList> {
   final String id;
   final String description;
   final List<String> genres;
@@ -30,7 +31,7 @@ class MovieDetails extends DetailsModel {
   final List<ProductionAndCompany>? productionCompanies;
 
   @override
-  BaseUserList? userList;
+  MovieWatchList? userList;
   @override
   ConsumeLater? consumeLater;
 
@@ -43,7 +44,6 @@ class MovieDetails extends DetailsModel {
     this.productionCompanies, this.userList, this.consumeLater,
   );
 
-    //TODO List implementation https://github.com/MrNtlu/Asset-Manager-Flutter/blob/0699c81d620d1d96d04073c6cfbc3afe6202b8bb/lib/common/models/response.dart#L374
     //TODO List implementation https://github.com/MrNtlu/Asset-Manager-Flutter/blob/0699c81d620d1d96d04073c6cfbc3afe6202b8bb/lib/common/models/response.dart#L374
     // val translations: List<Translation>?,
     // val trailers: List<Trailer>,
