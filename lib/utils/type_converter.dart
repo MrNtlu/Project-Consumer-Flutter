@@ -1,5 +1,12 @@
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
+import 'package:watchlistfy/models/main/anime/anime_details.dart';
+import 'package:watchlistfy/models/main/anime/anime_details_air_date.dart';
+import 'package:watchlistfy/models/main/anime/anime_details_character.dart';
+import 'package:watchlistfy/models/main/anime/anime_details_name_url.dart';
+import 'package:watchlistfy/models/main/anime/anime_details_recommendation.dart';
+import 'package:watchlistfy/models/main/anime/anime_details_relation.dart';
+import 'package:watchlistfy/models/main/anime/anime_watch_list.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/common/actor.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
@@ -8,8 +15,13 @@ import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
 import 'package:watchlistfy/models/main/common/streaming_platform.dart';
+import 'package:watchlistfy/models/main/game/game_play_list.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
+import 'package:watchlistfy/models/main/tv/tv_details.dart';
+import 'package:watchlistfy/models/main/tv/tv_details_network.dart';
+import 'package:watchlistfy/models/main/tv/tv_details_season.dart';
+import 'package:watchlistfy/models/main/tv/tv_watch_list.dart';
 
 class TypeConverter<T> {
   T convertToObject(Map<String, dynamic> response) {
@@ -39,6 +51,19 @@ class TypeConverter<T> {
         response["tmdb_id"],
         response["mal_id"] ?? response["rawg_id"]
       ) as T;
+    } else if (T == ReviewSummary) {
+      return ReviewSummary(
+        (response["reviews"]["avg_star"] as int).toDouble(),
+        response["reviews"]["total_votes"], 
+        response["reviews"]["is_reviewed"], 
+        StarCounts(
+          response["reviews"]["star_counts"]["one_star"], 
+          response["reviews"]["star_counts"]["two_star"], 
+          response["reviews"]["star_counts"]["three_star"], 
+          response["reviews"]["star_counts"]["four_star"], 
+          response["reviews"]["star_counts"]["five_star"]
+        )
+      ) as T;
     } else if (T == ConsumeLater) {
       return ConsumeLater(
         response["_id"], 
@@ -58,6 +83,80 @@ class TypeConverter<T> {
         response["created_at"],
         response["score"]
       ) as T;
+    } else if (T == TVWatchList) {
+      return TVWatchList(
+        response["_id"],
+        response["tv_id"],
+        response["tv_tmdb_id"],
+        response["times_finished"],
+        response["status"],
+        response["created_at"],
+        response["score"],
+        response["watched_episodes"],
+        response["watched_seasons"],
+      ) as T;
+    } else if (T == AnimeWatchList) {
+      return AnimeWatchList(
+        response["_id"],
+        response["anime_id"],
+        response["anime_mal_id"],
+        response["times_finished"],
+        response["status"],
+        response["created_at"],
+        response["score"],
+        response["watched_episodes"],
+      ) as T;
+    } else if (T == GamePlayList) {
+      return GamePlayList(
+        response["_id"],
+        response["game_id"],
+        response["game_rawg_id"],
+        response["times_finished"],
+        response["status"],
+        response["created_at"],
+        response["score"],
+        response["hours_played"],
+      ) as T;
+    } else if (T == AnimeDetailsRelation) {
+      return AnimeDetailsRelation(
+        response["_id"],
+        response["mal_id"],
+        response["anime_id"],
+        response["image_url"],
+        response["title_en"],
+        response["title_original"],
+        response["relation"],
+        response["type"],
+      ) as T;
+    } else if (T == AnimeNameUrl) {
+      return AnimeNameUrl(
+        response["name"],
+        response["url"],
+      ) as T;
+    } else if (T == AnimeDetailsRecommendation) {
+      return AnimeDetailsRecommendation(
+        response["title"],
+        response["mal_id"],
+        response["image_url"],
+      ) as T;
+    } else if (T == AnimeDetailsCharacter) {
+      return AnimeDetailsCharacter(
+        response["name"],
+        response["role"],
+        response["image"],
+        response["mal_id"]
+      ) as T;
+    } else if (T == AnimeDetailsAirDate) {
+      return AnimeDetailsAirDate(
+        response["from"],
+        response["to"],
+        response["from_day"],
+        response["from_month"],
+        response["from_year"],
+        response["to_day"],
+        response["to_month"],
+        response["to_year"],
+      ) as T;
     } else if (T == MovieDetails) {
       return MovieDetails(
         response["_id"], 
@@ -74,6 +173,89 @@ class TypeConverter<T> {
         response["image_url"], 
         response["imdb_id"], 
         response["release_date"], 
+        response["title_en"], 
+        response["title_original"], 
+        response["tmdb_id"], 
+        response["tmdb_popularity"], 
+        (response["tmdb_vote"] is double)
+        ? response["tmdb_vote"]
+        : (response["tmdb_vote"] as int).toDouble(), 
+        response["tmdb_vote_count"],
+        response["recommendations"] != null
+        ? ((
+          response["recommendations"] as List).map((e) => Recommendation(
+          e["description"], e["tmdb_id"], 
+          e["title_en"], e["title_original"], 
+          e["release_date"], e["image_url"]
+        )).toList())
+        : [],
+        response["actors"] != null
+        ? ((response["actors"] as List).map((e) => Actor(
+          e["tmdb_id"], 
+          e["name"], 
+          e["image"],
+          e["character"]
+        )).toList())
+        : [],
+        TypeConverter<ReviewSummary>().convertToObject(response),
+        response["streaming"] != null
+        ? ((response["streaming"] as List).map((e) => Streaming(
+          e["country_code"], 
+          e["buy_options"] != null
+          ? (e["buy_options"] as List).map((se) => StreamingPlatform(
+            se["logo"],
+            se["name"]
+          )).toList()
+          : null,
+          e["rent_options"] != null
+          ? (e["rent_options"] as List).map((se) => StreamingPlatform(
+            se["logo"],
+            se["name"]
+          )).toList()
+          : null,
+          e["streaming_platforms"] != null
+          ? (e["streaming_platforms"] as List).map((se) => StreamingPlatform(
+            se["logo"],
+            se["name"]
+          )).toList()
+          : null,
+        )).toList())
+        : null,
+        response["production_companies"] != null
+        ? ((response["production_companies"] as List).map((e) => ProductionAndCompany(
+          e["logo"],
+          e["name"],
+          e["origin_country"]
+        )).toList())
+        : null,
+        response["watch_list"] != null
+        ? TypeConverter<MovieWatchList>().convertToObject(response["watch_list"])
+        : null, 
+        response["watch_later"] != null
+        ? ConsumeLater(
+          response["watch_later"]["_id"], 
+          response["watch_later"]["user_id"], 
+          response["watch_later"]["content_id"], 
+          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["content_type"]
+        )
+        : null
+      ) as T;
+    } else if (T == TVDetails) {
+      return TVDetails(
+        response["_id"], 
+        response["description"], 
+        response["genres"] != null
+        ? (response["genres"] as List).map((e) => e.toString()).toList()
+        : [], 
+        response["status"], 
+        response["backdrop"], 
+        response["images"] != null
+        ? (response["images"] as List).map((e) => e.toString()).toList()
+        : [], 
+        response["image_url"], 
+        response["imdb_id"], 
+        response["first_air_date"], 
         response["title_en"], 
         response["title_original"], 
         response["tmdb_id"], 
@@ -140,8 +322,107 @@ class TypeConverter<T> {
           e["origin_country"]
         )).toList())
         : null,
+        response["total_episodes"] ?? 0,
+        response["total_seasons"] ?? 0,
+        response["networks"] != null
+        ? ((response["networks"] as List).map((e) => TVDetailsNetwork(
+          e["logo"],
+          e["name"],
+          e["origin_country"]
+        )).toList())
+        : null,
+        response["seasons"] != null
+        ? ((response["seasons"] as List).map((e) => TVDetailsSeason(
+          e["name"],
+          e["air_date"],
+          e["episode_count"],
+          e["season_num"],
+          e["image_url"]
+        )).toList())
+        : [],
         response["watch_list"] != null
-        ? TypeConverter<MovieWatchList>().convertToObject(response["watch_list"])
+        ? TypeConverter<TVWatchList>().convertToObject(response["watch_list"])
+        : null, 
+        response["watch_later"] != null
+        ? ConsumeLater(
+          response["watch_later"]["_id"], 
+          response["watch_later"]["user_id"], 
+          response["watch_later"]["content_id"], 
+          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["content_type"]
+        )
+        : null
+      ) as T;
+    } else if (T == AnimeDetails) {
+      return AnimeDetails(
+        response["_id"], 
+        response["description"], 
+        response["type"], 
+        response["source"],
+        response["episodes"], 
+        response["season"],
+        response["year"], 
+        response["status"],
+        response["backdrop"], 
+        TypeConverter<AnimeDetailsAirDate>().convertToObject(response["aired"]),
+        response["recommendations"] != null
+        ? ((response["recommendations"] as List).map((e) => 
+          TypeConverter<AnimeDetailsRecommendation>().convertToObject(e)
+        ).toList())
+        : [],
+        response["streaming"] != null
+        ? ((response["streaming"] as List).map((e) => 
+          TypeConverter<AnimeNameUrl>().convertToObject(e)
+        ).toList())
+        : null,
+        response["producers"] != null
+        ? ((response["producers"] as List).map((e) => 
+          TypeConverter<AnimeNameUrl>().convertToObject(e)
+        ).toList())
+        : null,
+        response["studios"] != null
+        ? ((response["studios"] as List).map((e) => 
+          TypeConverter<AnimeNameUrl>().convertToObject(e)
+        ).toList())
+        : null,
+        response["genres"] != null
+        ? ((response["genres"] as List).map((e) => 
+          TypeConverter<AnimeNameUrl>().convertToObject(e)
+        ).toList())
+        : null,
+        response["themes"] != null
+        ? ((response["themes"] as List).map((e) => 
+          TypeConverter<AnimeNameUrl>().convertToObject(e)
+        ).toList())
+        : null,
+        response["demographics"] != null
+        ? ((response["demographics"] as List).map((e) => 
+          TypeConverter<AnimeNameUrl>().convertToObject(e)
+        ).toList())
+        : null,
+        response["relations"] != null
+        ? ((response["relations"] as List).map((e) => 
+          TypeConverter<AnimeDetailsRelation>().convertToObject(e)
+        ).toList())
+        : [],
+        response["characters"] != null
+        ? ((response["characters"] as List).map((e) => 
+          TypeConverter<AnimeDetailsCharacter>().convertToObject(e)
+        ).toList())
+        : [],
+        TypeConverter<ReviewSummary>().convertToObject(response),
+        response["title_en"],
+        response["title_jp"],
+        response["title_original"],
+        response["image_url"],
+        response["mal_id"],
+        response["mal_score"],
+        response["mal_scored_by"],
+        response["is_airing"],
+        response["age_rating"],
+        response["trailer"],
+        response["watch_list"] != null
+        ? TypeConverter<AnimeWatchList>().convertToObject(response["watch_list"])
         : null, 
         response["watch_later"] != null
         ? ConsumeLater(

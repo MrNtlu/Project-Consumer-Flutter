@@ -1,3 +1,4 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
-import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
+import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -14,30 +15,29 @@ import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:expandable_text/expandable_text.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
-import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
-import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
+import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 
-class MovieDetailsPage extends StatefulWidget {
+class TVDetailsPage extends StatefulWidget {
   final String id;
 
-  const MovieDetailsPage(this.id, {super.key});
+  const TVDetailsPage(this.id, {super.key});
 
   @override
-  State<MovieDetailsPage> createState() => _MovieDetailsPageState();
+  State<TVDetailsPage> createState() => _TVDetailsPageState();
 }
 
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
+class _TVDetailsPageState extends State<TVDetailsPage> {
   DetailState _state = DetailState.init;
 
-  late final MovieDetailsProvider _provider;
+  late final TVDetailsProvider _provider;
   late final AuthenticationProvider _authProvider;
   String? _error;
 
@@ -46,7 +46,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       _state = DetailState.loading;
     });
 
-    _provider.getMovieDetails(widget.id).then((response) {
+    _provider.getTVDetails(widget.id).then((response) {
       _error = response.error;
 
       if (_state != DetailState.disposed) {
@@ -75,7 +75,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _provider = MovieDetailsProvider();
+    _provider = TVDetailsProvider();
   }
 
   @override
@@ -85,10 +85,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => _provider,
-      child: Consumer<MovieDetailsProvider>(
+      child: Consumer<TVDetailsProvider>(
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             child: CustomScrollView(
@@ -115,7 +115,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         });
                       } else if (item != null) {
                         provider.createConsumeLaterObject(
-                          ConsumeLaterBody(item.id, item.tmdbID, "movie")
+                          ConsumeLaterBody(item.id, item.tmdbID, "tv")
                         ).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
@@ -139,6 +139,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       if (item != null && item.userList != null) {
                         final status = Constants.UserListStatus.firstWhere((element) => element.request == item.userList!.status).name;
                         final score = item.userList!.score ?? 'Not Scored';
+                        final episodes = item.userList!.watchedEpisodes ?? "?";
+                        final seasons = item.userList!.watchedSeasons ?? "?";
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
@@ -147,11 +149,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             return UserListViewSheet(
                               _provider.item!.id, 
                               _provider.item!.title,
-                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)",
+                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $seasons seasons $episodes eps",
                               _provider.item!.userList!,
                               externalID: _provider.item!.tmdbID,
-                              contentType: ContentType.movie,
-                              movieProvider: provider,
+                              contentType: ContentType.tv,
+                              tvProvider: provider,
+                              episodePrefix: _provider.item?.totalEpisodes,
+                              seasonPrefix: _provider.item?.totalSeasons,
                             );
                           }
                         );
@@ -160,7 +164,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           context: context,
                           barrierDismissible: false,
                           builder: (context) {
-                            return MovieWatchListSheet(_provider, _provider.item!.id, _provider.item!.tmdbID);
+                            return TVWatchListSheet(
+                              _provider, 
+                              _provider.item!.id, 
+                              _provider.item!.tmdbID,
+                              episodePrefix: _provider.item?.totalEpisodes,
+                              seasonPrefix: _provider.item?.totalSeasons,
+                            );
                           }
                         );
                       }
@@ -181,7 +191,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     );
   }
 
-  Widget _body(MovieDetailsProvider provider) {
+  Widget _body(TVDetailsProvider provider) {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
@@ -212,9 +222,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               DetailsInfoColumn(
                                 item.title != item.titleOriginal,
                                 item.titleOriginal,
-                                item.length.toLength(),
-                                DateTime.parse(item.releaseDate).dateToHumanDate(),
-                                null, null,
+                                null,
+                                DateTime.parse(item.firstAirDate).dateToHumanDate(),
+                                item.totalEpisodes,
+                                item.totalSeasons,
                               )
                             ],
                           ),
@@ -274,7 +285,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       return item.recommendations[index].title;
                     }, 
                     (index) {
-                      return MovieDetailsPage(item.recommendations[index].tmdbID);
+                      return TVDetailsPage(item.recommendations[index].tmdbID);
                     }
                   ),
                 ),
@@ -293,6 +304,25 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     },
                     (index) {
                       return item.productionCompanies![index].originCountry;
+                    },
+                    placeHolderIcon: Icons.business_rounded,
+                  )
+                ),
+                if(item.networks != null)
+                const DetailsTitle("Networks"),
+                if(item.networks != null)
+                SizedBox(
+                  height: 130,
+                  child: DetailsCommonList(
+                    false, item.networks!.length,
+                    (index) {
+                      return item.networks![index].logo;
+                    },
+                    (index) {
+                      return item.networks![index].name;
+                    },
+                    (index) {
+                      return item.networks![index].originCountry ?? "";
                     },
                     placeHolderIcon: Icons.business_rounded,
                   )

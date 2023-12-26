@@ -3,11 +3,14 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_details.dart';
 import 'package:watchlistfy/models/main/common/request/delete_user_list_body.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
+import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
+import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 
 class UserListViewSheet extends StatelessWidget {
-  final MovieDetailsProvider provider;
+  final MovieDetailsProvider? movieProvider;
+  final TVDetailsProvider? tvProvider;
   final String contentID;
   final String? externalID;
   final int? externalIntID;
@@ -15,14 +18,20 @@ class UserListViewSheet extends StatelessWidget {
 
   final String title;
   final String message;
+  final int? episodePrefix;
+  final int? seasonPrefix;
   final BaseUserList userList;
 
   const UserListViewSheet(
-    this.provider, this.contentID, this.title, 
+    this.contentID, this.title, 
     this.message, this.userList, {
       this.externalID,
       this.externalIntID,
+      this.episodePrefix,
+      this.seasonPrefix,
       required this.contentType, 
+      this.movieProvider,
+      this.tvProvider,
       super.key
     }
   );
@@ -56,10 +65,17 @@ class UserListViewSheet extends StatelessWidget {
                 showCupertinoModalPopup(
                   context: context, 
                   builder: (context) {
-                    return MovieWatchListSheet(provider, contentID, externalID!, userList: userList);
+                    return MovieWatchListSheet(movieProvider!, contentID, externalID!, userList: userList);
                   }
                 );
                 break;
+              case ContentType.tv:
+                showCupertinoModalPopup(
+                  context: context, 
+                  builder: (context) {
+                    return TVWatchListSheet(tvProvider!, contentID, externalID!, userList: userList);
+                  }
+                );
               default:
                 break;
             }
@@ -71,7 +87,16 @@ class UserListViewSheet extends StatelessWidget {
           onPressed: () { //TODO Add are you sure dialog
             Navigator.pop(context);
 
-            provider.deleteMovieWatchList(DeleteUserListBody(userList.id, contentType.request));
+            switch (contentType) {
+              case ContentType.movie:
+                movieProvider!.deleteMovieWatchList(DeleteUserListBody(userList.id, contentType.request));
+                break;
+              case ContentType.tv:
+                tvProvider!.deleteTVWatchList(DeleteUserListBody(userList.id, contentType.request));
+                break;
+              default:
+                break;
+            }
           },
           child: const Text('Remove'),
         ),

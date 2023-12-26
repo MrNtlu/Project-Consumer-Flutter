@@ -5,7 +5,9 @@ import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
+import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -120,7 +122,9 @@ class _PreviewListState extends State<PreviewList> {
                       case ContentType.movie:
                         return MovieDetailsPage(data.id);
                       case ContentType.tv:
+                        return TVDetailsPage(data.id);
                       case ContentType.anime:
+                        return AnimeDetailsPage(data.id);
                       case ContentType.game:
                       //TODO IMPLEMENT
                       default:

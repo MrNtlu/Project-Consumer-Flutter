@@ -1,3 +1,4 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
-import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
+import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -14,30 +15,28 @@ import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:expandable_text/expandable_text.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
-import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
-import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
+import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 
-class MovieDetailsPage extends StatefulWidget {
+class AnimeDetailsPage extends StatefulWidget {
   final String id;
 
-  const MovieDetailsPage(this.id, {super.key});
+  const AnimeDetailsPage(this.id, {super.key});
 
   @override
-  State<MovieDetailsPage> createState() => _MovieDetailsPageState();
+  State<AnimeDetailsPage> createState() => _AnimeDetailsPageState();
 }
 
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
+class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   DetailState _state = DetailState.init;
 
-  late final MovieDetailsProvider _provider;
+  late final AnimeDetailsProvider _provider;
   late final AuthenticationProvider _authProvider;
   String? _error;
 
@@ -46,7 +45,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       _state = DetailState.loading;
     });
 
-    _provider.getMovieDetails(widget.id).then((response) {
+    _provider.getAnimeDetails(widget.id).then((response) {
       _error = response.error;
 
       if (_state != DetailState.disposed) {
@@ -75,7 +74,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _provider = MovieDetailsProvider();
+    _provider = AnimeDetailsProvider();
   }
 
   @override
@@ -85,10 +84,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => _provider,
-      child: Consumer<MovieDetailsProvider>(
+      child: Consumer<AnimeDetailsProvider>(
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             child: CustomScrollView(
@@ -115,7 +114,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         });
                       } else if (item != null) {
                         provider.createConsumeLaterObject(
-                          ConsumeLaterBody(item.id, item.tmdbID, "movie")
+                          ConsumeLaterBody(item.id, item.malID.toString(), "anime")
                         ).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
@@ -139,6 +138,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       if (item != null && item.userList != null) {
                         final status = Constants.UserListStatus.firstWhere((element) => element.request == item.userList!.status).name;
                         final score = item.userList!.score ?? 'Not Scored';
+                        final episodes = item.userList!.watchedEpisodes ?? "?";
+                        final seasons = item.userList!.watchedSeasons ?? "?";
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
@@ -147,22 +148,28 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             return UserListViewSheet(
                               _provider.item!.id, 
                               _provider.item!.title,
-                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)",
+                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $seasons seasons $episodes eps",
                               _provider.item!.userList!,
-                              externalID: _provider.item!.tmdbID,
-                              contentType: ContentType.movie,
-                              movieProvider: provider,
+                              externalIntID: _provider.item!.malID,
+                              contentType: ContentType.anime,
+                              //TODO Anime provider
                             );
                           }
                         );
                       } else if (item != null) {
-                        showCupertinoModalPopup(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return MovieWatchListSheet(_provider, _provider.item!.id, _provider.item!.tmdbID);
-                          }
-                        );
+                        // showCupertinoModalPopup(
+                        //   context: context,
+                        //   barrierDismissible: false,
+                        //   builder: (context) {
+                        //     return TVWatchListSheet(
+                        //       _provider, 
+                        //       _provider.item!.id, 
+                        //       _provider.item!.tmdbID,
+                        //       episodePrefix: _provider.item?.totalEpisodes,
+                        //       seasonPrefix: _provider.item?.totalSeasons,
+                        //     );
+                        //   }
+                        // );
                       }
                     } else if (!_authProvider.isAuthenticated) {
                       showCupertinoDialog(
@@ -181,7 +188,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     );
   }
 
-  Widget _body(MovieDetailsProvider provider) {
+  Widget _body(AnimeDetailsProvider provider) {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
@@ -205,16 +212,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.max,
                             children: [
+                              //TODO Instead of these, create for anime
                               DetailsMainInfo(
-                                item.tmdbVote.toStringAsFixed(2),
+                                item.malScore.toStringAsFixed(2),
                                 item.status,
                               ),
                               DetailsInfoColumn(
                                 item.title != item.titleOriginal,
                                 item.titleOriginal,
-                                item.length.toLength(),
-                                DateTime.parse(item.releaseDate).dateToHumanDate(),
-                                null, null,
+                                null,
+                                item.aired.from != null ? DateTime.parse(item.aired.from!).dateToHumanDate() : "",
+                                item.episodes,
+                                null,
                               )
                             ],
                           ),
@@ -231,7 +240,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
                 Text( //TODO Change to chip design
-                  item.genres.join(", "),
+                  item.genres != null ? item.genres!.map((e) => e.name).join(", ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 const DetailsTitle("Description"),
@@ -248,15 +257,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 SizedBox(
                   height: 110,
                   child: DetailsCommonList(
-                    true, item.actors.length,
+                    true, item.characters.length,
                     (index) {
-                      return item.actors[index].image;
+                      return item.characters[index].image;
                     },
                     (index) {
-                      return item.actors[index].name;
+                      return item.characters[index].name;
                     },
                     (index) {
-                      return item.actors[index].character;
+                      return item.characters[index].role;
                     },
                   )
                 ),
@@ -274,31 +283,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       return item.recommendations[index].title;
                     }, 
                     (index) {
-                      return MovieDetailsPage(item.recommendations[index].tmdbID);
+                      return AnimeDetailsPage(item.recommendations[index].malId.toString());
                     }
                   ),
                 ),
-                if(item.productionCompanies != null)
-                const DetailsTitle("Production"),
-                if(item.productionCompanies != null)
-                SizedBox(
-                  height: 130,
-                  child: DetailsCommonList(
-                    false, item.productionCompanies!.length,
-                    (index) {
-                      return item.productionCompanies![index].logo;
-                    },
-                    (index) {
-                      return item.productionCompanies![index].name;
-                    },
-                    (index) {
-                      return item.productionCompanies![index].originCountry;
-                    },
-                    placeHolderIcon: Icons.business_rounded,
-                  )
-                ),
-                //TODO Streaming by country
-                //TODO Image slide list
+                //TODO Missing attributes
                 //TODO Review Summary!
                 const SizedBox(height: 16)
               ],

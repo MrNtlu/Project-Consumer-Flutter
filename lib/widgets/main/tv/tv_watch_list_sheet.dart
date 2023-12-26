@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/main/base_details.dart';
-import 'package:watchlistfy/models/main/movie/movie_watch_list_body.dart';
-import 'package:watchlistfy/models/main/movie/movie_watch_list_update_body.dart';
+import 'package:watchlistfy/models/main/tv/tv_watch_list_body.dart';
+import 'package:watchlistfy/models/main/tv/tv_watch_list_update_body.dart';
 import 'package:watchlistfy/providers/main/details_sheet_provider.dart';
-import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
+import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -14,20 +13,28 @@ import 'package:watchlistfy/widgets/main/common/details_sheet_buttons.dart';
 import 'package:watchlistfy/widgets/main/common/details_sheet_status.dart';
 import 'package:watchlistfy/widgets/main/common/details_sheet_textfield.dart';
 
-class MovieWatchListSheet extends StatefulWidget {
-  final MovieDetailsProvider provider;
-  final String movieID;
-  final String movieTMDBId;
+class TVWatchListSheet extends StatefulWidget {
+  final TVDetailsProvider provider;
+  final String tvID;
+  final String tvTMDBId;
+  final int? episodePrefix;
+  final int? seasonPrefix;
   final BaseUserList? userList;
 
-  const MovieWatchListSheet(this.provider, this.movieID, this.movieTMDBId, {this.userList, super.key});
+  const TVWatchListSheet(
+    this.provider, this.tvID, 
+    this.tvTMDBId,
+    {this.userList, this.episodePrefix, this.seasonPrefix, super.key}
+  );
 
   @override
-  State<MovieWatchListSheet> createState() => _MovieWatchListSheetState();
+  State<TVWatchListSheet> createState() => TVWatchListSheetState();
 }
 
-class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
+class TVWatchListSheetState extends State<TVWatchListSheet> {
   late TextEditingController _timesFinishedTextController;
+  late TextEditingController _seasonTextController;
+  late TextEditingController _episodeTextController;
   late ScoreDropdown _scoreDropdown;
   late final DetailsSheetProvider _provider;
 
@@ -42,11 +49,15 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
       selectedValue: widget.userList?.score,
     );
     _timesFinishedTextController = TextEditingController(text: widget.userList?.timesFinished.toString() ?? '1');
+    _episodeTextController = TextEditingController(text: widget.userList?.watchedEpisodes.toString() ?? '0');
+    _seasonTextController = TextEditingController(text: widget.userList?.watchedSeasons.toString() ?? '0');
   }
 
   @override
   void dispose() {
     _timesFinishedTextController.dispose();
+    _episodeTextController.dispose();
+    _seasonTextController.dispose();
     super.dispose();
   }
 
@@ -73,6 +84,28 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
                     DetailsSheetStatus(provider),
                     const SizedBox(height: 16),
                     _scoreDropdown,
+                    const SizedBox(height: 12),
+                    DetailsSheetTextfield(
+                      _seasonTextController, 
+                      text: "Seasons", 
+                      onPressed: () {
+                        _seasonTextController.text = (
+                          int.parse(_seasonTextController.text != "" ? _seasonTextController.text : "0") + 1
+                        ).toString();
+                      },
+                      suffix: widget.seasonPrefix != null ? "/${widget.seasonPrefix}" : null,
+                    ),
+                    const SizedBox(height: 12),
+                    DetailsSheetTextfield(
+                      _episodeTextController, 
+                      text: "Episodes",
+                      onPressed: () {
+                        _episodeTextController.text = (
+                          int.parse(_episodeTextController.text != "" ? _episodeTextController.text : "0") + 1
+                        ).toString();
+                      },
+                      suffix: widget.episodePrefix != null ? "/${widget.episodePrefix}" : null,
+                    ),
                     if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
                     const SizedBox(height: 12),
                     if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
@@ -91,8 +124,10 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
                       onPressed: () {
                         final isFinished = provider.selectedStatus.request == Constants.UserListStatus[1].request;
                         final isTimesFinishedEmpty = _timesFinishedTextController.text == "";
+                        final isEpisodesEmpty = _episodeTextController.text == "";
+                        final isSeasonsEmpty = _seasonTextController.text == "";
           
-                        if (isFinished && isTimesFinishedEmpty) {
+                        if ((isFinished && isTimesFinishedEmpty) || isEpisodesEmpty || isSeasonsEmpty) {
                           showCupertinoDialog(
                             context: context, 
                             builder: (context) {
@@ -106,17 +141,21 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
                             final userList = widget.userList!;
                             final isUpdatingScore = userList.score != _scoreDropdown.selectedValue;
           
-                            widget.provider.updateMovieWatchList(MovieWatchListUpdateBody(
+                            widget.provider.updateTVWatchList(TVWatchListUpdateBody(
                               userList.id, isUpdatingScore, 
                               isUpdatingScore ? _scoreDropdown.selectedValue : null, 
                               provider.selectedStatus.request,
                               isFinished ? null : int.parse(_timesFinishedTextController.value.text),
+                              _episodeTextController.value.text == "" ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text),
+                              _seasonTextController.value.text == "" ? userList.watchedSeasons : int.parse(_seasonTextController.value.text)
                             ));
                           } else {
-                            widget.provider.createMovieWatchList(MovieWatchListBody(
-                              widget.movieID, widget.movieTMDBId, 
+                            widget.provider.createTVWatchList(TVWatchListBody(
+                              widget.tvID, widget.tvTMDBId, 
                               isFinished ? null : int.parse(_timesFinishedTextController.value.text),
-                              _scoreDropdown.selectedValue, provider.selectedStatus.request
+                              _scoreDropdown.selectedValue, provider.selectedStatus.request,
+                              _episodeTextController.value.text == "" ? null : int.parse(_episodeTextController.value.text),
+                              _seasonTextController.value.text == "" ? null : int.parse(_seasonTextController.value.text)
                             ));
                           }
                         }

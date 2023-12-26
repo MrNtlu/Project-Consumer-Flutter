@@ -1,6 +1,6 @@
 import 'package:watchlistfy/models/main/base_details.dart';
 
-class MovieWatchList extends BaseUserList {
+class TVWatchList extends BaseUserList {
   @override
   final String id;
   @override
@@ -15,13 +15,16 @@ class MovieWatchList extends BaseUserList {
   final String createdAt;
   @override
   int? score;
+  @override 
+  int? watchedEpisodes;
+  @override 
+  int? watchedSeasons;
 
-  @override int? watchedEpisodes;
-  @override int? watchedSeasons;
   @override final int? externalIntID = null;
 
-  MovieWatchList(
+  TVWatchList(
     this.id, this.contentID, this.externalID, this.timesFinished,
-    this.status, this.createdAt, this.score,
+    this.status, this.createdAt, this.score, 
+    this.watchedEpisodes, this.watchedSeasons,
   );
 }

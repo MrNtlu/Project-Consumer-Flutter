@@ -3,10 +3,16 @@ import 'package:flutter/cupertino.dart';
 class DetailsInfoColumn extends StatelessWidget {
   final bool shouldShowTitle;
   final String titleOriginal;
-  final String length;
+  final String? length;
+  final int? episodeCount;
+  final int? seasonsCount;
   final String releaseDate;
 
-  const DetailsInfoColumn(this.shouldShowTitle, this.titleOriginal, this.length, this.releaseDate, {super.key});
+  const DetailsInfoColumn(
+    this.shouldShowTitle, this.titleOriginal, this.length, 
+    this.releaseDate, this.episodeCount, this.seasonsCount,
+    {super.key}
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +29,40 @@ class DetailsInfoColumn extends StatelessWidget {
                 Expanded(child: Text(titleOriginal, textAlign: TextAlign.end))
               ],
             ),
-          const SizedBox(height: 8,),
+          const SizedBox(height: 8),
+          //Length
+          if (length != null)
           Row(
             children: [
               const Text("Duration", style: TextStyle(fontWeight: FontWeight.bold)),
               const Spacer(),
-              Text(length)
+              Text(length!)
             ],
           ),
-          const SizedBox(height: 8,),
+          if (length != null)
+          const SizedBox(height: 8),
+          //Season Count
+          if (seasonsCount != null)
+          Row(
+            children: [
+              const Text("Seasons", style: TextStyle(fontWeight: FontWeight.bold)),
+              const Spacer(),
+              Text(seasonsCount!.toString())
+            ],
+          ),
+          if (seasonsCount != null)
+          const SizedBox(height: 8),
+          //Episode Count
+          if (episodeCount != null)
+          Row(
+            children: [
+              const Text("Episodes", style: TextStyle(fontWeight: FontWeight.bold)),
+              const Spacer(),
+              Text(episodeCount!.toString())
+            ],
+          ),
+          if (episodeCount != null)
+          const SizedBox(height: 8),
           Row(
             children: [
               const Text("Release Date", style: TextStyle(fontWeight: FontWeight.bold)),

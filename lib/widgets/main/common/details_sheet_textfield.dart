@@ -6,9 +6,10 @@ class DetailsSheetTextfield extends StatelessWidget {
   final TextEditingController _controller;
   final String text;
   final VoidCallback onPressed;
+  final String? suffix;
 
   const DetailsSheetTextfield(
-    this._controller, {required this.text, required this.onPressed, super.key}
+    this._controller, {required this.text, required this.onPressed, this.suffix, super.key}
   );
 
   @override
@@ -35,9 +36,15 @@ class DetailsSheetTextfield extends StatelessWidget {
       ),
       style: const TextStyle(fontSize: 16),
       padding: const EdgeInsets.all(8),
-      suffix: CupertinoButton(
-        onPressed: onPressed,
-        child: Icon(Icons.add_circle_rounded, color: CupertinoTheme.of(context).bgTextColor,), 
+      suffix: Row(
+        children: [
+          if (suffix != null)
+          Text(suffix!, style: const TextStyle(fontSize: 16, color: CupertinoColors.systemGrey)),
+          CupertinoButton(
+            onPressed: onPressed,
+            child: Icon(Icons.add_circle_rounded, color: CupertinoTheme.of(context).bgTextColor,), 
+          ),
+        ],
       ),
     );
   }
