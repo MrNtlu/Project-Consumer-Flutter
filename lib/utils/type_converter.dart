@@ -416,7 +416,9 @@ class TypeConverter<T> {
         response["title_original"],
         response["image_url"],
         response["mal_id"],
-        response["mal_score"],
+        (response["mal_score"] is double)
+        ? response["mal_score"]
+        : (response["mal_score"] as int).toDouble(),
         response["mal_scored_by"],
         response["is_airing"],
         response["age_rating"],

@@ -1,6 +1,5 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -17,12 +16,13 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
+import 'package:watchlistfy/widgets/main/anime/anime_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
-import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import "package:collection/collection.dart";
 
 class AnimeDetailsPage extends StatefulWidget {
   final String id;
@@ -192,7 +192,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
-
+      
+        final animeRelations = groupBy(item.relations, (element) => element.relation);
         return SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -204,29 +205,33 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: SizedBox(
-                        height: item.title != item.titleOriginal ? 142 : 125,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              //TODO Instead of these, create for anime
-                              DetailsMainInfo(
-                                item.malScore.toStringAsFixed(2),
-                                item.status,
-                              ),
-                              DetailsInfoColumn(
-                                item.title != item.titleOriginal,
-                                item.titleOriginal,
-                                null,
-                                item.aired.from != null ? DateTime.parse(item.aired.from!).dateToHumanDate() : "",
-                                item.episodes,
-                                null,
-                              )
-                            ],
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            DetailsMainInfo(
+                              item.malScore.toStringAsFixed(2),
+                              item.status,
+                            ),
+                            const SizedBox(height: 32,),
+                            AnimeDetailsInfoColumn(
+                              item.titleOriginal, 
+                              item.titleJP, 
+                              item.season != null || item.year != null
+                              ? "${item.season?.capitalize() ?? '?'} ${item.year ?? '?'}"
+                              : "Unknown", 
+                              item.episodes?.toString() ?? '?', 
+                              "${item.aired.from != null && item.aired.from != ""
+                              ? DateTime.tryParse(item.aired.from!)?.dateToHumanDate() 
+                              : '?'} to ${item.aired.to != null && item.aired.to != ""
+                              ? DateTime.tryParse(item.aired.to!)?.dateToHumanDate() 
+                              : '?'}",
+                              item.source,
+                              item.type
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -289,6 +294,9 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 ),
                 //TODO Missing attributes
                 //TODO Review Summary!
+                for (var animeList in animeRelations.values)
+                  for (var anime in animeList)
+                  Text(anime.title),
                 const SizedBox(height: 16)
               ],
             ),
