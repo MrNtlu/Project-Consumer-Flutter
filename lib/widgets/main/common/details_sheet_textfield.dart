@@ -39,7 +39,12 @@ class DetailsSheetTextfield extends StatelessWidget {
       suffix: Row(
         children: [
           if (suffix != null)
-          Text(suffix!, style: const TextStyle(fontSize: 16, color: CupertinoColors.systemGrey)),
+          GestureDetector(
+            onTap: () {
+              _controller.text = suffix.toString();
+            },
+            child: Text("/$suffix", style: const TextStyle(fontSize: 16, color: CupertinoColors.systemGrey))
+          ),
           CupertinoButton(
             onPressed: onPressed,
             child: Icon(Icons.add_circle_rounded, color: CupertinoTheme.of(context).bgTextColor,), 

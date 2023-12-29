@@ -6,6 +6,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
+import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -126,7 +127,7 @@ class _PreviewListState extends State<PreviewList> {
                       case ContentType.anime:
                         return AnimeDetailsPage(data.id);
                       case ContentType.game:
-                      //TODO IMPLEMENT
+                        return GameDetailsPage(data.id);
                       default:
                         return MovieDetailsPage(data.id);
                     }

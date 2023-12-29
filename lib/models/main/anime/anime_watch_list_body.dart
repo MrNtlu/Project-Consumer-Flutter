@@ -2,7 +2,7 @@ import 'package:watchlistfy/models/common/json_convert.dart';
 
 class AnimeWatchListBody extends JSONConverter {
   final String animeID;
-  final String animeMALId;
+  final int animeMALId;
   final int? timesFinished;
   final int? score;
   final String status;
@@ -15,12 +15,12 @@ class AnimeWatchListBody extends JSONConverter {
 
   @override
   Map<String, Object> convertToJson() => {
-    "tv_id": animeID,
-    "tv_tmdb_id": animeMALId,
-    "times_finished": timesFinished ?? 0,
+    "anime_id": animeID,
+    "anime_mal_id": animeMALId,
     if (score != null)
     "score": score!,
     "status": status,
+    "times_finished": timesFinished ?? 0,
     if (watchedEpisodes != null)
     "watched_episodes": watchedEpisodes!,
   };

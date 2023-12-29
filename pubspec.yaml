@@ -60,6 +60,7 @@ dependencies:
   cached_network_image: ^3.3.0
   auto_size_text: ^3.0.0
   expandable_text: ^2.3.0
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:

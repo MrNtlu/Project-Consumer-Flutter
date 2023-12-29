@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/main/base_details.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list_body.dart';
@@ -110,12 +109,12 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
                               userList.id, isUpdatingScore, 
                               isUpdatingScore ? _scoreDropdown.selectedValue : null, 
                               provider.selectedStatus.request,
-                              isFinished ? null : int.parse(_timesFinishedTextController.value.text),
+                              isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
                             ));
                           } else {
                             widget.provider.createMovieWatchList(MovieWatchListBody(
                               widget.movieID, widget.movieTMDBId, 
-                              isFinished ? null : int.parse(_timesFinishedTextController.value.text),
+                              isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
                               _scoreDropdown.selectedValue, provider.selectedStatus.request
                             ));
                           }

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_details.dart';
 import 'package:watchlistfy/models/main/common/request/delete_user_list_body.dart';
+import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
+import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -11,6 +13,8 @@ import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 class UserListViewSheet extends StatelessWidget {
   final MovieDetailsProvider? movieProvider;
   final TVDetailsProvider? tvProvider;
+  final AnimeDetailsProvider? animeProvider;
+  final GameDetailsProvider? gameProvider;
   final String contentID;
   final String? externalID;
   final int? externalIntID;
@@ -32,6 +36,8 @@ class UserListViewSheet extends StatelessWidget {
       required this.contentType, 
       this.movieProvider,
       this.tvProvider,
+      this.animeProvider,
+      this.gameProvider,
       super.key
     }
   );
@@ -76,6 +82,7 @@ class UserListViewSheet extends StatelessWidget {
                     return TVWatchListSheet(tvProvider!, contentID, externalID!, userList: userList);
                   }
                 );
+                //TODO ANIME AND GAME
               default:
                 break;
             }
@@ -93,6 +100,12 @@ class UserListViewSheet extends StatelessWidget {
                 break;
               case ContentType.tv:
                 tvProvider!.deleteTVWatchList(DeleteUserListBody(userList.id, contentType.request));
+                break;
+              case ContentType.anime:
+                animeProvider!.deleteAnimeWatchList(DeleteUserListBody(userList.id, contentType.request));
+                break;
+              case ContentType.tv:
+                gameProvider!.deleteGamePlayList(DeleteUserListBody(userList.id, contentType.request));
                 break;
               default:
                 break;

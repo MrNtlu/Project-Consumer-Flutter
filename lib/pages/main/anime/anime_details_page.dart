@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/models/main/anime/anime_details_relation.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
@@ -17,6 +18,7 @@ import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_info_column.dart';
+import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
@@ -139,7 +141,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         final status = Constants.UserListStatus.firstWhere((element) => element.request == item.userList!.status).name;
                         final score = item.userList!.score ?? 'Not Scored';
                         final episodes = item.userList!.watchedEpisodes ?? "?";
-                        final seasons = item.userList!.watchedSeasons ?? "?";
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
@@ -148,28 +149,27 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             return UserListViewSheet(
                               _provider.item!.id, 
                               _provider.item!.title,
-                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $seasons seasons $episodes eps",
+                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $episodes eps",
                               _provider.item!.userList!,
                               externalIntID: _provider.item!.malID,
                               contentType: ContentType.anime,
-                              //TODO Anime provider
+                              animeProvider: provider,
                             );
                           }
                         );
                       } else if (item != null) {
-                        // showCupertinoModalPopup(
-                        //   context: context,
-                        //   barrierDismissible: false,
-                        //   builder: (context) {
-                        //     return TVWatchListSheet(
-                        //       _provider, 
-                        //       _provider.item!.id, 
-                        //       _provider.item!.tmdbID,
-                        //       episodePrefix: _provider.item?.totalEpisodes,
-                        //       seasonPrefix: _provider.item?.totalSeasons,
-                        //     );
-                        //   }
-                        // );
+                        showCupertinoModalPopup(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return AnimeWatchListSheet(
+                              _provider, 
+                              _provider.item!.id, 
+                              _provider.item!.malID,
+                              episodePrefix: _provider.item?.episodes,
+                            );
+                          }
+                        );
                       }
                     } else if (!_authProvider.isAuthenticated) {
                       showCupertinoDialog(
@@ -248,6 +248,16 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   item.genres != null ? item.genres!.map((e) => e.name).join(", ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
+                const DetailsTitle("Demographics"),
+                Text( //TODO Change to chip design
+                  item.demographics != null ? item.demographics!.map((e) => e.name).join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const DetailsTitle("Themes"),
+                Text( //TODO Change to chip design
+                  item.themes != null ? item.themes!.map((e) => e.name).join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
                 const DetailsTitle("Description"),
                 ExpandableText(
                   item.description,
@@ -292,11 +302,21 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     }
                   ),
                 ),
-                //TODO Missing attributes
-                //TODO Review Summary!
+                if (animeRelations.isNotEmpty)
+                const DetailsTitle("Related Anime"),
                 for (var animeList in animeRelations.values)
-                  for (var anime in animeList)
-                  Text(anime.title),
+                _relationList(animeList),
+                const DetailsTitle("Producers"),
+                Text( //TODO Change list with URL links.
+                  item.producers != null ? item.producers!.map((e) => e.name).join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const DetailsTitle("Studios"),
+                Text( //TODO Change to url links
+                  item.studios != null ? item.studios!.map((e) => e.name).join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                //TODO Review Summary!
                 const SizedBox(height: 16)
               ],
             ),
@@ -309,5 +329,33 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }
+  }
+
+  Widget _relationList(List<AnimeDetailsRelation> relationList) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DetailsSubTitle(relationList.first.relation),
+        SizedBox(
+          height: 115,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: DetailsRecommendationList(
+              relationList.length, 
+              (index) => relationList[index].imageURL, 
+              (index) => relationList[index].title, 
+              (index) {
+                final item = relationList[index];
+                if (item.relation == "Adaptation") {
+                  //TODO Redirect or open manga
+                }
+                return AnimeDetailsPage(item.animeID.toString()); 
+              }
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

@@ -340,8 +340,8 @@ class TypeConverter<T> {
           e["image_url"]
         )).toList())
         : [],
-        response["watch_list"] != null
-        ? TypeConverter<TVWatchList>().convertToObject(response["watch_list"])
+        response["tv_list"] != null
+        ? TypeConverter<TVWatchList>().convertToObject(response["tv_list"])
         : null, 
         response["watch_later"] != null
         ? ConsumeLater(
@@ -423,8 +423,8 @@ class TypeConverter<T> {
         response["is_airing"],
         response["age_rating"],
         response["trailer"],
-        response["watch_list"] != null
-        ? TypeConverter<AnimeWatchList>().convertToObject(response["watch_list"])
+        response["anime_list"] != null
+        ? TypeConverter<AnimeWatchList>().convertToObject(response["anime_list"])
         : null, 
         response["watch_later"] != null
         ? ConsumeLater(
