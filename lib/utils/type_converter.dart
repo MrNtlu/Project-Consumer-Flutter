@@ -15,6 +15,9 @@ import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
 import 'package:watchlistfy/models/main/common/streaming_platform.dart';
+import 'package:watchlistfy/models/main/game/game_details.dart';
+import 'package:watchlistfy/models/main/game/game_details_relation.dart';
+import 'package:watchlistfy/models/main/game/game_details_store.dart';
 import 'package:watchlistfy/models/main/game/game_play_list.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
@@ -156,6 +159,23 @@ class TypeConverter<T> {
         response["to_day"],
         response["to_month"],
         response["to_year"],
+      ) as T;
+    } else if (T == GameDetailsRelation) {
+      return GameDetailsRelation(
+        response["_id"],
+        response["platforms"] != null
+        ? (response["platforms"] as List).map((e) => e.toString()).toList()
+        : [],
+        response["title"],
+        response["title_original"],
+        response["rawg_id"],
+        response["release_date"],
+        response["image_url"],
+      ) as T;
+    } else if (T == GameDetailsStore) {
+      return GameDetailsStore(
+        response["url"],
+        response["store_id"],
       ) as T;
     } else if (T == MovieDetails) {
       return MovieDetails(
@@ -425,6 +445,63 @@ class TypeConverter<T> {
         response["trailer"],
         response["anime_list"] != null
         ? TypeConverter<AnimeWatchList>().convertToObject(response["anime_list"])
+        : null, 
+        response["watch_later"] != null
+        ? ConsumeLater(
+          response["watch_later"]["_id"], 
+          response["watch_later"]["user_id"], 
+          response["watch_later"]["content_id"], 
+          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["content_type"]
+        )
+        : null
+      ) as T;
+    } else if (T == GameDetails) {
+      return GameDetails(
+        response["_id"], 
+        response["description"], 
+        response["tba"], 
+        response["subreddit"], 
+        response["genres"] != null
+        ? (response["genres"] as List).map((e) => e.toString()).toList()
+        : [],
+        response["tags"] != null
+        ? (response["tags"] as List).map((e) => e.toString()).toList()
+        : [], 
+        response["platforms"] != null
+        ? (response["platforms"] as List).map((e) => e.toString()).toList()
+        : [], 
+        response["developers"] != null
+        ? (response["developers"] as List).map((e) => e.toString()).toList()
+        : [],
+        response["publishers"] != null
+        ? (response["publishers"] as List).map((e) => e.toString()).toList()
+        : [], 
+        response["stores"] != null
+        ? ((response["stores"] as List).map((e) => 
+          TypeConverter<GameDetailsStore>().convertToObject(e)
+        ).toList())
+        : [], 
+        response["screenshots"] != null
+        ? (response["screenshots"] as List).map((e) => e.toString()).toList()
+        : [], 
+        TypeConverter<ReviewSummary>().convertToObject(response),
+        response["title"], 
+        response["title_original"], 
+        response["image_url"], 
+        response["rawg_id"],
+        response["rawg_rating"],
+        response["rawg_rating_count"],
+        response["metacritic_score"],
+        response["release_date"],
+        response["age_rating"],
+        response["related_games"] != null
+        ? ((response["related_games"] as List).map((e) => 
+          TypeConverter<GameDetailsRelation>().convertToObject(e)
+        ).toList())
+        : [],
+        response["game_list"] != null
+        ? TypeConverter<GamePlayList>().convertToObject(response["game_list"])
         : null, 
         response["watch_later"] != null
         ? ConsumeLater(

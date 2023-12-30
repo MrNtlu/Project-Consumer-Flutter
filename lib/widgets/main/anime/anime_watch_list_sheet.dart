@@ -133,7 +133,6 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
                               _episodeTextController.value.text == "" ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text),
                             ));
                           } else {
-                            //TODO NOT WORKING FOR SOME REASON!
                             widget.provider.createAnimeWatchList(AnimeWatchListBody(
                               widget.animeID, widget.animeMALId,
                               isFinished ? int.parse(_timesFinishedTextController.value.text) : null,

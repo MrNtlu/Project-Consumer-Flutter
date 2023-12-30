@@ -135,20 +135,20 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         final hoursPlayed = item.userList!.watchedEpisodes ?? "?";
                         final timesFinished = item.userList!.timesFinished;
 
-                        // showCupertinoModalPopup(
-                        //   context: context, 
-                        //   builder: (context) {
-                        //     return UserListViewSheet(
-                        //       _provider.item!.id, 
-                        //       _provider.item!.title,
-                        //       "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $hoursPlayed hrs.",
-                        //       _provider.item!.userList!,
-                        //       externalIntID: _provider.item!.rawgId,
-                        //       contentType: ContentType.game,
-                        //       gameProvider: provider,
-                        //     );
-                        //   }
-                        // );
+                        showCupertinoModalPopup(
+                          context: context, 
+                          builder: (context) {
+                            return UserListViewSheet(
+                              _provider.item!.id, 
+                              _provider.item!.title,
+                              "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $hoursPlayed hrs.",
+                              _provider.item!.userList!,
+                              externalIntID: _provider.item!.rawgId,
+                              contentType: ContentType.game,
+                              gameProvider: provider,
+                            );
+                          }
+                        );
                       } else if (item != null) {
                         // showCupertinoModalPopup(
                         //   context: context,
@@ -203,10 +203,10 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            // DetailsMainInfo(
-                            //   item.malScore.toStringAsFixed(2),
-                            //   item.status,
-                            // ),
+                            DetailsMainInfo(
+                              item.rawgRating.toStringAsFixed(2),
+                              item.tba ? "TBA" : (item.releaseDate ?? ''),
+                            ),
                             const SizedBox(height: 32,),
                             //TODO Info columns
                           ],
@@ -215,17 +215,17 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                     ),
                     SizedBox(
                       height: 125,
-                      // child: ContentCell(item.imageUrl, item.title)
+                      child: ContentCell(item.imageUrl, item.title)
                     ),
                   ],
                 ),
                 const SizedBox(height: 16,),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
-                // Text( //TODO Change to chip design
-                //   item.genres != null ? item.genres!.map((e) => e.name).join(", ") : "",
-                //   style: const TextStyle(fontWeight: FontWeight.w500),
-                // ),
+                Text( //TODO Change to chip design
+                  item.genres.isNotEmpty ? item.genres.join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
                 //TODO Image list with slider
                 //TODO Review Summary!
                 const SizedBox(height: 16)
