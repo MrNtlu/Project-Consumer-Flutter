@@ -10,18 +10,19 @@ class ContentCell extends StatelessWidget {
   final String url;
   final String title;
   final double cornerRadius;
+  final bool forceRatio;
 
-  const ContentCell(this.url, this.title, {this.cornerRadius = 12, super.key});
+  const ContentCell(this.url, this.title, {this.cornerRadius = 12, this.forceRatio = false, super.key});
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ContentProvider>(context);
 
     return AspectRatio(
-      aspectRatio: provider.selectedContent != ContentType.game ? 2/3 : 16/9,
+      aspectRatio: forceRatio || provider.selectedContent != ContentType.game ? 2/3 : 16/9,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(cornerRadius),
-        child: provider.selectedContent == ContentType.game
+        child: !forceRatio && provider.selectedContent == ContentType.game
         ? Stack(children: [
           _image(provider.selectedContent),
           Align(
@@ -54,9 +55,9 @@ class ContentCell extends StatelessWidget {
       fadeInDuration: const Duration(milliseconds: 0),
       fadeOutDuration: const Duration(milliseconds: 0),
       key: ValueKey<String>(url + title),
-      fit: selectedContent != ContentType.game ? BoxFit.contain : BoxFit.fill,
+      fit: selectedContent != ContentType.game ? BoxFit.contain : (forceRatio ? BoxFit.cover : BoxFit.fill),
       progressIndicatorBuilder: (_, __, ___) => AspectRatio(
-        aspectRatio: selectedContent != ContentType.game ? 2/3 : 16/9,
+        aspectRatio: forceRatio || selectedContent != ContentType.game ? 2/3 : 16/9,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Shimmer.fromColors(

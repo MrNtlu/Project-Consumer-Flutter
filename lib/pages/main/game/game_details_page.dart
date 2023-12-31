@@ -1,3 +1,4 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -7,6 +8,7 @@ import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -16,7 +18,10 @@ import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
+import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/game/game_details_info_column.dart';
+import 'package:watchlistfy/widgets/main/game/game_details_play_list_sheet.dart';
 
 class GameDetailsPage extends StatefulWidget {
   final String id;
@@ -87,7 +92,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
             child: CustomScrollView(
               slivers: [
                 DetailsNavigationBar(
-                  "", // _provider.item?.title ?? "",
+                  _provider.item?.title ?? "",
                   _provider.item == null,
                   _provider.item?.userList == null,
                   _provider.item?.consumeLater == null,
@@ -107,16 +112,16 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                           }
                         });
                       } else if (item != null) {
-                        // provider.createConsumeLaterObject(
-                        //   ConsumeLaterBody(item.id, item.malID.toString(), "anime")
-                        // ).then((response) {
-                        //   if (response.error != null) {
-                        //     showCupertinoDialog(
-                        //       context: context, 
-                        //       builder: (_) => ErrorDialog(response.error!),
-                        //     );
-                        //   }
-                        // });
+                        provider.createConsumeLaterObject(
+                          ConsumeLaterBody(item.id, item.rawgId.toString(), "game")
+                        ).then((response) {
+                          if (response.error != null) {
+                            showCupertinoDialog(
+                              context: context, 
+                              builder: (_) => ErrorDialog(response.error!),
+                            );
+                          }
+                        });
                       }
                     } else if (!_authProvider.isAuthenticated) {
                       showCupertinoDialog(
@@ -150,19 +155,17 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                           }
                         );
                       } else if (item != null) {
-                        // showCupertinoModalPopup(
-                        //   context: context,
-                        //   barrierDismissible: false,
-                        //   builder: (context) {
-                        //     return TVWatchListSheet(
-                        //       _provider, 
-                        //       _provider.item!.id, 
-                        //       _provider.item!.tmdbID,
-                        //       episodePrefix: _provider.item?.totalEpisodes,
-                        //       seasonPrefix: _provider.item?.totalSeasons,
-                        //     );
-                        //   }
-                        // );
+                        showCupertinoModalPopup(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return GameDetailsPlayListSheet(
+                              _provider, 
+                              _provider.item!.id, 
+                              _provider.item!.rawgId,
+                            );
+                          }
+                        );
                       }
                     } else if (!_authProvider.isAuthenticated) {
                       showCupertinoDialog(
@@ -201,31 +204,83 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         padding: const EdgeInsets.only(right: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             DetailsMainInfo(
                               item.rawgRating.toStringAsFixed(2),
-                              item.tba ? "TBA" : (item.releaseDate ?? ''),
+                              item.tba ? "TBA" : (
+                                item.releaseDate != null ? DateTime.parse(item.releaseDate!).dateToHumanDate() : ''
+                              ),
                             ),
-                            const SizedBox(height: 32,),
-                            //TODO Info columns
+                            const SizedBox(height: 32),
+                            GameDetailsInfoColumn(
+                              item.title != item.titleOriginal, 
+                              item.titleOriginal, 
+                              item.ageRating, 
+                              item.metacriticScore
+                            )
                           ],
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 125,
-                      child: ContentCell(item.imageUrl, item.title)
+                      child: ContentCell(item.imageUrl, item.title, forceRatio: true, cornerRadius: 8,)
                     ),
                   ],
                 ),
                 const SizedBox(height: 16,),
                 const CustomDivider(height: 0.75, opacity: 0.35),
+                const DetailsTitle("Description"),
+                ExpandableText(
+                  removeAllHtmlTags(item.description),
+                  maxLines: 3,
+                  expandText: "Read More",
+                  collapseText: "Read Less",
+                  linkColor: CupertinoColors.systemBlue,
+                  style: const TextStyle(fontSize: 16),
+                  linkStyle: const TextStyle(fontSize: 14),
+                ),
                 const DetailsTitle("Genres"),
                 Text( //TODO Change to chip design
                   item.genres.isNotEmpty ? item.genres.join(", ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
+                const DetailsTitle("Developers"),
+                Text( //TODO Change to chip design
+                  item.developers.isNotEmpty ? item.developers.join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const DetailsTitle("Publishers"),
+                Text( //TODO Change to chip design
+                  item.publishers.isNotEmpty ? item.publishers.join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const DetailsTitle("Platforms"),
+                Text( //TODO Change to chip design
+                  item.platforms.isNotEmpty ? item.platforms.join(", ") : "",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                if(item.relatedGames.isNotEmpty)
+                const DetailsTitle("Related Games"),
+                if(item.relatedGames.isNotEmpty)
+                SizedBox(
+                  height: 150,
+                  child: DetailsRecommendationList(
+                    item.relatedGames.length, 
+                    (index) {
+                      return item.relatedGames[index].imageURL;
+                    }, 
+                    (index) {
+                      return item.relatedGames[index].title;
+                    }, 
+                    (index) {
+                      return GameDetailsPage(item.relatedGames[index].rawgId.toString());
+                    }
+                  ),
+                ),
+                //TODO Store id map
                 //TODO Image list with slider
                 //TODO Review Summary!
                 const SizedBox(height: 16)
@@ -240,5 +295,11 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }
+  }
+
+  String removeAllHtmlTags(String htmlText) {
+     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+
+     return htmlText.replaceAll(exp, '');
   }
 }

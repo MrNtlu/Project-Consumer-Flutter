@@ -490,7 +490,9 @@ class TypeConverter<T> {
         response["title_original"], 
         response["image_url"], 
         response["rawg_id"],
-        response["rawg_rating"],
+        (response["rawg_rating"] is double)
+        ? response["rawg_rating"]
+        : (response["rawg_rating"] as int).toDouble(),
         response["rawg_rating_count"],
         response["metacritic_score"],
         response["release_date"],

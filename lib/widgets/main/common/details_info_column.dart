@@ -22,13 +22,13 @@ class DetailsInfoColumn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (shouldShowTitle)
-            Row(
-              children: [
-                const Text("Title", style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(width: 12),
-                Expanded(child: Text(titleOriginal, textAlign: TextAlign.end))
-              ],
-            ),
+          Row(
+            children: [
+              const Text("Title", style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(width: 12),
+              Expanded(child: Text(titleOriginal, textAlign: TextAlign.end))
+            ],
+          ),
           const SizedBox(height: 8),
           //Length
           if (length != null)

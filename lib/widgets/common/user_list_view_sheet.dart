@@ -7,6 +7,8 @@ import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
+import 'package:watchlistfy/widgets/main/game/game_details_play_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 
@@ -69,7 +71,8 @@ class UserListViewSheet extends StatelessWidget {
             switch (contentType) {
               case ContentType.movie:
                 showCupertinoModalPopup(
-                  context: context, 
+                  context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return MovieWatchListSheet(movieProvider!, contentID, externalID!, userList: userList);
                   }
@@ -77,12 +80,28 @@ class UserListViewSheet extends StatelessWidget {
                 break;
               case ContentType.tv:
                 showCupertinoModalPopup(
-                  context: context, 
+                  context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return TVWatchListSheet(tvProvider!, contentID, externalID!, userList: userList);
                   }
                 );
-                //TODO ANIME AND GAME
+              case ContentType.anime:
+                showCupertinoModalPopup(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AnimeWatchListSheet(animeProvider!, contentID, externalIntID!, userList: userList);
+                  }
+                );
+              case ContentType.game:
+                showCupertinoModalPopup(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return GameDetailsPlayListSheet(gameProvider!, contentID, externalIntID!, userList: userList);
+                  }
+                );
               default:
                 break;
             }
@@ -104,7 +123,7 @@ class UserListViewSheet extends StatelessWidget {
               case ContentType.anime:
                 animeProvider!.deleteAnimeWatchList(DeleteUserListBody(userList.id, contentType.request));
                 break;
-              case ContentType.tv:
+              case ContentType.game:
                 gameProvider!.deleteGamePlayList(DeleteUserListBody(userList.id, contentType.request));
                 break;
               default:

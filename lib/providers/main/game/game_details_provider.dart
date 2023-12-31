@@ -21,10 +21,10 @@ class GameDetailsProvider extends BaseDetailsProvider<GameDetails> {
     => deleteConsumeLater(body, url: APIRoutes().userInteractionRoutes.consumeLater);
 
   Future<BaseNullableResponse<GamePlayList>> createGamePlayList(GamePlayListBody body) async
-    => createUserList<GamePlayListBody, GamePlayList>(body, url: APIRoutes().userListRoutes.animeUserList);
+    => createUserList<GamePlayListBody, GamePlayList>(body, url: APIRoutes().userListRoutes.gameUserList);
 
   Future<BaseNullableResponse<GamePlayList>> updateGamePlayList(GamePlayListUpdateBody body) async
-    => updateUserList<GamePlayListUpdateBody, GamePlayList>(body, url: APIRoutes().userListRoutes.animeUserList);
+    => updateUserList<GamePlayListUpdateBody, GamePlayList>(body, url: APIRoutes().userListRoutes.gameUserList);
 
   Future<BaseMessageResponse> deleteGamePlayList(DeleteUserListBody body) async
     => deleteUserList(body, url: APIRoutes().userListRoutes.deleteUserList);
