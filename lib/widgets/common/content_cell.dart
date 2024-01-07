@@ -55,7 +55,7 @@ class ContentCell extends StatelessWidget {
       fadeInDuration: const Duration(milliseconds: 0),
       fadeOutDuration: const Duration(milliseconds: 0),
       key: ValueKey<String>(url + title),
-      fit: selectedContent != ContentType.game ? BoxFit.contain : (forceRatio ? BoxFit.cover : BoxFit.fill),
+      fit: BoxFit.cover,
       progressIndicatorBuilder: (_, __, ___) => AspectRatio(
         aspectRatio: forceRatio || selectedContent != ContentType.game ? 2/3 : 16/9,
         child: ClipRRect(

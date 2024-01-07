@@ -32,4 +32,17 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
       );
     }
   }
+
+  Future<BasePaginationResponse<BaseContent>> searchAnime({
+    int page = 1,
+    required String search,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+    
+    return getList(
+      url: "${APIRoutes().animeRoutes.searchAnime}?page=$page&search=$search"
+    );
+  }
 }

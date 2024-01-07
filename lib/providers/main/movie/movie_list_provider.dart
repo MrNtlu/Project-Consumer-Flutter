@@ -32,4 +32,17 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
       );
     }
   }
+
+  Future<BasePaginationResponse<BaseContent>> searchMovie({
+    int page = 1,
+    required String search,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+    
+    return getList(
+      url: "${APIRoutes().movieRoutes.searchMovies}?page=$page&search=$search"
+    );
+  }
 }

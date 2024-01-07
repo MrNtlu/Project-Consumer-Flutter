@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/content_list_page.dart';
+import 'package:watchlistfy/pages/main/search_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_list_provider.dart';
@@ -34,7 +35,7 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: authenticationProvider.isAuthenticated
                     ?  const LoggedinHeader()
                     : const AnonymousHeader()
@@ -43,9 +44,19 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: CupertinoSearchTextField(
+                  onSubmitted: (value) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    if (value.isNotEmpty) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return SearchListPage(value);
+                        })
+                      );
+                    }
+                  },
                   keyboardType: TextInputType.name,
                 ),
               ),

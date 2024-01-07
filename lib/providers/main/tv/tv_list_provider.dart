@@ -32,4 +32,17 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
       );
     }
   }
+
+  Future<BasePaginationResponse<BaseContent>> searchTVSeries({
+    int page = 1,
+    required String search,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+    
+    return getList(
+      url: "${APIRoutes().tvRoutes.searchTVSeries}?page=$page&search=$search"
+    );
+  }
 }
