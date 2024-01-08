@@ -61,6 +61,7 @@ dependencies:
   auto_size_text: ^3.0.0
   expandable_text: ^2.3.0
   collection: ^1.18.0
+  modal_bottom_sheet: ^3.0.0-pre
 
 dev_dependencies:
   flutter_test:

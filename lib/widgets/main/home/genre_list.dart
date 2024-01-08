@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/common/name_url.dart';
+import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 
@@ -51,36 +52,57 @@ class GenreList extends StatelessWidget {
           
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: data.url,
-                    cacheKey: data.url,
-                    key: ValueKey<String>(data.url),
-                    fadeInDuration: const Duration(milliseconds: 0),
-                    fadeOutDuration: const Duration(milliseconds: 0),
-                  ),
-                  ColoredBox(
-                    color: CupertinoColors.black.withOpacity(0.5),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-                        child: Text(
-                        data.name,
-                        style: const TextStyle(
-                          fontSize: 16, 
-                          fontWeight: FontWeight.bold, 
-                          color: CupertinoColors.white
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    switch (contentProvider.selectedContent) {
+                      case ContentType.movie:
+                        return MovieDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                      case ContentType.tv:
+                        
+                      case ContentType.anime:
+                        
+                      case ContentType.game:
+                      
+                      default:
+                      return MovieDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                    }
+                    
+                  })
+                );
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: data.url,
+                      cacheKey: data.url,
+                      key: ValueKey<String>(data.url),
+                      fadeInDuration: const Duration(milliseconds: 0),
+                      fadeOutDuration: const Duration(milliseconds: 0),
+                    ),
+                    ColoredBox(
+                      color: CupertinoColors.black.withOpacity(0.5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+                          child: Text(
+                          data.name,
+                          style: const TextStyle(
+                            fontSize: 16, 
+                            fontWeight: FontWeight.bold, 
+                            color: CupertinoColors.white
+                          ),
+                        ),
                         ),
                       ),
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

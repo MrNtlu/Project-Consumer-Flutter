@@ -23,7 +23,7 @@ class Constants {
     BackendRequestMapper("Dropped", "dropped"),
   ];
 
-    //Status Requests
+  //Status Requests
   static final MovieStatusRequests = [
     BackendRequestMapper("In Production", "production"),
     BackendRequestMapper("Released", "released"),

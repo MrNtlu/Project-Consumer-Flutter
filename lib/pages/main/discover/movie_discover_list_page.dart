@@ -1,41 +1,40 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
+import 'package:watchlistfy/pages/main/discover/movie_discover_sheet.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
-import 'package:watchlistfy/providers/content_provider.dart';
-import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
-import 'package:watchlistfy/providers/main/game/game_list_provider.dart';
+import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_list_provider.dart';
-import 'package:watchlistfy/providers/main/tv/tv_list_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 
-class ContentListPage extends StatefulWidget {
-  final ContentType contentType;
-  final String contentTag;
-  final String title;
+class MovieDiscoverListPage extends StatefulWidget {
+  final String? genre;
+  final String sort;
+  final String? productionCompanies;
 
-  const ContentListPage(this.contentType, this.contentTag, this.title, {super.key});
+  const MovieDiscoverListPage({
+    this.genre,
+    this.sort = "popularity",
+    this.productionCompanies,
+    super.key
+  });
 
   @override
-  State<ContentListPage> createState() => _ContentListPageState();
+  State<MovieDiscoverListPage> createState() => _MovieDiscoverListPageState();
 }
 
-class _ContentListPageState extends State<ContentListPage> {
+class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   ListState _state = ListState.init;
 
-  late final ContentProvider _contentProvider;
   late final MovieListProvider _movieListProvider;
-  late final TVListProvider _tvListProvider;
-  late final AnimeListProvider _animeListProvider;
-  late final GameListProvider _gameListProvider;
+  late final DiscoverMovieProvider _discoverProvider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -53,24 +52,25 @@ class _ContentListPageState extends State<ContentListPage> {
       _isPaginating = true;
     }
 
-    Future<BasePaginationResponse<BaseContent>> futureResponse;
-    switch (widget.contentType) {
-      case ContentType.movie:
-        futureResponse = _movieListProvider.getMovies(page: _page, contentTag: widget.contentTag);
-        break;
-      case ContentType.tv:
-        futureResponse = _tvListProvider.getTVSeries(page: _page, contentTag: widget.contentTag);
-        break;
-      case ContentType.anime:
-        futureResponse = _animeListProvider.getAnime(page: _page, contentTag: widget.contentTag);
-        break;
-      case ContentType.game:
-        futureResponse = _gameListProvider.getGames(page: _page, contentTag: widget.contentTag);
-        break;
-      default:
-        futureResponse = _movieListProvider.getMovies(page: _page, contentTag: widget.contentTag);
-        break;
+    late final int? from;
+    late final int? to;
+    if (_discoverProvider.decade != null) {
+      from = int.parse(_discoverProvider.decade!);
+      to = from + 10;
+    } else {
+      from = null;
+      to = null;
     }
+
+    Future<BasePaginationResponse<BaseContent>> futureResponse = _movieListProvider.discoverMovies(
+      page: _page,
+      sort: _discoverProvider.sort,
+      genres: _discoverProvider.genre,
+      status: _discoverProvider.status,
+      productionCompany: _discoverProvider.productionCompanies,
+      from: from,
+      to: to,
+    );
 
     futureResponse.then((response) {
       _error = response.error;
@@ -106,9 +106,9 @@ class _ContentListPageState extends State<ContentListPage> {
   void initState() {
     super.initState();
     _movieListProvider = MovieListProvider();
-    _tvListProvider = TVListProvider();
-    _animeListProvider = AnimeListProvider();
-    _gameListProvider = GameListProvider();
+    _discoverProvider = DiscoverMovieProvider();
+    _discoverProvider.genre = widget.genre;
+    _discoverProvider.productionCompanies = widget.productionCompanies;
   }
 
   @override
@@ -122,7 +122,6 @@ class _ContentListPageState extends State<ContentListPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
-      _contentProvider = Provider.of<ContentProvider>(context, listen: false);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData();
@@ -132,38 +131,31 @@ class _ContentListPageState extends State<ContentListPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<BaseContent> data;
-    switch (widget.contentType) {
-      case ContentType.movie:
-        data = _movieListProvider.items;
-        break;
-      case ContentType.tv:
-        data = _tvListProvider.items;
-        break;
-      case ContentType.anime:
-        data = _animeListProvider.items;
-        break;
-      case ContentType.game:
-        data = _gameListProvider.items;
-        break;
-      default:
-        data = _movieListProvider.items;
-        break;
-    }
+    final data = _movieListProvider.items;
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => _movieListProvider),
-        ChangeNotifierProvider(create: (context) => _tvListProvider),
-        ChangeNotifierProvider(create: (context) => _animeListProvider),
-        ChangeNotifierProvider(create: (context) => _gameListProvider),
+        ChangeNotifierProvider(create: (_) => _movieListProvider),
+        ChangeNotifierProvider(create: (_) => _discoverProvider),
       ],
-      child: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle: "Home",
-          middle: Text(widget.title),
-        ),
-        child: _body(data)
+      child: Consumer<DiscoverMovieProvider>(
+        builder: (context, provider, child) {
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(provider.genre ?? 'Discover'),
+              trailing: GestureDetector(
+                child: Icon(Icons.filter_alt_rounded, color: CupertinoTheme.of(context).bgTextColor,),
+                onTap: () {
+                  showCupertinoModalBottomSheet(
+                    context: context, 
+                    builder: (context) => MovieDiscoverSheet(_fetchData, provider)
+                  );
+                },
+              ),
+            ),
+            child: _body(data),
+          );
+        }
       ),
     );
   }
@@ -174,16 +166,16 @@ class _ContentListPageState extends State<ContentListPage> {
         return GridView.builder(
           itemCount: _canPaginate ? data.length + 2 : data.length,
           controller: _scrollController,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 350, 
-            childAspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9, 
+            childAspectRatio: 2/3, 
             crossAxisSpacing: 6, 
             mainAxisSpacing: 6
           ), 
           itemBuilder: (context, index) {
             if ((_canPaginate || _isPaginating) && index >= data.length) {
               return AspectRatio(
-                aspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
+                aspectRatio: 2/3,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Shimmer.fromColors(
@@ -201,18 +193,7 @@ class _ContentListPageState extends State<ContentListPage> {
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
-                    switch (_contentProvider.selectedContent) {
-                      case ContentType.movie:
-                        return MovieDetailsPage(content.id);
-                      case ContentType.tv:
-                        return TVDetailsPage(content.id);
-                      case ContentType.anime:
-                        return AnimeDetailsPage(content.id);
-                      case ContentType.game: 
-                        return GameDetailsPage(content.id);
-                      default:
-                        return MovieDetailsPage(content.id);
-                    }
+                    return MovieDetailsPage(content.id);
                   })
                 );
               },

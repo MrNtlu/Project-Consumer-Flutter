@@ -45,4 +45,30 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
       url: "${APIRoutes().movieRoutes.searchMovies}?page=$page&search=$search"
     );
   }
+
+  Future<BasePaginationResponse<BaseContent>> discoverMovies({
+    int page = 1,
+    required String sort,
+    String? status,
+    String? productionCompany,
+    String? genres,
+    int? from,
+    int? to,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+    
+    return getList(
+      url: "${APIRoutes().movieRoutes.movieBySortFilter}?page=$page&sort=$sort${
+        status != null ? '&status=$status' : ''
+      }${
+        productionCompany != null ? '&production_companies=$productionCompany' : ''
+      }${
+        genres != null ? '&genres=$genres' : ''
+      }${
+        from != null && to != null ? '&from=$from&to=$to' : ''
+      }"
+    );
+  }
 }
