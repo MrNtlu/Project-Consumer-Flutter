@@ -41,4 +41,26 @@ class GameListProvider extends BasePaginationProvider<BaseContent> {
       url: "${APIRoutes().gameRoutes.searchGames}?page=$page&search=$search"
     );
   }
+
+  Future<BasePaginationResponse<BaseContent>> discoverGames({
+    int page = 1,
+    required String sort,
+    bool? tba,
+    String? genres,
+    String? platform,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+    
+    return getList(
+      url: "${APIRoutes().gameRoutes.gameBySortFilter}?page=$page&sort=$sort${
+        tba != null ? '&tba=$tba' : ''
+      }${
+        platform != null ? '&platform=$platform' : ''
+      }${
+        genres != null ? '&genres=$genres' : ''
+      }"
+    );
+  }
 }

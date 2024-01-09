@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
+import 'package:watchlistfy/providers/main/discover/discover_game_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
-class MovieDiscoverSheet extends StatelessWidget {
+class GameDiscoverSheet extends StatelessWidget {
   final VoidCallback fetchData;
-  final DiscoverMovieProvider provider;
+  final DiscoverGameProvider provider;
 
-  const MovieDiscoverSheet(this.fetchData, this.provider, {super.key});
+  const GameDiscoverSheet(this.fetchData, this.provider, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +18,16 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.map((e) => e.name).toList()
     );
 
-    final genres = Constants.MovieGenreList.map((e) => e.name).toList();
+    final genres = Constants.GameGenreList.map((e) => e.name).toList();
     genres.removeAt(0);
     final genreList = DiscoverSheetList(
-      Constants.MovieGenreList.where((element) => element.name == provider.genre).firstOrNull?.name,
+      Constants.GameGenreList.where((element) => element.name == provider.genre).firstOrNull?.name,
       genres,
     );
 
-    final statusList = DiscoverSheetList(
-      Constants.MovieStatusRequests.where((element) => element.request == provider.status).firstOrNull?.name,
-      Constants.MovieStatusRequests.map((e) => e.name).toList()
-    );
-
-    final decadeList = DiscoverSheetList(
-      Constants.DecadeList.where((element) => element.request == provider.decade).firstOrNull?.name,
-      Constants.DecadeList.map((e) => e.name).toList()
+    final platformList = DiscoverSheetList(
+      Constants.GamePlatformRequests.where((element) => element.request == provider.platform).firstOrNull?.name,
+      Constants.GamePlatformRequests.map((e) => e.name).toList()
     );
 
     return SafeArea(
@@ -45,8 +40,7 @@ class MovieDiscoverSheet extends StatelessWidget {
                 children: [
                   DiscoverSheetFilterBody("Sort", sortList),
                   DiscoverSheetFilterBody("Genre", genreList),
-                  DiscoverSheetFilterBody("Status", statusList),
-                  DiscoverSheetFilterBody("Release Date", decadeList),
+                  DiscoverSheetFilterBody("Platforms", platformList),
                 ],
               ),
             ),
@@ -66,9 +60,8 @@ class MovieDiscoverSheet extends StatelessWidget {
                     Navigator.pop(context);
                     provider.setDiscover(
                       sort: Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request,
-                      genre: Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
-                      status: Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
-                      decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
+                      genre: Constants.GameGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
+                      platform: Constants.GamePlatformRequests.where((element) => element.name == platformList.selectedValue).firstOrNull?.request,
                     );
                     fetchData();
                   },

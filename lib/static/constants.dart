@@ -229,6 +229,10 @@ class Constants {
     BackendRequestMapper("2020s", "2020"),
   ];
 
+  static final NumOfSeasonList = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"
+  ];
+
   static final ProfileImageList = [
     //Movies
     "https://image.tmdb.org/t/p/w300/hkBaDkMWbLaf8B1lsWsKX7Ew3Xq.jpg",

@@ -6,6 +6,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_relation.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
+import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -20,6 +21,7 @@ import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
+import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
@@ -244,20 +246,17 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 const SizedBox(height: 16,),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
-                Text( //TODO Change to chip design
-                  item.genres != null ? item.genres!.map((e) => e.name).join(", ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.genres != null ? item.genres!.map((e) => e.name).toList() : [], (genre) {
+                  return AnimeDiscoverListPage(genre: genre);
+                }),
                 const DetailsTitle("Demographics"),
-                Text( //TODO Change to chip design
-                  item.demographics != null ? item.demographics!.map((e) => e.name).join(", ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.demographics != null ? item.demographics!.map((e) => e.name).toList() : [], (demographic) {
+                  return AnimeDiscoverListPage(demographic: demographic);
+                }),
                 const DetailsTitle("Themes"),
-                Text( //TODO Change to chip design
-                  item.themes != null ? item.themes!.map((e) => e.name).join(", ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.themes != null ? item.themes!.map((e) => e.name).toList() : [], (theme) {
+                  return AnimeDiscoverListPage(theme: theme);
+                }),
                 const DetailsTitle("Description"),
                 ExpandableText(
                   item.description,

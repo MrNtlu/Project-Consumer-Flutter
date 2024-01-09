@@ -4,7 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/common/name_url.dart';
+import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/discover/game_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 
@@ -60,11 +63,11 @@ class GenreList extends StatelessWidget {
                       case ContentType.movie:
                         return MovieDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
                       case ContentType.tv:
-                        
+                        return TVDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
                       case ContentType.anime:
-                        
+                        return AnimeDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
                       case ContentType.game:
-                      
+                        return GameDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
                       default:
                       return MovieDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
                     }

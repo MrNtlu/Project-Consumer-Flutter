@@ -23,25 +23,27 @@ class ContentCell extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(cornerRadius),
         child: !forceRatio && provider.selectedContent == ContentType.game
-        ? Stack(children: [
-          _image(provider.selectedContent),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              width: double.infinity,
-              child: ColoredBox(
-                color: CupertinoColors.black.withOpacity(0.7),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.white),
-                  ),
-                )
+        ? Stack(
+          children: [
+            _image(provider.selectedContent),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: double.infinity,
+                child: ColoredBox(
+                  color: CupertinoColors.black.withOpacity(0.7),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.white),
+                    ),
+                  )
+                ),
               ),
-            ),
-          )
-        ],)
+            )
+          ]
+        )
         : _image(provider.selectedContent),
       ),
     );

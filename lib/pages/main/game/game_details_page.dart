@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
+import 'package:watchlistfy/pages/main/discover/game_discover_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -16,6 +17,7 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
+import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
@@ -243,10 +245,9 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                   linkStyle: const TextStyle(fontSize: 14),
                 ),
                 const DetailsTitle("Genres"),
-                Text( //TODO Change to chip design
-                  item.genres.isNotEmpty ? item.genres.join(", ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.genres, (genre) {
+                  return GameDiscoverListPage(genre: genre);
+                }),
                 const DetailsTitle("Developers"),
                 Text( //TODO Change to chip design
                   item.developers.isNotEmpty ? item.developers.join(", ") : "",
@@ -258,10 +259,9 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 const DetailsTitle("Platforms"),
-                Text( //TODO Change to chip design
-                  item.platforms.isNotEmpty ? item.platforms.join(", ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.platforms, (platform) {
+                  return GameDiscoverListPage(platform: platform);
+                }),
                 if(item.relatedGames.isNotEmpty)
                 const DetailsTitle("Related Games"),
                 if(item.relatedGames.isNotEmpty)

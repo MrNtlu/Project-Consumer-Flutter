@@ -9,6 +9,7 @@ import 'package:watchlistfy/providers/main/movie/movie_list_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_selection.dart';
+import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/home/anonymous_header.dart';
 import 'package:watchlistfy/widgets/main/home/genre_list.dart';
 import 'package:watchlistfy/widgets/main/home/info_card.dart';
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              _previewTitle("🔥 Popular", () {
+              SeeAllTitle("🔥 Popular", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[0], "🔥 Popular");
@@ -77,7 +78,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 20),
               const GenreList(),
               const SizedBox(height: 8),
-              _previewTitle("📆 Upcoming", () {
+              SeeAllTitle("📆 Upcoming", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[1], "📆 Upcoming");
@@ -89,7 +90,7 @@ class HomePage extends StatelessWidget {
                 child: PreviewList(Constants.ContentTags[1])
               ),
               const SizedBox(height: 8),
-              _previewTitle("🍿 Top Rated", () {
+              SeeAllTitle("🍿 Top Rated", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[2], "🍿 Top Rated");
@@ -102,23 +103,22 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               if (contentProvider.selectedContent != ContentType.game)
-              _previewTitle(
+              SeeAllTitle(
                 contentProvider.selectedContent == ContentType.movie
                 ? "🎭 In Theaters"
                 : "📺 Airing Today",
-                () { //TODO Chane it! Redirect to day of week page with day of week tabs
+                () {
                   Navigator.of(context, rootNavigator: true).push(
                     CupertinoPageRoute(builder: (_) {
                       return ContentListPage(
                         contentProvider.selectedContent,
                         Constants.ContentTags[3],
-                        contentProvider.selectedContent == ContentType.movie
-                        ? "🎭 In Theaters"
-                        : "📺 Airing Today"
-                      );
+                        "🎭 In Theaters"
+                      ); 
                     })
                   );
-                }
+                },
+                shouldHideSeeAllButton: contentProvider.selectedContent != ContentType.movie
               ),
               if (contentProvider.selectedContent != ContentType.game)
               SizedBox(
@@ -132,23 +132,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _previewTitle(String title, Function() onTap) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: GestureDetector(
-      onTap: () {
-        onTap(); 
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title, style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          )),
-          const Icon(CupertinoIcons.chevron_right)
-        ],
-      ),
-    ),
-  );
 }

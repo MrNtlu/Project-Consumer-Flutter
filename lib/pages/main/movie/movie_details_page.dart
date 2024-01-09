@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
+import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -16,6 +17,7 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
+import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
@@ -230,10 +232,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 const SizedBox(height: 16,),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
-                Text( //TODO Change to chip design
-                  item.genres.join(", "),
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.genres, (genre) {
+                  return MovieDiscoverListPage(genre: genre);
+                }),
                 const DetailsTitle("Description"),
                 ExpandableText(
                   item.description,

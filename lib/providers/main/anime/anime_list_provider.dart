@@ -45,4 +45,34 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
       url: "${APIRoutes().animeRoutes.searchAnime}?page=$page&search=$search"
     );
   }
+
+  Future<BasePaginationResponse<BaseContent>> discoverAnime({
+    int page = 1,
+    required String sort,
+    String? status,
+    String? genres,
+    String? demographics,
+    String? themes,
+    String? studios,
+    int? from,
+    int? to,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+    
+    return getList(
+      url: "${APIRoutes().animeRoutes.animeBySortFilter}?page=$page&sort=$sort${
+        status != null ? '&status=$status' : ''
+      }${
+        genres != null ? '&genres=$genres' : ''
+      }${
+        demographics != null ? '&demographics=$demographics' : ''
+      }${
+        themes != null ? '&themes=$themes' : ''
+      }${
+        studios != null ? '&studios=$studios' : ''
+      }"
+    );
+  }
 }

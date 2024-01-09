@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
+import 'package:watchlistfy/providers/main/discover/discover_anime_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
-class MovieDiscoverSheet extends StatelessWidget {
+class AnimeDiscoverSheet extends StatelessWidget {
   final VoidCallback fetchData;
-  final DiscoverMovieProvider provider;
+  final DiscoverAnimeProvider provider;
 
-  const MovieDiscoverSheet(this.fetchData, this.provider, {super.key});
+  const AnimeDiscoverSheet(this.fetchData, this.provider, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +18,26 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.map((e) => e.name).toList()
     );
 
-    final genres = Constants.MovieGenreList.map((e) => e.name).toList();
+    final genres = Constants.AnimeGenreList.map((e) => e.name).toList();
     genres.removeAt(0);
     final genreList = DiscoverSheetList(
-      Constants.MovieGenreList.where((element) => element.name == provider.genre).firstOrNull?.name,
+      Constants.AnimeGenreList.where((element) => element.name == provider.genre).firstOrNull?.name,
       genres,
     );
 
+    final demographicList = DiscoverSheetList(
+      Constants.AnimeDemographicsList.where((element) => element.name == provider.demographics).firstOrNull?.name,
+      Constants.AnimeDemographicsList.map((e) => e.name).toList()
+    );
+
+    final themeList = DiscoverSheetList(
+      Constants.AnimeThemeList.where((element) => element.name == provider.themes).firstOrNull?.name,
+      Constants.AnimeThemeList.map((e) => e.name).toList()
+    );
+
     final statusList = DiscoverSheetList(
-      Constants.MovieStatusRequests.where((element) => element.request == provider.status).firstOrNull?.name,
-      Constants.MovieStatusRequests.map((e) => e.name).toList()
+      Constants.AnimeStatusRequests.where((element) => element.request == provider.status).firstOrNull?.name,
+      Constants.AnimeStatusRequests.map((e) => e.name).toList()
     );
 
     final decadeList = DiscoverSheetList(
@@ -45,6 +55,8 @@ class MovieDiscoverSheet extends StatelessWidget {
                 children: [
                   DiscoverSheetFilterBody("Sort", sortList),
                   DiscoverSheetFilterBody("Genre", genreList),
+                  DiscoverSheetFilterBody("Demographics", demographicList),
+                  DiscoverSheetFilterBody("Themes", themeList),
                   DiscoverSheetFilterBody("Status", statusList),
                   DiscoverSheetFilterBody("Release Date", decadeList),
                 ],
@@ -66,8 +78,10 @@ class MovieDiscoverSheet extends StatelessWidget {
                     Navigator.pop(context);
                     provider.setDiscover(
                       sort: Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request,
-                      genre: Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
-                      status: Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
+                      genre: Constants.AnimeGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
+                      demographics: Constants.AnimeDemographicsList.where((element) => element.name == demographicList.selectedValue).firstOrNull?.name,
+                      themes: Constants.AnimeThemeList.where((element) => element.name == themeList.selectedValue).firstOrNull?.name,
+                      status: Constants.AnimeStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
                       decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
                     );
                     fetchData();

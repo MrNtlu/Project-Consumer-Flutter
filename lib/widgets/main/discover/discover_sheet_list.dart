@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 
+// ignore: must_be_immutable
 class DiscoverSheetList extends StatefulWidget {
   String? selectedValue;
   final List<String> list;

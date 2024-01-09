@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
+import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
-class MovieDiscoverSheet extends StatelessWidget {
+class TVDiscoverSheet extends StatelessWidget {
   final VoidCallback fetchData;
-  final DiscoverMovieProvider provider;
+  final DiscoverTVProvider provider;
 
-  const MovieDiscoverSheet(this.fetchData, this.provider, {super.key});
+  const TVDiscoverSheet(this.fetchData, this.provider, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +18,21 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.map((e) => e.name).toList()
     );
 
-    final genres = Constants.MovieGenreList.map((e) => e.name).toList();
+    final genres = Constants.TVGenreList.map((e) => e.name).toList();
     genres.removeAt(0);
     final genreList = DiscoverSheetList(
-      Constants.MovieGenreList.where((element) => element.name == provider.genre).firstOrNull?.name,
+      Constants.TVGenreList.where((element) => element.name == provider.genre).firstOrNull?.name,
       genres,
     );
 
     final statusList = DiscoverSheetList(
-      Constants.MovieStatusRequests.where((element) => element.request == provider.status).firstOrNull?.name,
-      Constants.MovieStatusRequests.map((e) => e.name).toList()
+      Constants.TVSeriesStatusRequests.where((element) => element.request == provider.status).firstOrNull?.name,
+      Constants.TVSeriesStatusRequests.map((e) => e.name).toList()
+    );
+
+    final numOfSeasonList = DiscoverSheetList(
+      Constants.NumOfSeasonList.where((element) => element == provider.numOfSeason).firstOrNull,
+      Constants.NumOfSeasonList.map((e) => e).toList()
     );
 
     final decadeList = DiscoverSheetList(
@@ -46,6 +51,7 @@ class MovieDiscoverSheet extends StatelessWidget {
                   DiscoverSheetFilterBody("Sort", sortList),
                   DiscoverSheetFilterBody("Genre", genreList),
                   DiscoverSheetFilterBody("Status", statusList),
+                  DiscoverSheetFilterBody("Number of Seasons", numOfSeasonList),
                   DiscoverSheetFilterBody("Release Date", decadeList),
                 ],
               ),
@@ -66,8 +72,9 @@ class MovieDiscoverSheet extends StatelessWidget {
                     Navigator.pop(context);
                     provider.setDiscover(
                       sort: Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request,
-                      genre: Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
-                      status: Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
+                      genre: Constants.TVGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
+                      status: Constants.TVSeriesStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
+                      numOfSeason: Constants.NumOfSeasonList.where((element) => element == numOfSeasonList.selectedValue).firstOrNull,
                       decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
                     );
                     fetchData();

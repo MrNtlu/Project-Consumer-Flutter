@@ -1,4 +1,5 @@
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
+import 'package:watchlistfy/models/auth/user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/anime/anime_details.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_air_date.dart';
@@ -10,6 +11,7 @@ import 'package:watchlistfy/models/main/anime/anime_watch_list.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/common/actor.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
+import 'package:watchlistfy/models/main/common/consume_later_response.dart';
 import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
@@ -19,6 +21,7 @@ import 'package:watchlistfy/models/main/game/game_details.dart';
 import 'package:watchlistfy/models/main/game/game_details_relation.dart';
 import 'package:watchlistfy/models/main/game/game_details_store.dart';
 import 'package:watchlistfy/models/main/game/game_play_list.dart';
+import 'package:watchlistfy/models/main/legend_content.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
 import 'package:watchlistfy/models/main/tv/tv_details.dart';
@@ -44,6 +47,39 @@ class TypeConverter<T> {
         response["image"],
         response["username"],
       ) as T;
+    } else if (T == UserInfo) {
+      return UserInfo(
+        response["_id"],
+        response["is_premium"] ?? false,
+        response["is_friend_request_sent"] ?? false,
+        response["is_friend_request_received"] ?? false,
+        response["is_friends_with"] ?? false,
+        response["friend_request_count"],
+        response["membership_type"],
+        response["anime_count"],
+        response["game_count"],
+        response["movie_count"],
+        response["tv_count"],
+        response["movie_watched_time"],
+        response["anime_watched_episodes"],
+        response["tv_watched_episodes"],
+        response["game_total_hours_played"],
+        response["fcm_token"],
+        response["username"],
+        response["email"],
+        response["image"],
+        response["level"],
+        response["consume_later"] != null
+        ? ((response["consume_later"] as List).map((e) => 
+          TypeConverter<ConsumeLaterResponse>().convertToObject(e)
+        ).toList())
+        : [],
+        response["legend_content"] != null
+        ? ((response["legend_content"] as List).map((e) => 
+          TypeConverter<LegendContent>().convertToObject(e)
+        ).toList())
+        : [],
+      ) as T;
     } else if (T == BaseContent) {
       return BaseContent(
         response["_id"] ?? '', 
@@ -53,6 +89,16 @@ class TypeConverter<T> {
         response["title_original"] ?? '',
         response["tmdb_id"],
         response["mal_id"] ?? response["rawg_id"]
+      ) as T;
+    } else if (T == LegendContent) {
+      return LegendContent(
+        response["_id"] ?? '', 
+        response["image_url"] ?? '', 
+        response["title_en"] ?? '', 
+        response["title_original"] ?? '',
+        response["times_finished"] ?? 0,
+        response["content_type"] ?? '',
+        response["hours_played"],
       ) as T;
     } else if (T == ReviewSummary) {
       return ReviewSummary(
@@ -75,6 +121,24 @@ class TypeConverter<T> {
         response["content_external_id"], 
         response["content_external_int_id"], 
         response["content_type"]
+      ) as T;
+    } else if (T == ConsumeLaterResponse) {
+      return ConsumeLaterResponse(
+        response["_id"], 
+        response["user_id"], 
+        response["content_id"], 
+        response["content_external_id"], 
+        response["content_external_int_id"], 
+        response["content_type"],
+        TypeConverter<ConsumeLaterContent>().convertToObject(response["content"]),
+      ) as T;
+    } else if (T == ConsumeLaterContent) {
+      return ConsumeLaterContent(
+        response["title_en"], 
+        response["title_original"], 
+        response["image_url"], 
+        response["score"], 
+        response["description"], 
       ) as T;
     } else if (T == MovieWatchList) {
       return MovieWatchList(
@@ -300,18 +364,7 @@ class TypeConverter<T> {
           e["character"]
         )).toList())
         : [],
-        ReviewSummary(
-          (response["reviews"]["avg_star"] as int).toDouble(),
-          response["reviews"]["total_votes"], 
-          response["reviews"]["is_reviewed"], 
-          StarCounts(
-            response["reviews"]["star_counts"]["one_star"], 
-            response["reviews"]["star_counts"]["two_star"], 
-            response["reviews"]["star_counts"]["three_star"], 
-            response["reviews"]["star_counts"]["four_star"], 
-            response["reviews"]["star_counts"]["five_star"]
-          )
-        ),
+        TypeConverter<ReviewSummary>().convertToObject(response),
         response["streaming"] != null
         ? ((response["streaming"] as List).map((e) => Streaming(
           e["country_code"], 

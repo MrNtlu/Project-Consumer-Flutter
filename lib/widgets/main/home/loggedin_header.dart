@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:watchlistfy/pages/main/profile/profile_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 
@@ -15,8 +16,11 @@ class LoggedinHeader extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        //TODO Navigate to profile
-        print("Profile clicked");
+        Navigator.of(context, rootNavigator: true).push(
+          CupertinoPageRoute(builder: (_) {
+            return const ProfilePage();
+          })
+        );
       },
       child: Row(
         children: [

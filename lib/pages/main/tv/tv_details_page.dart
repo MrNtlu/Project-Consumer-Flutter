@@ -6,6 +6,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
+import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -18,6 +19,7 @@ import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
+import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
@@ -241,10 +243,9 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 const SizedBox(height: 16,),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
-                Text( //TODO Change to chip design
-                  item.genres.join(", "),
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                DetailsGenreList(item.genres, (genre) {
+                  return TVDiscoverListPage(genre: genre);
+                }),
                 const DetailsTitle("Description"),
                 ExpandableText(
                   item.description,
