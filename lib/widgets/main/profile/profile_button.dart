@@ -31,6 +31,8 @@ class ProfileButton extends StatelessWidget {
                   ),
                 ),
               ),
+              //TODO Remove later
+              const SizedBox(width: 20,)
             ],
           ),
         ),

@@ -137,7 +137,9 @@ class TypeConverter<T> {
         response["title_en"], 
         response["title_original"], 
         response["image_url"], 
-        response["score"], 
+        (response["score"] is double)
+        ? response["score"]
+        : (response["score"] as int).toDouble(), 
         response["description"], 
       ) as T;
     } else if (T == MovieWatchList) {

@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/models/main/common/request/id_body.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
@@ -66,6 +68,9 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _provider = ProfileDetailsProvider();
+    if (_state != DetailState.init) {
+      _fetchData();
+    }
   }
 
   @override
@@ -83,7 +88,6 @@ class _ProfilePageState extends State<ProfilePage> {
           return CupertinoPageScaffold(
             child: CustomScrollView(
               slivers: [
-                if (!_provider.isLoading)
                 CupertinoSliverNavigationBar(
                   largeTitle: AutoSizeText(
                     _provider.item?.username ?? "Profile",
@@ -119,12 +123,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ProfileButton("Requests", () {
-                      //TODO Redirect
-                    }, CupertinoIcons.person_add_solid),
-                    const SizedBox(width: 12),
+                    // ProfileButton("Requests", () {
+                    //   //TODO Redirect
+                    // }, CupertinoIcons.person_add_solid),
+                    // const SizedBox(width: 12),
                     ProfileButton("User List", () {
-                      //TODO Redirect
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return UserListPage();
+                        })
+                      ).then((value) => _fetchData());
                     }, CupertinoIcons.list_bullet),
                   ],
                 ),
@@ -160,7 +168,8 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 200,
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
+                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                   itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
                   itemBuilder: (context, index) {
                     if (item.legendContent.isEmpty) {
@@ -210,11 +219,15 @@ class _ProfilePageState extends State<ProfilePage> {
               }),
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
+                child: _provider.isLoading
+                ? const CupertinoActivityIndicator()
+                : ListView.builder(
+                  scrollDirection: item.watchLater.isEmpty ? Axis.vertical : Axis.horizontal,
+                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                  itemCount: item.watchLater.isEmpty ? 1 : item.watchLater.length,
+                  itemExtent: 200 * 2 / 3,
                   itemBuilder: (context, index) {
-                    if (item.legendContent.isEmpty) {
+                    if (item.watchLater.isEmpty) {
                       return const Center(
                         child: Padding(
                           padding: EdgeInsets.all(8),
@@ -224,33 +237,33 @@ class _ProfilePageState extends State<ProfilePage> {
                     } else {
                       final data = item.watchLater[index];
 
-                      //TODO Implement consume later with button on right top etc.
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(builder: (_) {
-                                switch (ContentType.values.where((element) => element.request == data.contentType).first) {
-                                  case ContentType.movie:
-                                    return MovieDetailsPage(data.contentID);
-                                  case ContentType.tv:
-                                    return TVDetailsPage(data.contentID);
-                                  case ContentType.anime:
-                                    return AnimeDetailsPage(data.contentID);
-                                  case ContentType.game: 
-                                    return GameDetailsPage(data.contentID);
-                                  default:
-                                    return MovieDetailsPage(data.contentID);
-                                }
-                              })
-                            );
+                            if (!_provider.isLoading) {
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(builder: (_) {
+                                  switch (ContentType.values.where((element) => element.request == data.contentType).first) {
+                                    case ContentType.movie:
+                                      return MovieDetailsPage(data.contentID);
+                                    case ContentType.tv:
+                                      return TVDetailsPage(data.contentID);
+                                    case ContentType.anime:
+                                      return AnimeDetailsPage(data.contentID);
+                                    case ContentType.game: 
+                                      return GameDetailsPage(data.contentID);
+                                    default:
+                                      return MovieDetailsPage(data.contentID);
+                                  }
+                                })
+                              ).then((value) => _fetchData());
+                            }
                           },
                           child: ProfileConsumeLaterCell(
                             data.content.imageUrl, data.content.titleEn,
                             () {
-                              //TODO Remove from consume later
-                              //fetch data again
+                              _provider.deleteConsumeLater(index, IDBody(data.id));
                             }
                           )
                         ),
@@ -259,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 12)
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 16)
             ],
           ),
         );

@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: const EdgeInsets.only(left: 16, right: 8),
                     child: authenticationProvider.isAuthenticated
                     ?  const LoggedinHeader()
                     : const AnonymousHeader()

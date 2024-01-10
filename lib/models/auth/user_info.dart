@@ -28,7 +28,7 @@ class UserInfo {
   final List<LegendContent> legendContent;
 
   //TODO: https://github.com/MrNtlu/Project-Consumer-Android/blob/master/app/src/main/java/com/mrntlu/projectconsumer/models/auth/UserInfo.kt
-  // Add legend content, watch later, reviews
+  // Add reviews
 
   UserInfo(
     this.id, this.isPremium, this.isFriendRequestSent, this.isFriendRequestReceived,

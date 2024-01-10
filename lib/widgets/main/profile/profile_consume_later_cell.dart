@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class ProfileConsumeLaterCell extends StatelessWidget {
@@ -10,7 +11,9 @@ class ProfileConsumeLaterCell extends StatelessWidget {
     this.url, 
     this.title,
     this.onTap,
-    {super.key}
+    {
+      super.key
+    }
   );
 
   @override
@@ -27,7 +30,7 @@ class ProfileConsumeLaterCell extends StatelessWidget {
               right: 0,
               child: GestureDetector(
                 onTap: onTap,
-                child: const Icon(CupertinoIcons.bookmark_fill, size: 32)
+                child: Icon(CupertinoIcons.bookmark_fill, size: 32, color: AppColors().primaryColor,)
               ),
             )
           ],

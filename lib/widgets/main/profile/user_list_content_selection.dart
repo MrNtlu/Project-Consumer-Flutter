@@ -1,49 +1,39 @@
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/providers/content_provider.dart';
+import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 
-class ContentSelection extends StatefulWidget {
-  const ContentSelection({super.key});
+class UserListContentSelection extends StatefulWidget {
+  final UserListContentSelectionProvider provider;
+
+  const UserListContentSelection(this.provider, {super.key});
 
   @override
-  State<ContentSelection> createState() => _ContentSelectionState();
+  State<UserListContentSelection> createState() => _UserListContentSelectionState();
 }
 
-class _ContentSelectionState extends State<ContentSelection> {
-  late final ContentProvider contentProvider;
-  var isInit = false;
-
-  @override
-  void didChangeDependencies() {
-    if (!isInit) {
-      contentProvider = Provider.of<ContentProvider>(context);
-      isInit = true;
-    }
-    super.didChangeDependencies();
-  }
-
+class _UserListContentSelectionState extends State<UserListContentSelection> {
+  
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            contentProvider.selectedContent.value,
+            widget.provider.selectedContent.value,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: CupertinoTheme.of(context).bgTextColor,
+              color: CupertinoTheme.of(context).primaryColor,
             ),
           ),
           const SizedBox(width: 10),
           Icon(
             CupertinoIcons.arrowtriangle_down_circle_fill,
             size: 13,
-            color: CupertinoTheme.of(context).bgTextColor,
+            color: CupertinoTheme.of(context).primaryColor,
           )
         ],
       ), 
@@ -79,13 +69,13 @@ class _ContentSelectionState extends State<ContentSelection> {
                   itemCount: ContentType.values.length,
                   itemExtent: 50,
                   itemBuilder: (context, index) {
-                    var isSelected = ContentType.values.indexOf(contentProvider.selectedContent) == index;
+                    var isSelected = ContentType.values.indexOf(widget.provider.selectedContent) == index;
         
                     return CupertinoButton(
                       color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).bgColor,
                       onPressed: (){
                         if (!isSelected) {
-                          contentProvider.setContentType(ContentType.values[index]);
+                          widget.provider.setContentType(ContentType.values[index]);
                         }
                         Navigator.pop(context);
                       },
