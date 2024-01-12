@@ -28,6 +28,8 @@ import 'package:watchlistfy/models/main/tv/tv_details.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_network.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_season.dart';
 import 'package:watchlistfy/models/main/tv/tv_watch_list.dart';
+import 'package:watchlistfy/models/main/userlist/user_list.dart';
+import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
 
 class TypeConverter<T> {
   T convertToObject(Map<String, dynamic> response) {
@@ -80,6 +82,19 @@ class TypeConverter<T> {
         ).toList())
         : [],
       ) as T;
+    } else if (T == UserListContent) {
+      return UserListContent(
+        response["_id"], 
+        response["status"], 
+        response["score"],
+        response["times_finished"], 
+        response["watched_episodes"] ?? response["hours_played"],
+        response["watched_seasons"],
+        response["total_episodes"],
+        response["total_seasons"],
+        "", "", "", "", "",
+        response["created_at"],
+      ) as T;
     } else if (T == BaseContent) {
       return BaseContent(
         response["_id"] ?? '', 
@@ -89,6 +104,87 @@ class TypeConverter<T> {
         response["title_original"] ?? '',
         response["tmdb_id"],
         response["mal_id"] ?? response["rawg_id"]
+      ) as T;
+    } else if (T == UserList) {
+      return UserList(
+        response["_id"] ?? '', 
+        response["user_id"] ?? '', 
+        response["anime_list"] != null
+        ? ((
+          response["anime_list"] as List).map((e) => UserListContent(
+          e["_id"], 
+          e["content_status"], 
+          e["score"],
+          e["times_finished"], 
+          e["watched_episodes"],
+          null,
+          e["total_episodes"],
+          null,
+          e["anime_id"],
+          e["mal_id"].toString(),
+          e["image_url"],
+          e["title_en"],
+          e["title_original"],
+          e["created_at"],
+        )).toList())
+        : [],
+        response["game_list"] != null
+        ? ((
+          response["game_list"] as List).map((e) => UserListContent(
+          e["_id"], 
+          e["content_status"], 
+          e["score"],
+          e["times_finished"], 
+          e["hours_played"],
+          null,
+          null,
+          null,
+          e["game_id"],
+          e["rawg_id"].toString(),
+          e["image_url"],
+          e["title"],
+          e["title_original"],
+          e["created_at"],
+        )).toList())
+        : [],
+        response["movie_watch_list"] != null
+        ? ((
+          response["movie_watch_list"] as List).map((e) => UserListContent(
+          e["_id"], 
+          e["content_status"], 
+          e["score"],
+          e["times_finished"], 
+          null,
+          null,
+          null,
+          null,
+          e["movie_id"],
+          e["tmdb_id"],
+          e["image_url"],
+          e["title_en"],
+          e["title_original"],
+          e["created_at"],
+        )).toList())
+        : [],
+        response["tv_watch_list"] != null
+        ? ((
+          response["tv_watch_list"] as List).map((e) => UserListContent(
+          e["_id"], 
+          e["content_status"], 
+          e["score"],
+          e["times_finished"], 
+          e["watched_episodes"],
+          e["watched_seasons"],
+          e["total_episodes"],
+          e["total_seasons"],
+          e["tv_id"],
+          e["tmdb_id"],
+          e["image_url"],
+          e["title_en"],
+          e["title_original"],
+          e["created_at"],
+        )).toList())
+        : [],
       ) as T;
     } else if (T == LegendContent) {
       return LegendContent(

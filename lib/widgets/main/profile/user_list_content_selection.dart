@@ -21,15 +21,16 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(width: 19),
           Text(
             widget.provider.selectedContent.value,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: CupertinoTheme.of(context).primaryColor,
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 6),
           Icon(
             CupertinoIcons.arrowtriangle_down_circle_fill,
             size: 13,

@@ -1,37 +1,320 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/models/main/common/request/id_body.dart';
+import 'package:watchlistfy/models/main/userlist/request/increment_tv_list_body.dart';
+import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
+import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/widgets/common/content_cell.dart';
+import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_content_selection.dart';
 
-class UserListPage extends StatelessWidget {
+class UserListPage extends StatefulWidget {
   const UserListPage({super.key});
 
+  @override
+  State<UserListPage> createState() => _UserListPageState();
+}
+
+class _UserListPageState extends State<UserListPage> {
+  DetailState _state = DetailState.init;
+  String? _error;
+
+  late final UserListProvider _provider;
+
   /* TODO
-  * - [ ] Increment/decrement button for tv series and anime.
-  * - [ ] UserList provider to retrieve data and user list operations.
+  * - [x] Increment/decrement button for tv series and anime.
+  * - [x] UserList provider to retrieve data and user list operations.
+  * - [ ] Loading for user list
   * - [ ] UserList view, edit, delete like details page.
-  * - [ ] Nav bar with selection like home page
+  * - [ ] Sort/Search buttons
   */
+
+  void _fetchData() {
+    setState(() {
+      _state = DetailState.loading;
+    });
+
+    _provider.getUserList(sort: Constants.SortUserListRequests[0].request).then((response) {
+      _error = response.error;
+
+      if (_state != DetailState.disposed) {
+        setState(() {
+          _state = response.error != null
+            ? DetailState.error
+            : (
+              response.data != null
+                ? DetailState.view
+                : DetailState.error
+            );
+        });
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_state == DetailState.init) {
+      _fetchData();
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _provider = UserListProvider();
+    if (_state != DetailState.init) {
+      _fetchData();
+    }
+  }
+
+  @override
+  void dispose() {
+    _state = DetailState.disposed;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserListContentSelectionProvider(),
-      child: Consumer<UserListContentSelectionProvider>(
-        builder: (context, provider, child) {
-
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => _provider),
+        ChangeNotifierProvider(create: (_) => UserListContentSelectionProvider()),
+      ],
+      child: Consumer2<UserListContentSelectionProvider, UserListProvider>(
+        builder: (context, provider, userListProvider, child) {    
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: const Text("My List"),
-              trailing: UserListContentSelection(provider),
+              middle: UserListContentSelection(provider),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // UserListContentSelection(provider),
+                  CupertinoButton(
+                    onPressed: () {
+                      //TODO change sort
+                    },
+                    padding: EdgeInsets.zero,
+                    child: const Icon(CupertinoIcons.sort_down, size: 28)
+                  )
+                ],
+              ),
             ),
-            child: ListView.builder(itemBuilder: (context, index) {
-          
-            }),
+            child: _body(provider, userListProvider),
           );
         }
       ),
     );
+  }
+
+  Widget _body(UserListContentSelectionProvider provider, UserListProvider userListProvider) {
+    switch (_state) {
+      case DetailState.view:
+        return ListView.builder(
+          itemCount: provider.selectedContent == ContentType.movie
+          ? userListProvider.item?.movieList.length
+          : (
+            provider.selectedContent == ContentType.tv
+            ? userListProvider.item?.tvList.length
+            : (
+              provider.selectedContent == ContentType.anime
+              ? userListProvider.item?.animeList.length
+              : (
+                userListProvider.item?.gameList.length ?? 1
+              )
+            )
+          ),
+          itemBuilder: (context, index) {
+            late UserListContent data;
+
+            switch (provider.selectedContent) {
+              case ContentType.movie:
+                data = userListProvider.item!.movieList[index];
+                break;
+              case ContentType.tv:
+                data = userListProvider.item!.tvList[index];
+                break;
+              case ContentType.anime:
+                data = userListProvider.item!.animeList[index];
+                break;
+              default:
+                data = userListProvider.item!.gameList[index];
+                break;
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+              child: data.isLoading
+              ? CupertinoActivityIndicator()
+              : Row(
+                children: [
+                  SizedBox(
+                    width: 3,
+                    height: 125,
+                    child: ColoredBox(
+                      color: data.status == Constants.UserListStatus[0].request
+                      ? Colors.green.shade600
+                      : data.status == Constants.UserListStatus[1].request
+                        ? CupertinoColors.activeBlue
+                        : CupertinoColors.systemRed,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    height: 125,
+                    child: ContentCell(data.imageUrl ?? '', data.title)
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: AutoSizeText(
+                                  data.title,
+                                  minFontSize: 14,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  wrapWords: true,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                              ),
+                              CupertinoButton(
+                                padding: EdgeInsets.zero,
+                                child: const Icon(CupertinoIcons.ellipsis_vertical),
+                                onPressed: () {
+                                }
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          LinearProgressIndicator(
+                            value: (data.totalEpisodes ?? (
+                              data.status == Constants.UserListStatus[1].request
+                              ? 100
+                              : 0
+                            )).toDouble() / 100,
+                            minHeight: 6,
+                            backgroundColor: CupertinoTheme.of(context).onBgColor,
+                            color: AppColors().primaryColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(CupertinoIcons.star_fill, color: CupertinoColors.systemYellow, size: 14),
+                              const SizedBox(width: 3),
+                              Text(
+                                data.score?.toString() ?? "*",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
+                              Text(
+                                Constants.UserListStatus.where((element) => data.status == element.request).first.name,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              if(
+                                data.status == Constants.UserListStatus[0].request &&
+                                provider.selectedContent == ContentType.tv
+                              )
+                              CupertinoButton(
+                                onPressed: () {
+                                  userListProvider.incrementUserList(index, IncrementTVListBody(data.id, false), ContentType.tv);
+                                },
+                                padding: EdgeInsets.zero,
+                                minSize: 16,
+                                child: Icon(
+                                  CupertinoIcons.add_circled_solid, 
+                                  color: AppColors().primaryColor,
+                                  size: 16,
+                                ),
+                              ),
+                              if(
+                                data.status == Constants.UserListStatus[0].request &&
+                                provider.selectedContent == ContentType.tv
+                              )
+                              const SizedBox(width: 6),
+                              if(provider.selectedContent == ContentType.tv)
+                              Text(
+                                data.watchedSeasons?.toString() ?? "?",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              if(provider.selectedContent == ContentType.tv)
+                              Text("/${data.totalSeasons ?? "?"} seas"),
+                              const Spacer(),
+                              if(
+                                data.status == Constants.UserListStatus[0].request &&
+                                provider.selectedContent != ContentType.movie
+                              )
+                              CupertinoButton(
+                                onPressed: () {
+                                  switch (provider.selectedContent) {
+                                    case ContentType.tv:
+                                      userListProvider.incrementUserList(index, IncrementTVListBody(data.id, true), ContentType.tv);
+                                      break;
+                                    default:
+                                      userListProvider.incrementUserList(index, IDBody(data.id), provider.selectedContent);
+                                  }
+                                },
+                                padding: EdgeInsets.zero,
+                                minSize: 16,
+                                child: Icon(
+                                  CupertinoIcons.add_circled_solid, 
+                                  color: AppColors().primaryColor,
+                                  size: 16,
+                                ),
+                              ),
+                              if(
+                                data.status == Constants.UserListStatus[0].request &&
+                                provider.selectedContent != ContentType.movie
+                              )
+                              const SizedBox(width: 6),
+                              Text(
+                                data.watchedEpisodes?.toString() ?? "?",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text("/${data.totalEpisodes ?? "?"} eps"),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+        );
+      case DetailState.error:
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(_error ?? "Unknown error!"),
+          ),
+        );
+      case DetailState.loading:
+        return const LoadingView("Fetching data");
+      default:
+       return const LoadingView("Loading");
+    }
   }
 }
