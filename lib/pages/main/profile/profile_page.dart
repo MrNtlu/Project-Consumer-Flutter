@@ -130,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ProfileButton("User List", () {
                       Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(builder: (_) {
-                          return UserListPage();
+                          return const UserListPage();
                         })
                       ).then((value) => _fetchData());
                     }, CupertinoIcons.list_bullet),
