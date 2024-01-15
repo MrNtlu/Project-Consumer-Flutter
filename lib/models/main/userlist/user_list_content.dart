@@ -47,9 +47,10 @@ class UserListContent extends BaseUserList {
     this.createdAt
   );
 
-  void changeUserList(int? score, int timesFinished, int? mainAttribute, int? extraAttribute) {
+  void changeUserList(int? score, int timesFinished, int? mainAttribute, int? extraAttribute, String status) {
     this.score = score;
     this.timesFinished = timesFinished;
+    this.status = status;
     watchedEpisodes = mainAttribute;
     watchedSeasons = extraAttribute;
     isLoading = false;

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
@@ -33,10 +34,6 @@ void main() async {
   crashlytics.setCrashlyticsCollectionEnabled(shouldActivateAnalytics);
 }
 
-//TODO: Cupertino Widgets
-// https://docs.flutter.dev/ui/widgets/cupertino
-// Widgets https://github.com/MrNtlu/Asset-Manager-Flutter/tree/master/lib/common/widgets
-
 // Refresh Token
 // https://www.google.com/search?q=flutter+jwt+refresh+token&oq=flutter+jwt+refresh+token
 
@@ -51,6 +48,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (context) => ContentProvider()),
+        ChangeNotifierProvider(create: (context) => GlobalProvider()),
       ],
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),

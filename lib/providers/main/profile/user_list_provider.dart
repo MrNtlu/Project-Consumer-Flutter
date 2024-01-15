@@ -93,7 +93,7 @@ class UserListProvider with ChangeNotifier {
 
       content?.isLoading = false;
       if (data != null) {
-        content?.changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons);
+        content?.changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
         notifyListeners();
       }
 
@@ -145,16 +145,16 @@ class UserListProvider with ChangeNotifier {
       if (data != null) {
         switch (type) {
           case ContentType.tv:
-            item?.tvList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons);
+            item?.tvList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
             break;
           case ContentType.anime:
-            item?.animeList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons);
+            item?.animeList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
             break;
           case ContentType.game:
-            item?.gameList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons);
+            item?.gameList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
             break;
           default:
-            item?.tvList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons);
+            item?.tvList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
             break;
         }
         notifyListeners();

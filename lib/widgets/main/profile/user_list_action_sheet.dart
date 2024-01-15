@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/delete_user_list_body.dart';
+import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
+import 'package:watchlistfy/widgets/main/profile/user_list_edit_sheet.dart';
 
 class UserListActionSheet extends StatelessWidget {
   final int index;
   final String id;
   final String title;
   final ContentType contentType;
+  final UserListContent userList;
   final UserListProvider provider;
   final VoidCallback onViewTap;
 
-  const UserListActionSheet(this.index, this.id, this.title, this.contentType,
-      this.provider, this.onViewTap,
-      {super.key});
+  const UserListActionSheet(
+    this.index, this.id, this.title, this.contentType,
+    this.userList, this.provider, this.onViewTap,
+    {super.key}
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +50,17 @@ class UserListActionSheet extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
 
-            switch (contentType) {
-              case ContentType.movie:
-                break;
-              case ContentType.tv:
-                break;
-              case ContentType.anime:
-                break;
-              case ContentType.game:
-                break;
-              default:
-                break;
-            }
+            showCupertinoModalPopup(
+              context: context,
+              builder: (context) {
+                return UserListEditSheet(
+                  index,
+                  provider,
+                  contentType,
+                  userList,
+                );
+              }
+            );
           },
           child: const Text('Edit',
               style: TextStyle(color: CupertinoColors.activeBlue)),
@@ -66,6 +70,7 @@ class UserListActionSheet extends StatelessWidget {
           onPressed: () {
             //TODO Add are you sure dialog
             Navigator.pop(context);
+
             provider.deleteUserList(
                 index, DeleteUserListBody(id, contentType.request));
           },

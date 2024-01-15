@@ -16,6 +16,15 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  /* TODO
+  * - [ ] OnBoarding Page
+  *  - Make use enter new entries etc.
+  *  - For each content type, show popular ones.
+  *  - Allow user to skip or add 3 movies.(Create endpoint for that)
+  * - [ ] User List design
+  * - [ ] Default content type selection
+  * - [ ] Add new content cell design and allow user to select
+  */
   DetailState _state = DetailState.init;
   String? error = null;
   UserInfo? _userInfo = null;

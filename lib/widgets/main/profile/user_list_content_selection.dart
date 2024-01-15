@@ -49,9 +49,13 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
       context: context,
       builder: (BuildContext context) => SafeArea(
         child: Container(
+          margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           padding: const EdgeInsets.all(16),
-          height: 60 + (ContentType.values.length * 50) + 32,
-          color: CupertinoTheme.of(context).bgColor,
+          height: 60 + (ContentType.values.length * 50) + 24,
+          decoration: BoxDecoration(
+            color: CupertinoTheme.of(context).onBgColor,
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          ),
           child: Column(
             children: [
               const Align(
@@ -73,7 +77,7 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
                     var isSelected = ContentType.values.indexOf(widget.provider.selectedContent) == index;
         
                     return CupertinoButton(
-                      color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).bgColor,
+                      color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).onBgColor,
                       onPressed: (){
                         if (!isSelected) {
                           widget.provider.setContentType(ContentType.values[index]);

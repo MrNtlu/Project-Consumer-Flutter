@@ -15,7 +15,8 @@ class MovieDiscoverSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final sortList = DiscoverSheetList(
       Constants.SortRequests.where((element) => element.request == provider.sort).first.name,
-      Constants.SortRequests.map((e) => e.name).toList()
+      Constants.SortRequests.map((e) => e.name).toList(),
+      allowUnSelect: false,
     );
 
     final genres = Constants.MovieGenreList.map((e) => e.name).toList();

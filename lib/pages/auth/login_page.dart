@@ -8,6 +8,11 @@ class LoginPage extends StatelessWidget {
   final form = GlobalKey<FormState>();
   final loginModel = Login('test@gmail.com', '123Test');
 
+  /*
+  * Implement Google signin
+  * Implement Apple Signin also to backend
+  */
+
   void _onLoginPressed(BuildContext context, {Login? login}) {
     if (login == null) {
       final isValid = form.currentState?.validate();

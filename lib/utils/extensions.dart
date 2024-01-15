@@ -131,11 +131,6 @@ extension DynamicMapExt on Map<String, dynamic> {
 }
 
 extension ResponseExt on Response {
-  //TODO Remove later, example
-  // static Preview getPreviewResponseStatic(String responseBody) {
-  //   return Preview.fromJson(json.decode(responseBody));
-  // }
-  
   Preview getPreviewResponse() => Preview(
     movieResponse: json.decode(body)["movie"],
     tvResponse: json.decode(body)["tv"],

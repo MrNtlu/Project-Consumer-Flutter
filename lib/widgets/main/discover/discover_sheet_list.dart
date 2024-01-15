@@ -5,8 +5,9 @@ import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 class DiscoverSheetList extends StatefulWidget {
   String? selectedValue;
   final List<String> list;
+  final bool allowUnSelect;
 
-  DiscoverSheetList(this.selectedValue, this.list, {super.key});
+  DiscoverSheetList(this.selectedValue, this.list, {this.allowUnSelect = true, super.key});
 
   @override
   State<DiscoverSheetList> createState() => _DiscoverSheetListState();
@@ -30,7 +31,7 @@ class _DiscoverSheetListState extends State<DiscoverSheetList> {
               setState(() {
                 if (data != widget.selectedValue) {
                   widget.selectedValue = data;
-                } else {
+                } else if (widget.allowUnSelect) {
                   widget.selectedValue = null;
                 }
               });

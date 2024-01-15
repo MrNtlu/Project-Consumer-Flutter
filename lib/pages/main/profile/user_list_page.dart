@@ -1,24 +1,21 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/models/main/common/request/id_body.dart';
-import 'package:watchlistfy/models/main/userlist/request/increment_tv_list_body.dart';
 import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
-import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:watchlistfy/widgets/main/profile/user_list_action_sheet.dart';
+import 'package:watchlistfy/widgets/main/profile/user_list_compact.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_content_selection.dart';
+import 'package:watchlistfy/widgets/main/profile/user_list_expanded.dart';
+import 'package:watchlistfy/widgets/main/profile/user_list_settings_sheet.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_shimmer_cell.dart';
 
 class UserListPage extends StatefulWidget {
@@ -33,24 +30,15 @@ class _UserListPageState extends State<UserListPage> {
   String? _error;
 
   late final UserListProvider _provider;
-
-  /* TODO
-  * - [ ] Sheet, change UI and save locally. Sort & Design(Compact, extended)
-  * - [ ] UserList view, edit, delete like details page.
-  * - [ ] Sort/Search buttons
-  * - [ ] Compact and expanded toggle
-  * - [ ] Extract widgets
-  * - [ ] RefreshPager, if userList changed refresh userlist.
-    - https://github.com/MrNtlu/Asset-Manager-Flutter/blob/master/lib/content/providers/subscription/subscription_state.dart
-    - https://github.com/MrNtlu/Asset-Manager-Flutter/blob/master/lib/content/pages/subscription/subscription_page.dart
-  */
+  late final UserListContentSelectionProvider _userListProvider;
+  late final GlobalProvider _globalProvider;
 
   void _fetchData() {
     setState(() {
       _state = DetailState.loading;
     });
 
-    _provider.getUserList(sort: Constants.SortUserListRequests[0].request).then((response) {
+    _provider.getUserList(sort: _userListProvider.sort).then((response) {
       _error = response.error;
 
       if (_state != DetailState.disposed) {
@@ -82,6 +70,7 @@ class _UserListPageState extends State<UserListPage> {
   @override
   void didChangeDependencies() {
     if (_state == DetailState.init) {
+      _globalProvider = Provider.of<GlobalProvider>(context);
       _fetchData();
     }
     super.didChangeDependencies();
@@ -91,6 +80,7 @@ class _UserListPageState extends State<UserListPage> {
   void initState() {
     super.initState();
     _provider = UserListProvider();
+    _userListProvider = UserListContentSelectionProvider();
     if (_state != DetailState.init) {
       _fetchData();
     }
@@ -107,26 +97,23 @@ class _UserListPageState extends State<UserListPage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => _provider),
-        ChangeNotifierProvider(create: (_) => UserListContentSelectionProvider()),
+        ChangeNotifierProvider(create: (_) => _userListProvider),
       ],
       child: Consumer2<UserListContentSelectionProvider, UserListProvider>(
-        builder: (context, provider, userListProvider, child) {    
+        builder: (context, userListProvider, provider, child) {    
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: UserListContentSelection(provider),
+              middle: UserListContentSelection(userListProvider),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CupertinoButton(
                     onPressed: () {
-                      //TODO change view
-                    },
-                    padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.list_bullet_below_rectangle, size: 28)
-                  ),
-                  CupertinoButton(
-                    onPressed: () {
-                      //TODO change sort
+                      showCupertinoModalPopup(
+                        context: context, 
+                        builder: (context) {
+                          return UserListSettingsSheet(_fetchData, userListProvider);
+                        });
                     },
                     padding: EdgeInsets.zero,
                     child: const Icon(CupertinoIcons.sort_down, size: 28)
@@ -134,7 +121,7 @@ class _UserListPageState extends State<UserListPage> {
                 ],
               ),
             ),
-            child: _body(provider, userListProvider),
+            child: _body(userListProvider, provider),
           );
         }
       ),
@@ -177,7 +164,9 @@ class _UserListPageState extends State<UserListPage> {
             }
 
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+              padding: _globalProvider.userListMode == Constants.UserListUIModes.first
+              ? const EdgeInsets.symmetric(horizontal: 3, vertical: 4)
+              : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
               child: data.isLoading
               ? UserListShimmerCell(
                 data.imageUrl ?? '',
@@ -205,189 +194,20 @@ class _UserListPageState extends State<UserListPage> {
                     })
                   ).then((value) => _updateData(data));
                 },
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 3,
-                      height: 125,
-                      child: ColoredBox(
-                        color: data.status == Constants.UserListStatus[0].request
-                        ? Colors.green.shade600
-                        : data.status == Constants.UserListStatus[1].request
-                          ? CupertinoColors.activeBlue
-                          : CupertinoColors.systemRed,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      height: 125,
-                      child: ContentCell(data.imageUrl ?? '', data.title)
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: AutoSizeText(
-                                    data.title,
-                                    minFontSize: 14,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    wrapWords: true,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                ),
-                                CupertinoButton(
-                                  padding: EdgeInsets.zero,
-                                  child: const Icon(CupertinoIcons.ellipsis_vertical),
-                                  onPressed: () {
-                                    showCupertinoModalPopup(
-                                      context: context, 
-                                      builder: (context) {
-                                        return UserListActionSheet(
-                                          index, 
-                                          data.id, 
-                                          data.title, 
-                                          provider.selectedContent, 
-                                          userListProvider, 
-                                          () {
-                                            Navigator.of(context, rootNavigator: true).push(
-                                              CupertinoPageRoute(builder: (_) {
-                                                switch (ContentType.values.where((element) => element.request == provider.selectedContent.request).first) {
-                                                  case ContentType.movie:
-                                                    return MovieDetailsPage(data.contentID);
-                                                  case ContentType.tv:
-                                                    return TVDetailsPage(data.contentID);
-                                                  case ContentType.anime:
-                                                    return AnimeDetailsPage(data.contentID);
-                                                  case ContentType.game: 
-                                                    return GameDetailsPage(data.contentID);
-                                                  default:
-                                                    return MovieDetailsPage(data.contentID);
-                                                }
-                                              })
-                                            ).then((value) => _fetchData());
-                                          }
-                                        );
-                                      }
-                                    );
-                                  }
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            LinearProgressIndicator(
-                              value: (data.totalEpisodes ?? (
-                                data.status == Constants.UserListStatus[1].request
-                                ? 100
-                                : 0
-                              )).toDouble() / 100,
-                              minHeight: 6,
-                              backgroundColor: CupertinoTheme.of(context).onBgColor,
-                              color: AppColors().primaryColor,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(CupertinoIcons.star_fill, color: CupertinoColors.systemYellow, size: 14),
-                                const SizedBox(width: 3),
-                                Text(
-                                  data.score?.toString() ?? "*",
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  Constants.UserListStatus.where((element) => data.status == element.request).first.name,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                if(
-                                  data.status == Constants.UserListStatus[0].request &&
-                                  provider.selectedContent == ContentType.tv
-                                )
-                                CupertinoButton(
-                                  onPressed: () {
-                                    userListProvider.incrementUserList(index, IncrementTVListBody(data.id, false), ContentType.tv);
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  minSize: 16,
-                                  child: Icon(
-                                    CupertinoIcons.add_circled_solid, 
-                                    color: AppColors().primaryColor,
-                                    size: 16,
-                                  ),
-                                ),
-                                if(
-                                  data.status == Constants.UserListStatus[0].request &&
-                                  provider.selectedContent == ContentType.tv
-                                )
-                                const SizedBox(width: 6),
-                                if(provider.selectedContent == ContentType.tv)
-                                Text(
-                                  data.watchedSeasons?.toString() ?? "?",
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                if(provider.selectedContent == ContentType.tv)
-                                Text("/${data.totalSeasons ?? "?"} seas"),
-                                const Spacer(),
-                                if(
-                                  data.status == Constants.UserListStatus[0].request &&
-                                  provider.selectedContent != ContentType.movie
-                                )
-                                CupertinoButton(
-                                  onPressed: () {
-                                    switch (provider.selectedContent) {
-                                      case ContentType.tv:
-                                        userListProvider.incrementUserList(index, IncrementTVListBody(data.id, true), ContentType.tv);
-                                        break;
-                                      default:
-                                        userListProvider.incrementUserList(index, IDBody(data.id), provider.selectedContent);
-                                    }
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  minSize: 16,
-                                  child: Icon(
-                                    CupertinoIcons.add_circled_solid, 
-                                    color: AppColors().primaryColor,
-                                    size: 16,
-                                  ),
-                                ),
-                                if(
-                                  data.status == Constants.UserListStatus[0].request &&
-                                  provider.selectedContent != ContentType.movie
-                                )
-                                const SizedBox(width: 6),
-                                if(
-                                  provider.selectedContent != ContentType.movie
-                                )
-                                Text(
-                                  data.watchedEpisodes?.toString() ?? "?",
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                if(
-                                  provider.selectedContent != ContentType.movie
-                                )
-                                Text("/${data.totalEpisodes ?? "?"} eps"),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
+                child: _globalProvider.userListMode == Constants.UserListUIModes.first
+                ? UserListExpanded(
+                  data,
+                  provider,
+                  userListProvider,
+                  index,
+                  _updateData
+                )
+                : UserListCompact(
+                  data,
+                  provider,
+                  userListProvider,
+                  index,
+                  _updateData
                 ),
               ),
             );

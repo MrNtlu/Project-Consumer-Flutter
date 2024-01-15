@@ -124,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // ProfileButton("Requests", () {
-                    //   //TODO Redirect
+                    //   //TODO Redirect after implemented
                     // }, CupertinoIcons.person_add_solid),
                     // const SizedBox(width: 12),
                     ProfileButton("User List", () {

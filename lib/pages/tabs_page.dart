@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
 import 'package:watchlistfy/pages/settings_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
@@ -48,6 +49,8 @@ class _TabsPageState extends State<TabsPage> {
     super.didChangeDependencies();
     //TODO FirebaseMessaging Init, create FCM
     if (state == BaseState.init) {
+      Provider.of<GlobalProvider>(context, listen: false).initValues();
+
       await SharedPref().init().then((_) async {
         final token = SharedPref().getTokenCredentials();
         final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);

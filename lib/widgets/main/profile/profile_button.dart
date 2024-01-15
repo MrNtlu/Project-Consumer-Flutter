@@ -31,7 +31,7 @@ class ProfileButton extends StatelessWidget {
                   ),
                 ),
               ),
-              //TODO Remove later
+              //TODO Remove later after other button implemented
               const SizedBox(width: 20,)
             ],
           ),

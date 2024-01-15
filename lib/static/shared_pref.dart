@@ -1,5 +1,4 @@
-
-
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,5 +54,23 @@ class SharedPref {
 
   void deleteTokenCredentials(){
     sharedPref?.remove(Constants.TOKEN_PREF);
+  }
+
+  //Default Content Selection
+  void setDefaultContent(String contentRequest) {
+    sharedPref?.setString("default_content", contentRequest);
+  }
+
+  String getDefaultContent() {
+    return _sharedPreference.getString("default_content") ?? ContentType.movie.request;
+  }
+
+  //Default Content Selection
+  void setUserListUIMode(String mode) {
+    sharedPref?.setString("user_list_ui_mode", mode);
+  }
+
+  String getUserListUIMode() {
+    return _sharedPreference.getString("user_list_ui_mode") ?? Constants.UserListUIModes.first;
   }
 }

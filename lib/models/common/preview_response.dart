@@ -36,15 +36,4 @@ class Preview {
       games = typeConverter.convertToObject(gameResponse);
     }
   }
-
-  //TODO Remove later
-  // factory Preview.fromJson(Map<String, dynamic> json) {
-  //   return Preview(
-  //     movieResponse: json["movie"],
-  //     tvResponse: json["tv"],
-  //     animeResponse: json["anime"],
-  //     gameResponse: json["game"],
-  //     error: json["error"],
-  //   );
-  // }
 }
