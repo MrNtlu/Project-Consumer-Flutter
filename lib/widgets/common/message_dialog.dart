@@ -1,23 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
-class ErrorDialog extends StatelessWidget {
-  final String _error;
-
-  const ErrorDialog(this._error, {Key? key}) : super(key: key);
+class MessageDialog extends StatelessWidget {
+  final String title;
+  final String message;
+  const MessageDialog(this.message, {this.title = "Success", super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return CupertinoAlertDialog(
-      title: const Text("Error"),
+      title: Text(title),
       content: Padding(
         padding: const EdgeInsets.only(top: 12),
-        child: Text(_error),
+        child: Text(message),
       ),
       actions: [
         CupertinoDialogAction(
-          isDefaultAction: true,
-          child: const Text("Gotcha!"),
+          child: const Text("OK 👍"),
           onPressed: () {
             Navigator.pop(context);
           },

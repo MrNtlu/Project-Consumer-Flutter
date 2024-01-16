@@ -10,7 +10,6 @@ import 'package:watchlistfy/pages/main/discover/tv_discover_sheet.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_list_provider.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 
@@ -145,7 +144,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
             navigationBar: CupertinoNavigationBar(
               middle: Text(provider.genre ?? 'Discover'),
               trailing: GestureDetector(
-                child: Icon(Icons.filter_alt_rounded, color: CupertinoTheme.of(context).bgTextColor),
+                child: const Icon(Icons.filter_alt_rounded),
                 onTap: () {
                   showCupertinoModalBottomSheet(
                     context: context, 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/content_list_page.dart';
 import 'package:watchlistfy/pages/main/search_list_page.dart';
@@ -19,12 +20,17 @@ import 'package:watchlistfy/widgets/main/home/preview_list.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  //TODO Move vote now to bottom of the screen and promote premium membership.
+
   @override
   Widget build(BuildContext context) {
     final authenticationProvider = Provider.of<AuthenticationProvider>(context);
     final contentProvider = Provider.of<ContentProvider>(context);
+    final previewProvider = Provider.of<PreviewProvider>(context, listen: false);
 
-    Provider.of<PreviewProvider>(context, listen: false).getPreviews();
+    if (previewProvider.networkState != NetworkState.disposed) {
+      previewProvider.getPreviews();
+    }
 
     return Provider(
       create: (context) => MovieListProvider(),

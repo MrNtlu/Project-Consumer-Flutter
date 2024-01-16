@@ -39,12 +39,18 @@ class _PreviewListState extends State<PreviewList> {
   }
 
   @override
+  void dispose() {
+    _previewProvider.networkState = NetworkState.disposed;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     int listCount;
 
     if (_previewProvider.networkState == NetworkState.success) {
       BasePreviewResponse<BaseContent> preview;
-      
+
       switch (_contentProvider.selectedContent) {
         case ContentType.movie:
           preview = _previewProvider.moviePreview;
@@ -135,31 +141,36 @@ class _PreviewListState extends State<PreviewList> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: SizedBox(height: 200, child: ContentCell(data.imageUrl, data.titleEn)),
-            ),
-          );
-        },
-      )
-      : ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(listCount, (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3),
-          child: SizedBox(
-            height: 200,
-            child: AspectRatio(
-              aspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Shimmer.fromColors(
-                  baseColor: CupertinoColors.systemGrey, 
-                  highlightColor: CupertinoColors.systemGrey3,
-                  child: Container(color: CupertinoColors.systemGrey,)
-                )
-              ),
-            ),
-          ),
-        )
-      )
-    );
+                  child: SizedBox(
+                      height: 200,
+                      child: ContentCell(data.imageUrl, data.titleEn)),
+                ),
+              );
+            },
+          )
+        : ListView(
+            scrollDirection: Axis.horizontal,
+            children: List.generate(
+                listCount,
+                (index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      child: SizedBox(
+                        height: 200,
+                        child: AspectRatio(
+                          aspectRatio: _contentProvider.selectedContent !=
+                                  ContentType.game
+                              ? 2 / 3
+                              : 16 / 9,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Shimmer.fromColors(
+                                  baseColor: CupertinoColors.systemGrey,
+                                  highlightColor: CupertinoColors.systemGrey3,
+                                  child: Container(
+                                    color: CupertinoColors.systemGrey,
+                                  ))),
+                        ),
+                      ),
+                    )));
   }
 }

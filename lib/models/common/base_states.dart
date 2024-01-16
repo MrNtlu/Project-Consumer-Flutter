@@ -10,6 +10,7 @@ enum NetworkState {
   loading,
   success,
   error,
+  disposed,
 }
 
 enum ListState {

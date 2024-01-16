@@ -10,7 +10,6 @@ import 'package:watchlistfy/pages/main/discover/movie_discover_sheet.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_list_provider.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 
@@ -144,7 +143,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
             navigationBar: CupertinoNavigationBar(
               middle: Text(provider.genre ?? 'Discover'),
               trailing: GestureDetector(
-                child: Icon(Icons.filter_alt_rounded, color: CupertinoTheme.of(context).bgTextColor,),
+                child: const Icon(Icons.filter_alt_rounded),
                 onTap: () {
                   showCupertinoModalBottomSheet(
                     context: context, 

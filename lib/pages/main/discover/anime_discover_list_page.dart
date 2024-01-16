@@ -10,7 +10,6 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_sheet.dart';
 import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_anime_provider.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 
@@ -152,7 +151,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
             navigationBar: CupertinoNavigationBar(
               middle: Text(provider.genre ?? 'Discover'),
               trailing: GestureDetector(
-                child: Icon(Icons.filter_alt_rounded, color: CupertinoTheme.of(context).bgTextColor,),
+                child: const Icon(Icons.filter_alt_rounded),
                 onTap: () {
                   showCupertinoModalBottomSheet(
                     context: context, 

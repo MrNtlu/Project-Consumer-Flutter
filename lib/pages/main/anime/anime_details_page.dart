@@ -97,7 +97,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
             child: CustomScrollView(
               slivers: [
                 DetailsNavigationBar(
-                  _provider.item?.title ?? "",
+                  _provider.item?.title ?? (_provider.item?.titleOriginal ?? ""),
                   _provider.item == null,
                   _provider.item?.userList == null,
                   _provider.item?.consumeLater == null,

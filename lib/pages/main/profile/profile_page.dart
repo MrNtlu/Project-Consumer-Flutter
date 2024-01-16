@@ -7,6 +7,7 @@ import 'package:watchlistfy/models/main/common/request/id_body.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
@@ -215,7 +216,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SeeAllTitle("🕒 Watch Later", () {
-          
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return ConsumeLaterPage();
+                  })
+                ).then((value) => _fetchData());
               }),
               SizedBox(
                 height: 200,

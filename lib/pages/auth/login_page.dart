@@ -29,9 +29,9 @@ class LoginPage extends StatelessWidget {
         
         SharedPref().setTokenCredentials(value.token ?? '');
 
-        Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) {
+        Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute(builder: (_) {
           return const TabsPage();
-        }));
+        }), (_) => false);
       }
     });
   }
@@ -43,7 +43,6 @@ class LoginPage extends StatelessWidget {
     return CupertinoPageScaffold(
         navigationBar: const CupertinoNavigationBar(
           middle: Text("Login"),
-          previousPageTitle: "Home",
         ),
         child: CupertinoButton.filled(
           child: const Text(
