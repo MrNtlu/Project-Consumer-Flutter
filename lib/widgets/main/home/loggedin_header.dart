@@ -8,6 +8,9 @@ import 'package:watchlistfy/static/colors.dart';
 class LoggedinHeader extends StatelessWidget {
   const LoggedinHeader({super.key});
 
+  //TODO ContextMenu for userlist and consume later
+  // https://api.flutter.dev/flutter/cupertino/CupertinoContextMenu-class.html
+
   @override
   Widget build(BuildContext context) {
     final authenticationProvider = Provider.of<AuthenticationProvider>(context);

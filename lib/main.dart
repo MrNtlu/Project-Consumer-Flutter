@@ -34,10 +34,8 @@ void main() async {
   crashlytics.setCrashlyticsCollectionEnabled(shouldActivateAnalytics);
 }
 
-// Refresh Token
-// https://www.google.com/search?q=flutter+jwt+refresh+token&oq=flutter+jwt+refresh+token
-
-// Routing https://docs.flutter.dev/cookbook/navigation/named-routes
+//TODO
+// Deep linking https://codewithandrea.com/articles/flutter-deep-links/
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

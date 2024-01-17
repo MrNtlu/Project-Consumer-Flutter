@@ -62,6 +62,7 @@ dependencies:
   expandable_text: ^2.3.0
   collection: ^1.18.0
   modal_bottom_sheet: ^3.0.0-pre
+  flutter_markdown: ^0.6.18+3
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,8 @@ flutter:
     - assets/lottie/loading.json
     - assets/lottie/error.json
     - assets/lottie/error_dialog.json
+    - assets/policies/privacy_policy.md
+    - assets/policies/terms_conditions.md
     - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

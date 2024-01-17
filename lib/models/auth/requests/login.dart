@@ -44,10 +44,12 @@ class Login implements JSONConverter {
 
 class Register implements JSONConverter {
   String emailAddress;
-  String currency;
   String password;
+  String fcmToken;
+  String username;
+  String image;
 
-  Register(this.emailAddress, this.currency, this.password);
+  Register(this.emailAddress, this.password, this.fcmToken, this.username, this.image,);
 
   Future<BaseMessageResponse> register() async {
     try {
@@ -68,8 +70,10 @@ class Register implements JSONConverter {
   @override
   Map<String, Object> convertToJson() => {
      "email_address": emailAddress, 
-     "currency": currency,
-     "password": password
+     "fcm_token": fcmToken,
+     "password": password,
+     "image": image,
+     "username": username
   };
 }
 

@@ -34,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
   *  - Make use enter new entries etc.
   *  - For each content type, show popular ones.
   *  - Allow user to skip or add 3 movies.(Create endpoint for that)
+  * - [ ] Delete User
   * - [ ] User List design
   * - [ ] Default content type selection
   * - [ ] Add new content cell design and allow user to select
@@ -126,6 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
       navigationBar: CupertinoNavigationBar(
         middle: const Text("Settings"),
         backgroundColor: CupertinoTheme.of(context).bgColor,
+        brightness: cupertinoTheme.brightness,
       ),
       child: _state == DetailState.loading
       ? const LoadingView("Loading")
@@ -142,13 +144,18 @@ class _SettingsPageState extends State<SettingsPage> {
           titleTextColor: cupertinoTheme.bgTextColor,
           settingsTileTextColor: cupertinoTheme.bgTextColor,
         ),
+        brightness: cupertinoTheme.brightness,
         platform: DevicePlatform.iOS,
         applicationType: ApplicationType.cupertino,
         sections: [
           SettingsSection(
             title: const Text("Application"),
             tiles: [
-              const CustomSettingsTile(child: ThemeSwitch()),
+              CustomSettingsTile(child: ThemeSwitch(() {
+                setState(() {
+                  _state = DetailState.view;
+                });
+              })),
               if (authProvider.isAuthenticated)
               SettingsTile.navigation(
                 leading: const Icon(Icons.logout_rounded),
