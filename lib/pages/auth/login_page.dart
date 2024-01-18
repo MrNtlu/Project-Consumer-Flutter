@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/pages/auth/register_page.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/auth/email_field.dart';
+import 'package:watchlistfy/widgets/auth/forgot_password_sheet.dart';
 import 'package:watchlistfy/widgets/auth/password_field.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
@@ -20,7 +22,6 @@ class LoginPage extends StatelessWidget {
   /*
   * Implement Google signin
   * Implement Apple Signin also to backend
-  * Forgot Password
   * https://github.com/MrNtlu/Asset-Manager-Flutter/blob/master/lib/auth/pages/login_page.dart
   */
 
@@ -122,9 +123,13 @@ class LoginPage extends StatelessWidget {
                       CupertinoButton(
                         minSize: 0,
                         padding: const EdgeInsets.all(3),
-                        child: const Text("Forgot Password?", style: TextStyle(fontSize: 12)), 
+                        child: const Text("Forgot Password?", style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey)), 
                         onPressed: (){
-                          //TODO Implement
+                          showCupertinoModalBottomSheet(
+                            context: context,
+                            barrierColor: CupertinoColors.black.withOpacity(0.75),
+                            builder: (_) => const ForgotPasswordSheet()
+                          );
                         }
                       ),
                     ],

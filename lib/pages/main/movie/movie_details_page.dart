@@ -6,6 +6,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -17,6 +18,7 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
+import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
@@ -223,9 +225,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 125,
-                      child: ContentCell(item.imageUrl, item.title)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return ImagePage(item.imageUrl);
+                          })
+                        );
+                      },
+                      child: SizedBox(
+                        height: 125,
+                        child: ContentCell(item.imageUrl, item.title)
+                      ),
                     ),
                   ],
                 ),
@@ -298,10 +309,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     placeHolderIcon: Icons.business_rounded,
                   )
                 ),
+                if (item.images.isNotEmpty)
+                const DetailsTitle("Images"),
+                if (item.images.isNotEmpty)
+                DetailsCarouselSlider(item.images),
                 //TODO Streaming by country
-                //TODO Image slide list
                 //TODO Review Summary!
-                const SizedBox(height: 16)
+                const SizedBox(height: 32)
               ],
             ),
           ),

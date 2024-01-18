@@ -1,12 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
+import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/auth/auth_switch.dart';
 import 'package:watchlistfy/widgets/auth/email_field.dart';
 import 'package:watchlistfy/widgets/auth/password_field.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/profile_image_list.dart';
 
 class RegisterPage extends StatefulWidget {
 
@@ -26,10 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late final TextEditingController _emailTextController;
   late final TextEditingController _usernameTextController;
   late final TextEditingController _passwordTextController;
-
-  /*
-  * Profile image selection with grid or list
-  */
+  late final ProfileImageList _profileImageList;
 
   void _onRegisterPressed() async {  
     if (_termsConditionsCheck.getValue() && _privacyPolicyCheck.getValue()) {
@@ -52,6 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _registerModel.emailAddress = _emailTextController.text;
       _registerModel.password = _passwordTextController.text;
       _registerModel.username = _usernameTextController.text;
+      _registerModel.image = Constants.ProfileImageList[_profileImageList.selectedIndex];
       
       String? token = await FirebaseMessaging.instance.getToken();
       _registerModel.fcmToken = token ?? '';
@@ -63,6 +64,8 @@ class _RegisterPageState extends State<RegisterPage> {
           showCupertinoDialog(context: context, builder: (_) => ErrorDialog(value.error ?? value.message ?? ''));
         } else {
           Navigator.pop(context);
+
+          showCupertinoDialog(context: context, builder: (_) => MessageDialog(value.message ?? "Successfully registered."));
         }
       }).catchError((error){
         Navigator.pop(context);
@@ -85,6 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _emailTextController = TextEditingController();
       _passwordTextController = TextEditingController();
       _usernameTextController = TextEditingController();
+      _profileImageList = ProfileImageList();
 
       _isInit = true;
     }
@@ -98,13 +102,17 @@ class _RegisterPageState extends State<RegisterPage> {
           const CupertinoSliverNavigationBar(
             largeTitle: Text("Register", style: TextStyle(fontSize: 24)),
           ),
-          SliverFillRemaining(
+          SliverToBoxAdapter(
             child: Center(
-              child: Padding(
+              child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(height: 12),
+                    _profileImageList,
+                    const SizedBox(height: 24),
                     EmailField(_emailTextController),
                     const SizedBox(height: 24),
                     EmailField(_usernameTextController, label: "Username"),

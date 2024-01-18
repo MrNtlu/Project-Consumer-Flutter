@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 
@@ -11,24 +13,35 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final authenticationProvider = Provider.of<AuthenticationProvider>(context);
 
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: Card(
-        color: CupertinoTheme.of(context).bgColor,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: CupertinoTheme.of(context).primaryColor, width: 1.0),
-          borderRadius: BorderRadius.circular(12)
-        ),
-        elevation: 6,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Text(
-              authenticationProvider.isAuthenticated
-              ? "Vote now and decide new features!"
-              : "Login or Register now to access all features.",
-              style: TextStyle(color: CupertinoTheme.of(context).bgTextColor, fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () {
+        if (!authenticationProvider.isAuthenticated) {
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(builder: (_) {
+              return LoginPage();
+            })
+          ); 
+        }
+      },
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: Card(
+          color: CupertinoTheme.of(context).bgColor,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: CupertinoColors.systemBlue, width: 1.0),
+            borderRadius: BorderRadius.circular(12)
+          ),
+          elevation: 6,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Center(
+              child: AutoSizeText(
+                authenticationProvider.isAuthenticated
+                ? "Tip: Press and hold your username to access your list."
+                : "Login or Register now to access all features.",
+                style: TextStyle(color: CupertinoTheme.of(context).bgTextColor, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ),

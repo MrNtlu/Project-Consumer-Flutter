@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'project-consumer-76309.appspot.com',
     androidClientId: '642161392142-ijtko1kkakdd75sfqpiimrau2e432re4.apps.googleusercontent.com',
     iosClientId: '642161392142-8plt4054ceil5oilet6m2vm6l17b957c.apps.googleusercontent.com',
-    iosBundleId: 'com.example.watchlistfyFlutter',
+    iosBundleId: 'com.mrntlu.watchlistfy',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -75,6 +75,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'project-consumer-76309.appspot.com',
     androidClientId: '642161392142-ijtko1kkakdd75sfqpiimrau2e432re4.apps.googleusercontent.com',
     iosClientId: '642161392142-p7dridbhqmusjd0uk2m0nmprol9v2l29.apps.googleusercontent.com',
-    iosBundleId: 'com.example.watchlistfyFlutter.RunnerTests',
+    iosBundleId: 'com.mrntlu.watchlistfy.RunnerTests',
   );
 }

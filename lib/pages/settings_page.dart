@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
-import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -18,8 +18,10 @@ import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
+import 'package:watchlistfy/widgets/main/settings/user_list_switch.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -34,27 +36,48 @@ class _SettingsPageState extends State<SettingsPage> {
   *  - Make use enter new entries etc.
   *  - For each content type, show popular ones.
   *  - Allow user to skip or add 3 movies.(Create endpoint for that)
-  * - [ ] Delete User
-  * - [ ] User List design
   * - [ ] Default content type selection
   * - [ ] Add new content cell design and allow user to select
   */
   DetailState _state = DetailState.init;
-  String? error = null;
-  UserInfo? _userInfo = null;
+  String? error;
+  UserInfo? _userInfo;
 
   late final AuthenticationProvider authProvider;
 
-  @override
-  void didChangeDependencies() {
-    if (_state == DetailState.init) {
-      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-      themeProvider.initTheme(SharedPref().isDarkTheme());
-
-      authProvider = Provider.of<AuthenticationProvider>(context);
-      // _getUserInfo();
+  void _deleteUserAccount() {
+    setState(() {
+      _state = DetailState.loading;
+    });
+    try {
+      http.delete(
+        Uri.parse(APIRoutes().userRoutes.deleteUser),
+        headers: UserToken().getBearerToken()
+      ).then((response){
+        if (response.getBaseMessageResponse().error != null) {
+          setState(() {
+            _state = DetailState.view;
+          });
+          showDialog(
+            context: context, 
+            builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
+          );
+        } else {
+          Purchases.logOut();
+          GoogleSignInApi().signOut();
+          SharedPref().deleteTokenCredentials();
+          Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+        }
+      });
+    } catch (error) {
+      setState(() {
+        _state = DetailState.view;
+      });
+      showDialog(
+        context: context, 
+        builder: (ctx) => ErrorDialog(error.toString())
+      );
     }
-    super.didChangeDependencies();
   }
 
   void _logOut() {
@@ -119,6 +142,59 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void _getUserInfo() {
+    setState(() {
+      _state = DetailState.loading;
+    });
+
+    try {
+      http.get(
+        Uri.parse(APIRoutes().userRoutes.info),
+        headers: UserToken().getBearerToken()
+      ).then((response){
+        if (_state != DetailState.disposed) {
+          _userInfo = response.getBaseItemResponse<UserInfo>().data;
+          error = _userInfo == null ? response.getBaseItemResponse<UserInfo>().message : null;
+
+          setState(() {
+            _state = _userInfo == null ? DetailState.error : DetailState.view;
+          }); 
+        }
+      }).onError((error, stackTrace) {
+        this.error = error.toString();
+        setState(() {
+          _state = DetailState.error;
+        });
+      });
+    } catch(error) {
+      this.error = error.toString();
+      setState(() {
+        _state = DetailState.error;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _state = DetailState.disposed;
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_state == DetailState.init) {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+      themeProvider.initTheme(SharedPref().isDarkTheme());
+
+      authProvider = Provider.of<AuthenticationProvider>(context);
+
+      if (authProvider.isAuthenticated) {
+        _getUserInfo();
+      }
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final cupertinoTheme = CupertinoTheme.of(context);
@@ -156,6 +232,18 @@ class _SettingsPageState extends State<SettingsPage> {
                   _state = DetailState.view;
                 });
               })),
+              const CustomSettingsTile(child: UserListSwitch()),
+            ]
+          ),
+          SettingsSection(
+            title: const Text("Account"),
+            tiles: [
+              if (_userInfo != null)
+              _userInfoText("Email", _userInfo!.email),
+              if (_userInfo != null)
+              _userInfoText("Username", _userInfo!.username),
+              if (_userInfo != null)
+              _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
               if (authProvider.isAuthenticated)
               SettingsTile.navigation(
                 leading: const Icon(Icons.logout_rounded),
@@ -176,10 +264,46 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 },
               ),
+              if (authProvider.isAuthenticated)
+              SettingsTile.navigation(
+                leading: const Icon(Icons.delete_forever_rounded),
+                title: const Text('Delete Account'),
+                onPressed: (ctx) {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (_) {
+                      return SureDialog("Do you want to delete your account? This action cannot be reversed!", () {
+                        _deleteUserAccount();
+                      });
+                    }
+                  );
+                },
+              ),
             ]
           )
         ],
       ),
     );
   }
+
+  SettingsTile _userInfoText(String title, String data) => SettingsTile(
+    title: Row(
+      children: [
+        Text(title),
+        const SizedBox(width: 8),
+        Expanded(
+          child: AutoSizeText(
+            data,
+            textAlign: TextAlign.right,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold
+            ),
+            maxLines: 1,
+            maxFontSize: 16,
+            minFontSize: 12,
+          ),
+        ),
+      ],
+    )
+  );
 }

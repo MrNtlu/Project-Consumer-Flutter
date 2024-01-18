@@ -18,8 +18,8 @@ class ThemeSwitch extends StatelessWidget {
         onToggle();
       },
       initialValue: themeProvider.isDarkTheme,
-      leading: const Icon(CupertinoIcons.moon_fill),
-      title: const Text('Dark Theme'),
+      leading: Icon(themeProvider.isDarkTheme ? CupertinoIcons.moon_fill : CupertinoIcons.sun_max_fill),
+      title: Text('${themeProvider.isDarkTheme ? 'Dark' : 'Light'} Theme'),
     );
   }
 }

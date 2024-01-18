@@ -6,6 +6,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/game_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -17,6 +18,7 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
+import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
@@ -226,9 +228,18 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 125,
-                      child: ContentCell(item.imageUrl, item.title, forceRatio: true, cornerRadius: 8,)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return ImagePage(item.imageUrl);
+                          })
+                        );
+                      },
+                      child: SizedBox(
+                        height: 125,
+                        child: ContentCell(item.imageUrl, item.title, forceRatio: true, cornerRadius: 8,)
+                      ),
                     ),
                   ],
                 ),
@@ -249,13 +260,13 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                   return GameDiscoverListPage(genre: genre);
                 }),
                 const DetailsTitle("Developers"),
-                Text( //TODO Change to chip design
-                  item.developers.isNotEmpty ? item.developers.join(", ") : "",
+                Text(
+                  item.developers.isNotEmpty ? item.developers.join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 const DetailsTitle("Publishers"),
-                Text( //TODO Change to chip design
-                  item.publishers.isNotEmpty ? item.publishers.join(", ") : "",
+                Text(
+                  item.publishers.isNotEmpty ? item.publishers.join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 const DetailsTitle("Platforms"),
@@ -280,10 +291,13 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                     }
                   ),
                 ),
+                if (item.screenshots.isNotEmpty)
+                const DetailsTitle("Screenshots"),
+                if (item.screenshots.isNotEmpty)
+                DetailsCarouselSlider(item.screenshots),
                 //TODO Store id map
-                //TODO Image list with slider
                 //TODO Review Summary!
-                const SizedBox(height: 16)
+                const SizedBox(height: 32)
               ],
             ),
           ),

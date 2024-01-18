@@ -7,6 +7,7 @@ import 'package:watchlistfy/models/main/anime/anime_details_relation.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -237,9 +238,18 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 125,
-                      child: ContentCell(item.imageUrl, item.title)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return ImagePage(item.imageUrl);
+                          })
+                        );
+                      },
+                      child: SizedBox(
+                        height: 125,
+                        child: ContentCell(item.imageUrl, item.title)
+                      ),
                     ),
                   ],
                 ),
@@ -307,16 +317,16 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 _relationList(animeList),
                 const DetailsTitle("Producers"),
                 Text( //TODO Change list with URL links.
-                  item.producers != null ? item.producers!.map((e) => e.name).join(", ") : "",
+                  item.producers != null ? item.producers!.map((e) => e.name).join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 const DetailsTitle("Studios"),
                 Text( //TODO Change to url links
-                  item.studios != null ? item.studios!.map((e) => e.name).join(", ") : "",
+                  item.studios != null ? item.studios!.map((e) => e.name).join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 //TODO Review Summary!
-                const SizedBox(height: 16)
+                const SizedBox(height: 32)
               ],
             ),
           ),

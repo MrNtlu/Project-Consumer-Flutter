@@ -8,7 +8,7 @@
 PRODUCT_NAME = watchlistfy_flutter
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.watchlistfyFlutter
+PRODUCT_BUNDLE_IDENTIFIER = com.mrntlu.watchlistfy
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 MrNtlu All rights reserved.

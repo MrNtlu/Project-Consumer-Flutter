@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -51,7 +50,6 @@ dependencies:
   firebase_messaging: ^14.7.5
   package_info_plus: ^5.0.1
   in_app_review: ^2.0.8
-  flutter_launcher_icons: ^0.13.1
   share_plus: ^7.2.1
   intl: ^0.18.1
   http: ^1.1.2
@@ -63,6 +61,7 @@ dependencies:
   collection: ^1.18.0
   modal_bottom_sheet: ^3.0.0-pre
   flutter_markdown: ^0.6.18+3
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +73,23 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_native_splash: ^2.3.9
+  flutter_launcher_icons:
+    git: https://github.com/fluttercommunity/flutter_launcher_icons.git
+
+flutter_native_splash:
+  color: "#212121"
+  color_dark: "#212121"
+  image: "assets/images/splash.png"
+  android: false
+  ios: true
+
+flutter_launcher_icons:
+  android: false
+  ios: true
+  image_path: "assets/images/logo.png"
+  background_color_ios: "#212121"
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,6 +109,7 @@ flutter:
     - assets/lottie/error_dialog.json
     - assets/policies/privacy_policy.md
     - assets/policies/terms_conditions.md
+    - assets/images/logo.png
     - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
