@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -44,8 +45,9 @@ class DetailsCommonList extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     padding: const EdgeInsets.all(3),
-                    child: Image.network(
-                      getImage(index)!,
+                    child: CachedNetworkImage(
+                      imageUrl: getImage(index)!,
+                      key: ValueKey<String>(getImage(index)!),
                       height: 64,
                     ),
                   )

@@ -25,7 +25,7 @@ class ProfileLevelBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 12),
           Text(
             "$level Lvl",
             style: const TextStyle(

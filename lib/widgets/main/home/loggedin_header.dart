@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,25 +68,31 @@ class LoggedinHeader extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: isUrlValid
-                  ? Image.network(
-                    authenticationProvider.basicUserInfo!.image!,
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Padding(padding: const EdgeInsets.all(3), child: CircularProgressIndicator(color: AppColors().primaryColor));
-                    },
-                  )
-                  : const Icon(
-                    Icons.person,
-                    size: 30,
-                    color: CupertinoColors.activeBlue,
+                SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: isUrlValid
+                    ? CachedNetworkImage(
+                      imageUrl: authenticationProvider.basicUserInfo!.image!,
+                      height: 30,
+                      width: 30,
+                      key: ValueKey<String>(authenticationProvider.basicUserInfo!.image!),
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (_, __, ___) =>
+                        const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.person,
+                        size: 30,
+                        color: CupertinoColors.activeBlue,
+                      ),
+                    )
+                    : const Icon(
+                      Icons.person,
+                      size: 30,
+                      color: CupertinoColors.activeBlue,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),

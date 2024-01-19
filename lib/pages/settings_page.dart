@@ -64,6 +64,8 @@ class _SettingsPageState extends State<SettingsPage> {
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
           );
         } else {
+          authProvider.setAuthentication(false);
+          authProvider.setBasicUserInfo(null);
           Purchases.logOut();
           GoogleSignInApi().signOut();
           SharedPref().deleteTokenCredentials();
