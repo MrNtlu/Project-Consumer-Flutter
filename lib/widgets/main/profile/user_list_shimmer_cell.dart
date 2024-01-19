@@ -145,8 +145,9 @@ class UserListShimmerCell extends StatelessWidget {
                         ),
                       ),
                       CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        child: const Icon(CupertinoIcons.ellipsis_vertical),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        minSize: 0,
+                        child: const Icon(CupertinoIcons.ellipsis_vertical, size: 18),
                         onPressed: () {}
                       )
                     ],

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class DetailsNavigationBar extends StatelessWidget {
   final String title;
@@ -32,7 +33,11 @@ class DetailsNavigationBar extends StatelessWidget {
         children: [
           CupertinoButton(
             padding: EdgeInsets.zero,
-            onPressed: onListTap,
+            onPressed: () {
+              HapticFeedback.vibrate();
+
+              onListTap();
+            },
             child: isUserListLoading 
             ? const CupertinoActivityIndicator() 
             : Icon(
@@ -43,7 +48,11 @@ class DetailsNavigationBar extends StatelessWidget {
           ),
           CupertinoButton(
             padding: EdgeInsets.zero,
-            onPressed: onBookmarkTap,
+            onPressed: () {
+              HapticFeedback.vibrate();
+
+              onBookmarkTap();
+            },
             child: isBookmarkLoading
             ? const CupertinoActivityIndicator() 
             : Icon(

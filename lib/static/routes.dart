@@ -27,7 +27,8 @@ class APIRoutes {
     tvRoutes = TVSeriesRoutes(baseURL: Constants.BASE_API_URL);
     animeRoutes = AnimeRoutes(baseURL: Constants.BASE_API_URL);
     gameRoutes = GameRoutes(baseURL: Constants.BASE_API_URL);
-    userInteractionRoutes = UserInteractionRoutes(baseURL: Constants.BASE_API_URL);
+    userInteractionRoutes =
+        UserInteractionRoutes(baseURL: Constants.BASE_API_URL);
     userListRoutes = UserListRoutes(baseURL: Constants.BASE_API_URL);
   }
 
@@ -60,11 +61,13 @@ class OAuthRoutes {
   late String _baseOAuthURL;
 
   late String google;
+  late String apple;
 
   OAuthRoutes({baseURL}) {
     _baseOAuthURL = '$baseURL/oauth';
 
     google = '$_baseOAuthURL/google';
+    apple = '$_baseOAuthURL/apple';
   }
 }
 

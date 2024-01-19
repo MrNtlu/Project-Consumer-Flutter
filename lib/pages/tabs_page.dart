@@ -34,7 +34,7 @@ class _TabsPageState extends State<TabsPage> {
     if (state != BaseState.disposed && state != BaseState.init) {
       setState(() {
         _selectedPageIndex = index;
-      }); 
+      });
     }
   }
 
@@ -53,7 +53,8 @@ class _TabsPageState extends State<TabsPage> {
 
       await SharedPref().init().then((_) async {
         final token = SharedPref().getTokenCredentials();
-        final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+        final authProvider =
+            Provider.of<AuthenticationProvider>(context, listen: false);
         UserToken().setToken(token);
 
         if (token == null) {
@@ -105,7 +106,7 @@ class _TabsPageState extends State<TabsPage> {
             builder: (context) {
               if (state == BaseState.loading || state == BaseState.init) {
                 return const LoadingView("Please wait");
-              } 
+              }
               return SafeArea(child: _pages[index]);
             },
           );

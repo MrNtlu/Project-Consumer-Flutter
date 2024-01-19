@@ -62,6 +62,7 @@ dependencies:
   modal_bottom_sheet: ^3.0.0-pre
   flutter_markdown: ^0.6.18+3
   carousel_slider: ^4.2.1
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:

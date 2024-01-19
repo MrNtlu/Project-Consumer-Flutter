@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/consume_later_response.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_provider.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 
 class ConsumeLaterActionSheet extends StatelessWidget {
   final int index;
@@ -63,10 +64,16 @@ class ConsumeLaterActionSheet extends StatelessWidget {
         CupertinoActionSheetAction(
           isDestructiveAction: true,
           onPressed: () {
-            //TODO Add are you sure dialog
-            Navigator.pop(context);
+            showCupertinoDialog(
+              context: context, 
+              builder: (_) {
+                return SureDialog("Do you want to remove it?", () {
+                  Navigator.pop(context);
 
-            onDeleteTap();
+                  onDeleteTap();
+                });
+              }
+            );
           },
           child: const Text('Remove'),
         ),

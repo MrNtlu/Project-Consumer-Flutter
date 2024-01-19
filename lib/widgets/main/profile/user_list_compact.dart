@@ -50,7 +50,7 @@ class UserListCompact extends StatelessWidget {
         const SizedBox(width: 8),
         SizedBox(
           height: 75,
-          child: ContentCell(data.imageUrl ?? '', data.title, cornerRadius: 8)
+          child: ContentCell(data.imageUrl ?? '', data.title.isEmpty ? data.titleOriginal : data.title, cornerRadius: 8)
         ),
         Expanded(
           child: Padding(
@@ -62,7 +62,7 @@ class UserListCompact extends StatelessWidget {
                   children: [
                     Flexible(
                       child: AutoSizeText(
-                        data.title,
+                        data.title.isEmpty ? data.titleOriginal : data.title,
                         minFontSize: 14,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -75,9 +75,10 @@ class UserListCompact extends StatelessWidget {
                     ),
                     userListProvider.isLoading
                     ? const CupertinoActivityIndicator()
-                    :CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      child: const Icon(CupertinoIcons.ellipsis_vertical),
+                    : CupertinoButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      minSize: 0,
+                      child: const Icon(CupertinoIcons.ellipsis_vertical, size: 18),
                       onPressed: () {
                         showCupertinoModalPopup(
                           context: context, 
@@ -85,7 +86,7 @@ class UserListCompact extends StatelessWidget {
                             return UserListActionSheet(
                               index, 
                               data.id, 
-                              data.title, 
+                              data.title.isEmpty ? data.titleOriginal : data.title, 
                               provider.selectedContent, 
                               data,
                               userListProvider,

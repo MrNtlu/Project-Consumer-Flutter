@@ -37,8 +37,11 @@ class InfoCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Center(
               child: AutoSizeText(
+                minFontSize: 12,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 authenticationProvider.isAuthenticated
-                ? "Tip: Press and hold your username to access your list."
+                ? "Press and hold your username for quick menu."
                 : "Login or Register now to access all features.",
                 style: TextStyle(color: CupertinoTheme.of(context).bgTextColor, fontWeight: FontWeight.bold),
               ),

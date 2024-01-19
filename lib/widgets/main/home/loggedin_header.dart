@@ -23,6 +23,17 @@ class LoggedinHeader extends StatelessWidget {
           onPressed: () {
             Navigator.of(context, rootNavigator: true).push(
               CupertinoPageRoute(builder: (_) {
+                return const ProfilePage();
+              })
+            );
+          },
+          trailingIcon: CupertinoIcons.profile_circled,
+          child: const Text('Profile'),
+        ),
+        CupertinoContextMenuAction(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(builder: (_) {
                 return const UserListPage();
               })
             );
@@ -53,7 +64,7 @@ class LoggedinHeader extends StatelessWidget {
         child: ColoredBox(
           color: CupertinoTheme.of(context).bgColor,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Row(
               children: [
                 ClipRRect(

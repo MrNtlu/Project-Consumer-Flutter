@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
@@ -41,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
   */
   DetailState _state = DetailState.init;
   String? error;
-  UserInfo? _userInfo;
+  BasicUserInfo? _userInfo;
 
   late final AuthenticationProvider authProvider;
 
@@ -149,12 +150,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
     try {
       http.get(
-        Uri.parse(APIRoutes().userRoutes.info),
+        Uri.parse(APIRoutes().userRoutes.basic),
         headers: UserToken().getBearerToken()
       ).then((response){
         if (_state != DetailState.disposed) {
-          _userInfo = response.getBaseItemResponse<UserInfo>().data;
+          _userInfo = response.getBaseItemResponse<BasicUserInfo>().data;
           error = _userInfo == null ? response.getBaseItemResponse<UserInfo>().message : null;
+
+          if (_userInfo != null && PurchaseApi().userInfo == null) {
+            PurchaseApi().userInfo = _userInfo;
+          }
 
           setState(() {
             _state = _userInfo == null ? DetailState.error : DetailState.view;
@@ -207,80 +212,85 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       child: _state == DetailState.loading
       ? const LoadingView("Loading")
-      : SettingsList(
-        darkTheme: SettingsThemeData(
-          settingsListBackground: cupertinoTheme.bgColor,
-          settingsSectionBackground: cupertinoTheme.onBgColor,
-          titleTextColor: cupertinoTheme.bgTextColor,
-          settingsTileTextColor: cupertinoTheme.bgTextColor,
-        ),
-        lightTheme: SettingsThemeData(
-          settingsListBackground: cupertinoTheme.bgColor,
-          settingsSectionBackground: cupertinoTheme.onBgColor,
-          titleTextColor: cupertinoTheme.bgTextColor,
-          settingsTileTextColor: cupertinoTheme.bgTextColor,
-        ),
-        brightness: cupertinoTheme.brightness,
-        platform: DevicePlatform.iOS,
-        applicationType: ApplicationType.cupertino,
-        sections: [
-          SettingsSection(
-            title: const Text("Application"),
-            tiles: [
-              CustomSettingsTile(child: ThemeSwitch(() {
-                setState(() {
-                  _state = DetailState.view;
-                });
-              })),
-              const CustomSettingsTile(child: UserListSwitch()),
-            ]
+      : Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SettingsList(
+            shrinkWrap: true,
+            darkTheme: SettingsThemeData(
+              settingsListBackground: cupertinoTheme.bgColor,
+              settingsSectionBackground: cupertinoTheme.onBgColor,
+              titleTextColor: cupertinoTheme.bgTextColor,
+              settingsTileTextColor: cupertinoTheme.bgTextColor,
+            ),
+            lightTheme: SettingsThemeData(
+              settingsListBackground: cupertinoTheme.bgColor,
+              settingsSectionBackground: cupertinoTheme.onBgColor,
+              titleTextColor: cupertinoTheme.bgTextColor,
+              settingsTileTextColor: cupertinoTheme.bgTextColor,
+            ),
+            brightness: cupertinoTheme.brightness,
+            platform: DevicePlatform.iOS,
+            applicationType: ApplicationType.cupertino,
+            sections: [
+              SettingsSection(
+                title: const Text("Application"),
+                tiles: [
+                  CustomSettingsTile(child: ThemeSwitch(() {
+                    setState(() {
+                      _state = DetailState.view;
+                    });
+                  })),
+                  const CustomSettingsTile(child: UserListSwitch()),
+                ]
+              ),
+              SettingsSection(
+                title: const Text("Account"),
+                tiles: [
+                  if (_userInfo != null)
+                  _userInfoText("Email", _userInfo!.email),
+                  if (_userInfo != null)
+                  _userInfoText("Username", _userInfo!.username),
+                  if (_userInfo != null)
+                  _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
+                  if (authProvider.isAuthenticated)
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.logout_rounded),
+                    title: const Text('Logout'),
+                    onPressed: (ctx) {
+                      _logOut();
+                    },
+                  ),
+                  if (!authProvider.isAuthenticated)
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.login_rounded),
+                    title: const Text('Login'),
+                    onPressed: (ctx) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return LoginPage();
+                        })
+                      );
+                    },
+                  ),
+                ]
+              )
+            ],
           ),
-          SettingsSection(
-            title: const Text("Account"),
-            tiles: [
-              if (_userInfo != null)
-              _userInfoText("Email", _userInfo!.email),
-              if (_userInfo != null)
-              _userInfoText("Username", _userInfo!.username),
-              if (_userInfo != null)
-              _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
-              if (authProvider.isAuthenticated)
-              SettingsTile.navigation(
-                leading: const Icon(Icons.logout_rounded),
-                title: const Text('Logout'),
-                onPressed: (ctx) {
-                  _logOut();
-                },
-              ),
-              if (!authProvider.isAuthenticated)
-              SettingsTile.navigation(
-                leading: const Icon(Icons.login_rounded),
-                title: const Text('Login'),
-                onPressed: (ctx) {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return LoginPage();
-                    })
-                  );
-                },
-              ),
-              if (authProvider.isAuthenticated)
-              SettingsTile.navigation(
-                leading: const Icon(Icons.delete_forever_rounded),
-                title: const Text('Delete Account'),
-                onPressed: (ctx) {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (_) {
-                      return SureDialog("Do you want to delete your account? This action cannot be reversed!", () {
-                        _deleteUserAccount();
-                      });
-                    }
-                  );
-                },
-              ),
-            ]
-          )
+          if (authProvider.isAuthenticated)
+          CupertinoButton(
+            child: const Text('Delete Account', style: TextStyle(color: CupertinoColors.systemRed)),
+            onPressed: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (_) {
+                  return SureDialog("Do you want to delete your account? This action cannot be reversed!", () {
+                    _deleteUserAccount();
+                  });
+                }
+              );
+            },
+          ),
         ],
       ),
     );

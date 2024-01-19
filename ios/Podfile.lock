@@ -20,18 +20,18 @@ PODS:
   - Firebase/Messaging (10.18.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.18.0)
-  - firebase_analytics (10.7.2):
+  - firebase_analytics (10.8.0):
     - Firebase/Analytics (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.24.0):
+  - firebase_core (2.24.2):
     - Firebase/CoreOnly (= 10.18.0)
     - Flutter
-  - firebase_crashlytics (3.4.6):
+  - firebase_crashlytics (3.4.9):
     - Firebase/Crashlytics (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.7.6):
+  - firebase_messaging (14.7.10):
     - Firebase/Messaging (= 10.18.0)
     - firebase_core
     - Flutter
@@ -101,6 +101,7 @@ PODS:
   - FMDB/standard (2.7.5)
   - google_sign_in_ios (0.0.1):
     - Flutter
+    - FlutterMacOS
     - GoogleSignIn (~> 7.0)
   - GoogleAppMeasurement (10.18.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.18.0)
@@ -168,17 +169,22 @@ PODS:
   - PromisesObjC (2.3.1)
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
-  - purchases_flutter (6.4.0):
+  - purchases_flutter (6.16.0):
     - Flutter
-    - PurchasesHybridCommon (= 8.0.0)
-  - PurchasesHybridCommon (8.0.0):
-    - RevenueCat (= 4.30.5)
-  - RevenueCat (4.30.5)
+    - PurchasesHybridCommon (= 8.11.0)
+  - PurchasesHybridCommon (8.11.0):
+    - RevenueCat (= 4.32.0)
+    - RevenueCatUI (= 4.32.0)
+  - RevenueCat (4.32.0)
+  - RevenueCatUI (4.32.0):
+    - RevenueCat (= 4.32.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - sign_in_with_apple (0.0.1):
+    - Flutter
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
@@ -194,13 +200,14 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
+  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -228,6 +235,7 @@ SPEC REPOS:
     - PromisesSwift
     - PurchasesHybridCommon
     - RevenueCat
+    - RevenueCatUI
 
 EXTERNAL SOURCES:
   app_tracking_transparency:
@@ -247,7 +255,7 @@ EXTERNAL SOURCES:
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   google_sign_in_ios:
-    :path: ".symlinks/plugins/google_sign_in_ios/ios"
+    :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
   package_info_plus:
@@ -260,6 +268,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
@@ -269,10 +279,10 @@ SPEC CHECKSUMS:
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
-  firebase_analytics: a8c0d8ba83f213c9b775b5f61d36dadaafb1b239
-  firebase_core: f802c5c1f6caff9b8d38b591a36e7b25f8878936
-  firebase_crashlytics: 0db78a5b6badc630f21a833d0c9ab20ab5d81948
-  firebase_messaging: ca2fc59ddd52ef032d80f1a717d12eae8fa0e994
+  firebase_analytics: b3d6dd14c61549a29abb10e9843446a4d8bb53eb
+  firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
+  firebase_crashlytics: 4b91b8ad60ee7c168fe88979f84c9573a729de7a
+  firebase_messaging: 90e8a6db84b6e1e876cebce4f30f01dc495e7014
   FirebaseAnalytics: 4d310b35c48eaa4a058ddc04bdca6bdb5dc0fe80
   FirebaseCore: 2322423314d92f946219c8791674d2f3345b598f
   FirebaseCoreExtension: 0659f035b88c5a7a15a9763c48c2e6ca8c0a2977
@@ -285,7 +295,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
+  google_sign_in_ios: 1bfaf6607b44cd1b24c4d4bc39719870440f9ce1
   GoogleAppMeasurement: 70ce9aa438cff1cfb31ea3e660bcc67734cb716e
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
@@ -295,16 +305,18 @@ SPEC CHECKSUMS:
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
-  purchases_flutter: a428f3e8ac54dfb499ff190efa99d6701094bc32
-  PurchasesHybridCommon: 80262c5ffe6621e3cf3812e6103170f6d7fbcb79
-  RevenueCat: c1e33f4e1f1fd239ba461652f02928e220becc31
+  purchases_flutter: 12eb0a77ebf28a16b04ee72f2e1f6b77235bf97e
+  PurchasesHybridCommon: 0b331c2a81b5425cda70edd4331cef98fc435ab1
+  RevenueCat: 2d99a5ebabd33955c3a38dfdfa9d3efe77c5db0c
+  RevenueCatUI: fa6b619083afb967facc20ecdc7ae53a4c512d10
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
-  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
+  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
 
 PODFILE CHECKSUM: aa3b1d9cb94e8055dc6468141196cf9e4c8e33df
 

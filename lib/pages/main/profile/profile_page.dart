@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -14,6 +15,7 @@ import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_consume_later_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_extra_info_text.dart';
@@ -87,15 +89,15 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Consumer<ProfileDetailsProvider>(
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: AutoSizeText(
+                _provider.item?.username ?? "Profile",
+                style: const TextStyle(fontSize: 18),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             child: CustomScrollView(
               slivers: [
-                CupertinoSliverNavigationBar(
-                  largeTitle: AutoSizeText(
-                    _provider.item?.username ?? "Profile",
-                    style: const TextStyle(fontSize: 18),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
                 _body(provider)
               ],
             ),
@@ -157,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ProfileExtraInfoText(item.movieWatchedTime.toString(), "hrs", "Watched"),
+                    ProfileExtraInfoText((item.movieWatchedTime / 60).round().toString(), "hrs", "Watched"),
                     ProfileExtraInfoText(item.tvWatchedEpisodes.toString(), "eps", "Watched"),
                     ProfileExtraInfoText(item.animeWatchedEpisodes.toString(), "eps", "Watched"),
                     ProfileExtraInfoText(item.gameTotalHoursPlayed.toString(), "hrs", "Played"),
@@ -218,7 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SeeAllTitle("🕒 Watch Later", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
-                    return ConsumeLaterPage();
+                    return const ConsumeLaterPage();
                   })
                 ).then((value) => _fetchData());
               }),
@@ -268,7 +270,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: ProfileConsumeLaterCell(
                             data.content.imageUrl, data.content.titleEn,
                             () {
-                              _provider.deleteConsumeLater(index, IDBody(data.id));
+                              HapticFeedback.vibrate();
+
+                              showCupertinoDialog(
+                                context: context, 
+                                builder: (_) {
+                                  return SureDialog("Do you want to remove it?", () {
+                                    _provider.deleteConsumeLater(index, IDBody(data.id));
+                                  });
+                                }
+                              );
                             }
                           )
                         ),

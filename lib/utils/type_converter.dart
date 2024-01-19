@@ -56,21 +56,21 @@ class TypeConverter<T> {
         response["is_friend_request_sent"] ?? false,
         response["is_friend_request_received"] ?? false,
         response["is_friends_with"] ?? false,
-        response["friend_request_count"],
+        response["friend_request_count"] ?? 0,
         response["membership_type"],
-        response["anime_count"],
-        response["game_count"],
-        response["movie_count"],
-        response["tv_count"],
-        response["movie_watched_time"],
-        response["anime_watched_episodes"],
-        response["tv_watched_episodes"],
-        response["game_total_hours_played"],
+        response["anime_count"] ?? 0,
+        response["game_count"] ?? 0,
+        response["movie_count"] ?? 0,
+        response["tv_count"] ?? 0,
+        response["movie_watched_time"] ?? 0,
+        response["anime_watched_episodes"] ?? 0,
+        response["tv_watched_episodes"] ?? 0,
+        response["game_total_hours_played"] ?? 0,
         response["fcm_token"],
         response["username"],
         response["email"],
         response["image"],
-        response["level"],
+        response["level"] ?? 0,
         response["consume_later"] != null
         ? ((response["consume_later"] as List).map((e) => 
           TypeConverter<ConsumeLaterResponse>().convertToObject(e)
@@ -100,7 +100,7 @@ class TypeConverter<T> {
         response["_id"] ?? '', 
         response["description"] ?? '', 
         response["image_url"] ?? '', 
-        response["title_en"] ?? (response["title"] ?? ''), 
+        response["title_en"] ?? (response["title"] ?? (response["title_jp"] ?? '')), 
         response["title_original"] ?? '',
         response["tmdb_id"],
         response["mal_id"] ?? response["rawg_id"]
@@ -224,7 +224,7 @@ class TypeConverter<T> {
         response["user_id"], 
         response["content_id"], 
         response["content_external_id"], 
-        response["content_external_int_id"], 
+        response["content_external_int_id"] ?? 0, 
         response["content_type"],
         TypeConverter<ConsumeLaterContent>().convertToObject(response["content"]),
       ) as T;
@@ -233,9 +233,11 @@ class TypeConverter<T> {
         response["title_en"], 
         response["title_original"], 
         response["image_url"], 
-        (response["score"] is double)
-        ? response["score"]
-        : (response["score"] as int).toDouble(), 
+        response["score"] != null
+        ? (response["score"] is double)
+          ? response["score"]
+          : (response["score"] as int).toDouble()
+        : 0,
         response["description"], 
       ) as T;
     } else if (T == MovieWatchList) {

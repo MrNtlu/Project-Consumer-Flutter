@@ -3,6 +3,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/delete_user_list_body.dart';
 import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_edit_sheet.dart';
 
 class UserListActionSheet extends StatelessWidget {
@@ -68,11 +69,18 @@ class UserListActionSheet extends StatelessWidget {
         CupertinoActionSheetAction(
           isDestructiveAction: true,
           onPressed: () {
-            //TODO Add are you sure dialog
-            Navigator.pop(context);
-
-            provider.deleteUserList(
-                index, DeleteUserListBody(id, contentType.request));
+            showCupertinoDialog(
+              context: context, 
+              builder: (_) {
+                return SureDialog("Do you want to remove it from your list?", () {
+                  Navigator.pop(context);
+                  
+                  provider.deleteUserList(
+                    index, DeleteUserListBody(id, contentType.request));
+                  }
+                );
+              }
+            );
           },
           child: const Text('Remove'),
         ),

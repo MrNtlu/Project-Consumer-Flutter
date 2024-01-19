@@ -131,8 +131,20 @@ class _UserListPageState extends State<UserListPage> {
   Widget _body(UserListContentSelectionProvider provider, UserListProvider userListProvider) {
     switch (_state) {
       case DetailState.view:
+        final bool isEmpty = (provider.selectedContent == ContentType.movie
+        ? userListProvider.item?.movieList.isEmpty
+        : (
+          provider.selectedContent == ContentType.tv
+          ? userListProvider.item?.tvList.isEmpty
+          : (
+            provider.selectedContent == ContentType.anime
+            ? userListProvider.item?.animeList.isEmpty
+            : userListProvider.item?.gameList.isEmpty
+          )
+        )) ?? true;
+
         return ListView.builder(
-          itemCount: provider.selectedContent == ContentType.movie
+          itemCount: isEmpty ? 1 : (provider.selectedContent == ContentType.movie
           ? userListProvider.item?.movieList.length
           : (
             provider.selectedContent == ContentType.tv
@@ -144,8 +156,20 @@ class _UserListPageState extends State<UserListPage> {
                 userListProvider.item?.gameList.length ?? 1
               )
             )
-          ),
+          )),
           itemBuilder: (context, index) {
+            if (isEmpty) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text("Couldn't find anything."),
+                  ),
+                ),
+              );
+            }
+
             late UserListContent data;
 
             switch (provider.selectedContent) {

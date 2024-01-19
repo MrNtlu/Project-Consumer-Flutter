@@ -24,13 +24,25 @@ class ProfileConsumeLaterCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title),
+            ContentCell(url, title, forceRatio: true),
             Positioned(
               top: -3,
               right: 0,
               child: GestureDetector(
                 onTap: onTap,
-                child: Icon(CupertinoIcons.bookmark_fill, size: 32, color: AppColors().primaryColor,)
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: CupertinoColors.black.withOpacity(0.5),
+                        spreadRadius: 2.3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(CupertinoIcons.bookmark_fill, size: 32, color: AppColors().primaryColor)
+                )
               ),
             )
           ],

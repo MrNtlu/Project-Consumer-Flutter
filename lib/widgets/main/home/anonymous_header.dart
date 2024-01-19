@@ -12,7 +12,7 @@ class AnonymousHeader extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: CupertinoColors.systemBlue,
-          fontSize: 15
+          fontSize: 16
         ),
       ), 
       onPressed: () => Navigator.of(context, rootNavigator: true).push(

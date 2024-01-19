@@ -25,7 +25,11 @@ class ContentCell extends StatelessWidget {
         child: !forceRatio && provider.selectedContent == ContentType.game
         ? Stack(
           children: [
-            _image(provider.selectedContent),
+            SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: _image(provider.selectedContent)
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(

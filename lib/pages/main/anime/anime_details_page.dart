@@ -98,7 +98,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
             child: CustomScrollView(
               slivers: [
                 DetailsNavigationBar(
-                  _provider.item?.title ?? (_provider.item?.titleOriginal ?? ""),
+                  _state == DetailState.view ? (_provider.item!.title.isNotEmpty ? _provider.item!.title : _provider.item!.titleOriginal) : "",
                   _provider.item == null,
                   _provider.item?.userList == null,
                   _provider.item?.consumeLater == null,
@@ -221,7 +221,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             const SizedBox(height: 32,),
                             AnimeDetailsInfoColumn(
                               item.titleOriginal, 
-                              item.titleJP, 
+                              item.titleJP,
                               item.season != null || item.year != null
                               ? "${item.season?.capitalize() ?? '?'} ${item.year ?? '?'}"
                               : "Unknown", 
@@ -263,7 +263,9 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 DetailsGenreList(item.demographics != null ? item.demographics!.map((e) => e.name).toList() : [], (demographic) {
                   return AnimeDiscoverListPage(demographic: demographic);
                 }),
+                if (item.themes != null && item.themes!.isNotEmpty)
                 const DetailsTitle("Themes"),
+                if (item.themes != null && item.themes!.isNotEmpty)
                 DetailsGenreList(item.themes != null ? item.themes!.map((e) => e.name).toList() : [], (theme) {
                   return AnimeDiscoverListPage(theme: theme);
                 }),
@@ -315,12 +317,16 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 const DetailsTitle("Related Anime"),
                 for (var animeList in animeRelations.values)
                 _relationList(animeList),
+                if (item.producers != null && item.producers!.isNotEmpty)
                 const DetailsTitle("Producers"),
+                if (item.producers != null && item.producers!.isNotEmpty)
                 Text( //TODO Change list with URL links.
                   item.producers != null ? item.producers!.map((e) => e.name).join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
+                if (item.studios != null && item.studios!.isNotEmpty)
                 const DetailsTitle("Studios"),
+                if (item.studios != null && item.studios!.isNotEmpty)
                 Text( //TODO Change to url links
                   item.studios != null ? item.studios!.map((e) => e.name).join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),

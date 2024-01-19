@@ -7,6 +7,7 @@ import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_play_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
@@ -110,25 +111,32 @@ class UserListViewSheet extends StatelessWidget {
         ),
         CupertinoActionSheetAction(
           isDestructiveAction: true,
-          onPressed: () { //TODO Add are you sure dialog
-            Navigator.pop(context);
+          onPressed: () {
+            showCupertinoDialog(
+              context: context, 
+              builder: (_) {
+                return SureDialog("Do you want to remove it from your list?", () {
+                  Navigator.pop(context);
 
-            switch (contentType) {
-              case ContentType.movie:
-                movieProvider!.deleteMovieWatchList(DeleteUserListBody(userList.id, contentType.request));
-                break;
-              case ContentType.tv:
-                tvProvider!.deleteTVWatchList(DeleteUserListBody(userList.id, contentType.request));
-                break;
-              case ContentType.anime:
-                animeProvider!.deleteAnimeWatchList(DeleteUserListBody(userList.id, contentType.request));
-                break;
-              case ContentType.game:
-                gameProvider!.deleteGamePlayList(DeleteUserListBody(userList.id, contentType.request));
-                break;
-              default:
-                break;
-            }
+                  switch (contentType) {
+                    case ContentType.movie:
+                      movieProvider!.deleteMovieWatchList(DeleteUserListBody(userList.id, contentType.request));
+                      break;
+                    case ContentType.tv:
+                      tvProvider!.deleteTVWatchList(DeleteUserListBody(userList.id, contentType.request));
+                      break;
+                    case ContentType.anime:
+                      animeProvider!.deleteAnimeWatchList(DeleteUserListBody(userList.id, contentType.request));
+                      break;
+                    case ContentType.game:
+                      gameProvider!.deleteGamePlayList(DeleteUserListBody(userList.id, contentType.request));
+                      break;
+                    default:
+                      break;
+                  }
+                });
+              }
+            );
           },
           child: const Text('Remove'),
         ),

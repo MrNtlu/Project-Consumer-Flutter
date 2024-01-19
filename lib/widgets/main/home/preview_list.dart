@@ -26,12 +26,19 @@ class _PreviewListState extends State<PreviewList> {
   bool isInitialized = false;
   late final PreviewProvider _previewProvider;
   late final ContentProvider _contentProvider;
+  late final ScrollController _scrollController;
+
+  void onContentChange() {
+    _scrollController.jumpTo(0);
+  }
 
   @override
   void didChangeDependencies() {
     if (!isInitialized) {
+      _scrollController = ScrollController();
       _previewProvider = Provider.of<PreviewProvider>(context);
       _contentProvider = Provider.of<ContentProvider>(context);
+      _contentProvider.addListener(onContentChange);
       isInitialized = true;
     }
 
@@ -40,7 +47,9 @@ class _PreviewListState extends State<PreviewList> {
 
   @override
   void dispose() {
+    _contentProvider.removeListener(onContentChange);
     _previewProvider.networkState = NetworkState.disposed;
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -87,6 +96,7 @@ class _PreviewListState extends State<PreviewList> {
     return _previewProvider.networkState == NetworkState.success
         ? ListView.builder(
             scrollDirection: Axis.horizontal,
+            controller: _scrollController,
             itemCount: listCount,
             itemBuilder: (context, index) {
               BasePreviewResponse<BaseContent> preview;
@@ -142,8 +152,9 @@ class _PreviewListState extends State<PreviewList> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
                   child: SizedBox(
-                      height: 200,
-                      child: ContentCell(data.imageUrl, data.titleEn)),
+                    height: 200,
+                    child: ContentCell(data.imageUrl.replaceFirst("original", "w200"), data.titleEn)
+                  ),
                 ),
               );
             },
