@@ -65,12 +65,21 @@ class SharedPref {
     return _sharedPreference.getString("default_content") ?? ContentType.movie.request;
   }
 
-  //Default Content Selection
+  //User List Mode
   void setUserListUIMode(String mode) {
     sharedPref?.setString("user_list_ui_mode", mode);
   }
 
   String getUserListUIMode() {
     return _sharedPreference.getString("user_list_ui_mode") ?? Constants.UserListUIModes.first;
+  }
+
+  //Consume Later Mode
+  void setConsumeLaterUIMode(String mode) {
+    sharedPref?.setString("consume_later_ui_mode", mode);
+  }
+
+  String getConsumeLaterUIMode() {
+    return _sharedPreference.getString("consume_later_ui_mode") ?? Constants.ConsumeLaterUIModes.first;
   }
 }

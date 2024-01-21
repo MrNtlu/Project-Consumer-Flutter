@@ -29,7 +29,7 @@ void main() async {
   runApp(const MyApp());
 
   final status = await AppTrackingTransparency.requestTrackingAuthorization();
-  final shouldActivateAnalytics = status == TrackingStatus.authorized || status == TrackingStatus.notSupported;
+  final shouldActivateAnalytics = status == TrackingStatus.authorized;
   analytics.setAnalyticsCollectionEnabled(shouldActivateAnalytics);
   crashlytics.setCrashlyticsCollectionEnabled(shouldActivateAnalytics);
 }
@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
       
           return CupertinoApp(
             title: 'Watchlistfy',
+            debugShowCheckedModeBanner: false,
             theme: SharedPref().isDarkTheme() ? AppColors().darkTheme : AppColors().lightTheme,
             initialRoute: '/',
             routes: {

@@ -114,6 +114,8 @@ class Constants {
 
   static final UserListUIModes = ["Expanded", "Compact",];
 
+  static final ConsumeLaterUIModes = ["Grid", "List",];
+
   //Genre List
   static final MovieGenreList = [
     NameUrl("Discover", "https://image.tmdb.org/t/p/w300/vv5a8u6e40kyH0Hp6HuamAgzRai.jpg"),

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -9,15 +10,19 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_provider.dart';
+import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/consume_later_action_sheet.dart';
+import 'package:watchlistfy/widgets/main/profile/consume_later_grid_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/consume_later_sort_filter_sheet.dart';
 
 class ConsumeLaterPage extends StatefulWidget {
@@ -32,6 +37,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
   String? _error;
 
   late final ConsumeLaterProvider _provider;
+  late final GlobalProvider _globalProvider;
   late final ConsumeLaterSortFilterProvider _sortFilterProvider;
 
   void _fetchData() {
@@ -78,6 +84,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      _globalProvider = Provider.of<GlobalProvider>(context);
       _fetchData();
     }
     super.didChangeDependencies();
@@ -116,6 +123,22 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 children: [
                   CupertinoButton(
                     onPressed: () {
+                      _globalProvider.setConsumeLaterMode(
+                        _globalProvider.consumeLaterMode == Constants.ConsumeLaterUIModes.first
+                        ? Constants.ConsumeLaterUIModes.last
+                        : Constants.ConsumeLaterUIModes.first
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    child: Icon(
+                      _globalProvider.consumeLaterMode == Constants.ConsumeLaterUIModes.first
+                      ? Icons.grid_view_rounded
+                      : CupertinoIcons.list_bullet,
+                      size: 28
+                    )
+                  ),
+                  CupertinoButton(
+                    onPressed: () {
                       showCupertinoModalPopup(
                         context: context, 
                         builder: (context) {
@@ -138,8 +161,90 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
 
   Widget _body(List<ConsumeLaterResponse> data) {
     switch (_state) {
-      case ListState.done:      
-        return ListView.builder(
+      case ListState.done:
+        final isGridView = _globalProvider.consumeLaterMode == Constants.ConsumeLaterUIModes.first;
+
+        return isGridView
+        ? GridView.builder(
+          itemCount: data.isEmpty ? 1 : data.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 150, 
+            childAspectRatio: 2/3, 
+            crossAxisSpacing: 6, 
+            mainAxisSpacing: 6
+          ),
+          itemBuilder: (context, index) {
+            final content = data[index];
+            final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    switch (contentType) {
+                      case ContentType.movie:
+                        return MovieDetailsPage(content.contentID);
+                      case ContentType.tv:
+                        return TVDetailsPage(content.contentID);
+                      case ContentType.anime:
+                        return AnimeDetailsPage(content.contentID);
+                      case ContentType.game: 
+                        return GameDetailsPage(content.contentID);
+                    }
+                  })
+                ).then((value) => _updateData());
+              },
+              child: ConsumeLaterGridCell(
+                content.content.imageUrl,
+                content.content.titleEn, 
+                () {
+                  showCupertinoDialog(
+                    context: context, 
+                    builder: (_) {
+                      return SureDialog("Do you want to remove it?", () {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) {
+                            return const LoadingDialog();
+                          }
+                        );
+
+                        _provider.deleteConsumeLater(content.id, content).then((value) {
+                          handleMessageResponse(context, value);
+                        });
+                      });
+                    }
+                  );
+                },
+                () {
+                  showCupertinoDialog(
+                    context: context, 
+                    builder: (_) {
+                      return SureDialog("Do you want to mark it as finished and add to your list?", () {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) {
+                            return const LoadingDialog();
+                          }
+                        );
+
+                        //TODO Implement score later
+                        _provider.moveToUserList(
+                          content.id, 
+                          null, 
+                          content,
+                        ).then((value) {
+                          handleMessageResponse(context, value);
+                        });
+                      });
+                    }
+                  );
+                }
+              ),
+            );
+          }
+        )
+        : ListView.builder(
           itemCount: data.isEmpty ? 1 : data.length,
           itemBuilder: (context, index) {
             if (data.isEmpty) {

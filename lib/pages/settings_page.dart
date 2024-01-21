@@ -20,6 +20,7 @@ import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
+import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/widgets/main/settings/user_list_switch.dart';
@@ -39,6 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   *  - Allow user to skip or add 3 movies.(Create endpoint for that)
   * - [ ] Default content type selection
   * - [ ] Add new content cell design and allow user to select
+  * - [ ] Consume Later design selection
   */
   DetailState _state = DetailState.init;
   String? error;
@@ -244,6 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   })),
                   const CustomSettingsTile(child: UserListSwitch()),
+                  const CustomSettingsTile(child: ConsumeLaterSwitch()),
                 ]
               ),
               SettingsSection(

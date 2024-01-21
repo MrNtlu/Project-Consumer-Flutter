@@ -11,21 +11,23 @@ class SeeAllTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: GestureDetector(
-        onTap: () {
-          onTap(); 
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-            if (!shouldHideSeeAllButton)
-            const Icon(CupertinoIcons.chevron_right)
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          )),
+          if (!shouldHideSeeAllButton)
+          CupertinoButton(
+            minSize: 0,
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+            onPressed: () {
+              onTap();
+            },
+            child: const Icon(CupertinoIcons.chevron_right
+          ))
+        ],
       ),
     );
   }

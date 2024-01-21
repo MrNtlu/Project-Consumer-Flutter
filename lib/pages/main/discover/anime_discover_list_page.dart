@@ -204,7 +204,10 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                   })
                 );
               },
-              child: ContentCell(content.imageUrl, content.titleEn)
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                child: ContentCell(content.imageUrl, content.titleEn),
+              )
             );
           }
         );

@@ -89,7 +89,7 @@ flutter_launcher_icons:
   android: false
   ios: true
   image_path: "assets/images/logo.png"
-  background_color_ios: "#212121"
+  # background_color_ios: "#212121"
   remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
