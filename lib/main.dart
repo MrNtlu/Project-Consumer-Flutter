@@ -19,19 +19,29 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) { _trackingTransparencyRequest(); });
   await dotenv.load(fileName: ".env");
   await PurchaseApi().init();
   await SharedPref().init();
   await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+}
 
-  final status = await AppTrackingTransparency.requestTrackingAuthorization();
-  final shouldActivateAnalytics = status == TrackingStatus.authorized;
-  analytics.setAnalyticsCollectionEnabled(shouldActivateAnalytics);
-  crashlytics.setCrashlyticsCollectionEnabled(shouldActivateAnalytics);
+Future<void> _trackingTransparencyRequest() async {
+  await Future.delayed(const Duration(milliseconds: 1000));
+
+  final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+  if (status == TrackingStatus.authorized) {
+    analytics.setAnalyticsCollectionEnabled(true);
+    crashlytics.setCrashlyticsCollectionEnabled(true);
+  } else if(status == TrackingStatus.notDetermined) {
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+
+    analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
+    crashlytics.setCrashlyticsCollectionEnabled(status == TrackingStatus.authorized);
+  }
 }
 
 //TODO
@@ -52,11 +62,13 @@ class MyApp extends StatelessWidget {
         create: (context) => ThemeProvider(),
         builder: (context, _) {
           Provider.of<ThemeProvider>(context);
-      
+
           return CupertinoApp(
             title: 'Watchlistfy',
             debugShowCheckedModeBanner: false,
-            theme: SharedPref().isDarkTheme() ? AppColors().darkTheme : AppColors().lightTheme,
+            theme: SharedPref().isDarkTheme()
+                ? AppColors().darkTheme
+                : AppColors().lightTheme,
             initialRoute: '/',
             routes: {
               TabsPage.routeName: (context) => const TabsPage(),

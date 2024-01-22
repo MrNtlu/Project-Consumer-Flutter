@@ -169,10 +169,10 @@ PODS:
   - PromisesObjC (2.3.1)
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
-  - purchases_flutter (6.16.0):
+  - purchases_flutter (6.16.1):
     - Flutter
-    - PurchasesHybridCommon (= 8.11.0)
-  - PurchasesHybridCommon (8.11.0):
+    - PurchasesHybridCommon (= 8.11.1)
+  - PurchasesHybridCommon (8.11.1):
     - RevenueCat (= 4.32.0)
     - RevenueCatUI (= 4.32.0)
   - RevenueCat (4.32.0)
@@ -292,7 +292,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
   FirebaseSessions: 2f348975f6d1c139231c180e12194161da2e0cd6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in_ios: 1bfaf6607b44cd1b24c4d4bc39719870440f9ce1
@@ -308,8 +308,8 @@ SPEC CHECKSUMS:
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
-  purchases_flutter: 12eb0a77ebf28a16b04ee72f2e1f6b77235bf97e
-  PurchasesHybridCommon: 0b331c2a81b5425cda70edd4331cef98fc435ab1
+  purchases_flutter: 4048b4d0052cf452faa5d85e3aa3907a7929032c
+  PurchasesHybridCommon: db0f4063a1e77fd255318c4a2f05d26eff6f150a
   RevenueCat: 2d99a5ebabd33955c3a38dfdfa9d3efe77c5db0c
   RevenueCatUI: fa6b619083afb967facc20ecdc7ae53a4c512d10
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
