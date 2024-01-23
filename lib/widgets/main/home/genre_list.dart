@@ -30,6 +30,7 @@ class GenreList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: genreSize,
+        shrinkWrap: true,
         itemBuilder: (context, index) {
           List<NameUrl> genreList;
 
@@ -80,27 +81,27 @@ class GenreList extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: data.url,
-                      cacheKey: data.url,
-                      key: ValueKey<String>(data.url),
-                      fadeInDuration: const Duration(milliseconds: 0),
-                      fadeOutDuration: const Duration(milliseconds: 0),
+                    ImageFiltered(
+                      imageFilter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+                      child: CachedNetworkImage(
+                        imageUrl: data.url,
+                        cacheKey: data.url,
+                        key: ValueKey<String>(data.url),
+                        fadeInDuration: const Duration(milliseconds: 0),
+                        fadeOutDuration: const Duration(milliseconds: 0),
+                      ),
                     ),
                     ColoredBox(
                       color: CupertinoColors.black.withOpacity(0.5),
                       child: Padding(
                         padding: const EdgeInsets.all(3),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-                          child: Text(
+                        child: Text(
                           data.name,
                           style: const TextStyle(
                             fontSize: 16, 
                             fontWeight: FontWeight.bold, 
                             color: CupertinoColors.white
                           ),
-                        ),
                         ),
                       ),
                     ),

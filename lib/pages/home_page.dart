@@ -63,10 +63,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
+      child: SingleChildScrollView(
+        child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,9 +145,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 8),
               ],
             ),
-          ),
-        ],
-      ),
+      )
     );
   }
 }
