@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
+import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/settings_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
@@ -27,6 +29,7 @@ class _TabsPageState extends State<TabsPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
+    const AIRecommendationPage(),
     const SettingsPage(),
   ];
 
@@ -90,12 +93,18 @@ class _TabsPageState extends State<TabsPage> {
           onTap: _selectPage,
           currentIndex: _selectedPageIndex,
           backgroundColor: CupertinoTheme.of(context).barBackgroundColor,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+          activeColor: CupertinoTheme.of(context).primaryColor,
+          inactiveColor: CupertinoColors.systemGrey,
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.house_fill),
               label: "Home",
             ),
             BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/images/ai.svg", colorFilter: ColorFilter.mode(_selectedPageIndex == 1 ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey2, BlendMode.srcIn)),
+              label: "Assistant",
+            ),
+            const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.settings_solid),
               label: "Settings",
             ),

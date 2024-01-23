@@ -36,14 +36,14 @@ class _ContentSelectionState extends State<ContentSelection> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: CupertinoTheme.of(context).bgTextColor,
+              color: CupertinoTheme.of(context).primaryColor,
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 6),
           Icon(
             CupertinoIcons.arrowtriangle_down_circle_fill,
             size: 13,
-            color: CupertinoTheme.of(context).bgTextColor,
+            color: CupertinoTheme.of(context).primaryColor,
           )
         ],
       ), 

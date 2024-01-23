@@ -1,6 +1,7 @@
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
+import 'package:watchlistfy/models/main/ai/suggestion_response.dart';
 import 'package:watchlistfy/models/main/anime/anime_details.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_air_date.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_character.dart';
@@ -217,6 +218,20 @@ class TypeConverter<T> {
         response["content_external_id"], 
         response["content_external_int_id"], 
         response["content_type"]
+      ) as T;
+    } else if (T == SuggestionResponse) {
+      return SuggestionResponse(
+        response["_id"] ?? '', 
+        response["content_id"] ?? '',
+        response["content_external_id"] ?? '',
+        response["content_external_int_id"],
+        response["content_type"],
+        response["title_en"] ?? '',
+        response["title_original"] ?? '',
+        response["image_url"] ?? '',
+        response["score"] ?? 0, 
+        response["description"] ?? '',
+        null,
       ) as T;
     } else if (T == ConsumeLaterResponse) {
       return ConsumeLaterResponse(

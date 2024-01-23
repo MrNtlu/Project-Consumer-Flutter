@@ -128,6 +128,14 @@ extension DynamicMapExt on Map<String, dynamic> {
     code: this["code"],
     error: this["error"]
   );
+
+  BaseSuggestion<T> getBaseSuggestion<T>() => BaseSuggestion<T>(
+    message: this["message"],
+    response: this["data"]["suggestions"],
+    createdAt: this["data"]["created_at"],
+    code: this["code"],
+    error: this["error"]
+  );
 }
 
 extension ResponseExt on Response {

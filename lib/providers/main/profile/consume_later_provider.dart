@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/common/consume_later_response.dart';
 import 'package:watchlistfy/providers/common/base_list_provider.dart';
@@ -8,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 
-class ConsumeLaterProvider extends BaseProvider<ConsumeLaterResponse>  {
+class ConsumeLaterProvider extends BaseProvider<ConsumeLaterResponse> {
   Future<BaseListResponse<ConsumeLaterResponse>> getConsumeLater(
     String? contentType, String sort,
   ) => getList(

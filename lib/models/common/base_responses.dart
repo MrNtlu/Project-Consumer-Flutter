@@ -97,6 +97,32 @@ class BaseNullablePaginationResponse<T> {
   }
 }
 
+class BaseSuggestion<T> {
+  late List<T> data = [];
+  late String? createdAt;
+  final String? message;
+  final int? code;
+  final String? error;
+
+  BaseSuggestion({
+    List<dynamic>? response,
+    this.createdAt,
+    this.message,
+    this.code,
+    this.error
+  }){
+    if (response != null) {
+      var typeConverter = TypeConverter<T>();
+      
+      response.map((e) {
+        return e as Map<String, dynamic>; 
+      }).forEach((element) { 
+        data.add(typeConverter.convertToObject(element));
+      });
+    }
+  }
+}
+
 class BasePreviewResponse<T> {
   late List<T> upcoming = [];
   late List<T> popular = [];
