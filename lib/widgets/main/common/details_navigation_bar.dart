@@ -1,9 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:watchlistfy/pages/main/ai/ai_assistant_page.dart';
 
 class DetailsNavigationBar extends StatelessWidget {
   final String title;
+  final String contentType;
   final VoidCallback onBookmarkTap;
   final VoidCallback onListTap;
 
@@ -14,7 +17,7 @@ class DetailsNavigationBar extends StatelessWidget {
   final bool isBookmarkLoading;
 
   const DetailsNavigationBar(
-    this.title, this.isItemNull, this.isUserListNull, 
+    this.title, this.contentType, this.isItemNull, this.isUserListNull, 
     this.isBookmarkNull, this.isUserListLoading, this.isBookmarkLoading,
     {required this.onBookmarkTap, required this.onListTap, super.key}
   );
@@ -31,6 +34,17 @@ class DetailsNavigationBar extends StatelessWidget {
       ? Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              HapticFeedback.vibrate();
+
+              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                return AIAssistantPage(title, contentType);
+              }));
+            },
+            child: SvgPicture.asset("assets/images/ai.svg", height: 36, colorFilter: ColorFilter.mode(CupertinoTheme.of(context).primaryColor, BlendMode.srcIn)),
+          ),
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () {

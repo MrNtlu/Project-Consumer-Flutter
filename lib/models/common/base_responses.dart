@@ -123,6 +123,21 @@ class BaseSuggestion<T> {
   }
 }
 
+
+class BaseAIResponse {
+  late String data;
+  final String? message;
+  final int? code;
+  final String? error;
+
+  BaseAIResponse({
+    required this.data,
+    this.message,
+    this.code,
+    this.error
+  });
+}
+
 class BasePreviewResponse<T> {
   late List<T> upcoming = [];
   late List<T> popular = [];

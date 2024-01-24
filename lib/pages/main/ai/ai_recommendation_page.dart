@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -7,10 +8,12 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/ai/ai_recommendations_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class AIRecommendationPage extends StatefulWidget {
   const AIRecommendationPage({super.key});
@@ -23,7 +26,9 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   ListState _state = ListState.init;
 
   late final AIRecommendationsProvider _recommendationsProvider;
+  late final AuthenticationProvider authProvider;
 
+  String? createdAt;
   String? _error;
 
   void _fetchData() {
@@ -33,6 +38,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
 
     _recommendationsProvider.getRecommendations().then((response) {
       _error = response.error;
+      createdAt = response.createdAt;
 
       if (_state != ListState.disposed) {
         setState(() {
@@ -85,6 +91,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      authProvider = Provider.of<AuthenticationProvider>(context);
       _fetchData();
     }
     super.didChangeDependencies();
@@ -96,6 +103,9 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
       create: (_) => _recommendationsProvider,
       child: Consumer<AIRecommendationsProvider>(
         builder: (context, provider, child) {
+          final startDate = DateTime.tryParse(createdAt ?? '');
+          final deadlineDayRange = authProvider.basicUserInfo?.isPremium == true ? 7 : 30;
+          final endDate = startDate?.add(Duration(days: deadlineDayRange));
 
           return CupertinoPageScaffold(
             child: Column(
@@ -104,6 +114,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
                         maxRadius: 32,
@@ -112,27 +123,76 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                         child: const Text("🤖", style: TextStyle(fontSize: 32),),
                       ),
                       Flexible(
-                        child: BubbleSpecialOne(
-                          text: _state == ListState.done
-                          ? "This is what I recommend based on your activity."
-                          : (_state == ListState.error
-                            ? _error!
-                            : (
-                              _state == ListState.empty
-                              ? "You can generate your recommendations now!"
-                              : "Please wait..."
-                            )
-                          ),
-                          color: CupertinoTheme.of(context).bgTextColor,
-                          tail: true,
-                          isSender: false,
-                          textStyle: TextStyle(color: CupertinoTheme.of(context).bgColor, fontSize: 15),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            BubbleSpecialOne(
+                              text: _state == ListState.done
+                              ? "This is what I recommend based on your activity."
+                              : (_state == ListState.error
+                                ? _error!
+                                : (
+                                  _state == ListState.empty
+                                  ? "You can generate your recommendations now!"
+                                  : "Please wait..."
+                                )
+                              ),
+                              color: CupertinoTheme.of(context).bgTextColor,
+                              tail: true,
+                              isSender: false,
+                              textStyle: TextStyle(color: CupertinoTheme.of(context).bgColor, fontSize: 15),
+                            ),
+                            if (endDate != null)
+                            const SizedBox(height: 6),
+                            if (endDate != null)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text("Until refresh ", style: TextStyle(fontSize: 13)),
+                                TimerCountdown(
+                                  spacerWidth: 3,
+                                  enableDescriptions: false,
+                                  format: CountDownTimerFormat.daysHoursMinutesSeconds,
+                                  endTime: endDate,
+                                  descriptionTextStyle: const TextStyle(fontSize: 10),
+                                  colonsTextStyle: const TextStyle(fontSize: 10),
+                                  timeTextStyle: const TextStyle(fontSize: 13),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       CupertinoButton(
                         child: const Icon(CupertinoIcons.info_circle), 
                         onPressed: () {
-                          //TODO tell user what this page is and what can AI assistant do like summary etc.
+                          showCupertinoModalBottomSheet(
+                            context: context, 
+                            builder: (_) {
+                              return SafeArea(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                                  child: const Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "🤖 Your AI Assistant",
+                                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(height: 16),
+                                      Text("""Premium users can get recommendations every week. Free users can get recommendations every month.
+
+Spot-On Recommendations: Recommendations based on your user list. \n
+✨ Speedy Summaries: Get summary of a content and decide yourself. \n
+✨ User Reviews Digest: Brief overview of the content based on other people. \n"""),
+                                      Text("✨: Premium Features Only", style: TextStyle(fontSize: 11),)
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                          );
                         }
                       )
                     ],
@@ -145,6 +205,17 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                       child: const Text("Generate Now!", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
                       onPressed: () {
                         _generateData();
+                      }
+                    ),
+                  ),
+                ),
+                if (_state == ListState.error)
+                Expanded(
+                  child: Center(
+                    child: CupertinoButton.filled(
+                      child: const Text("Refresh", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                      onPressed: () {
+                        _fetchData();
                       }
                     ),
                   ),

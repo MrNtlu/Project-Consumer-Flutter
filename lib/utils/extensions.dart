@@ -136,6 +136,13 @@ extension DynamicMapExt on Map<String, dynamic> {
     code: this["code"],
     error: this["error"]
   );
+
+  BaseAIResponse getAIResponse() => BaseAIResponse(
+    data: this["data"] ?? '',
+    message: this["message"],
+    code: this["code"],
+    error: this["error"],
+  );
 }
 
 extension ResponseExt on Response {
