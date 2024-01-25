@@ -4,6 +4,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
@@ -92,7 +93,11 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   void didChangeDependencies() {
     if (_state == ListState.init) {
       authProvider = Provider.of<AuthenticationProvider>(context);
-      _fetchData();
+      if (authProvider.isAuthenticated) {
+        _fetchData();
+      } else {
+        _state = ListState.done;
+      }
     }
     super.didChangeDependencies();
   }
@@ -128,7 +133,11 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                           children: [
                             BubbleSpecialOne(
                               text: _state == ListState.done
-                              ? "This is what I recommend based on your activity."
+                              ? (
+                                authProvider.isAuthenticated
+                                ? "This is what I recommend based on your activity."
+                                : "You need to be logged in to get recommendations."
+                              )
                               : (_state == ListState.error
                                 ? _error!
                                 : (
@@ -142,9 +151,9 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                               isSender: false,
                               textStyle: TextStyle(color: CupertinoTheme.of(context).bgColor, fontSize: 15),
                             ),
-                            if (endDate != null)
+                            if (endDate != null && authProvider.isAuthenticated)
                             const SizedBox(height: 6),
-                            if (endDate != null)
+                            if (endDate != null && authProvider.isAuthenticated)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -220,7 +229,7 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                     ),
                   ),
                 ),
-                if (_state == ListState.done)
+                if (_state == ListState.done && authProvider.isAuthenticated)
                 Expanded(
                   child: GridView.builder(
                     itemCount: provider.items.length,
@@ -260,7 +269,22 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                       );
                     }
                   ),
-                )
+                ),
+                if (!authProvider.isAuthenticated)
+                Expanded(
+                  child: Center(
+                    child: CupertinoButton.filled(
+                      child: const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return LoginPage();
+                          })
+                        );
+                      }
+                    ),
+                  ),
+                ),
               ],
             )
           );

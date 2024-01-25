@@ -31,12 +31,12 @@ class AIRecommendationsProvider extends BaseProvider<SuggestionResponse> {
     }
   }
 
-  Future<BaseSuggestion<SuggestionResponse>>
-      generateRecommendations() async {
+  Future<BaseSuggestion<SuggestionResponse>> generateRecommendations() async {
     try {
       final response = await http.post(
-          Uri.parse(APIRoutes().openAIRoutes.generateSuggestions),
-          headers: UserToken().getBearerToken());
+        Uri.parse(APIRoutes().openAIRoutes.generateSuggestions),
+        headers: UserToken().getBearerToken()
+      );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
 

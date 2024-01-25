@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:watchlistfy/pages/main/ai/ai_assistant_page.dart';
+import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 
 class DetailsNavigationBar extends StatelessWidget {
   final String title;
   final String contentType;
+  final bool isAuthenticated;
   final VoidCallback onBookmarkTap;
   final VoidCallback onListTap;
 
@@ -19,7 +21,7 @@ class DetailsNavigationBar extends StatelessWidget {
   const DetailsNavigationBar(
     this.title, this.contentType, this.isItemNull, this.isUserListNull, 
     this.isBookmarkNull, this.isUserListLoading, this.isBookmarkLoading,
-    {required this.onBookmarkTap, required this.onListTap, super.key}
+    {required this.isAuthenticated, required this.onBookmarkTap, required this.onListTap, super.key}
   );
 
   @override
@@ -37,18 +39,25 @@ class DetailsNavigationBar extends StatelessWidget {
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () {
-              HapticFeedback.vibrate();
+              HapticFeedback.lightImpact();
 
-              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                return AIAssistantPage(title, contentType);
-              }));
+              if (isAuthenticated) {
+                Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                  return AIAssistantPage(title, contentType);
+                })); 
+              } else {
+                showCupertinoDialog(
+                  context: context,
+                  builder: (BuildContext context) => const UnauthorizedDialog()
+                );
+              }
             },
             child: SvgPicture.asset("assets/images/ai.svg", height: 36, colorFilter: ColorFilter.mode(CupertinoTheme.of(context).primaryColor, BlendMode.srcIn)),
           ),
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () {
-              HapticFeedback.vibrate();
+              HapticFeedback.lightImpact();
 
               onListTap();
             },
@@ -63,7 +72,7 @@ class DetailsNavigationBar extends StatelessWidget {
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () {
-              HapticFeedback.vibrate();
+              HapticFeedback.lightImpact();
 
               onBookmarkTap();
             },

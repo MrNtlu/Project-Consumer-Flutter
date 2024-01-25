@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:watchlistfy/static/purchase_api.dart';
 
 class ProfileUserImage extends StatelessWidget {
   final String? image;
@@ -13,32 +15,47 @@ class ProfileUserImage extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: SizedBox(
-        height: 75,
-        width: 75,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(37.5),
-          child: isUrlValid
-          ? CachedNetworkImage(
-            imageUrl: image!,
-            key: ValueKey<String>(image!),
+      child: Stack(
+        children: [
+          SizedBox(
             height: 75,
             width: 75,
-            fit: BoxFit.cover,
-            progressIndicatorBuilder: (_, __, ___) =>
-              const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
-            errorWidget: (context, url, error) => const Icon(
-              Icons.person,
-              size: 50,
-              color: CupertinoColors.activeBlue,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(37.5),
+              child: isUrlValid
+              ? CachedNetworkImage(
+                imageUrl: image!,
+                key: ValueKey<String>(image!),
+                height: 75,
+                width: 75,
+                fit: BoxFit.cover,
+                progressIndicatorBuilder: (_, __, ___) =>
+                  const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
+                errorWidget: (context, url, error) => const Icon(
+                  Icons.person,
+                  size: 50,
+                  color: CupertinoColors.activeBlue,
+                ),
+              )
+              : const Icon(
+                Icons.person,
+                size: 50,
+                color: CupertinoColors.activeBlue,
+              ),
             ),
-          )
-          : const Icon(
-            Icons.person,
-            size: 50,
-            color: CupertinoColors.activeBlue,
           ),
-        ),
+          if (PurchaseApi().userInfo?.isPremium == true)
+          Positioned(
+            bottom: -6,
+            right: -6,
+            child: Lottie.asset(
+              "assets/lottie/premium.json",
+              height: 36,
+              width: 36,
+              frameRate: FrameRate(60)
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
@@ -21,6 +23,7 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
+import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/widgets/main/settings/user_list_switch.dart';
@@ -40,7 +43,6 @@ class _SettingsPageState extends State<SettingsPage> {
   *  - Allow user to skip or add 3 movies.(Create endpoint for that)
   * - [ ] Default content type selection
   * - [ ] Add new content cell design and allow user to select
-  * - [ ] Consume Later design selection
   */
   DetailState _state = DetailState.init;
   String? error;
@@ -61,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
           setState(() {
             _state = DetailState.view;
           });
-          showDialog(
+          showCupertinoDialog(
             context: context, 
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
           );
@@ -78,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
       setState(() {
         _state = DetailState.view;
       });
-      showDialog(
+      showCupertinoDialog(
         context: context, 
         builder: (ctx) => ErrorDialog(error.toString())
       );
@@ -98,7 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
           setState(() {
             _state = DetailState.view;
           });
-          showDialog(
+          showCupertinoDialog(
             context: context, 
             builder: (_) => ErrorDialog(response.getBaseMessageResponse().error!)
           );
@@ -140,7 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
       setState(() {
         _state = DetailState.view;
       });
-      showDialog(
+      showCupertinoDialog(
         context: context, 
         builder: (ctx) => ErrorDialog(error.toString())
       );
@@ -252,6 +254,23 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingsSection(
                 title: const Text("Account"),
                 tiles: [
+                  if (_userInfo != null && authProvider.isAuthenticated && !_userInfo!.isPremium)
+                  SettingsTile.navigation(
+                    leading: Lottie.asset(
+                      "assets/lottie/premium.json",
+                      height: 36,
+                      width: 36,
+                      frameRate: FrameRate(60)
+                    ),
+                    title: const Text('Upgrade Account'),
+                    onPressed: (ctx) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return const OffersSheet();
+                        })
+                      );
+                    },
+                  ),
                   if (_userInfo != null)
                   _userInfoText("Email", _userInfo!.email),
                   if (_userInfo != null)

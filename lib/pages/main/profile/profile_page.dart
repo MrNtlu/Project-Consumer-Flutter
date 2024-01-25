@@ -174,6 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
                   physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                   itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
+                  itemExtent: 200 * 2 / 3,
                   itemBuilder: (context, index) {
                     if (item.legendContent.isEmpty) {
                       return const Center(
@@ -270,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: ProfileConsumeLaterCell(
                             data.content.imageUrl, data.content.titleEn,
                             () {
-                              HapticFeedback.vibrate();
+                              HapticFeedback.lightImpact();
 
                               showCupertinoDialog(
                                 context: context, 

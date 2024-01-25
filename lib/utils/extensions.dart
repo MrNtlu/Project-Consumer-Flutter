@@ -131,8 +131,8 @@ extension DynamicMapExt on Map<String, dynamic> {
 
   BaseSuggestion<T> getBaseSuggestion<T>() => BaseSuggestion<T>(
     message: this["message"],
-    response: this["data"]["suggestions"],
-    createdAt: this["data"]["created_at"],
+    response: this["data"] != null ? this["data"]["suggestions"] : [],
+    createdAt: this["data"] != null ? this["data"]["created_at"] : null,
     code: this["code"],
     error: this["error"]
   );

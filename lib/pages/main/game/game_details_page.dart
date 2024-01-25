@@ -103,6 +103,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                   _provider.item?.consumeLater == null,
                   provider.isUserListLoading,
                   provider.isLoading,
+                  isAuthenticated: _authProvider.isAuthenticated,
                   onBookmarkTap: () {
                     if (!provider.isLoading && _authProvider.isAuthenticated) {
                       final item = provider.item;

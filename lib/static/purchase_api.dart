@@ -32,13 +32,13 @@ class PurchaseApi {
     });
   }
 
-  Future setUserMembershipStatus(bool isPremium, bool isLifetimePremium) async {
-    await http.put(
+  Future setUserMembershipStatus(bool isPremium, int membershipType) async {
+    await http.patch(
       Uri.parse(APIRoutes().userRoutes.changeMembership),
       headers: UserToken().getBearerToken(),
       body: json.encode({
         "is_premium": isPremium,
-        "is_lifetime_premium": isLifetimePremium
+        "membership_type": membershipType
       })
     );
   }
@@ -52,14 +52,14 @@ class PurchaseApi {
       && (entitlements.isEmpty || (entitlements.isNotEmpty && !entitlements.first.isActive)) 
       && userInfo!.isPremium
     ) {
-      await setUserMembershipStatus(false, false);
+      await setUserMembershipStatus(false, 0);
       await setUserInfo();
     } else if (
       userInfo != null 
       && (entitlements.isNotEmpty && entitlements.first.isActive)
       && !userInfo!.isPremium
     ) {
-      await setUserMembershipStatus(true, entitlements.where((element) => element.productIdentifier == "kantan_11999_unlimited").isNotEmpty);
+      await setUserMembershipStatus(true, entitlements.first.productIdentifier == "watchlistfy_premium_1mo" ? 1 : 2);
       await setUserInfo();
     }
   }
