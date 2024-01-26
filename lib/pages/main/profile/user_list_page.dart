@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -159,12 +160,19 @@ class _UserListPageState extends State<UserListPage> {
           )),
           itemBuilder: (context, index) {
             if (isEmpty) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.75,
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text("Couldn't find anything."),
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Lottie.asset(
+                        "assets/lottie/empty.json",
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        frameRate: FrameRate(60)
+                      ),
+                      const Text("Nothing here.", style: TextStyle(fontWeight: FontWeight.w500)),
+                    ],
                   ),
                 ),
               );

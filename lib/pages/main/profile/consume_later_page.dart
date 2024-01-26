@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -174,6 +175,13 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
             mainAxisSpacing: 6
           ),
           itemBuilder: (context, index) {
+            if (data.isEmpty) {
+              return SizedBox(
+                height: 150,
+                child: _emptyView(),
+              );
+            }
+
             final content = data[index];
             final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
 
@@ -248,16 +256,9 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
           itemCount: data.isEmpty ? 1 : data.length,
           itemBuilder: (context, index) {
             if (data.isEmpty) {
-              return const SizedBox(
-                height: 150,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text("Couldn't find anything."),
-                  ),
-                ),
-              );
+              return _emptyView();
             }
+            
             final content = data[index];
             final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
 
@@ -402,12 +403,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
           }
         );
       case ListState.empty:
-        return const Center(
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("Couldn't find anything."),
-          ),
-        );
+        return _emptyView();
       case ListState.error:
         return Center(
           child: Padding(
@@ -419,6 +415,24 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
        return const LoadingView("Loading");
     }
   }
+
+  Widget _emptyView() => Center(
+    child: Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset(
+            "assets/lottie/discover.json",
+            height: 128,
+            width: 128,
+            frameRate: FrameRate(60)
+          ),
+          const Text("Nothing here.", style: TextStyle(fontWeight: FontWeight.w500)),
+        ],
+      ),
+    ),
+  );
 
   void handleMessageResponse(BuildContext context, BaseMessageResponse value) {
     Navigator.pop(context);

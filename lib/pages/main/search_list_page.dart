@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
@@ -254,12 +255,22 @@ class _SearchListPageState extends State<SearchListPage> {
           }
         );
       case ListState.empty:
-        return const Center(
+        return Center(
           child: Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("Couldn't find anything."),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset(
+                "assets/lottie/empty.json",
+                height: MediaQuery.of(context).size.height * 0.5,
+                frameRate: FrameRate(60)
+              ),
+              const Text("Couldn't find anything.", style: TextStyle(fontWeight: FontWeight.w500)),
+            ],
           ),
-        );
+        ),
+      );
       case ListState.error:
         return Center(
           child: Padding(

@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       return const Center(
                         child: Padding(
                           padding: EdgeInsets.all(8),
-                          child: Text("Couldn't find anything."),
+                          child: Text("Nothing here."),
                         ),
                       );
                     } else {
@@ -239,7 +239,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       return const Center(
                         child: Padding(
                           padding: EdgeInsets.all(8),
-                          child: Text("Couldn't find anything."),
+                          child: Text("Nothing here."),
                         ),
                       );
                     } else {

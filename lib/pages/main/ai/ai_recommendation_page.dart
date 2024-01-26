@@ -186,15 +186,15 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        "🤖 Your AI Assistant",
+                                        "🤖 AI Assistant",
                                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(height: 16),
                                       Text("""Premium users can get recommendations every week. Free users can get recommendations every month.
 
 Spot-On Recommendations: Recommendations based on your user list. \n
-✨ Speedy Summaries: Get summary of a content and decide yourself. \n
-✨ User Reviews Digest: Brief overview of the content based on other people. \n"""),
+✨ Summaries: Get summary of a content and decide yourself. \n
+✨ User Reviews Summary: Brief overview of the content based on other people. \n"""),
                                       Text("✨: Premium Features Only", style: TextStyle(fontSize: 11),)
                                     ],
                                   ),
