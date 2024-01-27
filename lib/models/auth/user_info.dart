@@ -1,5 +1,6 @@
 import 'package:watchlistfy/models/main/common/consume_later_response.dart';
 import 'package:watchlistfy/models/main/legend_content.dart';
+import 'package:watchlistfy/models/main/review/review_with_content.dart';
 
 class UserInfo {
   final String id;
@@ -26,15 +27,13 @@ class UserInfo {
 
   final List<ConsumeLaterResponse> watchLater;
   final List<LegendContent> legendContent;
-
-  //TODO: https://github.com/MrNtlu/Project-Consumer-Android/blob/master/app/src/main/java/com/mrntlu/projectconsumer/models/auth/UserInfo.kt
-  // Add reviews
+  final List<ReviewWithContent> reviews;
 
   UserInfo(
     this.id, this.isPremium, this.isFriendRequestSent, this.isFriendRequestReceived,
     this.isFriendsWith, this.friendRequestCount, this.membershipType, this.animeCount,
     this.gameCount, this.movieCount, this.tvCount, this.movieWatchedTime, this.animeWatchedEpisodes,
     this.tvWatchedEpisodes, this.gameTotalHoursPlayed, this.fcmToken, this.username, this.email,
-    this.image, this.level, this.watchLater, this.legendContent,
+    this.image, this.level, this.watchLater, this.legendContent, this.reviews
   );
 }

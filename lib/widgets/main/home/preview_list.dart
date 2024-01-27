@@ -48,7 +48,6 @@ class _PreviewListState extends State<PreviewList> {
   @override
   void dispose() {
     _contentProvider.removeListener(onContentChange);
-    _previewProvider.networkState = NetworkState.disposed;
     _scrollController.dispose();
     super.dispose();
   }
@@ -93,95 +92,100 @@ class _PreviewListState extends State<PreviewList> {
       listCount = 20;
     }
 
+    print(_previewProvider.networkState);
+
     return _previewProvider.networkState == NetworkState.success
-        ? ListView.builder(
-            scrollDirection: Axis.horizontal,
-            controller: _scrollController,
-            itemCount: listCount,
-            itemBuilder: (context, index) {
-              BasePreviewResponse<BaseContent> preview;
-              BaseContent data;
+    ? ListView.builder(
+        scrollDirection: Axis.horizontal,
+        controller: _scrollController,
+        itemCount: listCount,
+        itemBuilder: (context, index) {
+          BasePreviewResponse<BaseContent> preview;
+          BaseContent data;
 
-              switch (_contentProvider.selectedContent) {
-                case ContentType.movie:
-                  preview = _previewProvider.moviePreview;
-                  break;
-                case ContentType.tv:
-                  preview = _previewProvider.tvPreview;
-                  break;
-                case ContentType.anime:
-                  preview = _previewProvider.animePreview;
-                  break;
-                default:
-                  preview = _previewProvider.gamePreview;
-                  break;
-              }
+          switch (_contentProvider.selectedContent) {
+            case ContentType.movie:
+              preview = _previewProvider.moviePreview;
+              break;
+            case ContentType.tv:
+              preview = _previewProvider.tvPreview;
+              break;
+            case ContentType.anime:
+              preview = _previewProvider.animePreview;
+              break;
+            default:
+              preview = _previewProvider.gamePreview;
+              break;
+          }
 
-              switch (widget.contentTag) {
-                case "popular":
-                  data = preview.popular[index];
-                  break;
-                case "upcoming":
-                  data = preview.upcoming[index];
-                  break;
-                case "extra":
-                  data = preview.extra![index];
-                  break;
-                default:
-                  data = preview.top[index];
-                  break;
-              }
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .push(CupertinoPageRoute(builder: (_) {
-                    switch (_contentProvider.selectedContent) {
-                      case ContentType.movie:
-                        return MovieDetailsPage(data.id);
-                      case ContentType.tv:
-                        return TVDetailsPage(data.id);
-                      case ContentType.anime:
-                        return AnimeDetailsPage(data.id);
-                      case ContentType.game:
-                        return GameDetailsPage(data.id);
-                      default:
-                        return MovieDetailsPage(data.id);
-                    }
-                  }));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: SizedBox(
-                    height: 200,
-                    child: ContentCell(data.imageUrl.replaceFirst("original", "w200"), data.titleEn)
-                  ),
-                ),
-              );
+          switch (widget.contentTag) {
+            case "popular":
+              data = preview.popular[index];
+              break;
+            case "upcoming":
+              data = preview.upcoming[index];
+              break;
+            case "extra":
+              data = preview.extra![index];
+              break;
+            default:
+              data = preview.top[index];
+              break;
+          }
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true)
+                  .push(CupertinoPageRoute(builder: (_) {
+                switch (_contentProvider.selectedContent) {
+                  case ContentType.movie:
+                    return MovieDetailsPage(data.id);
+                  case ContentType.tv:
+                    return TVDetailsPage(data.id);
+                  case ContentType.anime:
+                    return AnimeDetailsPage(data.id);
+                  case ContentType.game:
+                    return GameDetailsPage(data.id);
+                  default:
+                    return MovieDetailsPage(data.id);
+                }
+              }));
             },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: SizedBox(
+                height: 200,
+                child: ContentCell(data.imageUrl.replaceFirst("original", "w200"), data.titleEn)
+              ),
+            ),
+          );
+        },
+      )
+    : ListView(
+        scrollDirection: Axis.horizontal,
+        children: List.generate(
+          listCount,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: SizedBox(
+              height: 200,
+              child: AspectRatio(
+                aspectRatio: _contentProvider.selectedContent != ContentType.game
+                ? 2 / 3
+                : 16 / 9,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Shimmer.fromColors(
+                    baseColor: CupertinoColors.systemGrey,
+                    highlightColor: CupertinoColors.systemGrey3,
+                    child: Container(
+                      color: CupertinoColors.systemGrey,
+                    )
+                  )
+                ),
+              ),
+            ),
           )
-        : ListView(
-            scrollDirection: Axis.horizontal,
-            children: List.generate(
-                listCount,
-                (index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3),
-                      child: SizedBox(
-                        height: 200,
-                        child: AspectRatio(
-                          aspectRatio: _contentProvider.selectedContent !=
-                                  ContentType.game
-                              ? 2 / 3
-                              : 16 / 9,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Shimmer.fromColors(
-                                  baseColor: CupertinoColors.systemGrey,
-                                  highlightColor: CupertinoColors.systemGrey3,
-                                  child: Container(
-                                    color: CupertinoColors.systemGrey,
-                                  ))),
-                        ),
-                      ),
-                    )));
+        )
+      );
   }
 }

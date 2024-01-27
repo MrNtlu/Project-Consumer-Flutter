@@ -1,11 +1,14 @@
+import 'package:watchlistfy/models/main/review/review.dart';
+
 class ReviewSummary {
-  //TODO Review?
+  final Review? review;
   final double averageStar;
   final int totalVotes;
   final bool isReviewed;
   final StarCounts starCounts;
 
   ReviewSummary(
+    this.review,
     this.averageStar,
     this.totalVotes,
     this.isReviewed,

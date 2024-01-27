@@ -25,6 +25,9 @@ import 'package:watchlistfy/models/main/game/game_play_list.dart';
 import 'package:watchlistfy/models/main/legend_content.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
+import 'package:watchlistfy/models/main/review/author.dart';
+import 'package:watchlistfy/models/main/review/review.dart';
+import 'package:watchlistfy/models/main/review/review_with_content.dart';
 import 'package:watchlistfy/models/main/tv/tv_details.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_network.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_season.dart';
@@ -82,6 +85,11 @@ class TypeConverter<T> {
           TypeConverter<LegendContent>().convertToObject(e)
         ).toList())
         : [],
+        response["reviews"] != null
+        ? ((response["reviews"] as List).map((e) => 
+          TypeConverter<ReviewWithContent>().convertToObject(e)
+        ).toList())
+        : []
       ) as T;
     } else if (T == UserListContent) {
       return UserListContent(
@@ -197,8 +205,38 @@ class TypeConverter<T> {
         response["content_type"] ?? '',
         response["hours_played"],
       ) as T;
+    } else if (T == Author) {
+      return Author(
+        image: response["image"],
+        username: response["username"],
+        email: response["email"],
+        id: response["_id"],
+        isPremium: response["is_premium"]
+      ) as T;
+    } else if (T == Review) {
+      return Review(
+        author: TypeConverter<Author>().convertToObject(response["author"]), 
+        star: response["star"], 
+        review: response["review"], 
+        popularity: response["popularity"], 
+        likes: response["likes"], 
+        isAuthor: response["is_author"], 
+        isSpoiler: response["is_spoiler"], 
+        isLiked: response["is_liked"], 
+        id: response["_id"], 
+        userID: response["user_id"], 
+        contentID: response["content_id"], 
+        contentExternalID: response["content_external_id"], 
+        contentExternalIntID: response["content_external_int_id"], 
+        contentType: response["content_type"], 
+        createdAt: response["created_at"], 
+        updatedAt: response["updated_at"]
+      ) as T;
     } else if (T == ReviewSummary) {
       return ReviewSummary(
+        response["reviews"]["review"] != null
+        ? TypeConverter<Review>().convertToObject(response["reviews"]["review"])
+        : null,
         (response["reviews"]["avg_star"] as int).toDouble(),
         response["reviews"]["total_votes"], 
         response["reviews"]["is_reviewed"], 
@@ -209,6 +247,32 @@ class TypeConverter<T> {
           response["reviews"]["star_counts"]["four_star"], 
           response["reviews"]["star_counts"]["five_star"]
         )
+      ) as T;
+    } else if (T == ReviewWithContent) {
+      return ReviewWithContent(
+        author: TypeConverter<Author>().convertToObject(response["author"]),
+        star: response["star"],
+        review: response["review"], 
+        popularity: response["popularity"], 
+        likes: response["likes"], 
+        isAuthor: response["is_author"], 
+        isLiked: response["is_liked"], 
+        isSpoiler: response["is_spoiler"], 
+        id: response["_id"], 
+        userID: response["user_id"], 
+        contentID: response["content_id"], 
+        contentExternalID: response["content_external_id"], 
+        contentExternalIntID: response["content_external_int_id"], 
+        contentType: response["content_type"], 
+        createdAt: response["created_at"], 
+        updatedAt: response["updated_at"], 
+        content: TypeConverter<ReviewContent>().convertToObject(response["content"])
+      ) as T;
+    } else if (T == ReviewContent) {
+      return ReviewContent(
+        titleEn: response["title_en"], 
+        titleOriginal: response["title_original"], 
+        imageURL: response["image_url"]
       ) as T;
     } else if (T == ConsumeLater) {
       return ConsumeLater(

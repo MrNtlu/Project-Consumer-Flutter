@@ -27,12 +27,6 @@ class LoginPage extends StatelessWidget {
 
   LoginPage({super.key});
 
-  /*
-  * Implement Google signin
-  * Implement Apple Signin also to backend
-  * https://github.com/MrNtlu/Asset-Manager-Flutter/blob/master/lib/auth/pages/login_page.dart
-  */
-
   void _onLoginPressed(BuildContext context) {
     if (_emailTextController.text.isEmpty || _passwordTextController.text.isEmpty) {
       showCupertinoDialog(
