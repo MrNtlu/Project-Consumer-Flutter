@@ -21,6 +21,7 @@ import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
+import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
@@ -292,6 +293,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     }
                   ),
                 ),
+                DetailsReviewSummary(item.reviewSummary),
+                if (item.images.isNotEmpty)
+                const DetailsTitle("Images"),
+                if (item.images.isNotEmpty)
+                DetailsCarouselSlider(item.images),
                 if(item.productionCompanies != null)
                 const DetailsTitle("Production"),
                 if(item.productionCompanies != null)
@@ -311,12 +317,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     placeHolderIcon: Icons.business_rounded,
                   )
                 ),
-                if (item.images.isNotEmpty)
-                const DetailsTitle("Images"),
-                if (item.images.isNotEmpty)
-                DetailsCarouselSlider(item.images),
                 //TODO Streaming by country
-                //TODO Review Summary!
                 const SizedBox(height: 32)
               ],
             ),

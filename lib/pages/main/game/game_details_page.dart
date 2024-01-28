@@ -23,6 +23,7 @@ import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
+import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_play_list_sheet.dart';
@@ -293,12 +294,12 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                     }
                   ),
                 ),
+                DetailsReviewSummary(item.reviewSummary),
                 if (item.screenshots.isNotEmpty)
                 const DetailsTitle("Screenshots"),
                 if (item.screenshots.isNotEmpty)
                 DetailsCarouselSlider(item.screenshots),
                 //TODO Store id map
-                //TODO Review Summary!
                 const SizedBox(height: 32)
               ],
             ),

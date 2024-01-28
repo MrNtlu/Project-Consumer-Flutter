@@ -26,6 +26,7 @@ import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
+import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 
@@ -303,6 +304,11 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     }
                   ),
                 ),
+                DetailsReviewSummary(item.reviewSummary),
+                if (item.images.isNotEmpty)
+                const DetailsTitle("Images"),
+                if (item.images.isNotEmpty)
+                DetailsCarouselSlider(item.images),
                 if(item.productionCompanies != null)
                 const DetailsTitle("Production"),
                 if(item.productionCompanies != null)
@@ -341,12 +347,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     placeHolderIcon: Icons.business_rounded,
                   )
                 ),
-                if (item.images.isNotEmpty)
-                const DetailsTitle("Images"),
-                if (item.images.isNotEmpty)
-                DetailsCarouselSlider(item.images),
                 //TODO Streaming by country
-                //TODO Review Summary!
                 const SizedBox(height: 32)
               ],
             ),

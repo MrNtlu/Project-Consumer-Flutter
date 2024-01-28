@@ -26,6 +26,7 @@ import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
+import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 import "package:collection/collection.dart";
 
@@ -317,6 +318,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     }
                   ),
                 ),
+                DetailsReviewSummary(item.reviewSummary),
                 if (animeRelations.isNotEmpty)
                 const DetailsTitle("Related Anime"),
                 for (var animeList in animeRelations.values)
@@ -335,7 +337,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   item.studios != null ? item.studios!.map((e) => e.name).join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
-                //TODO Review Summary!
                 const SizedBox(height: 32)
               ],
             ),

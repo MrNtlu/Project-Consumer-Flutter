@@ -92,8 +92,6 @@ class _PreviewListState extends State<PreviewList> {
       listCount = 20;
     }
 
-    print(_previewProvider.networkState);
-
     return _previewProvider.networkState == NetworkState.success
     ? ListView.builder(
         scrollDirection: Axis.horizontal,
