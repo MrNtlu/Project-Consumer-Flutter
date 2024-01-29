@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
+import 'package:watchlistfy/pages/main/review/review_create_page.dart';
+import 'package:watchlistfy/pages/main/review/review_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 
@@ -68,33 +70,47 @@ class DetailsReviewSummary extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Align(
-            alignment: Alignment.centerRight,
-            child: CupertinoButton.filled(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.edit, size: 18, color: CupertinoColors.white,),
-                  const SizedBox(width: 8),
-                  Text(
-                    reviewSummary.isReviewed ? "Edit Review" : "Write a Review",
-                    style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.w500, fontSize: 15),
-                  ),
-                ],
-              ),
-              onPressed: () {
-                if (!authProvider.isAuthenticated) {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (BuildContext context) => const UnauthorizedDialog()
-                  );
-                } else if (reviewSummary.isReviewed) {
-                  
-                } else {
-            
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CupertinoButton.filled(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.edit, size: 18, color: CupertinoColors.white,),
+                    const SizedBox(width: 8),
+                    Text(
+                      reviewSummary.isReviewed ? "Edit Review" : "Write a Review",
+                      style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.w500, fontSize: 15),
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  if (!authProvider.isAuthenticated) {
+                    showCupertinoDialog(
+                      context: context,
+                      builder: (BuildContext context) => const UnauthorizedDialog()
+                    );
+                  } else if (reviewSummary.isReviewed) {
+                    
+                  } else {
+                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                      return const ReviewCreatePage();
+                    }));
+                  }
                 }
-              }
-            ),
+              ),
+              CupertinoButton(
+                child: const Text("See All", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)), 
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                    return const ReviewListPage();
+                  }));
+                }
+              )
+            ],
           )
         ],
       ),
@@ -105,7 +121,7 @@ class DetailsReviewSummary extends StatelessWidget {
     children: [
       SizedBox(
         width: 15,
-        child: Text(label)
+        child: Text(label, style: const TextStyle(fontWeight: FontWeight.w500),)
       ),
       const SizedBox(width: 6),
       Expanded(

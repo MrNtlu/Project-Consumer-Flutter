@@ -66,6 +66,7 @@ dependencies:
   flutter_svg: ^2.0.9
   chat_bubbles: ^1.5.0
   flutter_timer_countdown: ^1.0.7
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

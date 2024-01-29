@@ -439,7 +439,9 @@ class TypeConverter<T> {
         response["title_en"], 
         response["title_original"], 
         response["tmdb_id"], 
-        response["tmdb_popularity"], 
+        (response["tmdb_popularity"] is double)
+        ? response["tmdb_popularity"]
+        : (response["tmdb_popularity"] as int).toDouble(), 
         (response["tmdb_vote"] is double)
         ? response["tmdb_vote"]
         : (response["tmdb_vote"] as int).toDouble(), 
@@ -522,7 +524,9 @@ class TypeConverter<T> {
         response["title_en"], 
         response["title_original"], 
         response["tmdb_id"], 
-        response["tmdb_popularity"], 
+        (response["tmdb_popularity"] is double)
+        ? response["tmdb_popularity"]
+        : (response["tmdb_popularity"] as int).toDouble(), 
         (response["tmdb_vote"] is double)
         ? response["tmdb_vote"]
         : (response["tmdb_vote"] as int).toDouble(), 
