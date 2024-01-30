@@ -8,10 +8,23 @@ import 'package:watchlistfy/pages/main/review/review_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 
+
+
 class DetailsReviewSummary extends StatelessWidget {
   final ReviewSummary reviewSummary;
+  final String contentID;
+  final String? contentExternalID;
+  final int? contentExternalIntID;
+  final String contentType;
+  final VoidCallback _fetchData;
 
-  const DetailsReviewSummary(this.reviewSummary, {super.key});
+  const DetailsReviewSummary(
+    this.reviewSummary,
+    this.contentID, this.contentExternalID, 
+    this.contentExternalIntID, this.contentType,
+    this._fetchData,
+    {super.key}
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +92,7 @@ class DetailsReviewSummary extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.edit, size: 18, color: CupertinoColors.white,),
+                    const Icon(Icons.edit, size: 18, color: CupertinoColors.white),
                     const SizedBox(width: 8),
                     Text(
                       reviewSummary.isReviewed ? "Edit Review" : "Write a Review",
@@ -94,10 +107,18 @@ class DetailsReviewSummary extends StatelessWidget {
                       builder: (BuildContext context) => const UnauthorizedDialog()
                     );
                   } else if (reviewSummary.isReviewed) {
-                    
+                    Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                      return ReviewCreatePage(
+                        contentID, contentExternalID, contentExternalIntID, 
+                        contentType, _fetchData, review: reviewSummary.review,
+                      );
+                    }));
                   } else {
                     Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                      return const ReviewCreatePage();
+                      return ReviewCreatePage(
+                        contentID, contentExternalID, contentExternalIntID, 
+                        contentType, _fetchData
+                      );
                     }));
                   }
                 }
@@ -106,7 +127,10 @@ class DetailsReviewSummary extends StatelessWidget {
                 child: const Text("See All", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)), 
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                    return const ReviewListPage();
+                    return ReviewListPage(
+                      contentID, contentExternalID, contentExternalIntID, 
+                      contentType, _fetchData
+                    );
                   }));
                 }
               )

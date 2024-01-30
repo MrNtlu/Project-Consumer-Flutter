@@ -293,7 +293,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     }
                   ),
                 ),
-                DetailsReviewSummary(item.reviewSummary),
+                DetailsReviewSummary(
+                  item.reviewSummary, item.id, item.tmdbID, 
+                  null, ContentType.movie.request, _fetchData,
+                ),
                 if (item.images.isNotEmpty)
                 const DetailsTitle("Images"),
                 if (item.images.isNotEmpty)

@@ -294,7 +294,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                     }
                   ),
                 ),
-                DetailsReviewSummary(item.reviewSummary),
+                DetailsReviewSummary(item.reviewSummary, item.id, null, item.rawgId, ContentType.game.request, _fetchData),
                 if (item.screenshots.isNotEmpty)
                 const DetailsTitle("Screenshots"),
                 if (item.screenshots.isNotEmpty)

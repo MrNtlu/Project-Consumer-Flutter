@@ -219,7 +219,7 @@ class TypeConverter<T> {
         star: response["star"], 
         review: response["review"], 
         popularity: response["popularity"], 
-        likes: response["likes"], 
+        likes: (response["likes"] as List).map((e) => e.toString()).toList(),
         isAuthor: response["is_author"], 
         isSpoiler: response["is_spoiler"], 
         isLiked: response["is_liked"], 

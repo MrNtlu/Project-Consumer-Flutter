@@ -3,6 +3,7 @@ import 'package:watchlistfy/static/routes/anime_routes.dart';
 import 'package:watchlistfy/static/routes/game_routes.dart';
 import 'package:watchlistfy/static/routes/movie_routes.dart';
 import 'package:watchlistfy/static/routes/openai_routes.dart';
+import 'package:watchlistfy/static/routes/review_routes.dart';
 import 'package:watchlistfy/static/routes/tv_routes.dart';
 import 'package:watchlistfy/static/routes/user_interaction_routes.dart';
 import 'package:watchlistfy/static/routes/user_list_routes.dart';
@@ -19,6 +20,7 @@ class APIRoutes {
   late final UserInteractionRoutes userInteractionRoutes;
   late final UserListRoutes userListRoutes;
   late final OpenAIRoutes openAIRoutes;
+  late final ReviewRoutes reviewRoutes;
 
   APIRoutes._privateConstructor() {
     authRoutes = AuthRoutes(baseURL: Constants.BASE_API_URL);
@@ -32,6 +34,7 @@ class APIRoutes {
     userInteractionRoutes = UserInteractionRoutes(baseURL: Constants.BASE_API_URL);
     userListRoutes = UserListRoutes(baseURL: Constants.BASE_API_URL);
     openAIRoutes = OpenAIRoutes(baseURL: Constants.BASE_API_URL);
+    reviewRoutes = ReviewRoutes(baseURL: Constants.BASE_API_URL);
   }
 
   static final APIRoutes _instance = APIRoutes._privateConstructor();

@@ -304,7 +304,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     }
                   ),
                 ),
-                DetailsReviewSummary(item.reviewSummary),
+                DetailsReviewSummary(item.reviewSummary, item.id, item.tmdbID, null, ContentType.tv.request, _fetchData),
                 if (item.images.isNotEmpty)
                 const DetailsTitle("Images"),
                 if (item.images.isNotEmpty)

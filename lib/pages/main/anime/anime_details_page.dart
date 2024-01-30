@@ -318,7 +318,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     }
                   ),
                 ),
-                DetailsReviewSummary(item.reviewSummary),
+                DetailsReviewSummary(item.reviewSummary, item.id, null, item.malID, ContentType.anime.request, _fetchData),
                 if (animeRelations.isNotEmpty)
                 const DetailsTitle("Related Anime"),
                 for (var animeList in animeRelations.values)
