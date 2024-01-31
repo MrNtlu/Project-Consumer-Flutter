@@ -9,6 +9,7 @@ import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
+import 'package:watchlistfy/pages/auth/policy_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -298,6 +299,31 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                 ]
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CupertinoButton(
+                child: const Text("Terms & Conditions"), 
+                onPressed: () {
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (_) {
+                      return const PolicyPage(false);
+                    })
+                  );
+                }
+              ),
+              CupertinoButton(
+                child: const Text("Privacy Policy"), 
+                onPressed: () {
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (_) {
+                      return const PolicyPage(true);
+                    })
+                  );
+                }
               )
             ],
           ),
