@@ -141,14 +141,20 @@ class _UserListEditSheetState extends State<UserListEditSheet> {
                           );
                         } else {
                           Navigator.pop(context);
-          
+
                           final userList = widget.userList;
                           final isUpdatingScore = userList.score != _scoreDropdown.selectedValue;
                           final score = isUpdatingScore ? _scoreDropdown.selectedValue : null;
                           final timesFinished = isFinished ? int.parse(_timesFinishedTextController.value.text) : null;
                           final status = provider.selectedStatus.request;
-                          final episodeText = _episodeTextController.value.text == "" ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text);
-                          final seasonText = _seasonTextController.value.text == "" ? userList.watchedSeasons : int.parse(_seasonTextController.value.text);
+                          final episodeText = (
+                            _episodeTextController.value.text == "" || 
+                            widget.contentType == ContentType.movie
+                          ) ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text);
+                          final seasonText = (
+                            _seasonTextController.value.text == "" ||
+                            widget.contentType != ContentType.tv 
+                          )? userList.watchedSeasons : int.parse(_seasonTextController.value.text);
 
                           late final JSONConverter request;
                           switch (widget.contentType) {

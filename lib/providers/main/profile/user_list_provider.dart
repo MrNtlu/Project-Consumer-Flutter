@@ -154,7 +154,7 @@ class UserListProvider with ChangeNotifier {
             item?.gameList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
             break;
           default:
-            item?.tvList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
+            item?.movieList[index].changeUserList(data.score, data.timesFinished, data.watchedEpisodes, data.watchedSeasons, data.status);
             break;
         }
         notifyListeners();
