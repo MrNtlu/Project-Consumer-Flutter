@@ -18,6 +18,7 @@ import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
 import 'package:watchlistfy/models/main/common/streaming_platform.dart';
+import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
 import 'package:watchlistfy/models/main/game/game_details.dart';
 import 'package:watchlistfy/models/main/game/game_details_relation.dart';
 import 'package:watchlistfy/models/main/game/game_details_store.dart';
@@ -204,6 +205,40 @@ class TypeConverter<T> {
         response["times_finished"] ?? 0,
         response["content_type"] ?? '',
         response["hours_played"],
+      ) as T;
+    } else if (T == CustomListContent) {
+      return CustomListContent(
+        response["order"], 
+        response["content_id"], 
+        response["content_external_id"], 
+        response["content_external_int_id"], 
+        response["content_type"], 
+        response["title_en"],
+        response["title_original"], 
+        response["image_url"], 
+        response["score"] != null 
+        ? (
+          response["score"] is double
+          ? response["score"]
+          : (response["score"] as int).toDouble()
+        )
+        : null
+      ) as T;
+    } else if (T == CustomList) {
+      return CustomList(
+        response["_id"], 
+        response["user_id"], 
+        TypeConverter<Author>().convertToObject(response["author"]), 
+        response["name"], 
+        response["description"], 
+        (response["likes"] as List).map((e) => e.toString()).toList(), 
+        response["is_liked"] ?? false, 
+        response["is_private"] ?? true,
+        response["content"] != null
+        ? ((
+          response["content"] as List).map((e) => TypeConverter<CustomListContent>().convertToObject(e)).toList())
+        : [],
+        response["created_at"],
       ) as T;
     } else if (T == Author) {
       return Author(

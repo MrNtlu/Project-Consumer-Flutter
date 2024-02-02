@@ -107,6 +107,14 @@ class Constants {
     BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
   ];
 
+  static final SortCustomListRequests = [
+    // BackendRequestMapper("Popularity", "popularity"),
+    BackendRequestMapper("Latest", "latest"),
+    BackendRequestMapper("Oldest", "oldest"),
+    BackendRequestMapper("Alphabetical", "alphabetical"),
+    BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
+  ];
+
   static final SortUserListRequests = [
     BackendRequestMapper("Score", "score"),
     BackendRequestMapper("Times Watched", "timeswatched"),

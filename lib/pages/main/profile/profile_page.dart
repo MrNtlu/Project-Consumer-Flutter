@@ -9,11 +9,13 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
+import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_button.dart';
@@ -121,15 +123,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ProfileLevelBar(item.level),
               const SizedBox(height: 16),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // ProfileButton("Requests", () {
-                    //   //TODO Redirect after implemented
-                    // }, CupertinoIcons.person_add_solid),
-                    // const SizedBox(width: 12),
+                    ProfileButton("Custom List", () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return const CustomListPage();
+                        })
+                      );
+                    }, CupertinoIcons.folder_fill),
+                    const SizedBox(width: 12),
                     ProfileButton("User List", () {
                       Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(builder: (_) {
@@ -167,57 +173,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 16),
-              SeeAllTitle("🥇️ Legend Content", () {}, shouldHideSeeAllButton: true),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
-                  itemExtent: 200 * 2 / 3,
-                  itemBuilder: (context, index) {
-                    if (item.legendContent.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.legendContent[index];
-          
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(builder: (_) {
-                                switch (ContentType.values.where((element) => element.request == data.contentType).first) {
-                                  case ContentType.movie:
-                                    return MovieDetailsPage(data.id);
-                                  case ContentType.tv:
-                                    return TVDetailsPage(data.id);
-                                  case ContentType.anime:
-                                    return AnimeDetailsPage(data.id);
-                                  case ContentType.game: 
-                                    return GameDetailsPage(data.id);
-                                  default:
-                                    return MovieDetailsPage(data.id);
-                                }
-                              })
-                            );
-                          },
-                          child: ProfileLegendCell(
-                            data.imageUrl, data.titleEn,
-                            timesFinished: data.timesFinished,
-                            hoursPlayed: data.hoursPlayed,
-                          )
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
               SeeAllTitle("🕒 Watch Later", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
@@ -282,6 +237,79 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }
                               );
                             }
+                          )
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("🥇️ Legend Content", style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+                    CupertinoButton(
+                      minSize: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                      onPressed: () {
+                        showCupertinoDialog(
+                          context: context, 
+                          builder: (_) => const MessageDialog(title: "Information", "Legend content refers to movies, animes, games and tv series that users have watched and enjoyed multiple times.")
+                        );
+                      },
+                      child: const Icon(CupertinoIcons.info_circle)
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
+                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                  itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
+                  itemExtent: 200 * 2 / 3,
+                  itemBuilder: (context, index) {
+                    if (item.legendContent.isEmpty) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text("Nothing here."),
+                        ),
+                      );
+                    } else {
+                      final data = item.legendContent[index];
+          
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(builder: (_) {
+                                switch (ContentType.values.where((element) => element.request == data.contentType).first) {
+                                  case ContentType.movie:
+                                    return MovieDetailsPage(data.id);
+                                  case ContentType.tv:
+                                    return TVDetailsPage(data.id);
+                                  case ContentType.anime:
+                                    return AnimeDetailsPage(data.id);
+                                  case ContentType.game: 
+                                    return GameDetailsPage(data.id);
+                                  default:
+                                    return MovieDetailsPage(data.id);
+                                }
+                              })
+                            );
+                          },
+                          child: ProfileLegendCell(
+                            data.imageUrl, data.titleEn,
+                            timesFinished: data.timesFinished,
+                            hoursPlayed: data.hoursPlayed,
                           )
                         ),
                       );
