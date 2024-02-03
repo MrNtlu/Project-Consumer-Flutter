@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
+import 'package:watchlistfy/pages/main/profile/custom_list_create_page.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/utils/extensions.dart';
@@ -78,20 +79,34 @@ class _CustomListPageState extends State<CustomListPage> {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: const Text("🗂️ Custom Lists"),
-              trailing: CupertinoButton(
-                onPressed: () {
-                  //TODO Redirect to create page
-                  // Navigator.of(context, rootNavigator: true).push(
-                  //   CupertinoPageRoute(builder: (_) {
-                  //     return const CustomListPage();
-                  //   })
-                  // ).then();
-                },
-                padding: EdgeInsets.zero,
-                child: const Icon(
-                  CupertinoIcons.add,
-                  size: 28
-                )
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoButton(
+                    onPressed: () {
+                      //TODO Bottom sheet sort dialog
+                    },
+                    padding: EdgeInsets.zero,
+                    child: const Icon(
+                      CupertinoIcons.sort_down,
+                      size: 28
+                    )
+                  ),
+                  CupertinoButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return const CustomListCreatePage();
+                        })
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    child: const Icon(
+                      CupertinoIcons.add,
+                      size: 28
+                    )
+                  ),
+                ],
               ),
             ),
             child: _body(provider.items),
