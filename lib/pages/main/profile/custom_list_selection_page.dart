@@ -35,8 +35,6 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
   bool _canPaginate = false;
   bool _isPaginating = false;
   String? _error;
-  
-  //TODO Add Remove button
 
   void _search() {
     if (_page == 1) {

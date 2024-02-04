@@ -1,5 +1,6 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
@@ -66,6 +67,11 @@ class MyApp extends StatelessWidget {
           return CupertinoApp(
             title: 'Watchlistfy',
             debugShowCheckedModeBanner: false,
+            localizationsDelegates: const [
+              DefaultMaterialLocalizations.delegate,
+              DefaultCupertinoLocalizations.delegate,
+              DefaultWidgetsLocalizations.delegate,
+            ],
             theme: SharedPref().isDarkTheme()
                 ? AppColors().darkTheme
                 : AppColors().lightTheme,

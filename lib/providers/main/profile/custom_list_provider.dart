@@ -12,4 +12,9 @@ class CustomListProvider extends BaseProvider<CustomList> {
   }) => getList(
     url: "${APIRoutes().customListRoutes.customLists}?sort=$sort${userId != null ? '&user_id=$userId' : ''}"
   );
+
+  Future<BaseMessageResponse> deleteCustomList(
+    String id,
+    CustomList response,
+  ) => deleteItem(id, url: APIRoutes().customListRoutes.deleteCustomList, deleteItem: response);
 }

@@ -15,6 +15,6 @@ class CreateCustomList extends JSONConverter {
     if (description != null)
     "description": description!,
     "is_private": isPrivate,
-    "content": content.map((e) => e.convertToJson()) 
+    "content": content.map((e) => e.convertToJson()).toList()
   };
 }

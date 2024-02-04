@@ -1,19 +1,125 @@
+import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
+import 'package:watchlistfy/models/main/custom-list/request/create_custom_list.dart';
+import 'package:watchlistfy/models/main/custom-list/request/custom_list_content.dart';
+import 'package:watchlistfy/models/main/custom-list/request/update_custom_list.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_selection_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_create_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/routes.dart';
+import 'package:watchlistfy/static/token.dart';
+import 'package:watchlistfy/utils/extensions.dart';
+import 'package:watchlistfy/widgets/common/error_dialog.dart';
+import 'package:watchlistfy/widgets/common/loading_dialog.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
+import 'package:http/http.dart' as http;
 
 class CustomListCreatePage extends StatelessWidget {
   final CustomList? customList;
+  final VoidCallback _fetchData;
 
-  const CustomListCreatePage({this.customList, super.key});
+  const CustomListCreatePage(this._fetchData, {this.customList, super.key});
 
   //TODO IsPrivate button
+
+  void handleCustomListOperation(
+    BuildContext context,
+    CustomListCreateProvider createProvider,
+    String title,
+    String? description,
+    bool isUpdating,
+  ) async {
+    if (title.isEmpty) {
+      showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid title. Title can not be empty!"));
+      return;
+    }
+    
+    showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
+
+    final contentList = createProvider.selectedContent.mapIndexed(
+      (index, element) => CustomListContentBody(
+        index + 1, 
+        element.contentID, 
+        element.contentExternalID, 
+        element.contentExternalIntID, 
+        element.contentType
+      )
+    ).sorted((a, b) => a.order.compareTo(b.order)).toList();
+
+    final CreateCustomList createBody = CreateCustomList(
+      title, 
+      description, 
+      false, 
+      contentList
+    );
+
+    final UpdateCustomListBody updateBody = UpdateCustomListBody(
+      customList?.id ?? '', 
+      title, 
+      description, 
+      false,
+      contentList
+    );
+
+    try {
+      final response = isUpdating 
+      ? await http.patch(
+        Uri.parse(APIRoutes().customListRoutes.updateCustomList),
+        body: json.encode(updateBody.convertToJson()),
+        headers: UserToken().getBearerToken()
+      )
+      : await http.post(
+        Uri.parse(APIRoutes().customListRoutes.createCustomList),
+        body: json.encode(createBody.convertToJson()),
+        headers: UserToken().getBearerToken()
+      );
+      
+      if (context.mounted) {
+        Navigator.pop(context);
+
+        var baseMessage = response.getBaseMessageResponse();
+
+        if (baseMessage.error != null && context.mounted){
+          showCupertinoDialog(
+            context: context, 
+            builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
+          ); 
+          return;
+        }
+
+        if (context.mounted) {
+          Navigator.pop(context);
+        
+          showCupertinoDialog(
+            context: context, 
+            builder: (ctx) => MessageDialog(baseMessage.message ?? "Unkwown error!")
+          );
+
+          _fetchData();
+          // if (updateReviewData != null) {
+          //   updateReviewData!();
+          // }
+        }
+      }
+    } catch(error) {
+      if (context.mounted) {
+        Navigator.pop(context);
+
+        showCupertinoDialog(
+          context: context, 
+          builder: (ctx) => ErrorDialog(error.toString())
+        );
+        return;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +128,7 @@ class CustomListCreatePage extends StatelessWidget {
 
     final TextEditingController nameController = TextEditingController(text: customList?.name);
     final TextEditingController descriptionController = TextEditingController(text: customList?.description);
+    customListCreateProvider.selectedContent = customList?.content.sorted((a, b) => a.order.compareTo(b.order)) ?? [];
 
     return ChangeNotifierProvider(
       create: (_) => customListCreateProvider,
@@ -104,12 +211,29 @@ class CustomListCreatePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Flexible(
-                      child: ListView.builder(
-                        itemCount: provider.selectedContent.length,
+                      child: ReorderableListView.builder(
+                        onReorder: (oldIndex, newIndex) {
+                          provider.reOrder(newIndex, oldIndex);
+                        },
+                        itemCount: provider.selectedContent.isNotEmpty ? provider.selectedContent.length : 1,
                         itemBuilder: (context, index) {
+                          if (provider.selectedContent.isEmpty) {
+                            return const SizedBox(
+                              key: ValueKey("no entry"),
+                              height: 150,
+                              child: Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text("No entry yet."),
+                                ),
+                              ),
+                            );
+                          }
+
                           final content = provider.selectedContent[index];
                       
                           return CustomListEntryCell(
+                            index: index + 1,
                             null, 
                             BaseContent(
                               content.contentID, 
@@ -124,7 +248,8 @@ class CustomListCreatePage extends StatelessWidget {
                             () {
                               provider.removeContent(content.contentID);
                             }, 
-                            null
+                            null,
+                            key: ValueKey(content.contentID),
                           );
                         }
                       ),
@@ -133,7 +258,13 @@ class CustomListCreatePage extends StatelessWidget {
                     CupertinoButton.filled(
                       child: Text(customList != null ? "Update" : "Create", style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
                       onPressed: () {
-                        //TODO SAVE or UPDATE operation
+                        handleCustomListOperation(
+                          context, 
+                          provider, 
+                          nameController.text, 
+                          descriptionController.text,
+                          customList != null
+                        );
                       }
                     )
                   ],

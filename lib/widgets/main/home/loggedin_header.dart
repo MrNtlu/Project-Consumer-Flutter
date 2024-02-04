@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
+import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
@@ -30,6 +31,17 @@ class LoggedinHeader extends StatelessWidget {
           },
           trailingIcon: CupertinoIcons.profile_circled,
           child: const Text('Profile'),
+        ),
+        CupertinoContextMenuAction(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(builder: (_) {
+                return const CustomListPage();
+              })
+            );
+          },
+          trailingIcon: CupertinoIcons.folder_fill,
+          child: const Text('Custom Lists'),
         ),
         CupertinoContextMenuAction(
           onPressed: () {

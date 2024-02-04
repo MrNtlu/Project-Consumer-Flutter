@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ProfileButton("Custom List", () {
+                    ProfileButton("Custom Lists", () {
                       Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(builder: (_) {
                           return const CustomListPage();

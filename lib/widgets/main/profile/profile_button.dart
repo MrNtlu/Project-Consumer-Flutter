@@ -17,18 +17,22 @@ class ProfileButton extends StatelessWidget {
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              Icon(icon, color: AppColors().primaryColor, size: 20),
-              Expanded(
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors().primaryColor,
-                    fontWeight: FontWeight.bold
-                  ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 3),
+                  child: Icon(icon, color: AppColors().primaryColor, size: 20),
+                )
+              ),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors().primaryColor,
+                  fontWeight: FontWeight.bold
                 ),
               ),
               //TODO Remove later after other button implemented

@@ -9,10 +9,11 @@ import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class CustomListEntryCell extends StatelessWidget {
+  final int? index;
   final ContentType? selectedContent;
   final BaseContent content;
   final bool doesContain;
-  final VoidCallback onRemove;
+  final VoidCallback? onRemove;
   final VoidCallback? onAdd;
 
   const CustomListEntryCell(
@@ -21,7 +22,7 @@ class CustomListEntryCell extends StatelessWidget {
     this.doesContain,
     this.onRemove,
     this.onAdd,
-    {super.key}
+    {this.index, super.key}
   );
 
   @override
@@ -50,8 +51,18 @@ class CustomListEntryCell extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (onAdd == null && onRemove != null)
+            const Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Icon(Icons.reorder_rounded),
+            ),
+            if (index != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Text("${index!}.", style: const TextStyle(fontWeight: FontWeight.bold)),
+            ),
             SizedBox(
-              height: 150,
+              height: onAdd != null ? 150 : 125,
               child: ContentCell(content.imageUrl, content.titleEn)
             ),
             Expanded(
@@ -77,13 +88,14 @@ class CustomListEntryCell extends StatelessWidget {
                 ),
               ),
             ),
+            if (onRemove != null)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CupertinoButton(
                   padding: const EdgeInsets.all(3),
                   onPressed: doesContain ? () {
-                    onRemove();
+                    onRemove!();
                   } : (){},
                   child: Icon(Icons.remove_circle, color: doesContain ? CupertinoColors.destructiveRed : CupertinoColors.systemGrey2),
                 ),
