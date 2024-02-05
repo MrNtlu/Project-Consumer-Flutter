@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                   ? const LoggedinHeader()
                   : const AnonymousHeader()
                 ),
-                const ContentSelection()
+                const ContentSelection(),
               ],
             ),
             const SizedBox(height: 24),

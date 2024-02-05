@@ -88,6 +88,7 @@ class UserRoutes {
   late String changePassword;
   late String changeNotification;
   late String changeMembership;
+  late String changeUsername;
   late String updateFCMToken;
   late String deleteUser;
 
@@ -97,10 +98,11 @@ class UserRoutes {
     info = '$_baseUserURL/info';
     basic = '$_baseUserURL/basic';
     forgotPassword = '$_baseUserURL/forgot-password';
-    changePassword = '$_baseUserURL/change-password';
-    changeNotification = '$_baseUserURL/change-notification';
-    updateFCMToken = '$_baseUserURL/update-token';
+    changePassword = '$_baseUserURL/password';
+    changeNotification = '$_baseUserURL/notification';
+    updateFCMToken = '$_baseUserURL/token';
     changeMembership = '$_baseUserURL/membership';
+    changeUsername = '$_baseUserURL/username';
     deleteUser = _baseUserURL;
   }
 }

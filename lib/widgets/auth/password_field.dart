@@ -3,11 +3,13 @@ import 'package:watchlistfy/static/colors.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController _controller;
+  final String label;
 
   const PasswordField(
     this._controller,
     {
-      super.key
+      this.label = "Password",
+      super.key,
     }
   );
 
@@ -36,7 +38,7 @@ class _PasswordFieldState extends State<PasswordField> {
         child: SizedBox(
           width: 90,
           child: Text(
-            "Password",
+            widget.label,
             style: TextStyle(
               color: CupertinoTheme.of(context).bgTextColor, 
               fontSize: 16

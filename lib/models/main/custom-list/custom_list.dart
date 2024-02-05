@@ -7,13 +7,14 @@ class CustomList {
   final String name;
   final String? description;
   final List<String> likes;
+  int popularity;
   bool isLiked;
   bool isPrivate;
   final List<CustomListContent> content;
   final String createdAt;
 
   CustomList(this.id, this.userID, this.author, this.name, this.description,
-      this.likes, this.isLiked, this.isPrivate, this.content, this.createdAt);
+      this.likes, this.popularity, this.isLiked, this.isPrivate, this.content, this.createdAt);
 }
 
 class CustomListContent {

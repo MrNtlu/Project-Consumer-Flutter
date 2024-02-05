@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
@@ -21,12 +22,16 @@ import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
+import 'package:watchlistfy/widgets/main/settings/change_password_sheet.dart';
+import 'package:watchlistfy/widgets/main/settings/change_username_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
 import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/widgets/main/settings/user_list_switch.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -218,129 +223,169 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       child: _state == DetailState.loading
       ? const LoadingView("Loading")
-      : Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SettingsList(
-            shrinkWrap: true,
-            darkTheme: SettingsThemeData(
-              settingsListBackground: cupertinoTheme.bgColor,
-              settingsSectionBackground: cupertinoTheme.onBgColor,
-              titleTextColor: cupertinoTheme.bgTextColor,
-              settingsTileTextColor: cupertinoTheme.bgTextColor,
-            ),
-            lightTheme: SettingsThemeData(
-              settingsListBackground: cupertinoTheme.bgColor,
-              settingsSectionBackground: cupertinoTheme.onBgColor,
-              titleTextColor: cupertinoTheme.bgTextColor,
-              settingsTileTextColor: cupertinoTheme.bgTextColor,
-            ),
-            brightness: cupertinoTheme.brightness,
-            platform: DevicePlatform.iOS,
-            applicationType: ApplicationType.cupertino,
-            sections: [
-              SettingsSection(
-                title: const Text("Application"),
-                tiles: [
-                  CustomSettingsTile(child: ThemeSwitch(() {
-                    setState(() {
-                      _state = DetailState.view;
-                    });
-                  })),
-                  const CustomSettingsTile(child: UserListSwitch()),
-                  const CustomSettingsTile(child: ConsumeLaterSwitch()),
-                ]
+      : SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SettingsList(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              darkTheme: SettingsThemeData(
+                settingsListBackground: cupertinoTheme.bgColor,
+                settingsSectionBackground: cupertinoTheme.onBgColor,
+                titleTextColor: cupertinoTheme.bgTextColor,
+                settingsTileTextColor: cupertinoTheme.bgTextColor,
               ),
-              SettingsSection(
-                title: const Text("Account"),
-                tiles: [
-                  if (_userInfo != null && authProvider.isAuthenticated && !_userInfo!.isPremium)
-                  SettingsTile.navigation(
-                    leading: Lottie.asset(
-                      "assets/lottie/premium.json",
-                      height: 36,
-                      width: 36,
-                      frameRate: FrameRate(60)
+              lightTheme: SettingsThemeData(
+                settingsListBackground: cupertinoTheme.bgColor,
+                settingsSectionBackground: cupertinoTheme.onBgColor,
+                titleTextColor: cupertinoTheme.bgTextColor,
+                settingsTileTextColor: cupertinoTheme.bgTextColor,
+              ),
+              brightness: cupertinoTheme.brightness,
+              platform: DevicePlatform.iOS,
+              applicationType: ApplicationType.cupertino,
+              sections: [
+                SettingsSection(
+                  title: const Text("Application"),
+                  tiles: [
+                    CustomSettingsTile(child: ThemeSwitch(() {
+                      setState(() {
+                        _state = DetailState.view;
+                      });
+                    })),
+                    const CustomSettingsTile(child: UserListSwitch()),
+                    const CustomSettingsTile(child: ConsumeLaterSwitch()),
+                  ]
+                ),
+                SettingsSection(
+                  title: const Text("Account"),
+                  tiles: [
+                    if (_userInfo != null && authProvider.isAuthenticated && !_userInfo!.isPremium)
+                    SettingsTile.navigation(
+                      leading: Lottie.asset(
+                        "assets/lottie/premium.json",
+                        height: 36,
+                        width: 36,
+                        frameRate: FrameRate(60)
+                      ),
+                      title: const Text('Upgrade Account'),
+                      onPressed: (ctx) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const OffersSheet();
+                          })
+                        );
+                      },
                     ),
-                    title: const Text('Upgrade Account'),
-                    onPressed: (ctx) {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return const OffersSheet();
-                        })
-                      );
-                    },
-                  ),
-                  if (_userInfo != null)
-                  _userInfoText("Email", _userInfo!.email),
-                  if (_userInfo != null)
-                  _userInfoText("Username", _userInfo!.username),
-                  if (_userInfo != null)
-                  _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
-                  if (authProvider.isAuthenticated)
-                  SettingsTile.navigation(
-                    leading: const Icon(Icons.logout_rounded),
-                    title: const Text('Logout'),
-                    onPressed: (ctx) {
-                      _logOut();
-                    },
-                  ),
-                  if (!authProvider.isAuthenticated)
-                  SettingsTile.navigation(
-                    leading: const Icon(Icons.login_rounded),
-                    title: const Text('Login'),
-                    onPressed: (ctx) {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return LoginPage();
-                        })
-                      );
-                    },
-                  ),
-                ]
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CupertinoButton(
-                child: const Text("Terms & Conditions"), 
-                onPressed: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return const PolicyPage(false);
-                    })
-                  );
-                }
-              ),
-              CupertinoButton(
-                child: const Text("Privacy Policy"), 
-                onPressed: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return const PolicyPage(true);
-                    })
-                  );
-                }
-              )
-            ],
-          ),
-          if (authProvider.isAuthenticated)
-          CupertinoButton(
-            child: const Text('Delete Account', style: TextStyle(color: CupertinoColors.systemRed)),
-            onPressed: () {
-              showCupertinoDialog(
-                context: context,
-                builder: (_) {
-                  return SureDialog("Do you want to delete your account? This action cannot be reversed!", () {
-                    _deleteUserAccount();
-                  });
-                }
-              );
-            },
-          ),
-        ],
+                    if (_userInfo != null)
+                    _userInfoText("Email", _userInfo!.email),
+                    if (_userInfo != null)
+                    _userInfoText("Username", _userInfo!.username),
+                    if (_userInfo != null)
+                    _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
+                    if (authProvider.isAuthenticated && _userInfo?.canChangeUsername == true)
+                    SettingsTile.navigation(
+                      leading: const Icon(CupertinoIcons.person_2_fill),
+                      title: const Text('Change Username'),
+                      onPressed: (ctx) {
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          barrierColor: CupertinoColors.black.withOpacity(0.75),
+                          builder: (_) => const ChangeUsernameSheet()
+                        );
+                      },
+                    ),
+                    if (authProvider.isAuthenticated)
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.password_rounded),
+                      title: const Text('Change Password'),
+                      onPressed: (ctx) {
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          barrierColor: CupertinoColors.black.withOpacity(0.75),
+                          builder: (_) => const ChangePasswordSheet()
+                        );
+                      },
+                    ),
+                    SettingsTile.navigation(
+                      leading: const Icon(CupertinoIcons.mail_solid),
+                      title: const Text('Contact Us'),
+                      onPressed: (ctx) async {
+                        final url = Uri.parse('mailto:mrntlu@gmail.com');
+                        if (!await  launchUrl(url) && context.mounted) {
+                          showCupertinoDialog(
+                            context: context, 
+                            builder: (_) => const MessageDialog("You can send email to, mrntlu@gmail.com", title: "Contact Us")
+                          );
+                        }
+                      },
+                    ),
+                    if (authProvider.isAuthenticated)
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.logout_rounded),
+                      title: const Text('Logout'),
+                      onPressed: (ctx) {
+                        _logOut();
+                      },
+                    ),
+                    if (!authProvider.isAuthenticated)
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.login_rounded),
+                      title: const Text('Login'),
+                      onPressed: (ctx) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return LoginPage();
+                          })
+                        );
+                      },
+                    ),
+                  ]
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CupertinoButton(
+                  child: const Text("Terms & Conditions"), 
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return const PolicyPage(false);
+                      })
+                    );
+                  }
+                ),
+                CupertinoButton(
+                  child: const Text("Privacy Policy"), 
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return const PolicyPage(true);
+                      })
+                    );
+                  }
+                )
+              ],
+            ),
+            if (authProvider.isAuthenticated)
+            CupertinoButton(
+              child: const Text('Delete Account', style: TextStyle(color: CupertinoColors.systemRed)),
+              onPressed: () {
+                showCupertinoDialog(
+                  context: context,
+                  builder: (_) {
+                    return SureDialog("Do you want to delete your account? This action cannot be reversed!", () {
+                      _deleteUserAccount();
+                    });
+                  }
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

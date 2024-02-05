@@ -231,7 +231,8 @@ class TypeConverter<T> {
         TypeConverter<Author>().convertToObject(response["author"]), 
         response["name"], 
         response["description"], 
-        (response["likes"] as List).map((e) => e.toString()).toList(), 
+        (response["likes"] as List).map((e) => e.toString()).toList(),
+        response["popularity"] ?? 0,
         response["is_liked"] ?? false, 
         response["is_private"] ?? true,
         response["content"] != null
