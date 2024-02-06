@@ -53,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String? error;
   BasicUserInfo? _userInfo;
 
-  late final AuthenticationProvider authProvider;
+  AuthenticationProvider? authProvider;
 
   void _deleteUserAccount() {
     setState(() {
@@ -73,8 +73,8 @@ class _SettingsPageState extends State<SettingsPage> {
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
           );
         } else {
-          authProvider.setAuthentication(false);
-          authProvider.setBasicUserInfo(null);
+          authProvider?.setAuthentication(false);
+          authProvider?.setBasicUserInfo(null);
           Purchases.logOut();
           GoogleSignInApi().signOut();
           SharedPref().deleteTokenCredentials();
@@ -126,8 +126,8 @@ class _SettingsPageState extends State<SettingsPage> {
               await GoogleSignInApi().signOut();
             }
             if (context.mounted) {
-              authProvider.setAuthentication(false);
-              authProvider.setBasicUserInfo(null);
+              authProvider?.setAuthentication(false);
+              authProvider?.setBasicUserInfo(null);
               Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
             }
           } catch (error) {
@@ -204,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
       authProvider = Provider.of<AuthenticationProvider>(context);
 
-      if (authProvider.isAuthenticated) {
+      if (authProvider?.isAuthenticated == true) {
         _getUserInfo();
       }
     }
@@ -261,7 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 SettingsSection(
                   title: const Text("Account"),
                   tiles: [
-                    if (_userInfo != null && authProvider.isAuthenticated && !_userInfo!.isPremium)
+                    if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
                     SettingsTile.navigation(
                       leading: Lottie.asset(
                         "assets/lottie/premium.json",
@@ -284,7 +284,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     _userInfoText("Username", _userInfo!.username),
                     if (_userInfo != null)
                     _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
-                    if (authProvider.isAuthenticated && _userInfo?.canChangeUsername == true)
+                    if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.person_2_fill),
                       title: const Text('Change Username'),
@@ -296,7 +296,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         );
                       },
                     ),
-                    if (authProvider.isAuthenticated)
+                    if (authProvider?.isAuthenticated == true)
                     SettingsTile.navigation(
                       leading: const Icon(Icons.password_rounded),
                       title: const Text('Change Password'),
@@ -321,7 +321,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         }
                       },
                     ),
-                    if (authProvider.isAuthenticated)
+                    if (authProvider?.isAuthenticated == true)
                     SettingsTile.navigation(
                       leading: const Icon(Icons.logout_rounded),
                       title: const Text('Logout'),
@@ -329,7 +329,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         _logOut();
                       },
                     ),
-                    if (!authProvider.isAuthenticated)
+                    if (authProvider?.isAuthenticated == false)
                     SettingsTile.navigation(
                       leading: const Icon(Icons.login_rounded),
                       title: const Text('Login'),
@@ -370,7 +370,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 )
               ],
             ),
-            if (authProvider.isAuthenticated)
+            if (authProvider?.isAuthenticated == true)
             CupertinoButton(
               child: const Text('Delete Account', style: TextStyle(color: CupertinoColors.systemRed)),
               onPressed: () {
