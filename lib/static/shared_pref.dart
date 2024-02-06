@@ -35,8 +35,8 @@ class SharedPref {
   }
 
   //Introduction
-  void setIsIntroductionPresented(bool isIntroductionDeleted) {
-    sharedPref?.setBool(Constants.INTRODUCTION_PREF, isIntroductionDeleted);
+  void setIsIntroductionPresented(bool isPresented) {
+    sharedPref?.setBool(Constants.INTRODUCTION_PREF, isPresented);
   }
 
   bool getIsIntroductionPresented() {
