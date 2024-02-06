@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -88,7 +87,6 @@ class MyApp extends StatelessWidget {
                 : AppColors().lightTheme,
             initialRoute: '/',
             routes: {
-              "/onboarding": (context) => const OnboardingPage(),
               TabsPage.routeName: (context) => const TabsPage(),
             },
           );

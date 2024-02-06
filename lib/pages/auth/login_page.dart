@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
@@ -120,16 +119,9 @@ class LoginPage extends StatelessWidget {
     return CupertinoPageScaffold(
         child: CustomScrollView(
           slivers: [
-            CupertinoSliverNavigationBar(
-              leading: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: const Icon(Icons.arrow_back_ios),
-                onPressed: (){
-                  Navigator.pop(context);
-                }
-              ),
-              largeTitle: const Text("Welcome Back 👋", style: TextStyle(fontSize: 24)),
-              middle: const Text("Welcome Back 👋", style: TextStyle(fontSize: 18)),
+            const CupertinoSliverNavigationBar(
+              largeTitle: Text("Welcome Back 👋", style: TextStyle(fontSize: 24)),
+              middle: Text("Welcome Back 👋", style: TextStyle(fontSize: 18)),
               alwaysShowMiddle: false,
             ),
             SliverFillRemaining(

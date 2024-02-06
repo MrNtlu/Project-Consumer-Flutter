@@ -129,7 +129,6 @@ class CustomListDetailsPage extends StatelessWidget {
                       },
                       child: CustomListEntryCell(
                         index: index + 1,
-                        contentType: ContentType.values.where((element) => content.contentType == element.request).first.value,
                         null,
                         BaseContent(
                           content.contentID, 
@@ -139,7 +138,7 @@ class CustomListDetailsPage extends StatelessWidget {
                           content.titleOriginal, 
                           content.contentExternalID,
                           content.contentExternalIntID
-                        ),
+                        ), 
                         true, 
                         null, 
                         null,

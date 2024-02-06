@@ -7,14 +7,12 @@ import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
-import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 
 class CustomListEntryCell extends StatelessWidget {
   final int? index;
   final ContentType? selectedContent;
   final BaseContent content;
   final bool doesContain;
-  final String? contentType;
   final VoidCallback? onRemove;
   final VoidCallback? onAdd;
 
@@ -24,7 +22,7 @@ class CustomListEntryCell extends StatelessWidget {
     this.doesContain,
     this.onRemove,
     this.onAdd,
-    {this.index, this.contentType, super.key}
+    {this.index, super.key}
   );
 
   @override
@@ -89,12 +87,6 @@ class CustomListEntryCell extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            if (contentType != null)
-            CupertinoChip(
-              isSelected: true, 
-              onSelected: (value){}, 
-              label: contentType!,
             ),
             if (onRemove != null)
             Column(

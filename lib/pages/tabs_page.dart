@@ -56,8 +56,8 @@ class _TabsPageState extends State<TabsPage> {
 
       await SharedPref().init().then((_) async {
         final token = SharedPref().getTokenCredentials();
-        final isIntroductionPresented = SharedPref().getIsIntroductionPresented();
-        final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+        final authProvider =
+            Provider.of<AuthenticationProvider>(context, listen: false);
         UserToken().setToken(token);
 
         if (token == null) {
@@ -80,14 +80,6 @@ class _TabsPageState extends State<TabsPage> {
         setState(() {
           state = BaseState.view;
         });
-
-        if (!isIntroductionPresented) {
-            await Future.delayed(const Duration(milliseconds: 300));
-            if (context.mounted) {
-
-              Navigator.of(context, rootNavigator: true).pushNamed("/onboarding");
-            }
-          }
       });
     }
   }
