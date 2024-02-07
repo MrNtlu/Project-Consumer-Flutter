@@ -4,7 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
+import 'package:watchlistfy/pages/main/game/game_details_page.dart';
+import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
+import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
+import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -13,12 +18,13 @@ import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:go_router/go_router.dart';
 
-FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+// FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
 
 void main() async {
@@ -38,7 +44,7 @@ void main() async {
     return true;
   };
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 Future<void> _trackingTransparencyRequest() async {
@@ -46,13 +52,13 @@ Future<void> _trackingTransparencyRequest() async {
 
   final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
   if (status == TrackingStatus.authorized) {
-    analytics.setAnalyticsCollectionEnabled(true);
-    crashlytics.setCrashlyticsCollectionEnabled(true);
+    // analytics.setAnalyticsCollectionEnabled(true);
+    crashlytics.setCrashlyticsCollectionEnabled(true && kReleaseMode);
   } else if(status == TrackingStatus.notDetermined) {
     final status = await AppTrackingTransparency.requestTrackingAuthorization();
 
-    analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
-    crashlytics.setCrashlyticsCollectionEnabled(status == TrackingStatus.authorized);
+    // analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
+    crashlytics.setCrashlyticsCollectionEnabled(status == TrackingStatus.authorized && kReleaseMode);
   }
 }
 
@@ -60,7 +66,42 @@ Future<void> _trackingTransparencyRequest() async {
 // Deep linking https://codewithandrea.com/articles/flutter-deep-links/
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final GoRouter _goRouter = GoRouter(
+    routes: [
+      GoRoute(
+        path: TabsPage.routeName,
+        builder: (context, state) => const TabsPage(),
+        routes: [
+          GoRoute(
+            path: 'movie/:id',
+            builder: (context, state) => MovieDetailsPage(state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'tv/:id',
+            builder: (context, state) => TVDetailsPage(state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'anime/:id',
+            builder: (context, state) => AnimeDetailsPage(state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'game/:id',
+            builder: (context, state) => GameDetailsPage(state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'profile/:username',
+            builder: (context, state) => ProfileDisplayPage(state.pathParameters['username']!),
+          ),
+          GoRoute(
+            path: OnboardingPage.routeName,
+            builder: (context, state) => const OnboardingPage()
+          )
+        ],
+      )
+    ]
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +116,7 @@ class MyApp extends StatelessWidget {
         builder: (context, _) {
           Provider.of<ThemeProvider>(context);
 
-          return CupertinoApp(
+          return CupertinoApp.router(
             title: 'Watchlistfy',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: const [
@@ -86,11 +127,12 @@ class MyApp extends StatelessWidget {
             theme: SharedPref().isDarkTheme()
                 ? AppColors().darkTheme
                 : AppColors().lightTheme,
-            initialRoute: '/',
-            routes: {
-              "/onboarding": (context) => const OnboardingPage(),
-              TabsPage.routeName: (context) => const TabsPage(),
-            },
+            routerConfig: _goRouter,
+            // initialRoute: '/',
+            // routes: {
+            //   "/onboarding": (context) => const OnboardingPage(),
+            //   TabsPage.routeName: (context) => const TabsPage(),
+            // },
           );
         },
       ),

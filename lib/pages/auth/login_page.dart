@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/pages/auth/register_page.dart';
-import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/routes.dart';
@@ -54,9 +54,7 @@ class LoginPage extends StatelessWidget {
       if (value.message == null) {
         SharedPref().setTokenCredentials(value.token ?? '');
 
-        Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute(builder: (_) {
-          return const TabsPage();
-        }), (_) => false);
+        context.pushReplacement("/");
       } else {
         showCupertinoDialog(context: context, builder: (_) => ErrorDialog(value.message ?? "Unknown error."));
 
@@ -100,9 +98,7 @@ class LoginPage extends StatelessWidget {
         } else {
           SharedPref().setTokenCredentials(token ?? '');
 
-          Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute(builder: (_) {
-            return const TabsPage();
-          }), (_) => false);
+          context.pushReplacement("/");
         }
       }
     } catch (err) {

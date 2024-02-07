@@ -222,6 +222,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             DetailsMainInfo(
                               item.malScore.toStringAsFixed(2),
                               item.status,
+                              "anime",
+                              item.id
                             ),
                             const SizedBox(height: 32,),
                             AnimeDetailsInfoColumn(

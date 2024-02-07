@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
 import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
+import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/settings_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
@@ -84,8 +85,11 @@ class _TabsPageState extends State<TabsPage> {
         if (!isIntroductionPresented) {
             await Future.delayed(const Duration(milliseconds: 300));
             if (context.mounted) {
-
-              Navigator.of(context, rootNavigator: true).pushNamed("/onboarding");
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(builder: (_) {
+                  return const OnboardingPage();
+                })
+              );
             }
           }
       });

@@ -2,11 +2,23 @@
 arch -x86_64 pod install --repo-update //Update cocoapods
 
 // DT_TOOLCHAIN_DIR cannot be used to error
+// Full clear
+flutter clean
 cd ios
 sudo gem update cocoapods
-flutter clean
 rm Podfile.lock
 rm -rf Pods/
 flutter pub get
 pod install
 pod update
+arch -x86_64 pod install --repo-update
+
+// Short Clear
+flutter clean
+cd ios
+sudo gem update cocoapods
+cd ..
+flutter pub get
+cd ios
+pod install
+arch -x86_64 pod install --repo-update

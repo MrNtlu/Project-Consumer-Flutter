@@ -83,6 +83,7 @@ class UserRoutes {
   late String _baseUserURL;
 
   late String info;
+  late String profileFromUsername;
   late String basic;
   late String forgotPassword;
   late String changePassword;
@@ -97,6 +98,7 @@ class UserRoutes {
 
     info = '$_baseUserURL/info';
     basic = '$_baseUserURL/basic';
+    profileFromUsername = '$_baseUserURL/profile';
     forgotPassword = '$_baseUserURL/forgot-password';
     changePassword = '$_baseUserURL/password';
     changeNotification = '$_baseUserURL/notification';

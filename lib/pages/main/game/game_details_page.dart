@@ -219,6 +219,8 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                               item.tba ? "TBA" : (
                                 item.releaseDate != null ? DateTime.parse(item.releaseDate!).dateToHumanDate() : ''
                               ),
+                              "game",
+                              item.id
                             ),
                             const SizedBox(height: 32),
                             GameDetailsInfoColumn(

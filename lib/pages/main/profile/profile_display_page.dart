@@ -1,27 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/models/main/common/request/id_body.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
-import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
-import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
-import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
-import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
-import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/providers/main/profile/profile_display_details_provider.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
-import 'package:watchlistfy/widgets/common/sure_dialog.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_button.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_consume_later_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_extra_info_text.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_info_text.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_legend_cell.dart';
@@ -29,25 +19,27 @@ import 'package:watchlistfy/widgets/main/profile/profile_level_bar.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_review_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_user_image.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class ProfileDisplayPage extends StatefulWidget {
+  final String username;
+
+  const ProfileDisplayPage(this.username, {super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileDisplayPage> createState() => _ProfileDisplayPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
   DetailState _state = DetailState.init;
   String? _error;
 
-  late final ProfileDetailsProvider _provider;
+  late final ProfileDisplayDetailsProvider _provider;
 
   void _fetchData() {
     setState(() {
       _state = DetailState.loading;
     });
 
-    _provider.getProfileDetails().then((response) {
+    _provider.getProfileDetails(widget.username).then((response) {
       _error = response.error;
 
       if (_state != DetailState.disposed) {
@@ -75,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _provider = ProfileDetailsProvider();
+    _provider = ProfileDisplayDetailsProvider();
     if (_state != DetailState.init) {
       _fetchData();
     }
@@ -91,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => _provider,
-      child: Consumer<ProfileDetailsProvider>(
+      child: Consumer<ProfileDisplayDetailsProvider>(
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
@@ -100,22 +92,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: const TextStyle(fontSize: 18),
                 overflow: TextOverflow.ellipsis,
               ),
-              trailing: _provider.item?.username != null ? CupertinoButton(
-                padding: const EdgeInsets.symmetric(horizontal: 3),
-                minSize: 0,
-                child: const Icon(CupertinoIcons.share, size: 22),
-                onPressed: () {
-                  final box = context.findRenderObject() as RenderBox?;
-
-                  if (box != null) {
-                    Share.share(
-                      '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}', 
-                      subject: 'Share Profile', 
-                      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                    ); 
-                  }
-                }
-              ) : null,
             ),
             child: CustomScrollView(
               slivers: [
@@ -128,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _body(ProfileDetailsProvider provider) {
+  Widget _body(ProfileDisplayDetailsProvider provider) {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
@@ -140,31 +116,32 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               ProfileUserImage(image),
               ProfileLevelBar(item.level),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ProfileButton("Custom Lists", () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return const CustomListPage();
-                        })
-                      );
-                    }, CupertinoIcons.folder_fill),
-                    const SizedBox(width: 12),
-                    ProfileButton("User List", () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return const UserListPage();
-                        })
-                      ).then((value) => _fetchData());
-                    }, CupertinoIcons.list_bullet),
-                  ],
-                ),
-              ),
+              //TODO Friend request button
+              // const SizedBox(height: 16),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 12),
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.max,
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       ProfileButton("Custom Lists", () {
+              //         Navigator.of(context, rootNavigator: true).push(
+              //           CupertinoPageRoute(builder: (_) {
+              //             return const CustomListPage();
+              //           })
+              //         );
+              //       }, CupertinoIcons.folder_fill),
+              //       const SizedBox(width: 12),
+              //       ProfileButton("User List", () {
+              //         Navigator.of(context, rootNavigator: true).push(
+              //           CupertinoPageRoute(builder: (_) {
+              //             return const UserListPage();
+              //           })
+              //         ).then((value) => _fetchData());
+              //       }, CupertinoIcons.list_bullet),
+              //     ],
+              //   ),
+              // ),
               const SizedBox(height: 32),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
@@ -191,78 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              SeeAllTitle("🕒 Watch Later", () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return const ConsumeLaterPage();
-                  })
-                ).then((value) => _fetchData());
-              }),
-              SizedBox(
-                height: 200,
-                child: _provider.isLoading
-                ? const CupertinoActivityIndicator()
-                : ListView.builder(
-                  scrollDirection: item.watchLater.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.watchLater.isEmpty ? 1 : item.watchLater.length,
-                  itemExtent: 200 * 2 / 3,
-                  itemBuilder: (context, index) {
-                    if (item.watchLater.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.watchLater[index];
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!_provider.isLoading) {
-                              Navigator.of(context, rootNavigator: true).push(
-                                CupertinoPageRoute(builder: (_) {
-                                  switch (ContentType.values.where((element) => element.request == data.contentType).first) {
-                                    case ContentType.movie:
-                                      return MovieDetailsPage(data.contentID);
-                                    case ContentType.tv:
-                                      return TVDetailsPage(data.contentID);
-                                    case ContentType.anime:
-                                      return AnimeDetailsPage(data.contentID);
-                                    case ContentType.game: 
-                                      return GameDetailsPage(data.contentID);
-                                    default:
-                                      return MovieDetailsPage(data.contentID);
-                                  }
-                                })
-                              ).then((value) => _fetchData());
-                            }
-                          },
-                          child: ProfileConsumeLaterCell(
-                            data.content.imageUrl, data.content.titleEn,
-                            () {
-                              HapticFeedback.lightImpact();
-
-                              showCupertinoDialog(
-                                context: context, 
-                                builder: (_) {
-                                  return SureDialog("Do you want to remove it?", () {
-                                    _provider.deleteConsumeLater(index, IDBody(data.id));
-                                  });
-                                }
-                              );
-                            }
-                          )
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
+              //TODO Add Reviews
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -290,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                   itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
                   itemExtent: 200 * 2 / 3,
                   itemBuilder: (context, index) {
@@ -336,13 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
               ),
-              SeeAllTitle("💬 Reviews", () {
-                // Navigator.of(context, rootNavigator: true).push(
-                //   CupertinoPageRoute(builder: (_) {
-                //     return const ConsumeLaterPage();
-                //   })
-                // ).then((value) => _fetchData());
-              }, shouldHideSeeAllButton: true),
+              SeeAllTitle("💬 Reviews", (){}, shouldHideSeeAllButton: true),
               SizedBox(
                 height: 200,
                 child: ListView.builder(

@@ -4,6 +4,8 @@ import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 
 class OnboardingPage extends StatefulWidget {
+  static const routeName = "onboarding";
+
   const OnboardingPage({super.key});
 
   @override

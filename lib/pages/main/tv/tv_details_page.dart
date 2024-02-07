@@ -225,6 +225,8 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                               DetailsMainInfo(
                                 item.tmdbVote.toStringAsFixed(2),
                                 item.status,
+                                "tv",
+                                item.id,
                               ),
                               DetailsInfoColumn(
                                 item.title != item.titleOriginal,

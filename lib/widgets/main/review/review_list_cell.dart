@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
+import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/review/review_create_page.dart';
 import 'package:watchlistfy/pages/main/review/review_details_page.dart';
 import 'package:watchlistfy/providers/main/review/review_list_provider.dart';
@@ -9,7 +10,6 @@ import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
-import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 
 class ReviewListCell extends StatelessWidget {
@@ -32,14 +32,11 @@ class ReviewListCell extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  //TODO Implement profile
-
-                  showCupertinoDialog(
-                    context: context, 
-                    builder: (_) {
-                      return const MessageDialog(title: "Not Yet", "Coming soon");
-                    }
-                  );
+                  Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return ProfileDisplayPage(item.author.username);
+                      })
+                    );
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

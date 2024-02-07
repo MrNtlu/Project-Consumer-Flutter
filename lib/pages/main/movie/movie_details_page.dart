@@ -215,6 +215,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               DetailsMainInfo(
                                 item.tmdbVote.toStringAsFixed(2),
                                 item.status,
+                                "movie",
+                                item.id,
                               ),
                               DetailsInfoColumn(
                                 item.title != item.titleOriginal,
