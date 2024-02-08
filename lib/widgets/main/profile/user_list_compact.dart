@@ -203,9 +203,11 @@ class UserListCompact extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     if(
-                      provider.selectedContent != ContentType.movie
+                      provider.selectedContent != ContentType.movie && provider.selectedContent != ContentType.game
                     )
                     Text("/${data.totalEpisodes ?? "?"} eps"),
+                    if (provider.selectedContent == ContentType.game)
+                    const Text(' hrs')
                   ],
                 )
               ],

@@ -8,6 +8,7 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
+import 'package:watchlistfy/pages/main/profile/custom_list_share_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
@@ -93,6 +94,10 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: 'profile/:username',
             builder: (context, state) => ProfileDisplayPage(state.pathParameters['username']!),
+          ),
+          GoRoute(
+            path: 'custom-list/:id',
+            builder: (context, state) => CustomListShareDetailsPage(state.pathParameters['id']!),
           ),
           GoRoute(
             path: OnboardingPage.routeName,

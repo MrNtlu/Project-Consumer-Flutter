@@ -168,7 +168,6 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                   ],
                 ),
               ),
-              //TODO Add Reviews
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(

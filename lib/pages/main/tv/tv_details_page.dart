@@ -215,7 +215,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: item.title != item.titleOriginal ? 142 : 125,
+                        height: item.title != item.titleOriginal ? 162 : 145,
                         child: Padding(
                           padding: const EdgeInsets.only(right: 16),
                           child: Column(

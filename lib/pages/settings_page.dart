@@ -310,7 +310,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.mail_solid),
-                      title: const Text('Contact Us'),
+                      title: const Text('Feedback & Suggestions'),
                       onPressed: (ctx) async {
                         final url = Uri.parse('mailto:mrntlu@gmail.com');
                         if (!await  launchUrl(url) && context.mounted) {

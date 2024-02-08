@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
@@ -8,6 +9,7 @@ import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_provider.dart';
+import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
@@ -25,48 +27,27 @@ class CustomListDetailsPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(item.name),
-        trailing: CupertinoButton(
-          onPressed: () {
-            showCupertinoDialog(
-              context: context, 
-              builder: (_) {
-                return SureDialog("Do you want to delete it?", () {
-                  Navigator.pop(context);
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            
+            CupertinoButton(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              minSize: 0,
+              child: const Icon(CupertinoIcons.share),
+              onPressed: () {
+                final box = context.findRenderObject() as RenderBox?;
 
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (_) {
-                      return const LoadingDialog();
-                    }
-                  );
-
-                  provider.deleteCustomList(
-                    item.id,
-                    item
-                  ).then((value) {
-                    Navigator.pop(context);
-
-                    showCupertinoDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      builder: (context) {
-                        if (value.error != null) {
-                          return ErrorDialog(value.error!);
-                        } else {
-                          return MessageDialog(value.message ?? "Successfully deleted.");
-                        }
-                      }
-                    );
-                  });
-                });
+                if (box != null) {
+                  Share.share(
+                    '${Constants.BASE_DOMAIN_URL}/custom-list/${item.id}', 
+                    subject: 'Share ${item.name}', 
+                    sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+                  ); 
+                }
               }
-            );
-          },
-          padding: EdgeInsets.zero,
-          child: const Icon(
-            CupertinoIcons.delete,
-            size: 28
-          )
+            ),
+          ],
         ),
       ),
       child: SafeArea(
@@ -135,8 +116,8 @@ class CustomListDetailsPage extends StatelessWidget {
                           content.contentID, 
                           "", 
                           content.imageURL ?? '', 
-                          content.titleEn, 
-                          content.titleOriginal, 
+                          content.titleEn.isNotEmpty ? content.titleEn : content.titleOriginal, 
+                          content.titleOriginal.isNotEmpty ? content.titleOriginal : content.titleEn, 
                           content.contentExternalID,
                           content.contentExternalIntID
                         ),
@@ -148,7 +129,58 @@ class CustomListDetailsPage extends StatelessWidget {
                     );
                   }
                 ),
-              )
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Icon(CupertinoIcons.heart_fill, size: 20),
+                  const SizedBox(width: 3),
+                  Text(item.popularity.toString()),
+                  const Spacer(),
+                  CupertinoButton(
+                    onPressed: () {
+                      showCupertinoDialog(
+                        context: context, 
+                        builder: (_) {
+                          return SureDialog("Do you want to delete it?", () {
+                            Navigator.pop(context);
+                  
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (_) {
+                                return const LoadingDialog();
+                              }
+                            );
+                  
+                            provider.deleteCustomList(
+                              item.id,
+                              item
+                            ).then((value) {
+                              Navigator.pop(context);
+                  
+                              showCupertinoDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (context) {
+                                  if (value.error != null) {
+                                    return ErrorDialog(value.error!);
+                                  } else {
+                                    return MessageDialog(value.message ?? "Successfully deleted.");
+                                  }
+                                }
+                              );
+                            });
+                          });
+                        }
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    child: const Icon(
+                      CupertinoIcons.delete,
+                    )
+                  ),
+                ],
+              ),
             ],
           ),
         )

@@ -67,10 +67,18 @@ class _TabsPageState extends State<TabsPage> {
           await RefreshToken(token).refresh().then((value) async {
             if (value.token != null) {
               await PurchaseApi().userInit();
-              authProvider.initAuthentication(true, PurchaseApi().userInfo);
-              state = BaseState.view;
+              if (PurchaseApi().userInfo != null && PurchaseApi().userInfo?.email.isNotEmpty == true) {
+                authProvider.initAuthentication(true, PurchaseApi().userInfo);
+                state = BaseState.view;
+              } else {
+                PurchaseApi().userInfo = null;
+                UserToken().setToken(null);
+                SharedPref().deleteTokenCredentials();
+                authProvider.initAuthentication(false, null);
+              }
             } else {
               //Failed to login
+              PurchaseApi().userInfo = null;
               UserToken().setToken(null);
               SharedPref().deleteTokenCredentials();
               authProvider.initAuthentication(false, null);

@@ -3,7 +3,7 @@ import 'package:watchlistfy/static/colors.dart';
 
 // ignore: must_be_immutable
 class SpoilerSwitch extends StatefulWidget {
-  bool isSpoiler; 
+  bool isSpoiler;
 
   SpoilerSwitch({this.isSpoiler = false, super.key});
 

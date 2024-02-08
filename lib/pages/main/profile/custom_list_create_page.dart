@@ -20,6 +20,7 @@ import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
 import 'package:http/http.dart' as http;
+import 'package:watchlistfy/widgets/main/profile/custom_list_private_switch.dart';
 
 class CustomListCreatePage extends StatelessWidget {
   final CustomList? customList;
@@ -35,6 +36,7 @@ class CustomListCreatePage extends StatelessWidget {
     String title,
     String? description,
     bool isUpdating,
+    bool isPrivate,
   ) async {
     if (title.isEmpty) {
       showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid title. Title can not be empty!"));
@@ -56,7 +58,7 @@ class CustomListCreatePage extends StatelessWidget {
     final CreateCustomList createBody = CreateCustomList(
       title, 
       description, 
-      false, 
+      isPrivate, 
       contentList
     );
 
@@ -64,7 +66,7 @@ class CustomListCreatePage extends StatelessWidget {
       customList?.id ?? '', 
       title, 
       description, 
-      false,
+      isPrivate,
       contentList
     );
 
@@ -126,6 +128,7 @@ class CustomListCreatePage extends StatelessWidget {
     final CustomListCreateProvider customListCreateProvider = CustomListCreateProvider();
     final AuthenticationProvider authProvider = Provider.of<AuthenticationProvider>(context);
 
+    final isPrivateSwitch = CustomListPrivateSwitch(isPrivate: customList?.isPrivate ?? false);
     final TextEditingController nameController = TextEditingController(text: customList?.name);
     final TextEditingController descriptionController = TextEditingController(text: customList?.description);
     customListCreateProvider.selectedContent = customList?.content.sorted((a, b) => a.order.compareTo(b.order)) ?? [];
@@ -172,6 +175,8 @@ class CustomListCreatePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    const SizedBox(height: 6),
+                    isPrivateSwitch,
                     const SizedBox(height: 6),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,7 +268,8 @@ class CustomListCreatePage extends StatelessWidget {
                           provider, 
                           nameController.text, 
                           descriptionController.text,
-                          customList != null
+                          customList != null,
+                          isPrivateSwitch.isPrivate
                         );
                       }
                     )

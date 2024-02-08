@@ -101,8 +101,10 @@ class UserListShimmerCell extends StatelessWidget {
                       const Text(
                         "?", style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      if(selectedContent != ContentType.movie)
+                      if(selectedContent != ContentType.movie && selectedContent != ContentType.game)
                       Text("/${totalEpisodes ?? "?"} eps"),
+                      if (selectedContent == ContentType.game)
+                      const Text(' hrs')
                     ],
                   )
                 ],
@@ -181,8 +183,10 @@ class UserListShimmerCell extends StatelessWidget {
                       const Text(
                         "?", style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      if(selectedContent != ContentType.movie)
+                      if(selectedContent != ContentType.movie && selectedContent != ContentType.game)
                       Text("/${totalEpisodes ?? "?"} eps"),
+                      if (selectedContent == ContentType.game)
+                      const Text(' hrs')
                     ],
                   )
                 ],
