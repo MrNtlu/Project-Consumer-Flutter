@@ -90,6 +90,11 @@ class TypeConverter<T> {
         ? ((response["reviews"] as List).map((e) => 
           TypeConverter<ReviewWithContent>().convertToObject(e)
         ).toList())
+        : [],
+        response["custom_lists"] != null
+        ? ((response["custom_lists"] as List).map((e) => 
+          TypeConverter<CustomList>().convertToObject(e)
+        ).toList())
         : []
       ) as T;
     } else if (T == UserListContent) {
@@ -232,8 +237,11 @@ class TypeConverter<T> {
         response["name"], 
         response["description"], 
         (response["likes"] as List).map((e) => e.toString()).toList(),
+        (response["bookmarks"] as List).map((e) => e.toString()).toList(),
         response["popularity"] ?? 0,
+        response["bookmark_count"] ?? 0,
         response["is_liked"] ?? false, 
+        response["is_bookmarked"] ?? false, 
         response["is_private"] ?? true,
         response["content"] != null
         ? ((

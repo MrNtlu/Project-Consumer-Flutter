@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
-import 'package:watchlistfy/providers/main/review/review_list_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -11,9 +11,9 @@ import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 
 class ReviewDetailsPage extends StatefulWidget {
   final Review item;
-  final ReviewListProvider provider;
+  final Future<BaseMessageResponse> Function(String) likeReview;
 
-  const ReviewDetailsPage(this.item, this.provider, {super.key});
+  const ReviewDetailsPage(this.item, this.likeReview, {super.key});
 
   @override
   State<ReviewDetailsPage> createState() => _ReviewDetailsPageState();
@@ -129,7 +129,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                         }
                       );
         
-                      widget.provider.voteReview(widget.item.id).then((value) {
+                      widget.likeReview(widget.item.id).then((value) {
                         if (context.mounted) {
                           Navigator.pop(context);
         

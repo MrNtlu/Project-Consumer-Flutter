@@ -115,7 +115,7 @@ class ReviewListCell extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                return ReviewDetailsPage(item, provider);
+                return ReviewDetailsPage(item, provider.voteReview);
               }));
             },
             child: const SizedBox(
@@ -218,7 +218,7 @@ class ReviewListCell extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                    return ReviewDetailsPage(item, provider);
+                    return ReviewDetailsPage(item, provider.voteReview);
                   }));
                 },
                 child: const Text("Read More"),

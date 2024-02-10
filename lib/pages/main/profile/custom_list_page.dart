@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
@@ -11,11 +10,9 @@ import 'package:watchlistfy/providers/main/profile/custom_list_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
-import 'package:watchlistfy/widgets/common/error_dialog.dart';
-import 'package:watchlistfy/widgets/common/loading_dialog.dart';
+import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:watchlistfy/widgets/common/message_dialog.dart';
-import 'package:watchlistfy/widgets/common/sure_dialog.dart';
+import 'package:watchlistfy/widgets/main/profile/custom_list_action_sheet.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_sort_sheet.dart';
 
 class CustomListPage extends StatefulWidget {
@@ -94,7 +91,14 @@ class _CustomListPageState extends State<CustomListPage> {
                       showCupertinoModalPopup(
                         context: context, 
                         builder: (context) {
-                          return CustomListSortSheet(_fetchData, _provider);
+                          return CustomListSortSheet(_provider.sort, (newSort) {
+                            final shouldFetchData = _provider.sort != newSort;
+                            _provider.sort = newSort;
+
+                            if (shouldFetchData) {
+                              _fetchData(); 
+                            }
+                          });
                         }
                       );
                     },
@@ -136,7 +140,7 @@ class _CustomListPageState extends State<CustomListPage> {
           itemCount: data.isEmpty ? 1 : data.length,
           itemBuilder: (context, index) {
             if (data.isEmpty) {
-              return _emptyView();
+              return const EmptyView("assets/lottie/empty.json", "Nothing here. You can create a new list.");
             }
 
             final content = data[index];
@@ -146,7 +150,7 @@ class _CustomListPageState extends State<CustomListPage> {
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
-                    return CustomListDetailsPage(content, _provider);
+                    return CustomListDetailsPage(content, _provider.deleteCustomList);
                   })
                 );
               },
@@ -199,86 +203,7 @@ class _CustomListPageState extends State<CustomListPage> {
                             showCupertinoModalPopup(
                               context: context, 
                               builder: (_) {
-                                return CupertinoActionSheet(
-                                  cancelButton: CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Close', style: TextStyle(color: CupertinoColors.systemBlue)),
-                                  ),
-                                  actions: [
-                                    CupertinoActionSheetAction(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-
-                                        Navigator.of(context, rootNavigator: true).push(
-                                          CupertinoPageRoute(builder: (_) {
-                                            return CustomListDetailsPage(content, _provider);
-                                          })
-                                        );
-                                      },
-                                      child: const Text(
-                                        'View',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(color: CupertinoColors.activeBlue)
-                                      ),
-                                    ),
-                                    CupertinoActionSheetAction(
-                                      isDefaultAction: true,
-                                      onPressed: () {
-                                        Navigator.pop(context);
-
-                                        Navigator.of(context, rootNavigator: true).push(
-                                          CupertinoPageRoute(builder: (_) {
-                                            return CustomListCreatePage(_fetchData, customList: content);
-                                          })
-                                        );
-                                      },
-                                      child: const Text('Edit', style: TextStyle(color: CupertinoColors.activeBlue)),
-                                    ),
-                                    CupertinoActionSheetAction(
-                                      isDestructiveAction: true,
-                                      onPressed: () {
-                                        showCupertinoDialog(
-                                          context: context, 
-                                          builder: (_) {
-                                            return SureDialog("Do you want to delete it?", () {
-                                              Navigator.pop(context);
-
-                                              showCupertinoDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return const LoadingDialog();
-                                                }
-                                              );
-
-                                              _provider.deleteCustomList(
-                                                content.id,
-                                                content
-                                              ).then((value) {
-                                                Navigator.pop(context);
-
-                                                showCupertinoDialog(
-                                                  context: context,
-                                                  barrierDismissible: true,
-                                                  builder: (context) {
-                                                    if (value.error != null) {
-                                                      return ErrorDialog(value.error!);
-                                                    } else {
-                                                      return MessageDialog(value.message ?? "Successfully deleted.");
-                                                    }
-                                                  }
-                                                );
-                                              });
-                                            });
-                                          }
-                                        );
-                                      },
-                                      child: const Text('Delete'),
-                                    ),
-                                  ],
-                                );
+                                return CustomListActionSheet(content, _provider.deleteCustomList, _fetchData);
                               }
                             );
                           },
@@ -293,7 +218,7 @@ class _CustomListPageState extends State<CustomListPage> {
           }
         );
       case ListState.empty:
-        return _emptyView();
+        return const EmptyView("assets/lottie/empty.json", "Nothing here. You can create a new list.");
       case ListState.error:
         return Center(
           child: Padding(
@@ -305,26 +230,4 @@ class _CustomListPageState extends State<CustomListPage> {
        return const LoadingView("Loading");
     }
   }
-
-  Widget _emptyView() => SizedBox(
-    height: MediaQuery.of(context).size.height * 0.75,
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset(
-              "assets/lottie/empty.json",
-              height: 250,
-              width: 250,
-              frameRate: FrameRate(60)
-            ),
-            const SizedBox(height: 12),
-            const Text("Nothing here. You can create a new list.", style: TextStyle(fontWeight: FontWeight.w500)),
-          ],
-        ),
-      ),
-    ),
-  );
 }

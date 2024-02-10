@@ -42,4 +42,66 @@ class CustomListShareProvider with ChangeNotifier {
       return BaseNullableResponse(message: error.toString(), error: error.toString());
     }
   }
+
+  Future<BaseMessageResponse> likeCustomList(
+    String id,
+  ) async {
+    try {
+      final response = await http.patch(
+        Uri.parse(APIRoutes().customListRoutes.likeCustomList),
+        body: json.encode({
+          "id": id
+        }),
+        headers: UserToken().getBearerToken()
+      );
+
+      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      
+      var baseItemResponse = decodedResponse.getBaseItemResponse<CustomList>();
+      var data = baseItemResponse.data;
+
+      if (response.getBaseMessageResponse().error == null && data != null) {
+        item?.isLiked = data.isLiked;
+        item?.likes.clear;
+        item?.likes.addAll(data.likes);
+        item?.popularity = data.popularity;
+        notifyListeners();   
+      }
+
+      return response.getBaseMessageResponse();
+    } catch (error) {
+      return BaseMessageResponse(error.toString(), error.toString());
+    }
+  }
+
+  Future<BaseMessageResponse> bookmarkCustomList(
+    String id,
+  ) async {
+    try {
+      final response = await http.patch(
+        Uri.parse(APIRoutes().customListRoutes.bookmarkCustomList),
+        body: json.encode({
+          "id": id
+        }),
+        headers: UserToken().getBearerToken()
+      );
+
+      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      
+      var baseItemResponse = decodedResponse.getBaseItemResponse<CustomList>();
+      var data = baseItemResponse.data;
+
+      if (response.getBaseMessageResponse().error == null && data != null) {
+        item?.isBookmarked = data.isBookmarked;
+        item?.bookmarks.clear;
+        item?.bookmarks.addAll(data.bookmarks);
+        item?.bookmarkCount = data.bookmarkCount;
+        notifyListeners();   
+      }
+
+      return response.getBaseMessageResponse();
+    } catch (error) {
+      return BaseMessageResponse(error.toString(), error.toString());
+    }
+  }
 }

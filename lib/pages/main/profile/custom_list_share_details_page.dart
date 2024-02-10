@@ -12,7 +12,9 @@ import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_share_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
+import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
 
@@ -204,38 +206,74 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                 CupertinoButton(
                   onPressed: () async {
                     if (_authProvider.isAuthenticated) {
-                      //TODO Like
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (_) {
+                          return const LoadingDialog();
+                        }
+                      );
+        
+                      provider.likeCustomList(widget.id).then((value) {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+        
+                          if (value.error != null) {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (_) {
+                                return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
+                              }
+                            );
+                          }
+                        }
+                      });
+                    } else {
+                      showCupertinoDialog(
+                        context: context, 
+                        builder: (_) => const ErrorDialog("You need to login to do this action.")
+                      );
                     }
-                    // showCupertinoDialog(
-                    //   context: context,
-                    //   builder: (_) {
-                    //     return const LoadingDialog();
-                    //   }
-                    // );
-      
-                    // provider.voteReview(widget.item.id).then((value) {
-                    //   if (context.mounted) {
-                    //     Navigator.pop(context);
-      
-                    //     if (value.error != null) {
-                    //       showCupertinoDialog(
-                    //         context: context,
-                    //         builder: (_) {
-                    //           return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
-                    //         }
-                    //       );
-                    //     } else {
-                    //       setState(() {
-                    //         widget.item.isLiked = !widget.item.isLiked;
-                    //         widget.item.popularity = widget.item.popularity + (widget.item.isLiked ? 1 : -1); 
-                    //       });
-                    //     }
-                    //   }
-                    // });
                   },
                   minSize: 0,
                   padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                  child: Icon(item.isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart, size: 20),
+                  child: Icon(item.isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart, size: 22),
+                ),
+                Text(item.popularity.toString()),
+                const SizedBox(width: 12),
+                CupertinoButton(
+                  onPressed: () async {
+                    if (_authProvider.isAuthenticated) {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (_) {
+                          return const LoadingDialog();
+                        }
+                      );
+        
+                      provider.bookmarkCustomList(widget.id).then((value) {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+        
+                          if (value.error != null) {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (_) {
+                                return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
+                              }
+                            );
+                          }
+                        }
+                      });
+                    } else {
+                      showCupertinoDialog(
+                        context: context, 
+                        builder: (_) => const ErrorDialog("You need to login to do this action.")
+                      );
+                    }
+                  },
+                  minSize: 0,
+                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                  child: Icon(item.isBookmarked ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark, size: 22),
                 ),
                 Text(item.popularity.toString()),
               ],

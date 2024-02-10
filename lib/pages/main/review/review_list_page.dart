@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/pages/main/review/review_create_page.dart';
 import 'package:watchlistfy/providers/main/review/review_list_provider.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
+import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/review/review_list_cell.dart';
 import 'package:watchlistfy/widgets/main/review/review_list_shimmer_cell.dart';
@@ -174,12 +175,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
           }
         );
       case ListState.empty:
-        return const Center(
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("No review yet."),
-          ),
-        );
+        return const EmptyView("assets/lottie/review.json", "No reviews yet.");
       case ListState.error:
         return Center(
           child: Padding(

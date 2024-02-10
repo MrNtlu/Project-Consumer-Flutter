@@ -29,7 +29,6 @@ class ProfileDisplayDetailsProvider with ChangeNotifier {
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserInfo>();
-      print(decodedResponse);
       var data = baseItemResponse.data;
 
       if (data != null) {

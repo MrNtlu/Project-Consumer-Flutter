@@ -28,8 +28,6 @@ class CustomListCreatePage extends StatelessWidget {
 
   const CustomListCreatePage(this._fetchData, {this.customList, super.key});
 
-  //TODO IsPrivate button
-
   void handleCustomListOperation(
     BuildContext context,
     CustomListCreateProvider createProvider,
@@ -40,6 +38,9 @@ class CustomListCreatePage extends StatelessWidget {
   ) async {
     if (title.isEmpty) {
       showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid title. Title can not be empty!"));
+      return;
+    } else if (createProvider.selectedContent.isEmpty) {
+      showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Please add at least 1 entry."));
       return;
     }
     

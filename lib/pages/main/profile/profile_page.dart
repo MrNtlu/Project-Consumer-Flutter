@@ -10,8 +10,10 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
+import 'package:watchlistfy/pages/main/profile/custom_list_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
+import 'package:watchlistfy/pages/main/review/review_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -100,21 +102,86 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: const TextStyle(fontSize: 18),
                 overflow: TextOverflow.ellipsis,
               ),
-              trailing: _provider.item?.username != null ? CupertinoButton(
-                padding: const EdgeInsets.symmetric(horizontal: 3),
-                minSize: 0,
-                child: const Icon(CupertinoIcons.share, size: 22),
-                onPressed: () {
-                  final box = context.findRenderObject() as RenderBox?;
+              trailing: _provider.item?.username != null ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    child: const Icon(CupertinoIcons.share),
+                    onPressed: () {
+                      final box = context.findRenderObject() as RenderBox?;
+                  
+                      if (box != null) {
+                        Share.share(
+                          '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}', 
+                          subject: 'Share Profile', 
+                          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+                        ); 
+                      }
+                    }
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    child: const Icon(CupertinoIcons.ellipsis_vertical),
+                    onPressed: () {
+                      showCupertinoModalPopup(
+                        context: context, 
+                        builder: (_) {
+                          return CupertinoActionSheet(
+                            cancelButton: CupertinoActionSheetAction(
+                              isDestructiveAction: true,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Close'),
+                            ),
+                            actions: [
+                              CupertinoActionSheetAction(
+                                isDefaultAction: true,
+                                onPressed: () {
+                                  Navigator.pop(context);
 
-                  if (box != null) {
-                    Share.share(
-                      '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}', 
-                      subject: 'Share Profile', 
-                      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                    ); 
-                  }
-                }
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    CupertinoPageRoute(builder: (_) {
+                                      return const ReviewInteractionListPage();
+                                    })
+                                  );
+                                },
+                                child: const Text('Liked Reviews'),
+                              ),
+                              CupertinoActionSheetAction(
+                                isDefaultAction: true,
+                                onPressed: () {
+                                  Navigator.pop(context);
+
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    CupertinoPageRoute(builder: (_) {
+                                      return const CustomListInteractionListPage(isBookmark: false);
+                                    })
+                                  );
+                                },
+                                child: const Text('Liked Custom Lists'),
+                              ),
+                              CupertinoActionSheetAction(
+                                isDefaultAction: true,
+                                onPressed: () {
+                                  Navigator.pop(context);
+
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    CupertinoPageRoute(builder: (_) {
+                                      return const CustomListInteractionListPage();
+                                    })
+                                  );
+                                },
+                                child: const Text('Bookmarked Custom Lists'),
+                              ),
+                            ],
+                          );
+                        }
+                      );
+                    }
+                  ),
+                ],
               ) : null,
             ),
             child: CustomScrollView(
@@ -337,6 +404,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SeeAllTitle("💬 Reviews", () {
+                //TODO All reviews button
                 // Navigator.of(context, rootNavigator: true).push(
                 //   CupertinoPageRoute(builder: (_) {
                 //     return const ConsumeLaterPage();

@@ -12,6 +12,7 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
+import 'package:watchlistfy/widgets/main/profile/profile_custom_list_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_extra_info_text.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_info_text.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_legend_cell.dart';
@@ -262,6 +263,31 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       final data = item.reviews[index];
           
                       return ProfileReviewCell(data, _fetchData);
+                    }
+                  },
+                ),
+              ),
+              SeeAllTitle("🗂️ Lists", (){}, shouldHideSeeAllButton: true),
+              SizedBox(
+                height: 125,
+                child: ListView.builder(
+                  scrollDirection: item.customLists.isEmpty ? Axis.vertical : Axis.horizontal,
+                  physics: item.customLists.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                  itemCount: item.customLists.isEmpty ? 1 : item.customLists.length,
+                  itemExtent: 300,
+                  itemBuilder: (context, index) {
+                    if (item.customLists.isEmpty) {
+                      return const Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 64),
+                          child: Text("Nothing here."),
+                        ),
+                      );
+                    } else {
+                      final data = item.customLists[index];
+          
+                      return ProfileCustomListCell(data);
                     }
                   },
                 ),

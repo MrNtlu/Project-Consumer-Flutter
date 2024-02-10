@@ -2,6 +2,7 @@ class ReviewRoutes {
   late String _baseReviewRoute;
 
   late String review;
+  late String likedReview;
   late String createReview;
   late String deleteReview;
   late String updateReview;
@@ -13,6 +14,7 @@ class ReviewRoutes {
     _baseReviewRoute = '$baseURL/review';
 
     review = _baseReviewRoute;
+    likedReview = '$_baseReviewRoute/liked';
     createReview = _baseReviewRoute;
     deleteReview = _baseReviewRoute;
     updateReview = _baseReviewRoute;

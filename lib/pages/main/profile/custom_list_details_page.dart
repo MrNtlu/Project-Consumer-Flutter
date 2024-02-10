@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
@@ -8,7 +9,6 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
-import 'package:watchlistfy/providers/main/profile/custom_list_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
@@ -18,9 +18,9 @@ import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
 
 class CustomListDetailsPage extends StatelessWidget {
   final CustomList item;
-  final CustomListProvider provider;
+  final Future<BaseMessageResponse> Function(String, CustomList) deleteCustomList;
 
-  const CustomListDetailsPage(this.item, this.provider, {super.key});
+  const CustomListDetailsPage(this.item, this.deleteCustomList, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +136,10 @@ class CustomListDetailsPage extends StatelessWidget {
                   const Icon(CupertinoIcons.heart_fill, size: 20),
                   const SizedBox(width: 3),
                   Text(item.popularity.toString()),
+                  const SizedBox(width: 12),
+                  const Icon(CupertinoIcons.bookmark_fill, size: 20),
+                  const SizedBox(width: 3),
+                  Text(item.bookmarkCount.toString()),
                   const Spacer(),
                   CupertinoButton(
                     onPressed: () {
@@ -152,7 +156,7 @@ class CustomListDetailsPage extends StatelessWidget {
                               }
                             );
                   
-                            provider.deleteCustomList(
+                            deleteCustomList(
                               item.id,
                               item
                             ).then((value) {
