@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,5 +82,14 @@ class SharedPref {
 
   String getConsumeLaterUIMode() {
     return _sharedPreference.getString("consume_later_ui_mode") ?? Constants.ConsumeLaterUIModes.first;
+  }
+
+  //Default Content Selection
+  void setSelectedCountry(String country) {
+    sharedPref?.setString("selected_country", country);
+  }
+
+  String getSelectedCountry() {
+    return _sharedPreference.getString("selected_country") ?? WidgetsBinding.instance.platformDispatcher.locale.countryCode ?? 'US';
   }
 }

@@ -38,7 +38,7 @@ class UserListExpanded extends StatelessWidget {
       children: [
         SizedBox(
           height: 125,
-          child: ContentCell(data.imageUrl ?? '', data.title)
+          child: ContentCell(data.imageUrl ?? '', data.title.isEmpty ? data.titleOriginal : data.title,)
         ),
         Expanded(
           child: Padding(
@@ -50,7 +50,7 @@ class UserListExpanded extends StatelessWidget {
                   children: [
                     Flexible(
                       child: AutoSizeText(
-                        data.title,
+                        data.title.isEmpty ? data.titleOriginal : data.title,
                         minFontSize: 14,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -73,7 +73,7 @@ class UserListExpanded extends StatelessWidget {
                             return UserListActionSheet(
                               index, 
                               data.id, 
-                              data.title,
+                              data.title.isEmpty ? data.titleOriginal : data.title,
                               provider.selectedContent,
                               data,
                               userListProvider, 

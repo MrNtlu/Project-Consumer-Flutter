@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -11,6 +12,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/pages/auth/policy_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -42,10 +44,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   /* TODO
-  * - [ ] OnBoarding Page
-  *  - Make use enter new entries etc.
-  *  - For each content type, show popular ones.
-  *  - Allow user to skip or add 3 movies.(Create endpoint for that)
   * - [ ] Default content type selection
   * - [ ] Add new content cell design and allow user to select
   */
@@ -54,6 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
   BasicUserInfo? _userInfo;
 
   AuthenticationProvider? authProvider;
+  GlobalProvider? globalProvider;
 
   void _deleteUserAccount() {
     setState(() {
@@ -200,6 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void didChangeDependencies() {
     if (_state == DetailState.init) {
       final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+      globalProvider = Provider.of<GlobalProvider>(context);
       themeProvider.initTheme(SharedPref().isDarkTheme());
 
       authProvider = Provider.of<AuthenticationProvider>(context);
@@ -256,6 +256,43 @@ class _SettingsPageState extends State<SettingsPage> {
                     })),
                     const CustomSettingsTile(child: UserListSwitch()),
                     const CustomSettingsTile(child: ConsumeLaterSwitch()),
+                    SettingsTile.navigation(
+                      leading: const Icon(CupertinoIcons.globe),
+                      title: Text('Region: ${globalProvider?.selectedCountryCode ?? 'US'}'),
+                      onPressed: (ctx) {
+                        showCountryPicker(
+                          context: context,
+                          useSafeArea: true,
+                          showPhoneCode: false,
+                          countryListTheme: CountryListThemeData(
+                            flagSize: 35,
+                            backgroundColor: CupertinoTheme.of(context).onBgColor,
+                            searchTextStyle: TextStyle(fontSize: 16, color: CupertinoTheme.of(context).bgTextColor),
+                            textStyle: TextStyle(fontSize: 16, color: CupertinoTheme.of(context).bgTextColor),
+                            bottomSheetHeight: 500,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(24),
+                              topRight: Radius.circular(24),
+                            ),
+                            inputDecoration: InputDecoration(
+                              labelText: 'Search',
+                              hintText: 'Start typing to search',
+                              hintStyle: const TextStyle(color: CupertinoColors.systemGrey2),
+                              prefixIcon: const Icon(CupertinoIcons.search),
+                              prefixIconColor: CupertinoTheme.of(context).bgTextColor,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: CupertinoTheme.of(context).bgTextColor.withOpacity(0.5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          onSelect: (Country country) {
+                            globalProvider?.setSelectedCountry(country.countryCode);
+                          },
+                        );
+                      },
+                    ),
                   ]
                 ),
                 SettingsSection(

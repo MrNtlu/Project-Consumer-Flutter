@@ -18,6 +18,7 @@ import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
 import 'package:watchlistfy/models/main/common/streaming_platform.dart';
+import 'package:watchlistfy/models/main/common/trailer.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
 import 'package:watchlistfy/models/main/game/game_details.dart';
 import 'package:watchlistfy/models/main/game/game_details_relation.dart';
@@ -542,6 +543,13 @@ class TypeConverter<T> {
           e["origin_country"]
         )).toList())
         : null,
+        response["trailers"] != null
+        ? ((response["trailers"] as List).map((e) => Trailer(
+          e["name"],
+          e["key"],
+          e["type"]
+        )).toList())
+        : null,
         response["watch_list"] != null
         ? TypeConverter<MovieWatchList>().convertToObject(response["watch_list"])
         : null, 
@@ -645,6 +653,13 @@ class TypeConverter<T> {
           e["image_url"]
         )).toList())
         : [],
+        response["trailers"] != null
+        ? ((response["trailers"] as List).map((e) => Trailer(
+          e["name"],
+          e["key"],
+          e["type"]
+        )).toList())
+        : null,
         response["tv_list"] != null
         ? TypeConverter<TVWatchList>().convertToObject(response["tv_list"])
         : null, 

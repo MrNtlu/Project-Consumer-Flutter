@@ -33,7 +33,7 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
           const SizedBox(width: 6),
           Icon(
             CupertinoIcons.arrowtriangle_down_circle_fill,
-            size: 13,
+            size: 14,
             color: CupertinoTheme.of(context).primaryColor,
           )
         ],

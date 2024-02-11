@@ -34,7 +34,7 @@ class _ContentSelectionState extends State<ContentSelection> {
           Text(
             contentProvider.selectedContent.value,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: CupertinoTheme.of(context).primaryColor,
             ),
@@ -42,7 +42,7 @@ class _ContentSelectionState extends State<ContentSelection> {
           const SizedBox(width: 6),
           Icon(
             CupertinoIcons.arrowtriangle_down_circle_fill,
-            size: 13,
+            size: 14,
             color: CupertinoTheme.of(context).primaryColor,
           )
         ],

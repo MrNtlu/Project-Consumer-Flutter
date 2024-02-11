@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
@@ -17,11 +19,13 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
+import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
@@ -295,6 +299,27 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     }
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const DetailsTitle("Platforms"),
+                    CupertinoButton(
+                      child: const Icon(CupertinoIcons.info_circle), 
+                      onPressed: () {
+                        final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
+
+                        showCupertinoDialog(
+                          context: context, 
+                          builder: (_) => MessageDialog(
+                            title: "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
+                            "You can change your region from Settings."
+                          )
+                        );
+                      }
+                    )
+                  ],
+                ),
+                DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
                 DetailsReviewSummary(
                   item.reviewSummary, item.id, item.tmdbID, 
                   null, ContentType.movie.request, _fetchData,

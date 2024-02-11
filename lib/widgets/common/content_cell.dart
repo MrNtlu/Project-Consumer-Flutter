@@ -73,6 +73,7 @@ class ContentCell extends StatelessWidget {
           )
         ),
       ),
+      errorListener: (_) {},
       errorWidget: (context, url, error) => Container(
         color: CupertinoTheme.of(context).bgTextColor,
         child: AspectRatio(

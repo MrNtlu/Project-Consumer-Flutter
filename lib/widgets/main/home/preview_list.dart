@@ -29,7 +29,9 @@ class _PreviewListState extends State<PreviewList> {
   late final ScrollController _scrollController;
 
   void onContentChange() {
-    _scrollController.jumpTo(0);
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
   }
 
   @override

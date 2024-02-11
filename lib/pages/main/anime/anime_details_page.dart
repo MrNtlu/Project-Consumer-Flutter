@@ -1,5 +1,6 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -10,6 +11,7 @@ import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -29,6 +31,7 @@ import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 import "package:collection/collection.dart";
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
   final String id;
@@ -200,6 +203,20 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
+        YoutubePlayerController? controller;
+        if (item.trailer != null) {
+          final videoId = YoutubePlayer.convertUrlToId(item.trailer!);
+
+          controller = YoutubePlayerController(
+            initialVideoId: videoId ?? item.trailer!.split("v=")[1],
+            flags: const YoutubePlayerFlags(
+              autoPlay: false,
+              mute: false,
+              showLiveFullscreenButton: false,
+              controlsVisibleAtStart: true
+            ),
+          );
+        }
       
         final animeRelations = groupBy(item.relations, (element) => element.relation);
         return SliverToBoxAdapter(
@@ -266,7 +283,9 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 DetailsGenreList(item.genres != null ? item.genres!.map((e) => e.name).toList() : [], (genre) {
                   return AnimeDiscoverListPage(genre: genre);
                 }),
+                if (item.demographics != null && item.demographics!.isNotEmpty)
                 const DetailsTitle("Demographics"),
+                if (item.demographics != null && item.demographics!.isNotEmpty)
                 DetailsGenreList(item.demographics != null ? item.demographics!.map((e) => e.name).toList() : [], (demographic) {
                   return AnimeDiscoverListPage(demographic: demographic);
                 }),
@@ -286,7 +305,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   style: const TextStyle(fontSize: 16),
                   linkStyle: const TextStyle(fontSize: 14),
                 ),
-                const DetailsTitle("Actors"),
+                const DetailsTitle("Characters"),
                 SizedBox(
                   height: 110,
                   child: DetailsCommonList(
@@ -319,6 +338,28 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                       return AnimeDetailsPage(item.recommendations[index].malId.toString());
                     }
                   ),
+                ),
+                if (item.trailer != null)
+                const DetailsTitle("Trailer"),
+                if (item.trailer != null)
+                YoutubePlayer(
+                  controller: controller!,
+                  showVideoProgressIndicator: true,
+                  aspectRatio: 16/9,
+                  bottomActions: [
+                    const SizedBox(width: 14.0),
+                    CurrentPosition(),
+                    const SizedBox(width: 8.0),
+                    ProgressBar(
+                      isExpanded: true,
+                      colors: ProgressBarColors(
+                        playedColor: Colors.red,
+                        handleColor: AppColors().primaryColor,
+                      ),
+                    ),
+                    RemainingDuration(),
+                    const PlaybackSpeedButton(),
+                  ],
                 ),
                 DetailsReviewSummary(item.reviewSummary, item.id, null, item.malID, ContentType.anime.request, _fetchData),
                 if (animeRelations.isNotEmpty)

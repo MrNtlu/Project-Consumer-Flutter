@@ -4,6 +4,7 @@ import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
+import 'package:watchlistfy/models/main/common/trailer.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_network.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_season.dart';
 import 'package:watchlistfy/models/main/tv/tv_watch_list.dart';
@@ -34,6 +35,7 @@ class TVDetails extends DetailsModel<TVWatchList> {
   final int totalSeasons;
   final List<TVDetailsNetwork>? networks;
   final List<TVDetailsSeason> seasons;
+  final List<Trailer>? trailers;
 
   @override
   TVWatchList? userList;
@@ -47,9 +49,8 @@ class TVDetails extends DetailsModel<TVWatchList> {
     this.tmdbID, this.tmdbPopularity, this.tmdbVote, this.tmdbVoteCount,
     this.recommendations, this.actors, this.reviewSummary, this.streaming,
     this.productionCompanies, this.totalEpisodes, this.totalSeasons,
-    this.networks, this.seasons, this.userList, this.consumeLater,
+    this.networks, this.seasons, this.trailers, this.userList, this.consumeLater,
   );
 
   // val translations: List<Translation>?,
-  // val trailers: List<Trailer>,
 }

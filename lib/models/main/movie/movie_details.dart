@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/main/common/production_company.dart';
 import 'package:watchlistfy/models/main/common/recommendation.dart';
 import 'package:watchlistfy/models/main/common/review_summary.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
+import 'package:watchlistfy/models/main/common/trailer.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
 
 class MovieDetails extends DetailsModel<MovieWatchList> {
@@ -29,6 +30,7 @@ class MovieDetails extends DetailsModel<MovieWatchList> {
   final ReviewSummary reviewSummary;
   final List<Streaming>? streaming;
   final List<ProductionAndCompany>? productionCompanies;
+  final List<Trailer>? trailers;
 
   @override
   MovieWatchList? userList;
@@ -41,10 +43,9 @@ class MovieDetails extends DetailsModel<MovieWatchList> {
     this.imdbID, this.releaseDate, this.title, this.titleOriginal,
     this.tmdbID, this.tmdbPopularity, this.tmdbVote, this.tmdbVoteCount,
     this.recommendations, this.actors, this.reviewSummary, this.streaming,
-    this.productionCompanies, this.userList, this.consumeLater,
+    this.productionCompanies, this.trailers, this.userList, this.consumeLater, 
   );
 
     //TODO List implementation https://github.com/MrNtlu/Asset-Manager-Flutter/blob/0699c81d620d1d96d04073c6cfbc3afe6202b8bb/lib/common/models/response.dart#L374
     // val translations: List<Translation>?,
-    // val trailers: List<Trailer>,
 }

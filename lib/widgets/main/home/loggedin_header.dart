@@ -81,8 +81,8 @@ class LoggedinHeader extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  height: 30,
-                  width: 30,
+                  height: 32,
+                  width: 32,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: isUrlValid
@@ -111,7 +111,7 @@ class LoggedinHeader extends StatelessWidget {
                 Text(
                   authenticationProvider.basicUserInfo?.username ?? '',
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold
                   ),
                 ),
