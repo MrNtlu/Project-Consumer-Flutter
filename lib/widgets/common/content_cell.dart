@@ -69,12 +69,12 @@ class ContentCell extends StatelessWidget {
           child: Shimmer.fromColors(
             baseColor: CupertinoColors.systemGrey, 
             highlightColor: CupertinoColors.systemGrey3,
-            child: Container(color: CupertinoColors.systemGrey,)
+            child: const ColoredBox(color: CupertinoColors.systemGrey,)
           )
         ),
       ),
       errorListener: (_) {},
-      errorWidget: (context, url, error) => Container(
+      errorWidget: (context, url, error) => ColoredBox(
         color: CupertinoTheme.of(context).bgTextColor,
         child: AspectRatio(
           aspectRatio: selectedContent != ContentType.game ? 2/3 : 16/9,

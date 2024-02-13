@@ -310,6 +310,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   height: 110,
                   child: DetailsCommonList(
                     true, item.characters.length,
+                    null,
                     (index) {
                       return item.characters[index].image;
                     },
@@ -319,6 +320,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     (index) {
                       return item.characters[index].role;
                     },
+                    false,
                   )
                 ),
                 if(item.recommendations.isNotEmpty)

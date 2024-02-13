@@ -14,6 +14,7 @@ class APIRoutes {
   late final OAuthRoutes oauthRoutes;
   late final UserRoutes userRoutes;
   late final PreviewRoutes previewRoutes;
+  late final SocialRoutes socialRoutes;
   late final MovieRoutes movieRoutes;
   late final TVSeriesRoutes tvRoutes;
   late final AnimeRoutes animeRoutes;
@@ -29,6 +30,7 @@ class APIRoutes {
     oauthRoutes = OAuthRoutes(baseURL: Constants.BASE_API_URL);
     userRoutes = UserRoutes(baseURL: Constants.BASE_API_URL);
     previewRoutes = PreviewRoutes(baseURL: Constants.BASE_API_URL);
+    socialRoutes = SocialRoutes(baseURL: Constants.BASE_API_URL);
     movieRoutes = MovieRoutes(baseURL: Constants.BASE_API_URL);
     tvRoutes = TVSeriesRoutes(baseURL: Constants.BASE_API_URL);
     animeRoutes = AnimeRoutes(baseURL: Constants.BASE_API_URL);
@@ -118,5 +120,17 @@ class PreviewRoutes {
     _basePreviewRoute = '$baseURL/preview';
 
     preview = _basePreviewRoute;
+  }
+}
+
+class SocialRoutes {
+  late String _baseSocialRoutes;
+
+  late String social;
+
+  SocialRoutes({baseURL}) {
+    _baseSocialRoutes = '$baseURL/social';
+
+    social = _baseSocialRoutes;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/review/review_create_page.dart';
@@ -41,31 +42,47 @@ class ReviewListCell extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Uri.tryParse(item.author.image) != null
-                        ? CachedNetworkImage(
-                          imageUrl: item.author.image,
+                    Stack(
+                      children: [
+                        SizedBox(
                           height: 40,
                           width: 40,
-                          key: ValueKey<String>(item.author.image),
-                          fit: BoxFit.cover,
-                          progressIndicatorBuilder: (_, __, ___) => const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
-                          errorWidget: (context, url, error) => const Icon(
-                            Icons.person,
-                            size: 40,
-                            color: CupertinoColors.activeBlue,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Uri.tryParse(item.author.image) != null
+                            ? CachedNetworkImage(
+                              imageUrl: item.author.image,
+                              height: 40,
+                              width: 40,
+                              key: ValueKey<String>(item.author.image),
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder: (_, __, ___) => const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
+                              errorListener: (_) {},
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.person,
+                                size: 40,
+                                color: CupertinoColors.activeBlue,
+                              ),
+                            )
+                            : const Icon(
+                              Icons.person,
+                              size: 40,
+                              color: CupertinoColors.activeBlue,
+                            ),
                           ),
-                        )
-                        : const Icon(
-                          Icons.person,
-                          size: 40,
-                          color: CupertinoColors.activeBlue,
                         ),
-                      ),
+                        if (item.author.isPremium)
+                        Positioned(
+                          bottom: -6,
+                          right: -6,
+                          child: Lottie.asset(
+                            "assets/lottie/premium.json",
+                            height: 30,
+                            width: 30,
+                            frameRate: FrameRate(60)
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(width: 8),
                     Column(

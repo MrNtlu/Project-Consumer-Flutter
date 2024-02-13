@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -115,7 +116,22 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ProfileUserImage(image),
+              Stack(
+                children: [
+                  ProfileUserImage(image),
+                  if (item.isPremium)
+                  Positioned(
+                    bottom: -6,
+                    right: -6,
+                    child: Lottie.asset(
+                      "assets/lottie/premium.json",
+                      height: 45,
+                      width: 45,
+                      frameRate: FrameRate(60)
+                    ),
+                  ),
+                ],
+              ),
               ProfileLevelBar(item.level),
               //TODO Friend request button
               // const SizedBox(height: 16),

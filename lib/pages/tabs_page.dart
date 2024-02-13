@@ -7,6 +7,7 @@ import 'package:watchlistfy/pages/home_page.dart';
 import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/settings_page.dart';
+import 'package:watchlistfy/pages/social_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
@@ -30,6 +31,7 @@ class _TabsPageState extends State<TabsPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
+    const SocialPage(),
     const AIRecommendationPage(),
     const SettingsPage(),
   ];
@@ -120,8 +122,12 @@ class _TabsPageState extends State<TabsPage> {
               icon: Icon(CupertinoIcons.house_fill),
               label: "Home",
             ),
+            const BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.person_2_fill),
+              label: "Socials",
+            ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("assets/images/ai.svg", colorFilter: ColorFilter.mode(_selectedPageIndex == 1 ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey2, BlendMode.srcIn)),
+              icon: SvgPicture.asset("assets/images/ai.svg", colorFilter: ColorFilter.mode(_selectedPageIndex == 2 ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey2, BlendMode.srcIn)),
               label: "Assistant",
             ),
             const BottomNavigationBarItem(

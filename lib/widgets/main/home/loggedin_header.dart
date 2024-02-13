@@ -94,6 +94,7 @@ class LoggedinHeader extends StatelessWidget {
                       fit: BoxFit.cover,
                       progressIndicatorBuilder: (_, __, ___) =>
                         const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
+                      errorListener: (_) {},
                       errorWidget: (context, url, error) => const Icon(
                         Icons.person,
                         size: 30,

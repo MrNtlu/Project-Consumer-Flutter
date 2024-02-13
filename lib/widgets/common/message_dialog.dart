@@ -15,7 +15,7 @@ class MessageDialog extends StatelessWidget {
       ),
       actions: [
         CupertinoDialogAction(
-          child: const Text("OK 👍"),
+          child: const Text("OK"),
           onPressed: () {
             Navigator.pop(context);
           },

@@ -8,6 +8,7 @@ import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_share_provider.dart';
@@ -16,6 +17,7 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/main/common/author_info_row.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
 
 class CustomListShareDetailsPage extends StatefulWidget {
@@ -276,6 +278,17 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                   child: Icon(item.isBookmarked ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark, size: 22),
                 ),
                 Text(item.popularity.toString()),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return ProfileDisplayPage(item.author.username);
+                      })
+                    );
+                  },
+                  child: AuthorInfoRow(item.author),
+                )
               ],
             )
           ],

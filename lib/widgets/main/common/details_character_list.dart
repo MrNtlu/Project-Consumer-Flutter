@@ -2,18 +2,22 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:watchlistfy/pages/main/actor/actor_content_page.dart';
 
 class DetailsCommonList extends StatelessWidget {
   final bool isAvatar;
   final int listCount;
   final IconData placeHolderIcon;
+  final String Function(int)? getActorID;
   final String? Function(int) getImage;
   final String Function(int) getName;
   final String Function(int)? getCharacter;
+  final bool isMovie;
 
   const DetailsCommonList(
-    this.isAvatar, this.listCount, this.getImage,
-    this.getName, this.getCharacter, {this.placeHolderIcon = Icons.person, super.key}
+    this.isAvatar, this.listCount, this.getActorID, this.getImage,
+    this.getName, this.getCharacter, this.isMovie, {this.placeHolderIcon = Icons.person, super.key}
   );
 
   @override
@@ -21,7 +25,10 @@ class DetailsCommonList extends StatelessWidget {
     return ListView.builder(
       itemCount: listCount,
       scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {    
+      itemBuilder: (context, index) {
+        final image = getImage(index);
+        final name = getName(index);
+
         return Padding(
           padding: const EdgeInsets.only(right: 8),
           child: ConstrainedBox(
@@ -31,12 +38,45 @@ class DetailsCommonList extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                getImage(index) != null
+                image != null
                 ? (isAvatar
-                  ? CircleAvatar(
-                    radius: 32,
-                    backgroundImage: NetworkImage(
-                      getImage(index)!,
+                  ? GestureDetector(
+                    onTap: () {
+                      if (getActorID != null) {
+                        Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                          return ActorContentPage(
+                            getActorID!(index),
+                            name,
+                            image,
+                            isMovie: isMovie,
+                          );
+                        }));
+                      }
+                    },
+                    child: SizedBox(
+                      height: 64,
+                      width: 64,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: image,
+                          cacheKey: image,
+                          filterQuality: FilterQuality.low,
+                          fit: BoxFit.cover,
+                          errorListener: (_) {},
+                          errorWidget: (context, _, __) {
+                            return const ColoredBox(color: CupertinoColors.systemGrey);
+                          },
+                          progressIndicatorBuilder: (_, __, ___) => ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Shimmer.fromColors(
+                              baseColor: CupertinoColors.systemGrey, 
+                              highlightColor: CupertinoColors.systemGrey3,
+                              child: const ColoredBox(color: CupertinoColors.systemGrey,)
+                            )
+                          ),
+                        ),
+                      ),
                     ),
                   )
                   : Container(
@@ -46,9 +86,10 @@ class DetailsCommonList extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.all(3),
                     child: CachedNetworkImage(
-                      imageUrl: getImage(index)!,
-                      key: ValueKey<String>(getImage(index)!),
+                      imageUrl: image,
+                      key: ValueKey<String>(image),
                       height: 64,
+                      errorListener: (_) {},
                     ),
                   )
                 )
@@ -65,7 +106,7 @@ class DetailsCommonList extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 AutoSizeText(
-                  getName(index),
+                  name,
                   maxLines: isAvatar ? 1 : 2,
                   maxFontSize: 16,
                   minFontSize: 14,

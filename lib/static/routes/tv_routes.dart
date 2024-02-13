@@ -4,6 +4,8 @@ class TVSeriesRoutes {
   late String tvBySortFilter;
   late String upcomingTVSeries;
   late String airingTVSeries;
+  late String tvSeriesByActor;
+  late String popularActors;
   late String searchTVSeries;
   late String tvSeriesDetails;
 
@@ -13,6 +15,8 @@ class TVSeriesRoutes {
     tvBySortFilter = _baseTVRoute;
     upcomingTVSeries = '$_baseTVRoute/upcoming';
     airingTVSeries = '$_baseTVRoute/airing';
+    tvSeriesByActor = '$_baseTVRoute/actor';
+    popularActors = '$_baseTVRoute/popular-actors';
     searchTVSeries = '$_baseTVRoute/search';
     tvSeriesDetails = '$_baseTVRoute/details';
   }

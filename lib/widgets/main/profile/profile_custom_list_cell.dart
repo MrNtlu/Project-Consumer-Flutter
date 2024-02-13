@@ -26,8 +26,8 @@ class ProfileCustomListCell extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
         border: Border.all(
-          color: CupertinoTheme.of(context).brightness == Brightness.dark ? CupertinoColors.systemGrey : CupertinoColors.systemGrey3,
-          width: 1.5,
+          color: CupertinoTheme.of(context).brightness == Brightness.dark ? const Color(0xFF212121) : CupertinoColors.systemGrey3,
+          width: 1.75,
         ),
         borderRadius: BorderRadius.circular(8),
       ),

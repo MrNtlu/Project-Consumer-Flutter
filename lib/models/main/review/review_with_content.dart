@@ -4,10 +4,10 @@ class ReviewWithContent {
   final Author author;
   final int star;
   final String review;
-  final int popularity;
+  int popularity;
   final List<String> likes;
   final bool isAuthor;
-  final bool isLiked;
+  bool isLiked;
   final bool isSpoiler;
   final String id;
   final String userID;

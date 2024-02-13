@@ -282,6 +282,9 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   child: DetailsCommonList(
                     true, item.actors.length,
                     (index) {
+                      return item.actors[index].tmdbID;
+                    },
+                    (index) {
                       return item.actors[index].image;
                     },
                     (index) {
@@ -290,6 +293,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     (index) {
                       return item.actors[index].character;
                     },
+                    false,
                   )
                 ),
                 if(item.recommendations.isNotEmpty)
@@ -343,6 +347,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   height: 130,
                   child: DetailsCommonList(
                     false, item.productionCompanies!.length,
+                    null,
                     (index) {
                       return item.productionCompanies![index].logo;
                     },
@@ -352,6 +357,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     (index) {
                       return item.productionCompanies![index].originCountry;
                     },
+                    false,
                     placeHolderIcon: Icons.business_rounded,
                   )
                 ),
@@ -362,6 +368,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   height: 130,
                   child: DetailsCommonList(
                     false, item.networks!.length,
+                    null,
                     (index) {
                       return item.networks![index].logo;
                     },
@@ -371,10 +378,10 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     (index) {
                       return item.networks![index].originCountry ?? "";
                     },
+                    false,
                     placeHolderIcon: Icons.business_rounded,
                   )
                 ),
-                //TODO Streaming by country
                 const SizedBox(height: 32)
               ],
             ),

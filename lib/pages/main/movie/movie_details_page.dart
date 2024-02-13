@@ -271,6 +271,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   child: DetailsCommonList(
                     true, item.actors.length,
                     (index) {
+                      return item.actors[index].tmdbID;
+                    },
+                    (index) {
                       return item.actors[index].image;
                     },
                     (index) {
@@ -279,6 +282,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     (index) {
                       return item.actors[index].character;
                     },
+                    true,
                   )
                 ),
                 if(item.recommendations.isNotEmpty)
@@ -335,6 +339,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   height: 130,
                   child: DetailsCommonList(
                     false, item.productionCompanies!.length,
+                    null,
                     (index) {
                       return item.productionCompanies![index].logo;
                     },
@@ -345,9 +350,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       return item.productionCompanies![index].originCountry;
                     },
                     placeHolderIcon: Icons.business_rounded,
+                    true,
                   )
                 ),
-                //TODO Streaming by country
                 const SizedBox(height: 32)
               ],
             ),

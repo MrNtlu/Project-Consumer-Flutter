@@ -1,3 +1,4 @@
+import 'package:watchlistfy/models/main/common/actor_details.dart';
 import 'package:watchlistfy/utils/type_converter.dart';
 
 class BaseMessageResponse {
@@ -143,12 +144,14 @@ class BasePreviewResponse<T> {
   late List<T> popular = [];
   late List<T> top = [];
   late List<T>? extra = [];
+  late List<ActorDetails>? actors = [];
 
   BasePreviewResponse({
     List<dynamic>? upcomingResponse,
     List<dynamic>? popularResponse,
     List<dynamic>? topResponse,
     List<dynamic>? extraResponse,
+    List<dynamic>? actorsResponse,
   }) {
     if (upcomingResponse != null) {
       var typeConverter = TypeConverter<T>();
@@ -190,6 +193,16 @@ class BasePreviewResponse<T> {
       });
     } else {
       extra = null;
+    }
+
+    if (actorsResponse != null) {
+      actorsResponse.map((e){
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
+        actors!.add(TypeConverter<ActorDetails>().convertToObject(element));
+      });
+    } else {
+      actors = null;
     }
   }
 }

@@ -11,6 +11,7 @@ import 'package:watchlistfy/models/main/anime/anime_details_relation.dart';
 import 'package:watchlistfy/models/main/anime/anime_watch_list.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/models/main/common/actor.dart';
+import 'package:watchlistfy/models/main/common/actor_details.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
 import 'package:watchlistfy/models/main/common/consume_later_response.dart';
 import 'package:watchlistfy/models/main/common/production_company.dart';
@@ -30,6 +31,8 @@ import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
 import 'package:watchlistfy/models/main/review/author.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/models/main/review/review_with_content.dart';
+import 'package:watchlistfy/models/main/social/leaderboard.dart';
+import 'package:watchlistfy/models/main/social/social.dart';
 import 'package:watchlistfy/models/main/tv/tv_details.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_network.dart';
 import 'package:watchlistfy/models/main/tv/tv_details_season.dart';
@@ -97,6 +100,32 @@ class TypeConverter<T> {
           TypeConverter<CustomList>().convertToObject(e)
         ).toList())
         : []
+      ) as T;
+    } else if (T == Leaderboard) {
+      return Leaderboard(
+        response["image"],
+        response["username"],
+        response["is_premium"] ?? false,
+        response["level"],
+        response["user_id"],
+      ) as T;
+    } else if (T == Social) {
+      return Social(
+        response["custom_lists"] != null
+        ? ((
+            response["custom_lists"] as List
+          ).map((e) => TypeConverter<CustomList>().convertToObject(e)).toList())
+        : [],
+        response["reviews"] != null
+        ? ((
+            response["reviews"] as List
+          ).map((e) => TypeConverter<ReviewWithContent>().convertToObject(e)).toList())
+        : [], 
+        response["leaderboard"] != null
+        ? ((
+            response["leaderboard"] as List
+          ).map((e) => TypeConverter<Leaderboard>().convertToObject(e)).toList())
+        : [],
       ) as T;
     } else if (T == UserListContent) {
       return UserListContent(
@@ -318,6 +347,12 @@ class TypeConverter<T> {
         titleEn: response["title_en"], 
         titleOriginal: response["title_original"], 
         imageURL: response["image_url"]
+      ) as T;
+    } else if (T == ActorDetails) {
+      return ActorDetails(
+        response["_id"], 
+        response["image_url"],
+        response["name"], 
       ) as T;
     } else if (T == ConsumeLater) {
       return ConsumeLater(
@@ -821,6 +856,7 @@ class TypeConverter<T> {
         popularResponse: response["popular"],
         topResponse: response["top"],
         extraResponse: response["extra"],
+        actorsResponse: response["actors"],
       ) as T;
     } else {
       return response as T;

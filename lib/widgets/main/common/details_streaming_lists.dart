@@ -100,6 +100,7 @@ class DetailsStreamingLists extends StatelessWidget {
               key: ValueKey<String>(item.logo),
               height: 64,
               width: 64,
+              errorListener: (_) {},
             ),
           ),
           const SizedBox(height: 6),

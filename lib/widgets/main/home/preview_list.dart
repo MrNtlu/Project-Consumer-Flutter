@@ -177,7 +177,7 @@ class _PreviewListState extends State<PreviewList> {
                   child: Shimmer.fromColors(
                     baseColor: CupertinoColors.systemGrey,
                     highlightColor: CupertinoColors.systemGrey3,
-                    child: Container(
+                    child: const ColoredBox(
                       color: CupertinoColors.systemGrey,
                     )
                   )

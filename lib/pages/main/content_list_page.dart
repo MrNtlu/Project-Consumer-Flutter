@@ -189,7 +189,7 @@ class _ContentListPageState extends State<ContentListPage> {
                   child: Shimmer.fromColors(
                     baseColor: CupertinoColors.systemGrey, 
                     highlightColor: CupertinoColors.systemGrey3,
-                    child: Container(color: CupertinoColors.systemGrey,)
+                    child: const ColoredBox(color: CupertinoColors.systemGrey,)
                   )
                 ),
               );

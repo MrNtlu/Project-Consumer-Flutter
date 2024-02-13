@@ -14,6 +14,7 @@ import 'package:watchlistfy/widgets/main/home/anonymous_header.dart';
 import 'package:watchlistfy/widgets/main/home/genre_list.dart';
 import 'package:watchlistfy/widgets/main/home/info_card.dart';
 import 'package:watchlistfy/widgets/main/home/loggedin_header.dart';
+import 'package:watchlistfy/widgets/main/home/preview_actor_list.dart';
 import 'package:watchlistfy/widgets/main/home/preview_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isInit = false;
+
   //TODO Move vote now to bottom of the screen and promote premium membership.
 
   late final TextEditingController searchController;
@@ -95,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                 keyboardType: TextInputType.name,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             SeeAllTitle("🔥 Popular", () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[0], "🔥 Popular");
@@ -108,7 +110,7 @@ class _HomePageState extends State<HomePage> {
             const InfoCard(),
             const SizedBox(height: 20),
             const GenreList(),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             SeeAllTitle("📆 Upcoming", () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ContentListPage(contentProvider.selectedContent,Constants.ContentTags[1], "📆 Upcoming");
@@ -117,16 +119,22 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
                 height: 200,
                 child: PreviewList(Constants.ContentTags[1])),
+            if (contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv)
             const SizedBox(height: 8),
+            if (contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv)
+            SeeAllTitle("🧛‍♂️ Popular Actors", (){}, shouldHideSeeAllButton: true),
+            if (contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv)
+            const PreviewActorList(),
+            const SizedBox(height: 12),
             SeeAllTitle("🍿 Top Rated", () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                return ContentListPage(contentProvider.selectedContent,Constants.ContentTags[2], "🍿 Top Rated");
+                return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[2], "🍿 Top Rated");
               }));
             }),
             SizedBox(
                 height: 200,
                 child: PreviewList(Constants.ContentTags[2])),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             if (contentProvider.selectedContent != ContentType.game)
               SeeAllTitle(
                 contentProvider.selectedContent == ContentType.movie
@@ -142,7 +150,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                   height: 200,
                   child: PreviewList(Constants.ContentTags[3])),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
           ],
         ),
       )
