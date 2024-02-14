@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -30,20 +31,27 @@ class CustomListDetailsPage extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            
             CupertinoButton(
               padding: const EdgeInsets.symmetric(horizontal: 3),
               minSize: 0,
               child: const Icon(CupertinoIcons.share),
-              onPressed: () {
-                final box = context.findRenderObject() as RenderBox?;
+              onPressed: () async {
+                final url = '${Constants.BASE_DOMAIN_URL}/custom-list/${item.id}';
+                try {
+                  final box = context.findRenderObject() as RenderBox?;
 
-                if (box != null) {
-                  Share.share(
-                    '${Constants.BASE_DOMAIN_URL}/custom-list/${item.id}', 
-                    subject: 'Share ${item.name}', 
-                    sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                  ); 
+                  if (box != null) {
+                    Share.share(
+                      url,
+                      subject: 'Share ${item.name}',
+                      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+                    ); 
+                  }
+                } catch (_) {
+                  await Clipboard.setData(ClipboardData(text: url));
+                  if (context.mounted) {
+                    showCupertinoDialog(context: context, builder: (_) => const MessageDialog("Copied to clipboard."));
+                  }
                 }
               }
             ),

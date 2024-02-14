@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -17,6 +18,7 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/author_info_row.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
 
@@ -95,15 +97,24 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
               padding: const EdgeInsets.symmetric(horizontal: 3),
               minSize: 0,
               child: const Icon(CupertinoIcons.share),
-              onPressed: () {
-                final box = context.findRenderObject() as RenderBox?;
+              onPressed: () async {
+                final url = '${Constants.BASE_DOMAIN_URL}/custom-list/${item.id}';
 
-                if (box != null) {
-                  Share.share(
-                    '${Constants.BASE_DOMAIN_URL}/custom-list/${item.id}', 
-                    subject: 'Share ${item.name}', 
-                    sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                  ); 
+                try {
+                  final box = context.findRenderObject() as RenderBox?;
+
+                  if (box != null) {
+                    Share.share(
+                      url, 
+                      subject: 'Share ${item.name}', 
+                      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+                    ); 
+                  }
+                } catch (_) {
+                  await Clipboard.setData(ClipboardData(text: url));
+                  if (context.mounted) {
+                    showCupertinoDialog(context: context, builder: (_) => const MessageDialog("Copied to clipboard."));
+                  }
                 }
               }
             ) : null,

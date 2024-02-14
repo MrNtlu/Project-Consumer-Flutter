@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/widgets/common/message_dialog.dart';
 
 class ProfileLevelBar extends StatelessWidget {
   final int level;
@@ -32,6 +33,21 @@ class ProfileLevelBar extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.w500
             ),
+          ),
+          const SizedBox(width: 8),
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            minSize: 0,
+            onPressed: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (_) => const MessageDialog(
+                  "Level is calculated based on User List, Watch Later, Reviews and Lists.",
+                  title: "Information",
+                )
+              );
+            },
+            child: const Icon(CupertinoIcons.info_circle, size: 17),
           )
         ],
       ),

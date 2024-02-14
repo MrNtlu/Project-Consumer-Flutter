@@ -95,7 +95,7 @@ class ProfileReviewCell extends StatelessWidget {
                   onPressed: () {},
                   minSize: 0,
                   padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                  child: const Icon(CupertinoIcons.heart, size: 20),
+                  child: Icon(data.isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart, size: 20),
                 ),
                 Text(data.popularity.toString()),
               ],

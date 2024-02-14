@@ -9,26 +9,29 @@ class ProfileInfoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          maxLines: 1,
-          style: TextStyle(
-            color: CupertinoTheme.of(context).bgTextColor,
-            fontWeight: FontWeight.w500
+    return SizedBox(
+      width: (MediaQuery.of(context).size.width * 0.85) / 4,
+      child: Column(
+        children: [
+          Text(
+            value,
+            maxLines: 1,
+            style: TextStyle(
+              color: CupertinoTheme.of(context).bgTextColor,
+              fontWeight: FontWeight.w500
+            ),
           ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          maxLines: 1,
-          style: TextStyle(
-            color: AppColors().primaryColor,
-            fontWeight: FontWeight.bold
-          ),
-        )
-      ],
+          const SizedBox(height: 6),
+          Text(
+            label,
+            maxLines: 1,
+            style: TextStyle(
+              color: AppColors().primaryColor,
+              fontWeight: FontWeight.bold
+            ),
+          )
+        ],
+      ),
     );
   }
 }

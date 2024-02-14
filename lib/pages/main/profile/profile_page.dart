@@ -109,15 +109,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: const Icon(CupertinoIcons.share),
-                    onPressed: () {
-                      final box = context.findRenderObject() as RenderBox?;
+                    onPressed: () async {
+                      final url = '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}';
+                      try {
+                        final box = context.findRenderObject() as RenderBox?;
                   
-                      if (box != null) {
-                        Share.share(
-                          '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}', 
-                          subject: 'Share Profile', 
-                          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                        ); 
+                        if (box != null) {
+                          Share.share(
+                            url,
+                            subject: 'Share Profile', 
+                            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+                          ); 
+                        }
+                      } catch (_) {
+                        await Clipboard.setData(ClipboardData(text: url));
+                        if (context.mounted) {
+                          showCupertinoDialog(context: context, builder: (_) => const MessageDialog("Copied to clipboard."));
+                        }
                       }
                     }
                   ),

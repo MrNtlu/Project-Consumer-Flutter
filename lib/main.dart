@@ -19,13 +19,13 @@ import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
-// import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:go_router/go_router.dart';
 
-// FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
 
 void main() async {
@@ -53,18 +53,15 @@ Future<void> _trackingTransparencyRequest() async {
 
   final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
   if (status == TrackingStatus.authorized) {
-    // analytics.setAnalyticsCollectionEnabled(true);
+    analytics.setAnalyticsCollectionEnabled(true);
     crashlytics.setCrashlyticsCollectionEnabled(true && kReleaseMode);
   } else if(status == TrackingStatus.notDetermined) {
     final status = await AppTrackingTransparency.requestTrackingAuthorization();
 
-    // analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
+    analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
     crashlytics.setCrashlyticsCollectionEnabled(status == TrackingStatus.authorized && kReleaseMode);
   }
 }
-
-//TODO
-// Deep linking https://codewithandrea.com/articles/flutter-deep-links/
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
