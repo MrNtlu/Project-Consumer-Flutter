@@ -428,12 +428,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SeeAllTitle("💬 Reviews", () {
-                //TODO All reviews button
                 // Navigator.of(context, rootNavigator: true).push(
                 //   CupertinoPageRoute(builder: (_) {
-                //     return const ConsumeLaterPage();
+                //     return ReviewProfileListPage(_fetchData);
                 //   })
-                // ).then((value) => _fetchData());
+                // );
               }, shouldHideSeeAllButton: true),
               SizedBox(
                 height: 200,

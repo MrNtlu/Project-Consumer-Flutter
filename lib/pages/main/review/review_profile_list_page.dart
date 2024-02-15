@@ -1,37 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/main/review/review.dart';
-import 'package:watchlistfy/pages/main/review/review_create_page.dart';
-import 'package:watchlistfy/providers/main/review/review_list_provider.dart';
+import 'package:watchlistfy/models/main/review/review_with_content.dart';
+import 'package:watchlistfy/providers/main/review/review_user_list_provider.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:watchlistfy/widgets/main/review/review_list_cell.dart';
+import 'package:watchlistfy/widgets/main/profile/profile_review_cell.dart';
 import 'package:watchlistfy/widgets/main/review/review_list_shimmer_cell.dart';
-import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
 
-class ReviewListPage extends StatefulWidget {
-  final String contentID;
-  final String? contentExternalID;
-  final int? contentExternalIntID;
-  final String contentType;
+class ReviewProfileListPage extends StatefulWidget {
   final VoidCallback fetchData;
 
-  const ReviewListPage(
-    this.contentID, this.contentExternalID, 
-    this.contentExternalIntID, this.contentType, this.fetchData,
-    {super.key}
-  );
+  const ReviewProfileListPage(this.fetchData, {super.key});
 
   @override
-  State<ReviewListPage> createState() => _ReviewListPageState();
+  State<ReviewProfileListPage> createState() => _ReviewProfileListPageState();
 }
 
-class _ReviewListPageState extends State<ReviewListPage> {
+class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
   ListState _state = ListState.init;
-  
-  late final ReviewListProvider _provider;
+
+  late final ReviewUserListProvider _provider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -51,10 +41,6 @@ class _ReviewListPageState extends State<ReviewListPage> {
 
     _provider.getReviews(
       page: _page,
-      contentID: widget.contentID,
-      contentExternalID: widget.contentExternalID,
-      contentExternalIntID: widget.contentExternalIntID,
-      contentType: widget.contentType,
     ).then((response) {
       _error = response.error;
 
@@ -86,7 +72,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
   @override
   void initState() {
     super.initState();
-    _provider = ReviewListProvider();
+    _provider = ReviewUserListProvider();
   }
 
   @override
@@ -111,42 +97,24 @@ class _ReviewListPageState extends State<ReviewListPage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => _provider,
-      child: Consumer<ReviewListProvider>(
+      child: Consumer<ReviewUserListProvider>(
         builder: (context, provider, child) {
           final data = provider.items;
 
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: const Text("💬 Reviews"),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CupertinoButton(
-                    onPressed: () {
-                      showCupertinoModalPopup(
-                        context: context, 
-                        builder: (context) {
-                          return ReviewSortSheet(_fetchData, _provider);
-                        }
-                      );
-                    },
-                    padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.sort_down, size: 28)
-                  ),
-                  if (data.where((element) => element.isAuthor).isEmpty)
-                  CupertinoButton(
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                        return ReviewCreatePage(
-                          widget.contentID, widget.contentExternalID, widget.contentExternalIntID, 
-                          widget.contentType, widget.fetchData, updateReviewData: _fetchData,
-                        );
-                      }));
-                    },
-                    padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.add, size: 28)
-                  ),
-                ],
+              middle: const Text("💬 My Reviews"),
+              trailing: CupertinoButton(
+                onPressed: () {
+                  // showCupertinoModalPopup(
+                  //   context: context, 
+                  //   builder: (context) {
+                  //     return ReviewSortSheet(_fetchData, _provider);
+                  //   }
+                  // );
+                },
+                padding: EdgeInsets.zero,
+                child: const Icon(CupertinoIcons.sort_down, size: 28)
               ),
             ),
             child: _body(data),
@@ -156,7 +124,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
     );
   }
 
-  Widget _body(List<Review> data) {
+  Widget _body(List<ReviewWithContent> data) {
     switch (_state) {
       case ListState.done:
         return ListView.separated(
@@ -170,7 +138,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
 
             final item = data[index];
 
-            return ReviewListCell(item, widget.fetchData, _fetchData, _provider);
+            return Text(item.review);
           }
         );
       case ListState.empty:

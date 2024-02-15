@@ -8,6 +8,7 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_display_details_provider.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
@@ -35,6 +36,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
   String? _error;
 
   late final ProfileDisplayDetailsProvider _provider;
+  late final AuthenticationProvider _authProvider;
 
   void _fetchData() {
     setState(() {
@@ -61,6 +63,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
   @override
   void didChangeDependencies() {
     if (_state == DetailState.init) {
+      _authProvider = Provider.of<AuthenticationProvider>(context);
       _fetchData();
     }
     super.didChangeDependencies();
@@ -95,10 +98,17 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            child: CustomScrollView(
+            child: _authProvider.isAuthenticated
+            ? CustomScrollView(
               slivers: [
                 _body(provider)
               ],
+            )
+            : const Center(
+              child: Text(
+                "You need to login to see the profile.",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
             ),
           );
         },
@@ -212,7 +222,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                  physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                   itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
                   itemExtent: 200 * 2 / 3,
                   itemBuilder: (context, index) {

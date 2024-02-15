@@ -23,8 +23,8 @@ import 'package:http/http.dart' as http;
 class LoginPage extends StatelessWidget {
   static const routeName = "/login";
   final loginModel = Login('', '');
-  late final TextEditingController _emailTextController;
-  late final TextEditingController _passwordTextController;
+  final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
 
   LoginPage({super.key});
 
@@ -110,9 +110,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _emailTextController = TextEditingController();
-    _passwordTextController = TextEditingController();
-
     return CupertinoPageScaffold(
         child: CustomScrollView(
           slivers: [

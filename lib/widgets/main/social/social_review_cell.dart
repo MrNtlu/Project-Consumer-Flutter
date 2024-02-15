@@ -97,6 +97,16 @@ class SocialReviewCell extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+            if (data.isSpoiler)
+            const Expanded(
+              child: Center(
+                child: Text(
+                  "This review contains spoiler! Tap to see it.",
+                  style: TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+            if (!data.isSpoiler)
             Expanded(
               child: AutoSizeText(
                 data.review,

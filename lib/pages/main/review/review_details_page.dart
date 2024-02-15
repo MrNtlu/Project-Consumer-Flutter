@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -21,6 +23,20 @@ class ReviewDetailsPage extends StatefulWidget {
 }
 
 class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
+  bool isInit = false;
+
+  late final AuthenticationProvider authProvider;
+
+  @override
+  void didChangeDependencies() {
+    if (!isInit) {
+      authProvider = Provider.of<AuthenticationProvider>(context);
+
+      isInit = true;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -139,32 +155,39 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                 children: [
                   CupertinoButton(
                     onPressed: () async {
-                      showCupertinoDialog(
-                        context: context,
-                        builder: (_) {
-                          return const LoadingDialog();
-                        }
-                      );
-        
-                      widget.likeReview(widget.item.id).then((value) {
-                        if (context.mounted) {
-                          Navigator.pop(context);
-        
-                          if (value.error != null) {
-                            showCupertinoDialog(
-                              context: context,
-                              builder: (_) {
-                                return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
-                              }
-                            );
-                          } else {
-                            setState(() {
-                              widget.item.isLiked = !widget.item.isLiked;
-                              widget.item.popularity = widget.item.popularity + (widget.item.isLiked ? 1 : -1); 
-                            });
+                      if (authProvider.isAuthenticated) {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) {
+                            return const LoadingDialog();
                           }
-                        }
-                      });
+                        );
+          
+                        widget.likeReview(widget.item.id).then((value) {
+                          if (context.mounted) {
+                            Navigator.pop(context);
+          
+                            if (value.error != null) {
+                              showCupertinoDialog(
+                                context: context,
+                                builder: (_) {
+                                  return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
+                                }
+                              );
+                            } else {
+                              setState(() {
+                                widget.item.isLiked = !widget.item.isLiked;
+                                widget.item.popularity = widget.item.popularity + (widget.item.isLiked ? 1 : -1); 
+                              });
+                            }
+                          }
+                        }); 
+                      } else {
+                        showCupertinoDialog(
+                          context: context, 
+                          builder: (_) => const ErrorDialog("You need to login to do this action.")
+                        );
+                      }
                     },
                     minSize: 0,
                     padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
