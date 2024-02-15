@@ -335,7 +335,12 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   ],
                 ),
                 DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "tv"),
-                DetailsReviewSummary(item.reviewSummary, item.id, item.tmdbID, null, ContentType.tv.request, _fetchData),
+                DetailsReviewSummary(
+                  item.title.isNotEmpty ? item.title : item.titleOriginal,
+                  item.reviewSummary, item.id, 
+                  item.tmdbID, null, 
+                  ContentType.tv.request, _fetchData,
+                ),
                 if (item.images.isNotEmpty)
                 const DetailsTitle("Images"),
                 if (item.images.isNotEmpty)

@@ -27,7 +27,11 @@ class ProfileReviewCell extends StatelessWidget {
         onTap: () {
           Navigator.of(context, rootNavigator: true).push(
             CupertinoPageRoute(builder: (_) {
-              return ReviewListPage(data.contentID, data.contentExternalID, data.contentExternalIntID, data.contentType, _fetchData);
+              return ReviewListPage(
+                data.content.titleEn.isNotEmpty ? data.content.titleEn : data.content.titleOriginal, data.contentID,
+                data.contentExternalID, data.contentExternalIntID, 
+                data.contentType, _fetchData
+              );
             })
           );
         },
@@ -75,15 +79,18 @@ class ProfileReviewCell extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: AutoSizeText(
-                data.review,
-                minFontSize: 14,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 5,
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500
+              child: SizedBox(
+                width: double.infinity,
+                child: AutoSizeText(
+                  data.review,
+                  minFontSize: 14,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500
+                  ),
                 ),
               ),
             ),
@@ -91,10 +98,8 @@ class ProfileReviewCell extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                CupertinoButton(
-                  onPressed: () {},
-                  minSize: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   child: Icon(data.isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart, size: 20),
                 ),
                 Text(data.popularity.toString()),

@@ -325,6 +325,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 ),
                 DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
                 DetailsReviewSummary(
+                  item.title.isNotEmpty ? item.title : item.titleOriginal,
                   item.reviewSummary, item.id, item.tmdbID, 
                   null, ContentType.movie.request, _fetchData,
                 ),

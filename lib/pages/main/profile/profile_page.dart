@@ -15,6 +15,7 @@ import 'package:watchlistfy/pages/main/profile/custom_list_interaction_list_page
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_interaction_list_page.dart';
+import 'package:watchlistfy/pages/main/review/review_profile_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -428,12 +429,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SeeAllTitle("💬 Reviews", () {
-                // Navigator.of(context, rootNavigator: true).push(
-                //   CupertinoPageRoute(builder: (_) {
-                //     return ReviewProfileListPage(_fetchData);
-                //   })
-                // );
-              }, shouldHideSeeAllButton: true),
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return ReviewProfileListPage(_fetchData);
+                  })
+                );
+              }),
               SizedBox(
                 height: 200,
                 child: ListView.builder(

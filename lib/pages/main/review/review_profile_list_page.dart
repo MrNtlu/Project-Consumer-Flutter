@@ -8,6 +8,7 @@ import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_review_cell.dart';
 import 'package:watchlistfy/widgets/main/review/review_list_shimmer_cell.dart';
+import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
 
 class ReviewProfileListPage extends StatefulWidget {
   final VoidCallback fetchData;
@@ -106,12 +107,22 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
               middle: const Text("💬 My Reviews"),
               trailing: CupertinoButton(
                 onPressed: () {
-                  // showCupertinoModalPopup(
-                  //   context: context, 
-                  //   builder: (context) {
-                  //     return ReviewSortSheet(_fetchData, _provider);
-                  //   }
-                  // );
+                  showCupertinoModalPopup(
+                    context: context, 
+                    builder: (context) {
+                      return ReviewSortSheet(
+                        _provider.sort,
+                        (newSort) {
+                          final shouldFetchData = _provider.sort != newSort;
+                          _provider.sort = newSort;
+
+                          if (shouldFetchData) {
+                            _fetchData(); 
+                          }
+                        }  
+                      );
+                    }
+                  );
                 },
                 padding: EdgeInsets.zero,
                 child: const Icon(CupertinoIcons.sort_down, size: 28)
@@ -138,7 +149,10 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
 
             final item = data[index];
 
-            return Text(item.review);
+            return SizedBox(
+              height: 200,
+              child: ProfileReviewCell(item, _fetchData)
+            );
           }
         );
       case ListState.empty:

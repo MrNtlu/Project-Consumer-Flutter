@@ -12,6 +12,7 @@ import 'package:watchlistfy/widgets/main/review/review_list_shimmer_cell.dart';
 import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
 
 class ReviewListPage extends StatefulWidget {
+  final String? title;
   final String contentID;
   final String? contentExternalID;
   final int? contentExternalIntID;
@@ -19,7 +20,7 @@ class ReviewListPage extends StatefulWidget {
   final VoidCallback fetchData;
 
   const ReviewListPage(
-    this.contentID, this.contentExternalID, 
+    this.title, this.contentID, this.contentExternalID, 
     this.contentExternalIntID, this.contentType, this.fetchData,
     {super.key}
   );
@@ -117,7 +118,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
 
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: const Text("💬 Reviews"),
+              middle: Text("💬 ${widget.title ?? ''} Reviews"),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -126,14 +127,24 @@ class _ReviewListPageState extends State<ReviewListPage> {
                       showCupertinoModalPopup(
                         context: context, 
                         builder: (context) {
-                          return ReviewSortSheet(_fetchData, _provider);
+                          return ReviewSortSheet(
+                            _provider.sort,
+                            (newSort) {
+                              final shouldFetchData = _provider.sort != newSort;
+                              _provider.sort = newSort;
+
+                              if (shouldFetchData) {
+                                _fetchData(); 
+                              }
+                            }
+                          );
                         }
                       );
                     },
                     padding: EdgeInsets.zero,
                     child: const Icon(CupertinoIcons.sort_down, size: 28)
                   ),
-                  if (data.where((element) => element.isAuthor).isEmpty)
+                  if (data.where((element) => element.isAuthor).isEmpty && _state != ListState.loading)
                   CupertinoButton(
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {

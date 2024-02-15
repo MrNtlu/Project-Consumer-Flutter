@@ -8,9 +8,8 @@ import 'package:watchlistfy/pages/main/review/review_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 
-
-
 class DetailsReviewSummary extends StatelessWidget {
+  final String? title;
   final ReviewSummary reviewSummary;
   final String contentID;
   final String? contentExternalID;
@@ -19,7 +18,7 @@ class DetailsReviewSummary extends StatelessWidget {
   final VoidCallback _fetchData;
 
   const DetailsReviewSummary(
-    this.reviewSummary,
+    this.title, this.reviewSummary,
     this.contentID, this.contentExternalID, 
     this.contentExternalIntID, this.contentType,
     this._fetchData,
@@ -128,7 +127,7 @@ class DetailsReviewSummary extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                     return ReviewListPage(
-                      contentID, contentExternalID, contentExternalIntID, 
+                      title, contentID, contentExternalID, contentExternalIntID, 
                       contentType, _fetchData
                     );
                   }));

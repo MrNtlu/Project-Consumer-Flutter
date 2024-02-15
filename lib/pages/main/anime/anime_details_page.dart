@@ -363,7 +363,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     const PlaybackSpeedButton(),
                   ],
                 ),
-                DetailsReviewSummary(item.reviewSummary, item.id, null, item.malID, ContentType.anime.request, _fetchData),
+                DetailsReviewSummary(
+                  item.title.isNotEmpty ? item.title : item.titleOriginal, item.reviewSummary, 
+                  item.id, null, item.malID, 
+                  ContentType.anime.request, _fetchData,
+                ),
                 if (animeRelations.isNotEmpty)
                 const DetailsTitle("Related Anime"),
                 for (var animeList in animeRelations.values)
