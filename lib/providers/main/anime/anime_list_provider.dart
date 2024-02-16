@@ -16,7 +16,7 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
 
     if (contentTag == Constants.ContentTags[0]) {
       return getList(
-        url: "${APIRoutes().animeRoutes.animeBySortFilter}?page=$page&sort=popularity"
+        url: "${APIRoutes().animeRoutes.popularAnime}?page=$page"
       );
     } else if (contentTag == Constants.ContentTags[1]) {
       return getList(
