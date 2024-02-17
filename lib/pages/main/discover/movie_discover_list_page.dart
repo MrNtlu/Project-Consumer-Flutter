@@ -141,7 +141,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(provider.genre ?? 'Discover'),
+              middle: Text(provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'),
               trailing: GestureDetector(
                 child: const Icon(Icons.filter_alt_rounded),
                 onTap: () {
@@ -198,7 +198,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                child: ContentCell(content.imageUrl, content.titleEn),
+                child: ContentCell(content.imageUrl, content.titleEn, forceRatio: true),
               )
             );
           }

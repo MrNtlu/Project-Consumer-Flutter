@@ -65,7 +65,7 @@ class CustomListEntryCell extends StatelessWidget {
             ),
             SizedBox(
               height: onAdd != null ? 150 : 125,
-              child: ContentCell(content.imageUrl, content.titleEn)
+              child: ContentCell(content.imageUrl, content.titleEn, forceRatio: true)
             ),
             Expanded(
               child: Padding(

@@ -23,7 +23,7 @@ class DetailsGenreList extends StatelessWidget {
             onSelected: (_) {
               Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(builder: (_) {
-                  return returnPage(data);
+                  return returnPage(Uri.encodeQueryComponent(data));
                 })
               );
             }

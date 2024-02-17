@@ -129,7 +129,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(provider.genre ?? 'Discover'),
+              middle: Text(provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'),
               trailing: GestureDetector(
                 child: const Icon(Icons.filter_alt_rounded),
                 onTap: () {

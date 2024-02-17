@@ -255,7 +255,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                       },
                       child: SizedBox(
                         height: 125,
-                        child: ContentCell(item.imageUrl, item.title)
+                        child: ContentCell(item.imageUrl, item.title, forceRatio: true)
                       ),
                     ),
                   ],

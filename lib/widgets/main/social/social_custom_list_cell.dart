@@ -67,7 +67,7 @@ class SocialCustomListCell extends StatelessWidget {
                           
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 3),
-                            child: ContentCell(listContent.imageURL ?? '', listContent.titleEn, cornerRadius: 8),
+                            child: ContentCell(listContent.imageURL ?? '', listContent.titleEn, cornerRadius: 8, forceRatio: true),
                           );
                         }
                       ),

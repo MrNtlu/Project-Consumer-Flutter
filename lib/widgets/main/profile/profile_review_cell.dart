@@ -50,6 +50,7 @@ class ProfileReviewCell extends StatelessWidget {
                     data.content.imageURL,
                     data.content.titleEn,
                     cornerRadius: 6,
+                    forceRatio: true
                   ),
                 ),
                 const SizedBox(width: 12),

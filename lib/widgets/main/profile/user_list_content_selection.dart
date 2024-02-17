@@ -16,31 +16,57 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
   
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 19),
-          Text(
-            widget.provider.selectedContent.value,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: CupertinoTheme.of(context).primaryColor,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CupertinoButton(
+          onPressed: () {
+            widget.provider.decrementContentType();
+          },
+          minSize: 0,
+          padding: EdgeInsets.zero,
+          child: const Icon(CupertinoIcons.left_chevron, size: 20),
+        ),
+        const SizedBox(width: 3),
+        CupertinoButton(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            width: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.provider.selectedContent.value,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoTheme.of(context).primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Icon(
+                  CupertinoIcons.chevron_down_circle_fill,
+                  size: 14,
+                  color: CupertinoTheme.of(context).primaryColor,
+                )
+              ],
             ),
-          ),
-          const SizedBox(width: 6),
-          Icon(
-            CupertinoIcons.arrowtriangle_down_circle_fill,
-            size: 14,
-            color: CupertinoTheme.of(context).primaryColor,
-          )
-        ],
-      ), 
-      onPressed: () {
-        _showPickerDialog();
-      }
+          ), 
+          onPressed: () {
+            _showPickerDialog();
+          }
+        ),
+        const SizedBox(width: 3),
+        CupertinoButton(
+          onPressed: () {
+            widget.provider.incrementContentType();
+          },
+          minSize: 0,
+          padding: EdgeInsets.zero,
+          child: const Icon(CupertinoIcons.right_chevron, size: 20),
+        ),
+        const SizedBox(width: 6,)
+      ],
     );
   }
 

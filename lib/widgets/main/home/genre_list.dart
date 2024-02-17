@@ -62,15 +62,15 @@ class GenreList extends StatelessWidget {
                   CupertinoPageRoute(builder: (_) {
                     switch (contentProvider.selectedContent) {
                       case ContentType.movie:
-                        return MovieDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                        return MovieDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
                       case ContentType.tv:
-                        return TVDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                        return TVDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
                       case ContentType.anime:
-                        return AnimeDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                        return AnimeDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
                       case ContentType.game:
-                        return GameDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                        return GameDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
                       default:
-                      return MovieDiscoverListPage(genre: data.name != "Discover" ? data.name : null);
+                      return MovieDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
                     }
                     
                   })

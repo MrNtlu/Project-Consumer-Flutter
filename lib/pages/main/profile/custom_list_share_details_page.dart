@@ -180,13 +180,13 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                         CupertinoPageRoute(builder: (_) {
                           switch (ContentType.values.where((element) => element.request == content.contentType).first) {
                             case ContentType.movie:
-                              return MovieDetailsPage(content.contentID);
+                              return MovieDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalID ?? '');
                             case ContentType.tv:
-                              return TVDetailsPage(content.contentID);
+                              return TVDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalID ?? '');
                             case ContentType.anime:
-                              return AnimeDetailsPage(content.contentID);
+                              return AnimeDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalIntID?.toString() ?? '');
                             case ContentType.game: 
-                              return GameDetailsPage(content.contentID);
+                              return GameDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalIntID?.toString() ?? '');
                           }
                         })
                       );

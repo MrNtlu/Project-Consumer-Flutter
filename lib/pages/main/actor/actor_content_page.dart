@@ -181,7 +181,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                child: ContentCell(content.imageUrl, content.titleEn),
+                child: ContentCell(content.imageUrl, content.titleEn, forceRatio: true),
               )
             );
           }
