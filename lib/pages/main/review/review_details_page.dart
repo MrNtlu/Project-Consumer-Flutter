@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
+import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
+import 'package:watchlistfy/pages/main/game/game_details_page.dart';
+import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
+import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/utils/extensions.dart';
@@ -194,6 +199,29 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                     child: Icon(widget.item.isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart, size: 20),
                   ),
                   Text(widget.item.popularity.toString()),
+                  const Spacer(),
+                  CupertinoButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            switch (ContentType.values.where((element) => element.request == widget.item.contentType).first) {
+                              case ContentType.movie:
+                                return MovieDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalID ?? '');
+                              case ContentType.tv:
+                                return TVDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalID ?? '');
+                              case ContentType.anime:
+                                return AnimeDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalIntID?.toString() ?? '');
+                              case ContentType.game: 
+                                return GameDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalIntID?.toString() ?? '');
+                            }
+                          })
+                        );
+                    },
+                    child: Text(
+                      "Go To ${ContentType.values.where((element) => element.request == widget.item.contentType).first.value}",
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    ),
+                  )
                 ],
               )
             ],

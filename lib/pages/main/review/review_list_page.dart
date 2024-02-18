@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -118,7 +119,10 @@ class _ReviewListPageState extends State<ReviewListPage> {
 
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text("💬 ${widget.title ?? ''} Reviews"),
+              middle: AutoSizeText(
+                "💬 ${widget.title ?? ''} Reviews", maxLines: 1, overflow: TextOverflow.ellipsis,
+                minFontSize: 13,
+              ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
