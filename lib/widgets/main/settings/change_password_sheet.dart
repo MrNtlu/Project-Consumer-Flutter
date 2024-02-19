@@ -20,10 +20,10 @@ class ChangePasswordSheet extends StatelessWidget {
       showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid password."));
       return;
     }
-    
+
     try {
       showCupertinoModalBottomSheet(
-        context: context, 
+        context: context,
         builder: (_) => const LoadingDialog()
       );
 
@@ -39,16 +39,16 @@ class ChangePasswordSheet extends StatelessWidget {
       if (context.mounted) {
         Navigator.pop(context);
 
-        if (response.getBaseMessageResponse().error != null){          
+        if (response.getBaseMessageResponse().error != null){
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          ); 
+          );
           return;
         }
-        
+
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => MessageDialog(response.getBaseMessageResponse().message ?? "Password changed successfully.")
         );
       }
@@ -57,7 +57,7 @@ class ChangePasswordSheet extends StatelessWidget {
         Navigator.pop(context);
 
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => ErrorDialog(error.toString())
         );
       }
@@ -81,6 +81,7 @@ class ChangePasswordSheet extends StatelessWidget {
               oldPasswordTextEditingController,
               label: "Old Password",
             ),
+            const SizedBox(height: 6),
             PasswordField(
               newPasswordTextEditingController,
               label: "New Password",
@@ -99,10 +100,10 @@ class ChangePasswordSheet extends StatelessWidget {
               )
             ),
             CupertinoButton.filled(
-              child: const Text("Change Password", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+              child: const Text("Change Password", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
               onPressed: () {
                 onChangePasswordPressed(
-                  context, 
+                  context,
                   oldPasswordTextEditingController.text,
                   newPasswordTextEditingController.text,
                 );

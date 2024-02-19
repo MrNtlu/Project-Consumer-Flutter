@@ -22,3 +22,8 @@ flutter pub get
 cd ios
 pod install
 arch -x86_64 pod install --repo-update
+
+// Android
+flutter clean
+flutter pub get
+flutter build appbundle

@@ -63,7 +63,7 @@ class SocialProvider with ChangeNotifier {
       );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
-      
+
       var baseItemResponse = decodedResponse.getBaseItemResponse<Review>();
       var data = baseItemResponse.data;
 

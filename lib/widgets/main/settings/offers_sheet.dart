@@ -39,7 +39,7 @@ class _OffersSheetState extends State<OffersSheet> {
           .toList();
     }
 
-    if (_state != ListState.disposed) {  
+    if (_state != ListState.disposed) {
       setState(() {
         _state = offerings.isEmpty ? ListState.empty : ListState.done;
       });
@@ -191,42 +191,42 @@ class _OffersSheetState extends State<OffersSheet> {
                   itemBuilder: (_, index) {
                     final package = _packages[index];
                     final product = package.storeProduct;
-                            
+
                     return GestureDetector(
                       onTap: () async {
                         setState(() {
                           _state = ListState.loading;
                         });
-                      
+
                         try {
                           await Purchases.purchasePackage(package);
-          
+
                           if (context.mounted) {
-                            if (_state != ListState.disposed) { 
+                            if (_state != ListState.disposed) {
                               setState(() {
                                 _state = ListState.done;
                               });
                             }
-                            
+
                             showCupertinoDialog(
                               context: context,
                               builder: (_) => const MessageDialog("✨ Successfuly purchased. Thank you for becoming a premium member. Please wait little bit longer while we update your account.")
                             );
-          
+
                             showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
-          
+
                             PurchaseApi().checkUserPremiumStatus().then((_) {
                               authProvider.setBasicUserInfo(PurchaseApi().userInfo);
                               Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
                             });
                           }
                         } on PlatformException catch (e) {
-                          if (_state != ListState.disposed) { 
+                          if (_state != ListState.disposed) {
                             setState(() {
                               _state = ListState.done;
                             });
                           }
-                      
+
                           var errorCode = PurchasesErrorHelper.getErrorCode(e);
                           if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
                             if (context.mounted) {
@@ -243,7 +243,7 @@ class _OffersSheetState extends State<OffersSheet> {
                           decoration: BoxDecoration(
                             color: AppColors().onDarkBackgroundColor,
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(width: 2, color: product.identifier == "watchlistfy_premium_1mo" ? CupertinoColors.activeGreen : CupertinoColors.systemBlue)
+                            border: Border.all(width: 2, color: (product.identifier == "watchlistfy_premium_1mo" || product.identifier == "watchlistfy_premium_1mo:monthly-autorenewing") ? CupertinoColors.activeGreen : CupertinoColors.systemBlue)
                           ),
                           margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                           padding: const EdgeInsets.all(6),
@@ -266,17 +266,17 @@ class _OffersSheetState extends State<OffersSheet> {
                                       ),
                                     ),
                                   ),
-                                  if(product.identifier != "watchlistfy_premium_supporter_1mo")
+                                  if(!(product.identifier == "watchlistfy_premium_supporter_1mo" || product.identifier == "watchlistfy_premium_supporter_1mo:monthly-autorenewing"))
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: product.identifier == "watchlistfy_premium_supporter_annual"
+                                      color: (product.identifier == "watchlistfy_premium_supporter_annual" || product.identifier == "watchlistfy_premium_supporter_annual:annual-autorenewing")
                                       ? AppColors().primaryColor
                                       : CupertinoColors.activeGreen,
                                       borderRadius: const BorderRadius.all(Radius.circular(4)),
                                     ),
                                     padding: const EdgeInsets.all(4),
                                     child: Text(
-                                      product.identifier != "watchlistfy_premium_supporter_annual"
+                                      !(product.identifier == "watchlistfy_premium_supporter_annual" || product.identifier == "watchlistfy_premium_supporter_annual:annual-autorenewing")
                                       ? "Better Price"
                                       : "Best Offer",
                                       style: const TextStyle(

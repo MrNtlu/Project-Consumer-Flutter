@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/static/routes.dart';
 import 'package:watchlistfy/static/token.dart';
@@ -48,25 +49,25 @@ class PurchaseApi {
     final entitlements = purchaserInfo.entitlements.active.values.toList();
 
     if (
-      userInfo != null 
-      && (entitlements.isEmpty || (entitlements.isNotEmpty && !entitlements.first.isActive)) 
+      userInfo != null
+      && (entitlements.isEmpty || (entitlements.isNotEmpty && !entitlements.first.isActive))
       && userInfo!.isPremium
     ) {
       await setUserMembershipStatus(false, 0);
       await setUserInfo();
     } else if (
-      userInfo != null 
+      userInfo != null
       && (entitlements.isNotEmpty && entitlements.first.isActive)
       && !userInfo!.isPremium
     ) {
-      await setUserMembershipStatus(true, entitlements.first.productIdentifier == "watchlistfy_premium_1mo" ? 1 : 2);
+      await setUserMembershipStatus(true, (entitlements.first.productIdentifier == "watchlistfy_premium_1mo" || entitlements.first.productIdentifier == "watchlistfy_premium_1mo:monthly-autorenewing") ? 1 : 2);
       await setUserInfo();
     }
   }
 
   Future init() async {
     await Purchases.setLogLevel(LogLevel.debug);
-    final configuration = PurchasesConfiguration(dotenv.env['REVENUE_CAT_IOS_KEY'] ?? '');
+    final configuration = PurchasesConfiguration(Platform.isIOS ? dotenv.env['REVENUE_CAT_IOS_KEY'] ?? '': dotenv.env['REVENUE_CAT_ANDROID_KEY'] ?? '');
     await Purchases.configure(configuration);
   }
 

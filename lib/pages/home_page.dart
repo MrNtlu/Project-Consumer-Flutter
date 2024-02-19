@@ -69,13 +69,17 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 8),
-                  child: authenticationProvider.isAuthenticated
-                  ? const LoggedinHeader()
-                  : const AnonymousHeader()
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 8),
+                      child: authenticationProvider.isAuthenticated
+                      ? const LoggedinHeader()
+                      : const AnonymousHeader()
+                    ),
+                  ),
                 ),
                 const ContentSelection(),
               ],

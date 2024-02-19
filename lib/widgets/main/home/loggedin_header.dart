@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,11 +110,16 @@ class LoggedinHeader extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  authenticationProvider.basicUserInfo?.username ?? '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
+                Expanded(
+                  child: AutoSizeText(
+                    authenticationProvider.basicUserInfo?.username ?? '',
+                    minFontSize: 14,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
               ],

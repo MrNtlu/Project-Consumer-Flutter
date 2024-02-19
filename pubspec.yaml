@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.4.3+20
+version: 1.4.4+21
 
 environment:
   sdk: '>=3.2.1 <4.0.0'
@@ -82,7 +82,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  flutter_native_splash: ^2.3.9
+  flutter_native_splash: ^2.3.10
   flutter_launcher_icons:
     git: https://github.com/fluttercommunity/flutter_launcher_icons.git
 
@@ -90,13 +90,24 @@ flutter_native_splash:
   color: "#212121"
   color_dark: "#212121"
   image: "assets/images/splash.png"
-  android: false
+  image_android: "assets/images/splash.png"
+  android_gravity: center
+  android_12:
+    color: "#212121"
+    color_dark: "#212121"
+    image: "assets/images/splash.png"
+  android: true
   ios: true
 
 flutter_launcher_icons:
-  android: false
+  android: true
   ios: true
   image_path: "assets/images/logo.png"
+  image_path_android: "assets/images/android_logo.png"
+  adaptive_icon_background: "#212121"
+  adaptive_icon_foreground: "assets/images/android_logo.png"
+  adaptive_icon_monochrome: "assets/images/android_logo.png"
+  min_sdk_android: 21
   # background_color_ios: "#212121"
   remove_alpha_ios: true
 

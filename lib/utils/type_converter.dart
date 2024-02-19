@@ -51,7 +51,7 @@ class TypeConverter<T> {
         response["oauth_type"] ?? -1,
         response["can_change_username"] ?? false,
         Notification(
-          response["app_notification"]["friend_request"] ?? false, 
+          response["app_notification"]["friend_request"] ?? false,
           response["app_notification"]["review_likes"] ?? false
         ),
         response["email"],
@@ -81,22 +81,22 @@ class TypeConverter<T> {
         response["image"],
         response["level"] ?? 0,
         response["consume_later"] != null
-        ? ((response["consume_later"] as List).map((e) => 
+        ? ((response["consume_later"] as List).map((e) =>
           TypeConverter<ConsumeLaterResponse>().convertToObject(e)
         ).toList())
         : [],
         response["legend_content"] != null
-        ? ((response["legend_content"] as List).map((e) => 
+        ? ((response["legend_content"] as List).map((e) =>
           TypeConverter<LegendContent>().convertToObject(e)
         ).toList())
         : [],
         response["reviews"] != null
-        ? ((response["reviews"] as List).map((e) => 
+        ? ((response["reviews"] as List).map((e) =>
           TypeConverter<ReviewWithContent>().convertToObject(e)
         ).toList())
         : [],
         response["custom_lists"] != null
-        ? ((response["custom_lists"] as List).map((e) => 
+        ? ((response["custom_lists"] as List).map((e) =>
           TypeConverter<CustomList>().convertToObject(e)
         ).toList())
         : []
@@ -120,7 +120,7 @@ class TypeConverter<T> {
         ? ((
             response["reviews"] as List
           ).map((e) => TypeConverter<ReviewWithContent>().convertToObject(e)).toList())
-        : [], 
+        : [],
         response["leaderboard"] != null
         ? ((
             response["leaderboard"] as List
@@ -129,10 +129,10 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == UserListContent) {
       return UserListContent(
-        response["_id"], 
-        response["status"], 
+        response["_id"],
+        response["status"],
         response["score"],
-        response["times_finished"], 
+        response["times_finished"],
         response["watched_episodes"] ?? response["hours_played"],
         response["watched_seasons"],
         response["total_episodes"],
@@ -142,25 +142,25 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == BaseContent) {
       return BaseContent(
-        response["_id"] ?? '', 
-        response["description"] ?? '', 
-        response["image_url"] ?? '', 
-        response["title_en"] ?? (response["title"] ?? (response["title_jp"] ?? '')), 
+        response["_id"] ?? '',
+        response["description"] ?? '',
+        response["image_url"] ?? '',
+        response["title_en"] ?? (response["title"] ?? (response["title_jp"] ?? '')),
         response["title_original"] ?? '',
         response["tmdb_id"],
         response["mal_id"] ?? response["rawg_id"]
       ) as T;
     } else if (T == UserList) {
       return UserList(
-        response["_id"] ?? '', 
-        response["user_id"] ?? '', 
+        response["_id"] ?? '',
+        response["user_id"] ?? '',
         response["anime_list"] != null
         ? ((
           response["anime_list"] as List).map((e) => UserListContent(
-          e["_id"], 
-          e["content_status"], 
+          e["_id"],
+          e["content_status"],
           e["score"],
-          e["times_finished"], 
+          e["times_finished"],
           e["watched_episodes"],
           null,
           e["total_episodes"],
@@ -176,10 +176,10 @@ class TypeConverter<T> {
         response["game_list"] != null
         ? ((
           response["game_list"] as List).map((e) => UserListContent(
-          e["_id"], 
-          e["content_status"], 
+          e["_id"],
+          e["content_status"],
           e["score"],
-          e["times_finished"], 
+          e["times_finished"],
           e["hours_played"],
           null,
           null,
@@ -195,10 +195,10 @@ class TypeConverter<T> {
         response["movie_watch_list"] != null
         ? ((
           response["movie_watch_list"] as List).map((e) => UserListContent(
-          e["_id"], 
-          e["content_status"], 
+          e["_id"],
+          e["content_status"],
           e["score"],
-          e["times_finished"], 
+          e["times_finished"],
           null,
           null,
           null,
@@ -214,10 +214,10 @@ class TypeConverter<T> {
         response["tv_watch_list"] != null
         ? ((
           response["tv_watch_list"] as List).map((e) => UserListContent(
-          e["_id"], 
-          e["content_status"], 
+          e["_id"],
+          e["content_status"],
           e["score"],
-          e["times_finished"], 
+          e["times_finished"],
           e["watched_episodes"],
           e["watched_seasons"],
           e["total_episodes"],
@@ -233,9 +233,9 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == LegendContent) {
       return LegendContent(
-        response["_id"] ?? '', 
-        response["image_url"] ?? '', 
-        response["title_en"] ?? '', 
+        response["_id"] ?? '',
+        response["image_url"] ?? '',
+        response["title_en"] ?? '',
         response["title_original"] ?? '',
         response["times_finished"] ?? 0,
         response["content_type"] ?? '',
@@ -243,15 +243,15 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == CustomListContent) {
       return CustomListContent(
-        response["order"], 
-        response["content_id"], 
-        response["content_external_id"], 
-        response["content_external_int_id"], 
-        response["content_type"], 
+        response["order"],
+        response["content_id"],
+        response["content_external_id"],
+        response["content_external_int_id"],
+        response["content_type"],
         response["title_en"],
-        response["title_original"], 
-        response["image_url"], 
-        response["score"] != null 
+        response["title_original"],
+        response["image_url"],
+        response["score"] != null
         ? (
           response["score"] is double
           ? response["score"]
@@ -261,17 +261,17 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == CustomList) {
       return CustomList(
-        response["_id"], 
-        response["user_id"], 
-        TypeConverter<Author>().convertToObject(response["author"]), 
-        response["name"], 
-        response["description"], 
+        response["_id"],
+        response["user_id"],
+        TypeConverter<Author>().convertToObject(response["author"]),
+        response["name"],
+        response["description"],
         (response["likes"] as List).map((e) => e.toString()).toList(),
         (response["bookmarks"] as List).map((e) => e.toString()).toList(),
         response["popularity"] ?? 0,
         response["bookmark_count"] ?? 0,
-        response["is_liked"] ?? false, 
-        response["is_bookmarked"] ?? false, 
+        response["is_liked"] ?? false,
+        response["is_bookmarked"] ?? false,
         response["is_private"] ?? true,
         response["content"] != null
         ? ((
@@ -289,21 +289,21 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == Review) {
       return Review(
-        author: TypeConverter<Author>().convertToObject(response["author"]), 
-        star: response["star"], 
-        review: response["review"], 
-        popularity: response["popularity"], 
+        author: TypeConverter<Author>().convertToObject(response["author"]),
+        star: response["star"],
+        review: response["review"],
+        popularity: response["popularity"],
         likes: (response["likes"] as List).map((e) => e.toString()).toList(),
-        isAuthor: response["is_author"], 
-        isSpoiler: response["is_spoiler"], 
-        isLiked: response["is_liked"], 
-        id: response["_id"], 
-        userID: response["user_id"], 
-        contentID: response["content_id"], 
-        contentExternalID: response["content_external_id"], 
-        contentExternalIntID: response["content_external_int_id"], 
-        contentType: response["content_type"], 
-        createdAt: response["created_at"], 
+        isAuthor: response["is_author"],
+        isSpoiler: response["is_spoiler"],
+        isLiked: response["is_liked"],
+        id: response["_id"],
+        userID: response["user_id"],
+        contentID: response["content_id"],
+        contentExternalID: response["content_external_id"],
+        contentExternalIntID: response["content_external_int_id"],
+        contentType: response["content_type"],
+        createdAt: response["created_at"],
         updatedAt: response["updated_at"]
       ) as T;
     } else if (T == ReviewSummary) {
@@ -312,13 +312,13 @@ class TypeConverter<T> {
         ? TypeConverter<Review>().convertToObject(response["reviews"]["review"])
         : null,
         (response["reviews"]["avg_star"] as int).toDouble(),
-        response["reviews"]["total_votes"], 
-        response["reviews"]["is_reviewed"], 
+        response["reviews"]["total_votes"],
+        response["reviews"]["is_reviewed"],
         StarCounts(
-          response["reviews"]["star_counts"]["one_star"], 
-          response["reviews"]["star_counts"]["two_star"], 
-          response["reviews"]["star_counts"]["three_star"], 
-          response["reviews"]["star_counts"]["four_star"], 
+          response["reviews"]["star_counts"]["one_star"],
+          response["reviews"]["star_counts"]["two_star"],
+          response["reviews"]["star_counts"]["three_star"],
+          response["reviews"]["star_counts"]["four_star"],
           response["reviews"]["star_counts"]["five_star"]
         )
       ) as T;
@@ -326,46 +326,46 @@ class TypeConverter<T> {
       return ReviewWithContent(
         author: TypeConverter<Author>().convertToObject(response["author"]),
         star: response["star"],
-        review: response["review"], 
-        popularity: response["popularity"], 
-        likes: (response["likes"] as List).map((e) => e.toString()).toList(), 
-        isAuthor: response["is_author"], 
-        isLiked: response["is_liked"], 
-        isSpoiler: response["is_spoiler"], 
-        id: response["_id"], 
-        userID: response["user_id"], 
-        contentID: response["content_id"], 
-        contentExternalID: response["content_external_id"], 
-        contentExternalIntID: response["content_external_int_id"], 
-        contentType: response["content_type"], 
-        createdAt: response["created_at"], 
-        updatedAt: response["updated_at"], 
+        review: response["review"],
+        popularity: response["popularity"],
+        likes: (response["likes"] as List).map((e) => e.toString()).toList(),
+        isAuthor: response["is_author"],
+        isLiked: response["is_liked"],
+        isSpoiler: response["is_spoiler"],
+        id: response["_id"],
+        userID: response["user_id"],
+        contentID: response["content_id"],
+        contentExternalID: response["content_external_id"],
+        contentExternalIntID: response["content_external_int_id"],
+        contentType: response["content_type"],
+        createdAt: response["created_at"],
+        updatedAt: response["updated_at"],
         content: TypeConverter<ReviewContent>().convertToObject(response["content"])
       ) as T;
     } else if (T == ReviewContent) {
       return ReviewContent(
-        titleEn: response["title_en"], 
-        titleOriginal: response["title_original"], 
+        titleEn: response["title_en"],
+        titleOriginal: response["title_original"],
         imageURL: response["image_url"]
       ) as T;
     } else if (T == ActorDetails) {
       return ActorDetails(
-        response["_id"], 
+        response["_id"],
         response["image_url"],
-        response["name"], 
+        response["name"],
       ) as T;
     } else if (T == ConsumeLater) {
       return ConsumeLater(
-        response["_id"], 
-        response["user_id"], 
-        response["content_id"], 
-        response["content_external_id"], 
-        response["content_external_int_id"], 
+        response["_id"],
+        response["user_id"],
+        response["content_id"],
+        response["content_external_id"],
+        response["content_external_int_id"],
         response["content_type"]
       ) as T;
     } else if (T == SuggestionResponse) {
       return SuggestionResponse(
-        response["_id"] ?? '', 
+        response["_id"] ?? '',
         response["content_id"] ?? '',
         response["content_external_id"] ?? '',
         response["content_external_int_id"],
@@ -384,25 +384,25 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == ConsumeLaterResponse) {
       return ConsumeLaterResponse(
-        response["_id"], 
-        response["user_id"], 
-        response["content_id"], 
-        response["content_external_id"], 
-        response["content_external_int_id"] ?? 0, 
+        response["_id"],
+        response["user_id"],
+        response["content_id"],
+        response["content_external_id"],
+        response["content_external_int_id"] ?? 0,
         response["content_type"],
         TypeConverter<ConsumeLaterContent>().convertToObject(response["content"]),
       ) as T;
     } else if (T == ConsumeLaterContent) {
       return ConsumeLaterContent(
-        response["title_en"], 
-        response["title_original"], 
-        response["image_url"], 
+        response["title_en"],
+        response["title_original"],
+        response["image_url"],
         response["score"] != null
         ? (response["score"] is double)
           ? response["score"]
           : (response["score"] as int).toDouble()
         : 0,
-        response["description"], 
+        response["description"],
       ) as T;
     } else if (T == MovieWatchList) {
       return MovieWatchList(
@@ -507,42 +507,42 @@ class TypeConverter<T> {
       ) as T;
     } else if (T == MovieDetails) {
       return MovieDetails(
-        response["_id"], 
-        response["description"], 
+        response["_id"],
+        response["description"],
         response["genres"] != null
         ? (response["genres"] as List).map((e) => e.toString()).toList()
-        : [], 
-        response["length"], 
-        response["status"], 
-        response["backdrop"], 
+        : [],
+        response["length"],
+        response["status"],
+        response["backdrop"],
         response["images"] != null
         ? (response["images"] as List).map((e) => e.toString()).toList()
-        : [], 
-        response["image_url"], 
-        response["imdb_id"], 
-        response["release_date"], 
-        response["title_en"], 
-        response["title_original"], 
-        response["tmdb_id"], 
+        : [],
+        response["image_url"],
+        response["imdb_id"],
+        response["release_date"],
+        response["title_en"],
+        response["title_original"],
+        response["tmdb_id"],
         (response["tmdb_popularity"] is double)
         ? response["tmdb_popularity"]
-        : (response["tmdb_popularity"] as int).toDouble(), 
+        : (response["tmdb_popularity"] as int).toDouble(),
         (response["tmdb_vote"] is double)
         ? response["tmdb_vote"]
-        : (response["tmdb_vote"] as int).toDouble(), 
+        : (response["tmdb_vote"] as int).toDouble(),
         response["tmdb_vote_count"],
         response["recommendations"] != null
         ? ((
           response["recommendations"] as List).map((e) => Recommendation(
-          e["description"], e["tmdb_id"], 
-          e["title_en"], e["title_original"], 
+          e["description"], e["tmdb_id"],
+          e["title_en"], e["title_original"],
           e["release_date"], e["image_url"]
         )).toList())
         : [],
         response["actors"] != null
         ? ((response["actors"] as List).map((e) => Actor(
-          e["tmdb_id"], 
-          e["name"], 
+          e["tmdb_id"],
+          e["name"],
           e["image"],
           e["character"]
         )).toList())
@@ -550,7 +550,7 @@ class TypeConverter<T> {
         TypeConverter<ReviewSummary>().convertToObject(response),
         response["streaming"] != null
         ? ((response["streaming"] as List).map((e) => Streaming(
-          e["country_code"], 
+          e["country_code"],
           e["buy_options"] != null
           ? (e["buy_options"] as List).map((se) => StreamingPlatform(
             se["logo"],
@@ -587,54 +587,54 @@ class TypeConverter<T> {
         : null,
         response["watch_list"] != null
         ? TypeConverter<MovieWatchList>().convertToObject(response["watch_list"])
-        : null, 
+        : null,
         response["watch_later"] != null
         ? ConsumeLater(
-          response["watch_later"]["_id"], 
-          response["watch_later"]["user_id"], 
-          response["watch_later"]["content_id"], 
-          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["_id"],
+          response["watch_later"]["user_id"],
+          response["watch_later"]["content_id"],
+          response["watch_later"]["content_external_id"], -1,
           response["watch_later"]["content_type"]
         )
         : null
       ) as T;
     } else if (T == TVDetails) {
       return TVDetails(
-        response["_id"], 
-        response["description"], 
+        response["_id"],
+        response["description"],
         response["genres"] != null
         ? (response["genres"] as List).map((e) => e.toString()).toList()
-        : [], 
-        response["status"], 
-        response["backdrop"], 
+        : [],
+        response["status"],
+        response["backdrop"],
         response["images"] != null
         ? (response["images"] as List).map((e) => e.toString()).toList()
-        : [], 
-        response["image_url"], 
-        response["imdb_id"], 
-        response["first_air_date"], 
-        response["title_en"], 
-        response["title_original"], 
-        response["tmdb_id"], 
+        : [],
+        response["image_url"],
+        response["imdb_id"],
+        response["first_air_date"],
+        response["title_en"],
+        response["title_original"],
+        response["tmdb_id"],
         (response["tmdb_popularity"] is double)
         ? response["tmdb_popularity"]
-        : (response["tmdb_popularity"] as int).toDouble(), 
+        : (response["tmdb_popularity"] as int).toDouble(),
         (response["tmdb_vote"] is double)
         ? response["tmdb_vote"]
-        : (response["tmdb_vote"] as int).toDouble(), 
+        : (response["tmdb_vote"] as int).toDouble(),
         response["tmdb_vote_count"],
         response["recommendations"] != null
         ? ((
           response["recommendations"] as List).map((e) => Recommendation(
-          e["description"], e["tmdb_id"], 
-          e["title_en"], e["title_original"], 
+          e["description"], e["tmdb_id"],
+          e["title_en"], e["title_original"],
           e["release_date"], e["image_url"]
         )).toList())
         : [],
         response["actors"] != null
         ? ((response["actors"] as List).map((e) => Actor(
-          e["tmdb_id"], 
-          e["name"], 
+          e["tmdb_id"],
+          e["name"],
           e["image"],
           e["character"]
         )).toList())
@@ -642,7 +642,7 @@ class TypeConverter<T> {
         TypeConverter<ReviewSummary>().convertToObject(response),
         response["streaming"] != null
         ? ((response["streaming"] as List).map((e) => Streaming(
-          e["country_code"], 
+          e["country_code"],
           e["buy_options"] != null
           ? (e["buy_options"] as List).map((se) => StreamingPlatform(
             se["logo"],
@@ -697,71 +697,71 @@ class TypeConverter<T> {
         : null,
         response["tv_list"] != null
         ? TypeConverter<TVWatchList>().convertToObject(response["tv_list"])
-        : null, 
+        : null,
         response["watch_later"] != null
         ? ConsumeLater(
-          response["watch_later"]["_id"], 
-          response["watch_later"]["user_id"], 
-          response["watch_later"]["content_id"], 
-          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["_id"],
+          response["watch_later"]["user_id"],
+          response["watch_later"]["content_id"],
+          response["watch_later"]["content_external_id"], -1,
           response["watch_later"]["content_type"]
         )
         : null
       ) as T;
     } else if (T == AnimeDetails) {
       return AnimeDetails(
-        response["_id"], 
-        response["description"], 
-        response["type"], 
+        response["_id"],
+        response["description"],
+        response["type"],
         response["source"],
-        response["episodes"], 
+        response["episodes"],
         response["season"],
-        response["year"], 
+        response["year"],
         response["status"],
-        response["backdrop"], 
+        response["backdrop"],
         TypeConverter<AnimeDetailsAirDate>().convertToObject(response["aired"]),
         response["recommendations"] != null
-        ? ((response["recommendations"] as List).map((e) => 
+        ? ((response["recommendations"] as List).map((e) =>
           TypeConverter<AnimeDetailsRecommendation>().convertToObject(e)
         ).toList())
         : [],
         response["streaming"] != null
-        ? ((response["streaming"] as List).map((e) => 
+        ? ((response["streaming"] as List).map((e) =>
           TypeConverter<AnimeNameUrl>().convertToObject(e)
         ).toList())
         : null,
         response["producers"] != null
-        ? ((response["producers"] as List).map((e) => 
+        ? ((response["producers"] as List).map((e) =>
           TypeConverter<AnimeNameUrl>().convertToObject(e)
         ).toList())
         : null,
         response["studios"] != null
-        ? ((response["studios"] as List).map((e) => 
+        ? ((response["studios"] as List).map((e) =>
           TypeConverter<AnimeNameUrl>().convertToObject(e)
         ).toList())
         : null,
         response["genres"] != null
-        ? ((response["genres"] as List).map((e) => 
+        ? ((response["genres"] as List).map((e) =>
           TypeConverter<AnimeNameUrl>().convertToObject(e)
         ).toList())
         : null,
         response["themes"] != null
-        ? ((response["themes"] as List).map((e) => 
+        ? ((response["themes"] as List).map((e) =>
           TypeConverter<AnimeNameUrl>().convertToObject(e)
         ).toList())
         : null,
         response["demographics"] != null
-        ? ((response["demographics"] as List).map((e) => 
+        ? ((response["demographics"] as List).map((e) =>
           TypeConverter<AnimeNameUrl>().convertToObject(e)
         ).toList())
         : null,
         response["relations"] != null
-        ? ((response["relations"] as List).map((e) => 
+        ? ((response["relations"] as List).map((e) =>
           TypeConverter<AnimeDetailsRelation>().convertToObject(e)
         ).toList())
         : [],
         response["characters"] != null
-        ? ((response["characters"] as List).map((e) => 
+        ? ((response["characters"] as List).map((e) =>
           TypeConverter<AnimeDetailsCharacter>().convertToObject(e)
         ).toList())
         : [],
@@ -780,50 +780,50 @@ class TypeConverter<T> {
         response["trailer"],
         response["anime_list"] != null
         ? TypeConverter<AnimeWatchList>().convertToObject(response["anime_list"])
-        : null, 
+        : null,
         response["watch_later"] != null
         ? ConsumeLater(
-          response["watch_later"]["_id"], 
-          response["watch_later"]["user_id"], 
-          response["watch_later"]["content_id"], 
-          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["_id"],
+          response["watch_later"]["user_id"],
+          response["watch_later"]["content_id"],
+          response["watch_later"]["content_external_id"], -1,
           response["watch_later"]["content_type"]
         )
         : null
       ) as T;
     } else if (T == GameDetails) {
       return GameDetails(
-        response["_id"], 
-        response["description"], 
-        response["tba"], 
-        response["subreddit"], 
+        response["_id"],
+        response["description"],
+        response["tba"],
+        response["subreddit"],
         response["genres"] != null
         ? (response["genres"] as List).map((e) => e.toString()).toList()
         : [],
         response["tags"] != null
         ? (response["tags"] as List).map((e) => e.toString()).toList()
-        : [], 
+        : [],
         response["platforms"] != null
         ? (response["platforms"] as List).map((e) => e.toString()).toList()
-        : [], 
+        : [],
         response["developers"] != null
         ? (response["developers"] as List).map((e) => e.toString()).toList()
         : [],
         response["publishers"] != null
         ? (response["publishers"] as List).map((e) => e.toString()).toList()
-        : [], 
+        : [],
         response["stores"] != null
-        ? ((response["stores"] as List).map((e) => 
+        ? ((response["stores"] as List).map((e) =>
           TypeConverter<GameDetailsStore>().convertToObject(e)
         ).toList())
-        : [], 
+        : [],
         response["screenshots"] != null
         ? (response["screenshots"] as List).map((e) => e.toString()).toList()
-        : [], 
+        : [],
         TypeConverter<ReviewSummary>().convertToObject(response),
-        response["title"], 
-        response["title_original"], 
-        response["image_url"], 
+        response["title"],
+        response["title_original"],
+        response["image_url"],
         response["rawg_id"],
         (response["rawg_rating"] is double)
         ? response["rawg_rating"]
@@ -833,19 +833,19 @@ class TypeConverter<T> {
         response["release_date"],
         response["age_rating"],
         response["related_games"] != null
-        ? ((response["related_games"] as List).map((e) => 
+        ? ((response["related_games"] as List).map((e) =>
           TypeConverter<GameDetailsRelation>().convertToObject(e)
         ).toList())
         : [],
         response["game_list"] != null
         ? TypeConverter<GamePlayList>().convertToObject(response["game_list"])
-        : null, 
+        : null,
         response["watch_later"] != null
         ? ConsumeLater(
-          response["watch_later"]["_id"], 
-          response["watch_later"]["user_id"], 
-          response["watch_later"]["content_id"], 
-          response["watch_later"]["content_external_id"], -1, 
+          response["watch_later"]["_id"],
+          response["watch_later"]["user_id"],
+          response["watch_later"]["content_id"],
+          response["watch_later"]["content_external_id"], -1,
           response["watch_later"]["content_type"]
         )
         : null

@@ -68,9 +68,17 @@ class _SocialPageState extends State<SocialPage> {
                     child: provider.networkState == NetworkState.success
                     ? ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: provider.item?.customList.length,
+                      itemCount: provider.item?.customList.isNotEmpty == true ? provider.item?.customList.length : 1,
                       itemExtent: 300,
                       itemBuilder: (context, index) {
+                        if (provider.item?.customList.isEmpty == true) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text("Nothing here."),
+                            ),
+                          );
+                        }
                         return SocialCustomListCell(provider.item!.customList[index]);
                       }
                     )
@@ -100,7 +108,7 @@ class _SocialPageState extends State<SocialPage> {
                     itemCount: provider.item?.leaderboard.length,
                     itemBuilder: (context, index) {
                       final userInfo = provider.item!.leaderboard[index];
-                                
+
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(

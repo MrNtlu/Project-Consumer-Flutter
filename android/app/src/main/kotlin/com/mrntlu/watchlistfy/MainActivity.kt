@@ -1,4 +1,4 @@
-package com.mrntlu.watchlistfy
+package com.mrntlu.projectconsumer
 
 import io.flutter.embedding.android.FlutterActivity
 

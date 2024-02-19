@@ -2,6 +2,7 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
@@ -36,7 +37,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -117,6 +118,11 @@ class MyApp extends StatelessWidget {
         create: (context) => ThemeProvider(),
         builder: (context, _) {
           Provider.of<ThemeProvider>(context);
+
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: SharedPref().isDarkTheme() ? const Color(0xFF121212) : const Color(0xFFFAFAFA),
+            systemNavigationBarColor: SharedPref().isDarkTheme() ? const Color(0xFF212121) : const Color(0xFFFAFAFA),
+          ));
 
           return CupertinoApp.router(
             title: 'Watchlistfy',

@@ -61,7 +61,7 @@ class _ContentSelectionState extends State<ContentSelection> {
                 )
               ],
             ),
-          ), 
+          ),
           onPressed: () {
             _showPickerDialog();
           }
@@ -111,7 +111,7 @@ class _ContentSelectionState extends State<ContentSelection> {
                   itemExtent: 50,
                   itemBuilder: (context, index) {
                     var isSelected = ContentType.values.indexOf(contentProvider.selectedContent) == index;
-        
+
                     return CupertinoButton(
                       color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).onBgColor,
                       onPressed: (){
@@ -126,7 +126,7 @@ class _ContentSelectionState extends State<ContentSelection> {
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
                         ),
-                      ), 
+                      ),
                     );
                   }
                 ),
