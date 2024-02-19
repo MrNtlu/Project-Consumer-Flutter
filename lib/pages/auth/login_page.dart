@@ -274,6 +274,7 @@ class LoginPage extends StatelessWidget {
                       ),
                       if (Platform.isIOS || Platform.isMacOS)
                       const SizedBox(height: 16),
+                      if (Platform.isAndroid)
                       SizedBox(
                         width: 250,
                         child: CupertinoButton(

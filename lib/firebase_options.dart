@@ -24,17 +24,14 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -52,11 +49,25 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBr4an1YMHmLdFs9IVWU9pZF_Q1iGrXysY',
-    appId: '1:642161392142:android:92187715887ef69baf9a5f',
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDncthhpp6Ia5_EW0NcSibQfkkUAK9kZN4',
+    appId: '1:642161392142:ios:8eba75954ae19416af9a5f',
     messagingSenderId: '642161392142',
     projectId: 'project-consumer-76309',
     storageBucket: 'project-consumer-76309.appspot.com',
+    androidClientId: '642161392142-0nnugbpf261o2u8nno02nmphlon9vn6b.apps.googleusercontent.com',
+    iosClientId: '642161392142-ueib18e7r9vfik3b9fvvfvbte8juchjh.apps.googleusercontent.com',
+    iosBundleId: 'com.mrntlu.watchlistfy',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDncthhpp6Ia5_EW0NcSibQfkkUAK9kZN4',
+    appId: '1:642161392142:ios:53e5d0572cd23b71af9a5f',
+    messagingSenderId: '642161392142',
+    projectId: 'project-consumer-76309',
+    storageBucket: 'project-consumer-76309.appspot.com',
+    androidClientId: '642161392142-0nnugbpf261o2u8nno02nmphlon9vn6b.apps.googleusercontent.com',
+    iosClientId: '642161392142-9tm981ee4du5ufhnmghe2onc8i7akgeb.apps.googleusercontent.com',
+    iosBundleId: 'com.mrntlu.watchlistfy.RunnerTests',
   );
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -119,10 +121,12 @@ class MyApp extends StatelessWidget {
         builder: (context, _) {
           Provider.of<ThemeProvider>(context);
 
-          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: SharedPref().isDarkTheme() ? const Color(0xFF121212) : const Color(0xFFFAFAFA),
-            systemNavigationBarColor: SharedPref().isDarkTheme() ? const Color(0xFF212121) : const Color(0xFFFAFAFA),
-          ));
+          if (Platform.isAndroid) {
+            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+              statusBarColor: SharedPref().isDarkTheme() ? const Color(0xFF121212) : const Color(0xFFFAFAFA),
+              systemNavigationBarColor: SharedPref().isDarkTheme() ? const Color(0xFF212121) : const Color(0xFFFAFAFA),
+            )); 
+          }
 
           return CupertinoApp.router(
             title: 'Watchlistfy',
