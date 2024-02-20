@@ -148,13 +148,13 @@ class _PreviewListState extends State<PreviewList> {
                   default:
                     return MovieDetailsPage(data.id);
                 }
-              }));
+              }, maintainState: false));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 3),
               child: SizedBox(
                 height: 200,
-                child: ContentCell(data.imageUrl.replaceFirst("original", "w200"), data.titleEn)
+                child: ContentCell(data.imageUrl.replaceFirst("original", "w300"), data.titleEn)
               ),
             ),
           );

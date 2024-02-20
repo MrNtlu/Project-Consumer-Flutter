@@ -54,6 +54,7 @@ class ReviewListCell extends StatelessWidget {
                               imageUrl: item.author.image,
                               height: 40,
                               width: 40,
+                              cacheKey: item.author.image,
                               key: ValueKey<String>(item.author.image),
                               fit: BoxFit.cover,
                               progressIndicatorBuilder: (_, __, ___) => const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),

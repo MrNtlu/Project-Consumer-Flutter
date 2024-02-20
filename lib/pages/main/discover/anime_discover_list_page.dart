@@ -201,7 +201,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return AnimeDetailsPage(content.id);
-                  })
+                  }, maintainState: false)
                 );
               },
               child: Padding(

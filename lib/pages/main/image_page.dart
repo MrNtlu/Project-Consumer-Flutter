@@ -16,7 +16,7 @@ class ImagePage extends StatelessWidget {
           panEnabled: true,
           minScale: 0.5,
           maxScale: 2,
-          child: CachedNetworkImage(imageUrl: _image, fit: BoxFit.contain)
+          child: CachedNetworkImage(imageUrl: _image, fit: BoxFit.contain, key: ValueKey(_image), cacheKey: _image)
         ),
       ),
     );

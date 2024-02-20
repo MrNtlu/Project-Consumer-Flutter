@@ -193,7 +193,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return MovieDetailsPage(content.id);
-                  })
+                  }, maintainState: false)
                 );
               },
               child: Padding(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -115,10 +116,17 @@ class _ActorContentPageState extends State<ActorContentPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.image != null && widget.image!.isNotEmpty)
-            CircleAvatar(
-              radius: 15,
-              backgroundImage: NetworkImage(
-                widget.image!,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(18),
+              child: CachedNetworkImage(
+                imageUrl: widget.image!,
+                key: ValueKey<String>(widget.image!),
+                cacheKey: widget.image,
+                fit: BoxFit.cover,
+                height: 36,
+                width: 36,
+                maxHeightDiskCache: 100,
+                maxWidthDiskCache: 100,
               )
             ),
             if (widget.image != null && widget.image!.isNotEmpty)
@@ -176,7 +184,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
                     } else {
                       return TVDetailsPage(content.id);
                     }
-                  })
+                  }, maintainState: false)
                 );
               },
               child: Padding(

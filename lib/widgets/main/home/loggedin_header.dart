@@ -91,6 +91,7 @@ class LoggedinHeader extends StatelessWidget {
                       imageUrl: authenticationProvider.basicUserInfo!.image!,
                       height: 30,
                       width: 30,
+                      cacheKey: authenticationProvider.basicUserInfo!.image!,
                       key: ValueKey<String>(authenticationProvider.basicUserInfo!.image!),
                       fit: BoxFit.cover,
                       progressIndicatorBuilder: (_, __, ___) =>

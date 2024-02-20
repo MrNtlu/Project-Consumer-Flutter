@@ -113,7 +113,7 @@ class CustomListDetailsPage extends StatelessWidget {
                               case ContentType.game: 
                                 return GameDetailsPage(content.contentID);
                             }
-                          })
+                          }, maintainState: false)
                         );
                       },
                       child: CustomListEntryCell(

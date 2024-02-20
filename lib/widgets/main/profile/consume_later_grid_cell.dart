@@ -25,7 +25,13 @@ class ConsumeLaterGridCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true),
+            ContentCell(
+              url, 
+              title, 
+              forceRatio: true,
+              cacheHeight: 550,
+              cacheWidth: 425,
+            ),
             Positioned(
               top: -3,
               right: 0,

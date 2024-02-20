@@ -243,7 +243,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                       },
                       child: SizedBox(
                         height: 125,
-                        child: ContentCell(item.imageUrl, item.title, forceRatio: true, cornerRadius: 8,)
+                        child: ContentCell(item.imageUrl, item.title, forceRatio: true, cornerRadius: 8)
                       ),
                     ),
                   ],

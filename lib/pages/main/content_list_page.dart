@@ -213,12 +213,12 @@ class _ContentListPageState extends State<ContentListPage> {
                       default:
                         return MovieDetailsPage(content.id);
                     }
-                  })
+                  }, maintainState: false)
                 );
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                child: ContentCell(content.imageUrl, content.titleEn),
+                child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 400, cacheHeight: 600),
               )
             );
           }

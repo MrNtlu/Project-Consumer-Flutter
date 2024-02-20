@@ -50,7 +50,15 @@ class UserListCompact extends StatelessWidget {
         const SizedBox(width: 8),
         SizedBox(
           height: 75,
-          child: ContentCell(data.imageUrl ?? '', data.title.isEmpty ? data.titleOriginal : data.title, cornerRadius: 8, forceRatio: true)
+          child: ContentCell(
+            data.imageUrl ?? '', 
+            data.title.isEmpty ? 
+            data.titleOriginal : data.title, 
+            cornerRadius: 8, 
+            forceRatio: true,
+            cacheHeight: 275,
+            cacheWidth: 175,
+          )
         ),
         Expanded(
           child: Padding(

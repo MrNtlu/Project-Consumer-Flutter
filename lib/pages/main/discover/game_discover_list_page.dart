@@ -181,7 +181,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return GameDetailsPage(content.id);
-                  })
+                  }, maintainState: false)
                 );
               },
               child: Padding(

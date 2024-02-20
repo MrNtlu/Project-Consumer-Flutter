@@ -11,8 +11,10 @@ class ContentCell extends StatelessWidget {
   final String title;
   final double cornerRadius;
   final bool forceRatio;
+  final int? cacheWidth;
+  final int? cacheHeight;
 
-  const ContentCell(this.url, this.title, {this.cornerRadius = 12, this.forceRatio = false, super.key});
+  const ContentCell(this.url, this.title, {this.cornerRadius = 12, this.forceRatio = false, this.cacheWidth, this.cacheHeight, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +58,13 @@ class ContentCell extends StatelessWidget {
   Widget _image(ContentType selectedContent) {
     return CachedNetworkImage(
       imageUrl: url,
+      key: ValueKey<String>(url + title),
       cacheKey: url + title,
+      maxWidthDiskCache: cacheWidth,
+      maxHeightDiskCache: cacheHeight,
       filterQuality: FilterQuality.low,
       fadeInDuration: const Duration(milliseconds: 0),
       fadeOutDuration: const Duration(milliseconds: 0),
-      key: ValueKey<String>(url + title),
       fit: BoxFit.cover,
       progressIndicatorBuilder: (_, __, ___) => AspectRatio(
         aspectRatio: forceRatio || selectedContent != ContentType.game ? 2/3 : 16/9,

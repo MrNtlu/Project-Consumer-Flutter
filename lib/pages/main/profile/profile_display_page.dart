@@ -128,7 +128,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
             children: [
               Stack(
                 children: [
-                  ProfileUserImage(image),
+                  ProfileUserImage(image, isProfileDisplay: true),
                   if (item.isPremium)
                   Positioned(
                     bottom: -6,
@@ -254,7 +254,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                                   default:
                                     return MovieDetailsPage(data.id);
                                 }
-                              })
+                              }, maintainState: false)
                             );
                           },
                           child: ProfileLegendCell(

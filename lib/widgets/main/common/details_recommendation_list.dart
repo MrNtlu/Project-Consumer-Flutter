@@ -26,11 +26,14 @@ class DetailsRecommendationList extends StatelessWidget {
                 CupertinoPageRoute(builder: (_) {
                   return onTap(index);
                 }
-              ));
+              , maintainState: false));
             },
             child: ContentCell(
-              getImage(index), getTitle(index),
+              getImage(index), 
+              getTitle(index),
               cornerRadius: 8,
+              cacheHeight: 325,
+              cacheWidth: 250,
             )
           ),
         );

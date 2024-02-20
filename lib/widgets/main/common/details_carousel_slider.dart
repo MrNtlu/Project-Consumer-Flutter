@@ -27,7 +27,13 @@ class DetailsCarouselSlider extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: CachedNetworkImage(imageUrl: i, fit: BoxFit.cover)
+                  child: CachedNetworkImage(
+                    imageUrl: i,
+                    key: ValueKey<String>(i),
+                    cacheKey: i,
+                    fit: BoxFit.cover,
+                    maxHeightDiskCache: 300,
+                  )
                 )
               ),
             );

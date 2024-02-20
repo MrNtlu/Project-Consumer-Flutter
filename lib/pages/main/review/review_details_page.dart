@@ -78,9 +78,12 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                 child: Uri.tryParse(widget.item.author.image) != null
                                 ? CachedNetworkImage(
                                   imageUrl: widget.item.author.image,
+                                  key: ValueKey<String>(widget.item.author.image),
+                                  cacheKey: widget.item.author.image,
                                   height: 40,
                                   width: 40,
-                                  key: ValueKey<String>(widget.item.author.image),
+                                  maxHeightDiskCache: 175,
+                                  maxWidthDiskCache: 175,
                                   fit: BoxFit.cover,
                                   progressIndicatorBuilder: (_, __, ___) => const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
                                   errorListener: (_) {},

@@ -43,14 +43,16 @@ class DetailsCommonList extends StatelessWidget {
                   ? GestureDetector(
                     onTap: () {
                       if (getActorID != null) {
-                        Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                          return ActorContentPage(
-                            getActorID!(index),
-                            name,
-                            image,
-                            isMovie: isMovie,
-                          );
-                        }));
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return ActorContentPage(
+                              getActorID!(index),
+                              name,
+                              image,
+                              isMovie: isMovie,
+                            );
+                          },
+                        ));
                       }
                     },
                     child: SizedBox(
@@ -60,9 +62,12 @@ class DetailsCommonList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
                           imageUrl: image,
+                          key: ValueKey<String>(image),
                           cacheKey: image,
                           filterQuality: FilterQuality.low,
                           fit: BoxFit.cover,
+                          maxHeightDiskCache: 200,
+                          maxWidthDiskCache: 200,
                           errorListener: (_) {},
                           errorWidget: (context, _, __) {
                             return const ColoredBox(color: CupertinoColors.systemGrey);
@@ -88,7 +93,10 @@ class DetailsCommonList extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: image,
                       key: ValueKey<String>(image),
+                      cacheKey: image,
                       height: 64,
+                      maxHeightDiskCache: 200,
+                      maxWidthDiskCache: 200,
                       errorListener: (_) {},
                     ),
                   )

@@ -6,8 +6,9 @@ import 'package:watchlistfy/static/purchase_api.dart';
 
 class ProfileUserImage extends StatelessWidget {
   final String? image;
+  final bool isProfileDisplay;
 
-  const ProfileUserImage(this.image, {super.key});
+  const ProfileUserImage(this.image, {this.isProfileDisplay = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,11 @@ class ProfileUserImage extends StatelessWidget {
               ? CachedNetworkImage(
                 imageUrl: image!,
                 key: ValueKey<String>(image!),
+                cacheKey: image,
                 height: 75,
                 width: 75,
+                maxHeightDiskCache: 200,
+                maxWidthDiskCache: 200,
                 fit: BoxFit.cover,
                 progressIndicatorBuilder: (_, __, ___) =>
                   const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
@@ -45,7 +49,7 @@ class ProfileUserImage extends StatelessWidget {
               ),
             ),
           ),
-          if (PurchaseApi().userInfo?.isPremium == true)
+          if (PurchaseApi().userInfo?.isPremium == true && !isProfileDisplay)
           Positioned(
             bottom: -6,
             right: -6,

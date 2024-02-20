@@ -38,7 +38,13 @@ class UserListExpanded extends StatelessWidget {
       children: [
         SizedBox(
           height: 125,
-          child: ContentCell(data.imageUrl ?? '', data.title.isEmpty ? data.titleOriginal : data.title, forceRatio: true)
+          child: ContentCell(
+            data.imageUrl ?? '', 
+            data.title.isEmpty ? data.titleOriginal : data.title, 
+            forceRatio: true,
+            cacheHeight: 375,
+            cacheWidth: 300,
+          )
         ),
         Expanded(
           child: Padding(

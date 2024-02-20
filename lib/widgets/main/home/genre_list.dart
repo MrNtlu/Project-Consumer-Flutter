@@ -87,6 +87,7 @@ class GenreList extends StatelessWidget {
                         imageUrl: data.url,
                         cacheKey: data.url,
                         key: ValueKey<String>(data.url),
+                        maxHeightDiskCache: 150,
                         errorListener: (_) {},
                         fadeInDuration: const Duration(milliseconds: 0),
                         fadeOutDuration: const Duration(milliseconds: 0),

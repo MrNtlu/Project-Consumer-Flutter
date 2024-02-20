@@ -27,7 +27,7 @@ class ProfileLegendCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true),
+            ContentCell(url, title, forceRatio: true, cacheHeight: 400, cacheWidth: 270),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(

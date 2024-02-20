@@ -56,6 +56,8 @@ class PreviewActorList extends StatelessWidget {
                         cacheKey: actor.image,
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
+                        maxHeightDiskCache: 175,
+                        maxWidthDiskCache: 175,
                         errorListener: (_){},
                         progressIndicatorBuilder: (_, __, ___) => ClipRRect(
                           borderRadius: BorderRadius.circular(12),

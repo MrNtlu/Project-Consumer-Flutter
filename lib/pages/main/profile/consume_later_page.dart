@@ -285,7 +285,13 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                   children: [
                     SizedBox(
                       height: 100,
-                      child: ContentCell(content.content.imageUrl, content.content.titleEn, cornerRadius: 8, forceRatio: true)
+                      child: ContentCell(
+                        content.content.imageUrl, 
+                        content.content.titleEn, cornerRadius: 8, 
+                        forceRatio: true,
+                        cacheHeight: 350,
+                        cacheWidth: 275,
+                      )
                     ),
                     Expanded(
                       child: Padding(

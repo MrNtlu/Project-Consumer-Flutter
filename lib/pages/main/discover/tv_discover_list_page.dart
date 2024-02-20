@@ -194,7 +194,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return TVDetailsPage(content.id);
-                  })
+                  }, maintainState: false)
                 );
               },
               child: Padding(

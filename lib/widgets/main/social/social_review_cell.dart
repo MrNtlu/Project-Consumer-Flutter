@@ -69,7 +69,9 @@ class SocialReviewCell extends StatelessWidget {
                     data.content.imageURL,
                     data.content.titleEn,
                     cornerRadius: 6,
-                    forceRatio: true
+                    forceRatio: true,
+                    cacheHeight: 175,
+                    cacheWidth: 125,
                   ),
                 ),
                 const SizedBox(width: 12),

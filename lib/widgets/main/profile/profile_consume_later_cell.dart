@@ -24,7 +24,7 @@ class ProfileConsumeLaterCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true),
+            ContentCell(url, title, forceRatio: true, cacheWidth: 300, cacheHeight: 400,),
             Positioned(
               top: -3,
               right: 0,

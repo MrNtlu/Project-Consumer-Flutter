@@ -146,9 +146,12 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
                                 child: Uri.tryParse(item.author.image) != null
                                 ? CachedNetworkImage(
                                   imageUrl: item.author.image,
+                                  key: ValueKey<String>(item.author.image),
+                                  cacheKey: item.author.image,
                                   height: 40,
                                   width: 40,
-                                  key: ValueKey<String>(item.author.image),
+                                  maxHeightDiskCache: 175,
+                                  maxWidthDiskCache: 175,
                                   fit: BoxFit.cover,
                                   progressIndicatorBuilder: (_, __, ___) => const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
                                   errorListener: (_) {},

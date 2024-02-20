@@ -6,17 +6,14 @@ import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
-import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class UserListShimmerCell extends StatelessWidget {
-  final String imageUrl;
   final String title;
   final ContentType selectedContent;
   final int? totalSeasons;
   final int? totalEpisodes;
 
   const UserListShimmerCell(
-    this.imageUrl,
     this.title,
     this.selectedContent,
     this.totalSeasons,
@@ -36,7 +33,11 @@ class UserListShimmerCell extends StatelessWidget {
         children: [
           SizedBox(
             height: 125,
-            child: ContentCell(imageUrl, title)
+            width: 83.3,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: const ColoredBox(color: CupertinoColors.systemGrey)
+            )
           ),
           Expanded(
             child: Padding(
@@ -123,7 +124,11 @@ class UserListShimmerCell extends StatelessWidget {
           const SizedBox(width: 8),
           SizedBox(
             height: 75,
-            child: ContentCell(imageUrl, title)
+            width: 50,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: const ColoredBox(color: CupertinoColors.systemGrey)
+            )
           ),
           Expanded(
             child: Padding(

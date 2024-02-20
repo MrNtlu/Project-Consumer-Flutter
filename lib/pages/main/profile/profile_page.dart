@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -215,22 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(
-                children: [
-                  ProfileUserImage(image),
-                  if (item.isPremium)
-                  Positioned(
-                    bottom: -6,
-                    right: -6,
-                    child: Lottie.asset(
-                      "assets/lottie/premium.json",
-                      height: 45,
-                      width: 45,
-                      frameRate: FrameRate(60)
-                    ),
-                  ),
-                ],
-              ),
+              ProfileUserImage(image),
               ProfileLevelBar(item.level),
               const SizedBox(height: 16),
               Padding(

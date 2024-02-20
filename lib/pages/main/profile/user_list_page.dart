@@ -201,7 +201,6 @@ class _UserListPageState extends State<UserListPage> {
               : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
               child: data.isLoading
               ? UserListShimmerCell(
-                data.imageUrl ?? '',
                 data.title, 
                 provider.selectedContent,
                 data.totalSeasons, 
