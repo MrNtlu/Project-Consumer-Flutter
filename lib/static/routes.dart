@@ -115,11 +115,13 @@ class PreviewRoutes {
   late String _basePreviewRoute;
 
   late String preview;
+  late String previewV2;
 
   PreviewRoutes({baseURL}) {
     _basePreviewRoute = '$baseURL/preview';
 
     preview = _basePreviewRoute;
+    previewV2 = '$_basePreviewRoute/v2';
   }
 }
 

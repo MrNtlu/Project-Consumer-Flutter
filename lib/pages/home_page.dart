@@ -6,6 +6,7 @@ import 'package:watchlistfy/pages/main/content_list_page.dart';
 import 'package:watchlistfy/pages/main/search_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_selection.dart';
@@ -16,6 +17,7 @@ import 'package:watchlistfy/widgets/main/home/info_card.dart';
 import 'package:watchlistfy/widgets/main/home/loggedin_header.dart';
 import 'package:watchlistfy/widgets/main/home/preview_actor_list.dart';
 import 'package:watchlistfy/widgets/main/home/preview_list.dart';
+import 'package:watchlistfy/widgets/main/home/preview_streaming_platforms_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   late final TextEditingController searchController;
   late final AuthenticationProvider authenticationProvider;
   late final ContentProvider contentProvider;
+  late final GlobalProvider globalProvider;
   PreviewProvider? previewProvider;
 
   void onContentChange() {
@@ -44,9 +47,10 @@ class _HomePageState extends State<HomePage> {
       searchController = TextEditingController();
       authenticationProvider = Provider.of<AuthenticationProvider>(context);
       contentProvider = Provider.of<ContentProvider>(context);
+      globalProvider = Provider.of<GlobalProvider>(context);
       previewProvider = Provider.of<PreviewProvider>(context, listen: false);
 
-      previewProvider?.getPreviews();
+      previewProvider?.getPreviews(region: globalProvider.selectedCountryCode);
       contentProvider.addListener(onContentChange);
 
       isInit = true;
@@ -140,6 +144,26 @@ class _HomePageState extends State<HomePage> {
                 child: PreviewList(Constants.ContentTags[2])),
             const SizedBox(height: 12),
             if (contentProvider.selectedContent != ContentType.game)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("📺 Streaming Platforms", style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )),
+                  Text(globalProvider.selectedCountryCode, style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )),
+                ],
+              ),
+            ),
+            if (contentProvider.selectedContent != ContentType.game)
+            const PreviewStreamingPlatformsList(),
+            const SizedBox(height: 12),
+            if (contentProvider.selectedContent != ContentType.game)
               SeeAllTitle(
                 contentProvider.selectedContent == ContentType.movie
                   ? "🎭 In Theaters"
@@ -154,7 +178,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                   height: 200,
                   child: PreviewList(Constants.ContentTags[3])),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
           ],
         ),
       )

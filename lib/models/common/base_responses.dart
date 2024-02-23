@@ -1,4 +1,6 @@
+import 'package:watchlistfy/models/main/anime/anime_details_name_url.dart';
 import 'package:watchlistfy/models/main/common/actor_details.dart';
+import 'package:watchlistfy/models/main/common/streaming_platform.dart';
 import 'package:watchlistfy/utils/type_converter.dart';
 
 class BaseMessageResponse {
@@ -145,6 +147,9 @@ class BasePreviewResponse<T> {
   late List<T> top = [];
   late List<T>? extra = [];
   late List<ActorDetails>? actors = [];
+  late List<StreamingPlatform>? streamingPlatforms = [];
+  late List<AnimeNameUrl>? animeStreamingPlatforms = [];
+  late List<AnimeNameUrl>? studios = [];
 
   BasePreviewResponse({
     List<dynamic>? upcomingResponse,
@@ -152,6 +157,9 @@ class BasePreviewResponse<T> {
     List<dynamic>? topResponse,
     List<dynamic>? extraResponse,
     List<dynamic>? actorsResponse,
+    List<dynamic>? streamingResponse,
+    List<dynamic>? animeStreamingResponse,
+    List<dynamic>? studiosResponse,
   }) {
     if (upcomingResponse != null) {
       var typeConverter = TypeConverter<T>();
@@ -203,6 +211,36 @@ class BasePreviewResponse<T> {
       });
     } else {
       actors = null;
+    }
+
+    if (streamingResponse != null) {
+      streamingResponse.map((e){
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
+        streamingPlatforms!.add(TypeConverter<StreamingPlatform>().convertToObject(element));
+      });
+    } else {
+      streamingPlatforms = null;
+    }
+
+    if (animeStreamingResponse != null) {
+      animeStreamingResponse.map((e){
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
+        animeStreamingPlatforms!.add(TypeConverter<AnimeNameUrl>().convertToObject(element));
+      });
+    } else {
+      animeStreamingPlatforms = null;
+    }
+
+    if (studiosResponse != null) {
+      studiosResponse.map((e){
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
+        studios!.add(TypeConverter<AnimeNameUrl>().convertToObject(element));
+      });
+    } else {
+      studios = null;
     }
   }
 }

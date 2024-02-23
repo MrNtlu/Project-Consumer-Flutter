@@ -16,11 +16,15 @@ class PreviewProvider with ChangeNotifier {
   BasePreviewResponse<BaseContent> animePreview = BasePreviewResponse();
   BasePreviewResponse<BaseContent> gamePreview = BasePreviewResponse();
 
-  Future<Preview> getPreviews() async {
+  Future<Preview> getPreviews({
+    required String region
+  }) async {
     networkState = NetworkState.loading;
 
     try {
-      final response = await http.get(Uri.parse(APIRoutes().previewRoutes.preview));
+      final response = await http.get(
+        Uri.parse('${APIRoutes().previewRoutes.previewV2}?region=$region')
+      );
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
       final previewResponse = decodedResponse.getPreviewResponse();
 

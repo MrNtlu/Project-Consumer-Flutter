@@ -448,6 +448,11 @@ class TypeConverter<T> {
         response["score"],
         response["hours_played"],
       ) as T;
+    } else if (T == StreamingPlatform) {
+      return StreamingPlatform(
+        response["logo"],
+        response["name"]
+      ) as T;
     } else if (T == AnimeDetailsRelation) {
       return AnimeDetailsRelation(
         response["_id"],
@@ -857,6 +862,9 @@ class TypeConverter<T> {
         topResponse: response["top"],
         extraResponse: response["extra"],
         actorsResponse: response["actors"],
+        streamingResponse: response["streaming_platforms"],
+        animeStreamingResponse: response["anime_streaming_platforms"],
+        studiosResponse: response["studios"],
       ) as T;
     } else {
       return response as T;
