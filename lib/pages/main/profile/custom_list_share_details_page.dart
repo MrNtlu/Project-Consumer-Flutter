@@ -288,7 +288,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                   padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                   child: Icon(item.isBookmarked ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark, size: 22),
                 ),
-                Text(item.popularity.toString()),
+                Text(item.bookmarkCount.toString()),
                 const Spacer(),
                 GestureDetector(
                   onTap: () {

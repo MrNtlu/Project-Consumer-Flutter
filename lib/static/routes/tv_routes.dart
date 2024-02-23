@@ -8,6 +8,8 @@ class TVSeriesRoutes {
   late String popularActors;
   late String searchTVSeries;
   late String tvSeriesDetails;
+  late String popularStreamingPlatforms;
+  late String tvSeriesByStreamingPlatform;
 
   TVSeriesRoutes({baseURL}) {
     _baseTVRoute = '$baseURL/tv';
@@ -19,5 +21,7 @@ class TVSeriesRoutes {
     popularActors = '$_baseTVRoute/popular-actors';
     searchTVSeries = '$_baseTVRoute/search';
     tvSeriesDetails = '$_baseTVRoute/details';
+    popularStreamingPlatforms = '$_baseTVRoute/popular-streaming-platforms';
+    tvSeriesByStreamingPlatform = '$_baseTVRoute/streaming-platforms';
   }
 }

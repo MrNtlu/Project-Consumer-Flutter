@@ -8,6 +8,8 @@ class MovieRoutes {
   late String popularActors;
   late String searchMovies;
   late String movieDetails;
+  late String popularStreamingPlatforms;
+  late String moviesByStreamingPlatform;
 
   MovieRoutes({baseURL}) {
     _baseMovieRoute = '$baseURL/movie';
@@ -19,5 +21,7 @@ class MovieRoutes {
     popularActors = '$_baseMovieRoute/popular-actors';
     searchMovies = '$_baseMovieRoute/search';
     movieDetails = '$_baseMovieRoute/details';
+    popularStreamingPlatforms = '$_baseMovieRoute/popular-streaming-platforms';
+    moviesByStreamingPlatform = '$_baseMovieRoute/streaming-platforms';
   }
 }

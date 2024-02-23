@@ -7,6 +7,10 @@ class AnimeRoutes {
   late String airingAnime;
   late String searchAnime;
   late String animeDetails;
+  late String popularStreamingPlatforms;
+  late String popularStudios;
+  late String animeByStreamingPlatform;
+  late String animeByStudio;
 
   AnimeRoutes({baseURL}) {
     _baseAnimeRoute = '$baseURL/anime';
@@ -17,5 +21,9 @@ class AnimeRoutes {
     airingAnime = '$_baseAnimeRoute/airing';
     searchAnime = '$_baseAnimeRoute/search';
     animeDetails = '$_baseAnimeRoute/details';
+    popularStreamingPlatforms = '$_baseAnimeRoute/popular-streaming-platforms';
+    popularStudios = '$_baseAnimeRoute/popular-studios';
+    animeByStreamingPlatform = '$_baseAnimeRoute/streaming-platforms';
+    animeByStudio = '$_baseAnimeRoute/studios';
   }
 }
