@@ -28,7 +28,7 @@ class DetailsStreamingLists extends StatelessWidget {
         SizedBox(
           height: data != null && data.streamingPlatforms != null ? 90 : 50,
           child: _streamingList(
-            data != null && data.streamingPlatforms != null, 
+            data != null && data.streamingPlatforms != null,
             data?.streamingPlatforms,
             globalProvider.selectedCountryCode,
           ),
@@ -37,7 +37,7 @@ class DetailsStreamingLists extends StatelessWidget {
         SizedBox(
           height: data != null && data.buyOptions != null ? 90 : 50,
           child: _streamingList(
-            data != null && data.buyOptions != null, 
+            data != null && data.buyOptions != null,
             data?.buyOptions,
             globalProvider.selectedCountryCode,
           ),
@@ -46,7 +46,7 @@ class DetailsStreamingLists extends StatelessWidget {
         SizedBox(
           height: data != null && data.rentOptions != null ? 90 : 50,
           child: _streamingList(
-            data != null && data.rentOptions != null, 
+            data != null && data.rentOptions != null,
             data?.rentOptions,
             globalProvider.selectedCountryCode,
           ),
@@ -65,7 +65,7 @@ class DetailsStreamingLists extends StatelessWidget {
     itemCount: data!.length,
     itemBuilder: (context, index) {
       final item = data[index];
-  
+
       return GestureDetector(
         onTap: () async {
           if (tmdbId.isNotEmpty) {

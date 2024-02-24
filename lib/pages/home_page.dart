@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -72,6 +74,8 @@ class _HomePageState extends State<HomePage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            if (Platform.isAndroid)
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -149,10 +153,11 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("📺 Streaming Platforms", style: TextStyle(
+                  const Text("📺 Streaming Platforms", style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   )),
+                  if (contentProvider.selectedContent != ContentType.anime)
                   Text(globalProvider.selectedCountryCode, style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -161,7 +166,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             if (contentProvider.selectedContent != ContentType.game)
-            const PreviewStreamingPlatformsList(),
+            PreviewStreamingPlatformsList(globalProvider.selectedCountryCode),
             const SizedBox(height: 12),
             if (contentProvider.selectedContent != ContentType.game)
               SeeAllTitle(
@@ -169,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                   ? "🎭 In Theaters"
                   : "📺 Airing Today", () {
                 Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                  return ContentListPage(contentProvider.selectedContent,Constants.ContentTags[3], "🎭 In Theaters");
+                  return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[3], "🎭 In Theaters");
                 }));
               },
               shouldHideSeeAllButton: contentProvider.selectedContent !=ContentType.movie

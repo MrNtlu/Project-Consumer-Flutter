@@ -24,18 +24,18 @@ class ReviewCreatePage extends StatelessWidget {
   final VoidCallback? updateReviewData;
 
   const ReviewCreatePage(
-    this.contentID, this.contentExternalID, 
+    this.contentID, this.contentExternalID,
     this.contentExternalIntID, this.contentType,
     this._fetchData,
     {this.review, this.updateReviewData, super.key}
   );
 
   void handleReviewOperation(BuildContext context, String review, int star, bool isSpoiler, bool isUpdating) async {
-    if (review.isNotEmpty && review.length < 6) {
-      showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid review. Your review can not be empty!"));
+    if (review.isEmpty || review.length < 6) {
+      showCupertinoDialog(context: context, builder: (_) => ErrorDialog(review.isEmpty ? "Invalid review. Your review can not be empty!" : "Invalid review. Your review should be longer than 6 characters."));
       return;
     }
-    
+
     showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
 
     final ReviewBody reviewBody = ReviewBody(
@@ -46,9 +46,9 @@ class ReviewCreatePage extends StatelessWidget {
     final UpdateReviewBody updateReviewBody = UpdateReviewBody(
       this.review?.id ?? '', isSpoiler, star, review
     );
-    
+
     try {
-      final response = isUpdating 
+      final response = isUpdating
       ? await http.patch(
         Uri.parse(APIRoutes().reviewRoutes.updateReview),
         body: json.encode(updateReviewBody.convertToJson()),
@@ -59,7 +59,7 @@ class ReviewCreatePage extends StatelessWidget {
         body: json.encode(reviewBody.convertToJson()),
         headers: UserToken().getBearerToken()
       );
-      
+
       if (context.mounted) {
         Navigator.pop(context);
 
@@ -67,17 +67,17 @@ class ReviewCreatePage extends StatelessWidget {
 
         if (baseMessage.error != null && context.mounted){
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          ); 
+          );
           return;
         }
 
         if (context.mounted) {
           Navigator.pop(context);
-        
+
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => MessageDialog(baseMessage.message ?? "Unkwown error!")
           );
 
@@ -90,7 +90,7 @@ class ReviewCreatePage extends StatelessWidget {
     } catch(error) {
       if (context.mounted) {
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => ErrorDialog(error.toString())
         );
         return;
@@ -152,7 +152,7 @@ class ReviewCreatePage extends StatelessWidget {
               spoilerSwitch,
               const SizedBox(height: 32),
               CupertinoButton.filled(
-                child: Text(review != null ? "Update" : "Post", style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                child: Text(review != null ? "Update" : "Post", style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
                 onPressed: () {
                   if (review != null) {
                     handleReviewOperation(context, controller.text, rating, spoilerSwitch.isSpoiler, true);

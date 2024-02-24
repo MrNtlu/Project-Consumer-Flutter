@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:watchlistfy/pages/main/ai/ai_assistant_page.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 
@@ -19,7 +19,7 @@ class DetailsNavigationBar extends StatelessWidget {
   final bool isBookmarkLoading;
 
   const DetailsNavigationBar(
-    this.title, this.contentType, this.isItemNull, this.isUserListNull, 
+    this.title, this.contentType, this.isItemNull, this.isUserListNull,
     this.isBookmarkNull, this.isUserListLoading, this.isBookmarkLoading,
     {required this.isAuthenticated, required this.onBookmarkTap, required this.onListTap, super.key}
   );
@@ -44,7 +44,7 @@ class DetailsNavigationBar extends StatelessWidget {
               if (isAuthenticated) {
                 Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                   return AIAssistantPage(title, contentType);
-                })); 
+                }));
               } else {
                 showCupertinoDialog(
                   context: context,
@@ -52,7 +52,7 @@ class DetailsNavigationBar extends StatelessWidget {
                 );
               }
             },
-            child: SvgPicture.asset("assets/images/ai.svg", height: 36, colorFilter: ColorFilter.mode(CupertinoTheme.of(context).primaryColor, BlendMode.srcIn)),
+            child: FaIcon(FontAwesomeIcons.robot, size: 18, color: CupertinoTheme.of(context).primaryColor),
           ),
           CupertinoButton(
             padding: EdgeInsets.zero,
@@ -61,8 +61,8 @@ class DetailsNavigationBar extends StatelessWidget {
 
               onListTap();
             },
-            child: isUserListLoading 
-            ? const CupertinoActivityIndicator() 
+            child: isUserListLoading
+            ? const CupertinoActivityIndicator()
             : Icon(
               !isUserListNull
               ? CupertinoIcons.heart_fill
@@ -77,7 +77,7 @@ class DetailsNavigationBar extends StatelessWidget {
               onBookmarkTap();
             },
             child: isBookmarkLoading
-            ? const CupertinoActivityIndicator() 
+            ? const CupertinoActivityIndicator()
             : Icon(
               !isBookmarkNull
               ? CupertinoIcons.bookmark_fill

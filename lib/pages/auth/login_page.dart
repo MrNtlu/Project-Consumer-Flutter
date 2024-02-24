@@ -23,6 +23,7 @@ import 'package:watchlistfy/widgets/auth/password_field.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatelessWidget {
   static const routeName = "/login";
@@ -284,7 +285,7 @@ class LoginPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Icon(Icons.android, color: Colors.green),
+                              FaIcon(FontAwesomeIcons.google, color: Colors.black,),
                               Text(
                                 "Sign in with Google",
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)

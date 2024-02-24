@@ -1,6 +1,5 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -9,9 +8,9 @@ import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
+import 'package:watchlistfy/pages/main/trailer_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -22,6 +21,7 @@ import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_info_column.dart';
+import 'package:watchlistfy/widgets/main/anime/anime_details_streaming_platforms_list.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
@@ -31,7 +31,6 @@ import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 import "package:collection/collection.dart";
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
   final String id;
@@ -120,7 +119,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         provider.deleteConsumeLaterObject(IDBody(item.consumeLater!.id)).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -131,7 +130,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         ).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -155,10 +154,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
-                          context: context, 
+                          context: context,
                           builder: (context) {
                             return UserListViewSheet(
-                              _provider.item!.id, 
+                              _provider.item!.id,
                               _provider.item!.title,
                               "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $episodes eps",
                               _provider.item!.userList!,
@@ -174,8 +173,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                           barrierDismissible: false,
                           builder: (context) {
                             return AnimeWatchListSheet(
-                              _provider, 
-                              _provider.item!.id, 
+                              _provider,
+                              _provider.item!.id,
                               _provider.item!.malID,
                               episodePrefix: _provider.item?.episodes,
                             );
@@ -194,7 +193,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
               ],
             ),
           );
-        } 
+        }
       )
     );
   }
@@ -203,21 +202,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
-        YoutubePlayerController? controller;
-        if (item.trailer != null) {
-          final videoId = YoutubePlayer.convertUrlToId(item.trailer!);
 
-          controller = YoutubePlayerController(
-            initialVideoId: videoId ?? item.trailer!.split("v=")[1],
-            flags: const YoutubePlayerFlags(
-              autoPlay: false,
-              mute: false,
-              showLiveFullscreenButton: false,
-              controlsVisibleAtStart: true
-            ),
-          );
-        }
-      
         final animeRelations = groupBy(item.relations, (element) => element.relation);
         return SliverToBoxAdapter(
           child: Padding(
@@ -244,16 +229,16 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             ),
                             const SizedBox(height: 32,),
                             AnimeDetailsInfoColumn(
-                              item.titleOriginal, 
+                              item.titleOriginal,
                               item.titleJP,
                               item.season != null || item.year != null
                               ? "${item.season?.capitalize() ?? '?'} ${item.year ?? '?'}"
-                              : "Unknown", 
-                              item.episodes?.toString() ?? '?', 
+                              : "Unknown",
+                              item.episodes?.toString() ?? '?',
                               "${item.aired.from != null && item.aired.from != ""
-                              ? DateTime.tryParse(item.aired.from!)?.dateToHumanDate() 
+                              ? DateTime.tryParse(item.aired.from!)?.dateToHumanDate()
                               : '?'} to ${item.aired.to != null && item.aired.to != ""
-                              ? DateTime.tryParse(item.aired.to!)?.dateToHumanDate() 
+                              ? DateTime.tryParse(item.aired.to!)?.dateToHumanDate()
                               : '?'}",
                               item.source,
                               item.type
@@ -262,18 +247,46 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return ImagePage(item.imageUrl);
-                          })
-                        );
-                      },
-                      child: SizedBox(
-                        height: 125,
-                        child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 200, cacheHeight: 300)
-                      ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(builder: (_) {
+                                return ImagePage(item.imageUrl);
+                              })
+                            );
+                          },
+                          child: SizedBox(
+                            height: 125,
+                            child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 200, cacheHeight: 300)
+                          ),
+                        ),
+                        if (item.trailer != null)
+                        const SizedBox(height: 8),
+                        if (item.trailer != null)
+                        SizedBox(
+                          width: 80,
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            minSize: 0,
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(CupertinoIcons.play_rectangle_fill, size: 18),
+                                SizedBox(width: 6),
+                                Text("Trailer", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                                return TrailerPage(trailerURL: item.trailer!);
+                              }));
+                            }
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -329,45 +342,27 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 SizedBox(
                   height: 150,
                   child: DetailsRecommendationList(
-                    item.recommendations.length, 
+                    item.recommendations.length,
                     (index) {
                       return item.recommendations[index].imageURL;
-                    }, 
+                    },
                     (index) {
                       return item.recommendations[index].title;
-                    }, 
+                    },
                     (index) {
                       return AnimeDetailsPage(item.recommendations[index].malId.toString());
                     }
                   ),
                 ),
-                if (item.trailer != null)
-                const DetailsTitle("Trailer"),
-                if (item.trailer != null)
-                YoutubePlayer(
-                  controller: controller!,
-                  showVideoProgressIndicator: true,
-                  aspectRatio: 16/9,
-                  bottomActions: [
-                    const SizedBox(width: 14.0),
-                    CurrentPosition(),
-                    const SizedBox(width: 8.0),
-                    ProgressBar(
-                      isExpanded: true,
-                      colors: ProgressBarColors(
-                        playedColor: Colors.red,
-                        handleColor: AppColors().primaryColor,
-                      ),
-                    ),
-                    RemainingDuration(),
-                    const PlaybackSpeedButton(),
-                  ],
-                ),
                 DetailsReviewSummary(
-                  item.title.isNotEmpty ? item.title : item.titleOriginal, item.reviewSummary, 
-                  item.id, null, item.malID, 
+                  item.title.isNotEmpty ? item.title : item.titleOriginal, item.reviewSummary,
+                  item.id, null, item.malID,
                   ContentType.anime.request, _fetchData,
                 ),
+                if (item.streaming != null && item.streaming!.isNotEmpty)
+                const DetailsTitle("Streaming Platforms"),
+                if (item.streaming != null && item.streaming!.isNotEmpty)
+                AnimeDetailsStreamingPlatformsList(item.streaming!),
                 if (animeRelations.isNotEmpty)
                 const DetailsTitle("Related Anime"),
                 for (var animeList in animeRelations.values)
@@ -411,15 +406,15 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: DetailsRecommendationList(
-              relationList.length, 
-              (index) => relationList[index].imageURL, 
-              (index) => relationList[index].title, 
+              relationList.length,
+              (index) => relationList[index].imageURL,
+              (index) => relationList[index].title,
               (index) {
                 final item = relationList[index];
                 if (item.relation == "Adaptation") {
                   //TODO Redirect or open manga
                 }
-                return AnimeDetailsPage(item.animeID.toString()); 
+                return AnimeDetailsPage(item.animeID.toString());
               }
             ),
           ),

@@ -87,6 +87,12 @@ class Constants {
     BackendRequestMapper("Oldest", "old")
   ];
 
+  static final SortRequestsStreamingPlatform = [
+    BackendRequestMapper("Popularity", "popularity"),
+    BackendRequestMapper("Newest", "new"),
+    BackendRequestMapper("Oldest", "old")
+  ];
+
   static final SortReviewRequests = [
     BackendRequestMapper("Popularity", "popularity"),
     BackendRequestMapper("Latest", "latest"),

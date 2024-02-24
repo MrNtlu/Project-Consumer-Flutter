@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -117,20 +117,20 @@ class _TabsPageState extends State<TabsPage> {
           backgroundColor: CupertinoTheme.of(context).barBackgroundColor,
           activeColor: CupertinoTheme.of(context).primaryColor,
           inactiveColor: CupertinoColors.systemGrey,
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.house_fill),
               label: "Home",
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.person_2_fill),
               label: "Socials",
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("assets/images/ai.svg", colorFilter: ColorFilter.mode(_selectedPageIndex == 2 ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey2, BlendMode.srcIn)),
+              icon: FaIcon(FontAwesomeIcons.robot, size: 24),
               label: "Assistant",
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.settings_solid),
               label: "Settings",
             ),
@@ -140,7 +140,7 @@ class _TabsPageState extends State<TabsPage> {
           return CupertinoTabView(
             builder: (context) {
               if (state == BaseState.loading || state == BaseState.init) {
-                return const LoadingView("Please wait");
+                return const LoadingView("Loading");
               }
               return SafeArea(child: _pages[index]);
             },

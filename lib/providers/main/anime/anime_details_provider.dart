@@ -12,7 +12,7 @@ import 'package:watchlistfy/static/routes.dart';
 
 class AnimeDetailsProvider extends BaseDetailsProvider<AnimeDetails> {
 
-  Future<BaseNullableResponse<AnimeDetails>> getAnimeDetails(String id) async 
+  Future<BaseNullableResponse<AnimeDetails>> getAnimeDetails(String id) async
     => getDetails(url: "${APIRoutes().animeRoutes.animeDetails}?id=$id");
 
   Future<BaseNullableResponse<ConsumeLater>> createConsumeLaterObject(ConsumeLaterBody body) async
