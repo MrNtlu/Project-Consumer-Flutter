@@ -6,6 +6,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_relation.dart';
 import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
+import 'package:watchlistfy/pages/main/anime/studio_content_page.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/pages/main/trailer_page.dart';
@@ -370,16 +371,41 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 if (item.producers != null && item.producers!.isNotEmpty)
                 const DetailsTitle("Producers"),
                 if (item.producers != null && item.producers!.isNotEmpty)
-                Text( //TODO Change list with URL links.
+                Text(
                   item.producers != null ? item.producers!.map((e) => e.name).join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 if (item.studios != null && item.studios!.isNotEmpty)
                 const DetailsTitle("Studios"),
                 if (item.studios != null && item.studios!.isNotEmpty)
-                Text( //TODO Change to url links
-                  item.studios != null ? item.studios!.map((e) => e.name).join(" • ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                SizedBox(
+                  height: 35,
+                  child: ListView.builder(
+                    itemCount: item.studios!.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final name = item.studios![index].name;
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(builder: (_) {
+                              return StudioContentPage(name);
+                            })
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Center(
+                            child: Text(
+                              name,
+                              style: const TextStyle(fontWeight: FontWeight.w500, decoration: TextDecoration.underline,),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  ),
                 ),
                 const SizedBox(height: 32)
               ],

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/pages/main/anime/studio_content_page.dart';
 import 'package:watchlistfy/pages/main/content_list_page.dart';
 import 'package:watchlistfy/pages/main/search_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
@@ -185,6 +186,49 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                   height: 200,
                   child: PreviewList(Constants.ContentTags[3])),
+            if (contentProvider.selectedContent == ContentType.anime)
+            const SizedBox(height: 12),
+            if (contentProvider.selectedContent == ContentType.anime)
+            SeeAllTitle("🎙️ Popular Studios", (){}, shouldHideSeeAllButton: true),
+            if (contentProvider.selectedContent == ContentType.anime)
+            SizedBox(
+              height: 35,
+              child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  return const Center(child: Text(" • ", style: TextStyle(fontSize: 16)));
+                },
+                itemCount: previewProvider?.animePreview.studios?.length ?? 0,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final studio = previewProvider?.animePreview.studios?[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      if (studio?.name != null) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return StudioContentPage(studio!.name);
+                          })
+                        );
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: Center(
+                        child: Text(
+                          studio?.name ?? '',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              ),
+            ),
             const SizedBox(height: 16),
           ],
         ),
