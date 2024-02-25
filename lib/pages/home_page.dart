@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 child: PreviewList(Constants.ContentTags[0])),
             const SizedBox(height: 20),
-            if (!Platform.isAndroid)
+            if (!authenticationProvider.isAuthenticated)
             const InfoCard(),
             if (!Platform.isAndroid)
             const SizedBox(height: 20),
