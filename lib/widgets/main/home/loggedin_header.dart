@@ -155,9 +155,9 @@ class LoggedinHeader extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Icon(CupertinoIcons.profile_circled, color: CupertinoTheme.of(context).bgTextColor, size: 16),
-                    const SizedBox(width: 6),
                     Text("Profile", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                    const Spacer(),
+                    Icon(CupertinoIcons.profile_circled, color: CupertinoTheme.of(context).bgTextColor, size: 18),
                   ],
                 )
               ),
@@ -171,9 +171,9 @@ class LoggedinHeader extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Icon(CupertinoIcons.folder_fill, color: CupertinoTheme.of(context).bgTextColor, size: 16),
-                    const SizedBox(width: 6),
                     Text("Custom Lists", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                    const Spacer(),
+                    Icon(CupertinoIcons.folder_fill, color: CupertinoTheme.of(context).bgTextColor, size: 18),
                   ],
                 )
               ),
@@ -187,9 +187,9 @@ class LoggedinHeader extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Icon(CupertinoIcons.list_bullet_below_rectangle, color: CupertinoTheme.of(context).bgTextColor, size: 16),
-                    const SizedBox(width: 6),
                     Text("User List", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                    const Spacer(),
+                    Icon(CupertinoIcons.list_bullet_below_rectangle, color: CupertinoTheme.of(context).bgTextColor, size: 18),
                   ],
                 )
               ),
@@ -203,9 +203,9 @@ class LoggedinHeader extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Icon(CupertinoIcons.time, color: CupertinoTheme.of(context).bgTextColor, size: 16),
-                    const SizedBox(width: 6),
                     Text("Watch Later", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                    const Spacer(),
+                    Icon(CupertinoIcons.time, color: CupertinoTheme.of(context).bgTextColor, size: 18),
                   ],
                 )
               ),
@@ -237,19 +237,6 @@ class LoggedinHeader extends StatelessWidget {
                 Icons.person,
                 size: 30,
                 color: CupertinoColors.activeBlue,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: AutoSizeText(
-              authenticationProvider.basicUserInfo?.username ?? '',
-              minFontSize: 14,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold
               ),
             ),
           ),

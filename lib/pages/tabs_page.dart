@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
@@ -15,6 +19,7 @@ import 'package:watchlistfy/static/purchase_api.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class TabsPage extends StatefulWidget {
   static const routeName = "/";
@@ -44,9 +49,46 @@ class _TabsPageState extends State<TabsPage> {
     }
   }
 
+  bool androidInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (info.currentRoute(context)?.isFirst == true) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to close the app?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: ()  {
+                Navigator.pop(context);
+                SystemNavigator.pop();
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        )
+      );
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) {
+      BackButtonInterceptor.add(androidInterceptor);
+    }
+  }
+
   @override
   void dispose() {
     state = BaseState.disposed;
+    if (Platform.isAndroid) {
+      BackButtonInterceptor.remove(androidInterceptor);
+    }
     super.dispose();
   }
 

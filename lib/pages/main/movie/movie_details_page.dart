@@ -94,7 +94,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => _provider,
       child: Consumer<MovieDetailsProvider>(
@@ -119,7 +119,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         provider.deleteConsumeLaterObject(IDBody(item.consumeLater!.id)).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -130,7 +130,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         ).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -153,10 +153,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
-                          context: context, 
+                          context: context,
                           builder: (context) {
                             return UserListViewSheet(
-                              _provider.item!.id, 
+                              _provider.item!.id,
                               _provider.item!.title,
                               "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)",
                               _provider.item!.userList!,
@@ -187,7 +187,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
               ],
             ),
           );
-        } 
+        }
       )
     );
   }
@@ -291,13 +291,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 SizedBox(
                   height: 150,
                   child: DetailsRecommendationList(
-                    item.recommendations.length, 
+                    item.recommendations.length,
                     (index) {
                       return item.recommendations[index].imageURL;
-                    }, 
+                    },
                     (index) {
                       return item.recommendations[index].title;
-                    }, 
+                    },
                     (index) {
                       return MovieDetailsPage(item.recommendations[index].tmdbID);
                     }
@@ -308,12 +308,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   children: [
                     const DetailsTitle("Platforms"),
                     CupertinoButton(
-                      child: const Icon(CupertinoIcons.info_circle), 
+                      child: const Icon(CupertinoIcons.info_circle),
                       onPressed: () {
                         final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
 
                         showCupertinoDialog(
-                          context: context, 
+                          context: context,
                           builder: (_) => MessageDialog(
                             title: "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
                             "You can change your region from Settings."
@@ -326,7 +326,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
                 DetailsReviewSummary(
                   item.title.isNotEmpty ? item.title : item.titleOriginal,
-                  item.reviewSummary, item.id, item.tmdbID, 
+                  item.reviewSummary, item.id, item.tmdbID,
                   null, ContentType.movie.request, _fetchData,
                 ),
                 if (item.images.isNotEmpty)
@@ -362,7 +362,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       case DetailState.error:
         return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
-        return const SliverFillRemaining(child: LoadingView("Please wait"));
+        return const SliverFillRemaining(child: LoadingView("Loading"));
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }

@@ -73,6 +73,7 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   extended_image: ^8.2.0
   font_awesome_flutter: ^10.7.0
+  back_button_interceptor: ^7.0.2
 
 dev_dependencies:
   flutter_test:

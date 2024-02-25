@@ -209,7 +209,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                       onPressed: () {
                         showCupertinoDialog(
-                          context: context, 
+                          context: context,
                           builder: (_) => const MessageDialog(title: "Information", "Legend content refers to movies, animes, games and tv series that users have watched and enjoyed multiple times.")
                         );
                       },
@@ -235,7 +235,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       );
                     } else {
                       final data = item.legendContent[index];
-          
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: GestureDetector(
@@ -249,7 +249,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                                     return TVDetailsPage(data.id);
                                   case ContentType.anime:
                                     return AnimeDetailsPage(data.id);
-                                  case ContentType.game: 
+                                  case ContentType.game:
                                     return GameDetailsPage(data.id);
                                   default:
                                     return MovieDetailsPage(data.id);
@@ -287,7 +287,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       );
                     } else {
                       final data = item.reviews[index];
-          
+
                       return ProfileReviewCell(data, _fetchData);
                     }
                   },
@@ -312,7 +312,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       );
                     } else {
                       final data = item.customLists[index];
-          
+
                       return ProfileCustomListCell(data);
                     }
                   },
@@ -325,7 +325,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
       case DetailState.error:
         return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
-        return const SliverFillRemaining(child: LoadingView("Please wait"));
+        return const SliverFillRemaining(child: LoadingView("Loading"));
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }

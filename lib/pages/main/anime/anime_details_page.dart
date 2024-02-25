@@ -389,7 +389,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       case DetailState.error:
         return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
-        return const SliverFillRemaining(child: LoadingView("Please wait"));
+        return const SliverFillRemaining(child: LoadingView("Loading"));
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }

@@ -82,7 +82,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => _provider,
       child: Consumer<CustomListShareProvider>(
@@ -105,10 +105,10 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
 
                   if (box != null) {
                     Share.share(
-                      url, 
-                      subject: 'Share ${item.name}', 
+                      url,
+                      subject: 'Share ${item.name}',
                       sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                    ); 
+                    );
                   }
                 } catch (_) {
                   await Clipboard.setData(ClipboardData(text: url));
@@ -126,7 +126,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
               )
             ),
           );
-        } 
+        }
       )
     );
   }
@@ -135,7 +135,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
-        
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,9 +171,9 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                       ),
                     );
                   }
-              
+
                   final content = item.content.sorted((a, b) => a.order.compareTo(b.order))[index];
-                      
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -185,7 +185,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                               return TVDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalID ?? '');
                             case ContentType.anime:
                               return AnimeDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalIntID?.toString() ?? '');
-                            case ContentType.game: 
+                            case ContentType.game:
                               return GameDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalIntID?.toString() ?? '');
                           }
                         })
@@ -196,16 +196,16 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                       contentType: ContentType.values.where((element) => content.contentType == element.request).first.value,
                       null,
                       BaseContent(
-                        content.contentID, 
-                        "", 
-                        content.imageURL ?? '', 
-                        content.titleEn.isNotEmpty ? content.titleEn : content.titleOriginal, 
-                        content.titleOriginal.isNotEmpty ? content.titleOriginal : content.titleEn, 
+                        content.contentID,
+                        "",
+                        content.imageURL ?? '',
+                        content.titleEn.isNotEmpty ? content.titleEn : content.titleOriginal,
+                        content.titleOriginal.isNotEmpty ? content.titleOriginal : content.titleEn,
                         content.contentExternalID,
                         content.contentExternalIntID
                       ),
-                      true, 
-                      null, 
+                      true,
+                      null,
                       null,
                       key: ValueKey(content.contentID),
                     ),
@@ -225,11 +225,11 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                           return const LoadingDialog();
                         }
                       );
-        
+
                       provider.likeCustomList(widget.id).then((value) {
                         if (context.mounted) {
                           Navigator.pop(context);
-        
+
                           if (value.error != null) {
                             showCupertinoDialog(
                               context: context,
@@ -242,7 +242,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                       });
                     } else {
                       showCupertinoDialog(
-                        context: context, 
+                        context: context,
                         builder: (_) => const ErrorDialog("You need to login to do this action.")
                       );
                     }
@@ -262,11 +262,11 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                           return const LoadingDialog();
                         }
                       );
-        
+
                       provider.bookmarkCustomList(widget.id).then((value) {
                         if (context.mounted) {
                           Navigator.pop(context);
-        
+
                           if (value.error != null) {
                             showCupertinoDialog(
                               context: context,
@@ -279,7 +279,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                       });
                     } else {
                       showCupertinoDialog(
-                        context: context, 
+                        context: context,
                         builder: (_) => const ErrorDialog("You need to login to do this action.")
                       );
                     }
@@ -307,7 +307,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
       case DetailState.error:
         return ErrorView(_error ?? "Unknown error", _fetchData);
       case DetailState.loading:
-        return const LoadingView("Please wait");
+        return const LoadingView("Loading");
       default:
         return const LoadingView("Loading");
     }

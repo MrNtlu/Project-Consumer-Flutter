@@ -119,7 +119,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                         provider.deleteConsumeLaterObject(IDBody(item.consumeLater!.id)).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -130,7 +130,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                         ).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -155,10 +155,10 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
-                          context: context, 
+                          context: context,
                           builder: (context) {
                             return UserListViewSheet(
-                              _provider.item!.id, 
+                              _provider.item!.id,
                               _provider.item!.title,
                               "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $seasons seasons $episodes eps",
                               _provider.item!.userList!,
@@ -176,8 +176,8 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                           barrierDismissible: false,
                           builder: (context) {
                             return TVWatchListSheet(
-                              _provider, 
-                              _provider.item!.id, 
+                              _provider,
+                              _provider.item!.id,
                               _provider.item!.tmdbID,
                               episodePrefix: _provider.item?.totalEpisodes,
                               seasonPrefix: _provider.item?.totalSeasons,
@@ -197,7 +197,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
               ],
             ),
           );
-        } 
+        }
       )
     );
   }
@@ -302,13 +302,13 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 SizedBox(
                   height: 150,
                   child: DetailsRecommendationList(
-                    item.recommendations.length, 
+                    item.recommendations.length,
                     (index) {
                       return item.recommendations[index].imageURL;
-                    }, 
+                    },
                     (index) {
                       return item.recommendations[index].title;
-                    }, 
+                    },
                     (index) {
                       return TVDetailsPage(item.recommendations[index].tmdbID);
                     }
@@ -319,12 +319,12 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   children: [
                     const DetailsTitle("Platforms"),
                     CupertinoButton(
-                      child: const Icon(CupertinoIcons.info_circle), 
+                      child: const Icon(CupertinoIcons.info_circle),
                       onPressed: () {
                         final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
 
                         showCupertinoDialog(
-                          context: context, 
+                          context: context,
                           builder: (_) => MessageDialog(
                             title: "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
                             "You can change your region from Settings."
@@ -337,8 +337,8 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "tv"),
                 DetailsReviewSummary(
                   item.title.isNotEmpty ? item.title : item.titleOriginal,
-                  item.reviewSummary, item.id, 
-                  item.tmdbID, null, 
+                  item.reviewSummary, item.id,
+                  item.tmdbID, null,
                   ContentType.tv.request, _fetchData,
                 ),
                 if (item.images.isNotEmpty)
@@ -395,7 +395,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
       case DetailState.error:
         return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
-        return const SliverFillRemaining(child: LoadingView("Please wait"));
+        return const SliverFillRemaining(child: LoadingView("Loading"));
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }

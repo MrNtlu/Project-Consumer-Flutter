@@ -113,7 +113,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         provider.deleteConsumeLaterObject(IDBody(item.consumeLater!.id)).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -124,7 +124,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         ).then((response) {
                           if (response.error != null) {
                             showCupertinoDialog(
-                              context: context, 
+                              context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
@@ -148,10 +148,10 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         final timesFinished = item.userList!.timesFinished;
 
                         showCupertinoModalPopup(
-                          context: context, 
+                          context: context,
                           builder: (context) {
                             return UserListViewSheet(
-                              _provider.item!.id, 
+                              _provider.item!.id,
                               _provider.item!.title,
                               "🎯 $status\n⭐ $score\n🏁 $timesFinished time(s)\n📺 $hoursPlayed hrs.",
                               _provider.item!.userList!,
@@ -167,8 +167,8 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                           barrierDismissible: false,
                           builder: (context) {
                             return GameDetailsPlayListSheet(
-                              _provider, 
-                              _provider.item!.id, 
+                              _provider,
+                              _provider.item!.id,
                               _provider.item!.rawgId,
                             );
                           }
@@ -195,7 +195,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
     switch (_state) {
       case DetailState.view:
         final item = provider.item!;
-      
+
         return SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -224,9 +224,9 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                             ),
                             const SizedBox(height: 32),
                             GameDetailsInfoColumn(
-                              item.title != item.titleOriginal, 
-                              item.titleOriginal, 
-                              item.ageRating, 
+                              item.title != item.titleOriginal,
+                              item.titleOriginal,
+                              item.ageRating,
                               item.metacriticScore
                             )
                           ],
@@ -284,13 +284,13 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                 SizedBox(
                   height: 150,
                   child: DetailsRecommendationList(
-                    item.relatedGames.length, 
+                    item.relatedGames.length,
                     (index) {
                       return item.relatedGames[index].imageURL;
-                    }, 
+                    },
                     (index) {
                       return item.relatedGames[index].title;
-                    }, 
+                    },
                     (index) {
                       return GameDetailsPage(item.relatedGames[index].rawgId.toString());
                     }
@@ -298,8 +298,8 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                 ),
                 DetailsReviewSummary(
                   item.title.isNotEmpty ? item.title : item.titleOriginal,
-                  item.reviewSummary, item.id, 
-                  null, item.rawgId, 
+                  item.reviewSummary, item.id,
+                  null, item.rawgId,
                   ContentType.game.request, _fetchData,
                 ),
                 if (item.screenshots.isNotEmpty)
@@ -315,7 +315,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
       case DetailState.error:
         return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
-        return const SliverFillRemaining(child: LoadingView("Please wait"));
+        return const SliverFillRemaining(child: LoadingView("Loading"));
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }

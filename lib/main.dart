@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
             SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
               statusBarColor: SharedPref().isDarkTheme() ? const Color(0xFF121212) : const Color(0xFFFAFAFA),
               systemNavigationBarColor: SharedPref().isDarkTheme() ? const Color(0xFF212121) : const Color(0xFFFAFAFA),
-            )); 
+            ));
           }
 
           return CupertinoApp.router(

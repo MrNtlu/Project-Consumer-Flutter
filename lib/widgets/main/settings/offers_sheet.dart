@@ -334,7 +334,7 @@ class _OffersSheetState extends State<OffersSheet> {
           ),
         );
       default:
-        return const Center(child: LoadingView("Please wait"));
+        return const Center(child: LoadingView("Loading"));
     }
   }
 

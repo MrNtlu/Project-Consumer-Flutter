@@ -13,7 +13,7 @@ class LoadingDialog extends StatelessWidget {
           CupertinoActivityIndicator(radius: 14, color: CupertinoTheme.of(context).bgTextColor),
           const SizedBox(height: 12),
           const Text(
-            "Please wait", 
+            "Please wait",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
           )
         ],

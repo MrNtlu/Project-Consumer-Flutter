@@ -68,7 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
             _state = DetailState.view;
           });
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
           );
         } else {
@@ -85,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _state = DetailState.view;
       });
       showCupertinoDialog(
-        context: context, 
+        context: context,
         builder: (ctx) => ErrorDialog(error.toString())
       );
     }
@@ -105,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
             _state = DetailState.view;
           });
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (_) => ErrorDialog(response.getBaseMessageResponse().error!)
           );
         } else {
@@ -135,11 +135,11 @@ class _SettingsPageState extends State<SettingsPage> {
             });
             if (context.mounted) {
               showCupertinoDialog(
-                context: context, 
+                context: context,
                 builder: (_) => ErrorDialog(error.toString())
               );
             }
-          } 
+          }
         }
       });
     } catch (error) {
@@ -147,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _state = DetailState.view;
       });
       showCupertinoDialog(
-        context: context, 
+        context: context,
         builder: (ctx) => ErrorDialog(error.toString())
       );
     }
@@ -173,7 +173,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
           setState(() {
             _state = _userInfo == null ? DetailState.error : DetailState.view;
-          }); 
+          });
         }
       }).onError((error, stackTrace) {
         this.error = error.toString();
@@ -352,7 +352,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         final url = Uri.parse('mailto:mrntlu@gmail.com');
                         if (!await  launchUrl(url) && context.mounted) {
                           showCupertinoDialog(
-                            context: context, 
+                            context: context,
                             builder: (_) => const MessageDialog("You can send email to, mrntlu@gmail.com", title: "Contact Us")
                           );
                         }
@@ -386,9 +386,9 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CupertinoButton(
-                  child: const Text("Terms & Conditions"), 
+                  child: const Text("Terms & Conditions"),
                   onPressed: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context, rootNavigator: true).push(
                       CupertinoPageRoute(builder: (_) {
                         return const PolicyPage(false);
                       })
@@ -396,9 +396,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   }
                 ),
                 CupertinoButton(
-                  child: const Text("Privacy Policy"), 
+                  child: const Text("Privacy Policy"),
                   onPressed: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context, rootNavigator: true).push(
                       CupertinoPageRoute(builder: (_) {
                         return const PolicyPage(true);
                       })

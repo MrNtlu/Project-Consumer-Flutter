@@ -113,13 +113,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       final url = '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}';
                       try {
                         final box = context.findRenderObject() as RenderBox?;
-                  
+
                         if (box != null) {
                           Share.share(
                             url,
-                            subject: 'Share Profile', 
+                            subject: 'Share Profile',
                             sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                          ); 
+                          );
                         }
                       } catch (_) {
                         await Clipboard.setData(ClipboardData(text: url));
@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: const Icon(CupertinoIcons.ellipsis_vertical),
                     onPressed: () {
                       showCupertinoModalPopup(
-                        context: context, 
+                        context: context,
                         builder: (_) {
                           return CupertinoActionSheet(
                             cancelButton: CupertinoActionSheetAction(
@@ -309,7 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       return TVDetailsPage(data.contentID);
                                     case ContentType.anime:
                                       return AnimeDetailsPage(data.contentID);
-                                    case ContentType.game: 
+                                    case ContentType.game:
                                       return GameDetailsPage(data.contentID);
                                     default:
                                       return MovieDetailsPage(data.contentID);
@@ -324,7 +324,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               HapticFeedback.lightImpact();
 
                               showCupertinoDialog(
-                                context: context, 
+                                context: context,
                                 builder: (_) {
                                   return SureDialog("Do you want to remove it?", () {
                                     _provider.deleteConsumeLater(index, IDBody(data.id));
@@ -353,7 +353,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                       onPressed: () {
                         showCupertinoDialog(
-                          context: context, 
+                          context: context,
                           builder: (_) => const MessageDialog(title: "Information", "Legend content refers to movies, animes, games and tv series that users have watched and enjoyed multiple times.")
                         );
                       },
@@ -379,7 +379,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     } else {
                       final data = item.legendContent[index];
-          
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: GestureDetector(
@@ -393,7 +393,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     return TVDetailsPage(data.id);
                                   case ContentType.anime:
                                     return AnimeDetailsPage(data.id);
-                                  case ContentType.game: 
+                                  case ContentType.game:
                                     return GameDetailsPage(data.id);
                                   default:
                                     return MovieDetailsPage(data.id);
@@ -437,7 +437,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     } else {
                       final data = item.reviews[index];
-          
+
                       return ProfileReviewCell(data, _fetchData);
                     }
                   },
@@ -450,7 +450,7 @@ class _ProfilePageState extends State<ProfilePage> {
       case DetailState.error:
         return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
-        return const SliverFillRemaining(child: LoadingView("Please wait"));
+        return const SliverFillRemaining(child: LoadingView("Loading"));
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }
