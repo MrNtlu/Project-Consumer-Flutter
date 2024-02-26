@@ -53,7 +53,7 @@ class GenreList extends StatelessWidget {
           }
 
           final data = genreList[index];
-          
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
             child: GestureDetector(
@@ -72,7 +72,6 @@ class GenreList extends StatelessWidget {
                       default:
                       return MovieDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
                     }
-                    
                   })
                 );
               },
@@ -100,8 +99,8 @@ class GenreList extends StatelessWidget {
                         child: Text(
                           data.name,
                           style: const TextStyle(
-                            fontSize: 16, 
-                            fontWeight: FontWeight.bold, 
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                             color: CupertinoColors.white
                           ),
                         ),

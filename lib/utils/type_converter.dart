@@ -148,7 +148,12 @@ class TypeConverter<T> {
         response["title_en"] ?? (response["title"] ?? (response["title_jp"] ?? '')),
         response["title_original"] ?? '',
         response["tmdb_id"],
-        response["mal_id"] ?? response["rawg_id"]
+        response["mal_id"] ?? response["rawg_id"],
+        ((response["mal_score"] ?? response["tmdb_vote"] ?? response["rawg_rating"] ?? 0) is double)
+        ? response["mal_score"] ?? response["tmdb_vote"] ?? response["rawg_rating"] ?? 0.0
+        : ((response["mal_score"] ?? response["tmdb_vote"] ?? response["rawg_rating"] ?? 0) as int).toDouble(),
+        response["episodes"] ?? response["length"] ?? response["total_seasons"] ?? response["metacritic_score"],
+        response["source"] ?? response["total_episodes"]?.toString() ?? response["release_date"] ?? response["status"],
       ) as T;
     } else if (T == UserList) {
       return UserList(

@@ -154,7 +154,7 @@ class _SocialPageState extends State<SocialPage> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: AutoSizeText(
-                                  userInfo.username,
+                                  userInfo.username.split("@")[0], //TODO Remove later?
                                   minFontSize: 16,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,

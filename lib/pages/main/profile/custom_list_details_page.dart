@@ -45,7 +45,7 @@ class CustomListDetailsPage extends StatelessWidget {
                       url,
                       subject: 'Share ${item.name}',
                       sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                    ); 
+                    );
                   }
                 } catch (_) {
                   await Clipboard.setData(ClipboardData(text: url));
@@ -96,9 +96,9 @@ class CustomListDetailsPage extends StatelessWidget {
                         ),
                       );
                     }
-                
+
                     final content = item.content.sorted((a, b) => a.order.compareTo(b.order))[index];
-                        
+
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context, rootNavigator: true).push(
@@ -110,7 +110,7 @@ class CustomListDetailsPage extends StatelessWidget {
                                 return TVDetailsPage(content.contentID);
                               case ContentType.anime:
                                 return AnimeDetailsPage(content.contentID);
-                              case ContentType.game: 
+                              case ContentType.game:
                                 return GameDetailsPage(content.contentID);
                             }
                           }, maintainState: false)
@@ -121,16 +121,17 @@ class CustomListDetailsPage extends StatelessWidget {
                         contentType: ContentType.values.where((element) => content.contentType == element.request).first.value,
                         null,
                         BaseContent(
-                          content.contentID, 
-                          "", 
-                          content.imageURL ?? '', 
-                          content.titleEn.isNotEmpty ? content.titleEn : content.titleOriginal, 
-                          content.titleOriginal.isNotEmpty ? content.titleOriginal : content.titleEn, 
+                          content.contentID,
+                          "",
+                          content.imageURL ?? '',
+                          content.titleEn.isNotEmpty ? content.titleEn : content.titleOriginal,
+                          content.titleOriginal.isNotEmpty ? content.titleOriginal : content.titleEn,
                           content.contentExternalID,
-                          content.contentExternalIntID
+                          content.contentExternalIntID,
+                          content.score, null, null
                         ),
-                        true, 
-                        null, 
+                        true,
+                        null,
                         null,
                         key: ValueKey(content.contentID),
                       ),
@@ -152,24 +153,24 @@ class CustomListDetailsPage extends StatelessWidget {
                   CupertinoButton(
                     onPressed: () {
                       showCupertinoDialog(
-                        context: context, 
+                        context: context,
                         builder: (_) {
                           return SureDialog("Do you want to delete it?", () {
                             Navigator.pop(context);
-                  
+
                             showCupertinoDialog(
                               context: context,
                               builder: (_) {
                                 return const LoadingDialog();
                               }
                             );
-                  
+
                             deleteCustomList(
                               item.id,
                               item
                             ).then((value) {
                               Navigator.pop(context);
-                  
+
                               showCupertinoDialog(
                                 context: context,
                                 barrierDismissible: true,

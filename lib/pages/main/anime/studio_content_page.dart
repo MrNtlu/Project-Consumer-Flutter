@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/providers/main/anime/anime_studio_list_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/widgets/common/content_list_cell.dart';
+import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/common/content_list.dart';
@@ -21,6 +27,7 @@ class _StudioContentPageState extends State<StudioContentPage> {
   ListState _state = ListState.init;
 
   late final AnimeStudioListProvider _provider;
+  late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -88,6 +95,7 @@ class _StudioContentPageState extends State<StudioContentPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData();
@@ -100,27 +108,48 @@ class _StudioContentPageState extends State<StudioContentPage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(widget.studio),
-        trailing: CupertinoButton(
-          onPressed: () {
-            showCupertinoModalPopup(
-              context: context,
-              builder: (context) {
-                return StreamingSortSheet(
-                  _provider.sort,
-                  (newSort) {
-                    final shouldFetchData = _provider.sort != newSort;
-                    _provider.sort = newSort;
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CupertinoButton(
+              onPressed: () {
+                _globalProvider.setContentMode(
+                  _globalProvider.contentMode == Constants.ContentUIModes.first
+                  ? Constants.ContentUIModes.last
+                  : Constants.ContentUIModes.first
+                );
+              },
+              padding: EdgeInsets.zero,
+              child: Icon(
+                _globalProvider.contentMode == Constants.ContentUIModes.first
+                ? Icons.grid_view_rounded
+                : CupertinoIcons.list_bullet,
+                size: 28
+              )
+            ),
+            CupertinoButton(
+              onPressed: () {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) {
+                    return StreamingSortSheet(
+                      _provider.sort,
+                      (newSort) {
+                        final shouldFetchData = _provider.sort != newSort;
+                        _provider.sort = newSort;
 
-                    if (shouldFetchData) {
-                      _fetchData();
-                    }
+                        if (shouldFetchData) {
+                          _fetchData();
+                        }
+                      }
+                    );
                   }
                 );
-              }
-            );
-          },
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.sort_down, size: 28)
+              },
+              padding: EdgeInsets.zero,
+              child: const Icon(CupertinoIcons.sort_down, size: 28)
+            ),
+          ],
         ),
       ),
       child: ChangeNotifierProvider(
@@ -137,13 +166,29 @@ class _StudioContentPageState extends State<StudioContentPage> {
   Widget _body(List<BaseContent> data) {
     switch (_state) {
       case ListState.done:
-        return ContentList(
+        final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
+
+        return isGridView
+        ? ContentList(
           _scrollController,
           _canPaginate,
           _isPaginating,
           false,
           isAnime: true,
           data
+        )
+        : ListView.builder(
+          itemCount: _canPaginate ? data.length + 1 : data.length,
+          controller: _scrollController,
+          itemBuilder: (context, index) {
+            if ((_canPaginate || _isPaginating) && index >= data.length) {
+              return const ContentListShimmerCell(ContentType.anime);
+            }
+
+            final content = data[index];
+
+            return ContentListCell(ContentType.anime, content: content);
+          },
         );
       case ListState.empty:
         return const EmptyView("assets/lottie/empty.json", "Nothing here.");

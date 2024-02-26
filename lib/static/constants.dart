@@ -128,6 +128,8 @@ class Constants {
 
   static final UserListUIModes = ["Expanded", "Compact",];
 
+  static final ContentUIModes = ["Grid", "List",];
+
   static final ConsumeLaterUIModes = ["Grid", "List",];
 
   //Genre List

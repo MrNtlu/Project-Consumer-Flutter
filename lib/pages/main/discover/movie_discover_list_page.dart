@@ -5,12 +5,17 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_sheet.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_list_provider.dart';
+import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
+import 'package:watchlistfy/widgets/common/content_list_cell.dart';
+import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 
 class MovieDiscoverListPage extends StatefulWidget {
@@ -34,6 +39,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
 
   late final MovieListProvider _movieListProvider;
   late final DiscoverMovieProvider _discoverProvider;
+  late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -44,7 +50,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   void _fetchData() {
     if (_page == 1) {
       setState(() {
-        _state = ListState.loading;  
+        _state = ListState.loading;
       });
     } else {
       _canPaginate = false;
@@ -92,7 +98,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
 
   void _scrollHandler() {
     if (
-      _canPaginate 
+      _canPaginate
       && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
       && !_scrollController.position.outOfRange
     ) {
@@ -121,6 +127,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData();
@@ -142,14 +149,35 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: Text(provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'),
-              trailing: GestureDetector(
-                child: const Icon(Icons.filter_alt_rounded),
-                onTap: () {
-                  showCupertinoModalBottomSheet(
-                    context: context, 
-                    builder: (context) => MovieDiscoverSheet(_fetchData, provider)
-                  );
-                },
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoButton(
+                    onPressed: () {
+                      _globalProvider.setContentMode(
+                        _globalProvider.contentMode == Constants.ContentUIModes.first
+                        ? Constants.ContentUIModes.last
+                        : Constants.ContentUIModes.first
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    child: Icon(
+                      _globalProvider.contentMode == Constants.ContentUIModes.first
+                      ? Icons.grid_view_rounded
+                      : CupertinoIcons.list_bullet,
+                      size: 28
+                    )
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.filter_alt_rounded),
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => MovieDiscoverSheet(_fetchData, provider)
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             child: _body(data),
@@ -162,15 +190,18 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   Widget _body(List<BaseContent> data) {
     switch (_state) {
       case ListState.done:
-        return GridView.builder(
+        final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
+
+        return isGridView
+        ? GridView.builder(
           itemCount: _canPaginate ? data.length + 2 : data.length,
           controller: _scrollController,
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 350, 
-            childAspectRatio: 2/3, 
-            crossAxisSpacing: 6, 
+            maxCrossAxisExtent: 350,
+            childAspectRatio: 2/3,
+            crossAxisSpacing: 6,
             mainAxisSpacing: 6
-          ), 
+          ),
           itemBuilder: (context, index) {
             if ((_canPaginate || _isPaginating) && index >= data.length) {
               return AspectRatio(
@@ -178,7 +209,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Shimmer.fromColors(
-                    baseColor: CupertinoColors.systemGrey, 
+                    baseColor: CupertinoColors.systemGrey,
                     highlightColor: CupertinoColors.systemGrey3,
                     child: Container(color: CupertinoColors.systemGrey,)
                   )
@@ -202,7 +233,20 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
               )
             );
           }
-        );
+        )
+      : ListView.builder(
+        itemCount: _canPaginate ? data.length + 1 : data.length,
+        controller: _scrollController,
+        itemBuilder: (context, index) {
+          if ((_canPaginate || _isPaginating) && index >= data.length) {
+            return const ContentListShimmerCell(ContentType.movie);
+          }
+
+          final content = data[index];
+
+          return ContentListCell(ContentType.movie, content: content);
+        },
+      );
       case ListState.empty:
         return const Center(
           child: Padding(
@@ -218,7 +262,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
           ),
         );
       case ListState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const LoadingView("Loading");
     }

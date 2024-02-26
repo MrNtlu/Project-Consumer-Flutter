@@ -26,15 +26,22 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
       ? ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: contentProvider.selectedContent == ContentType.movie
-          ? previewProvider.moviePreview.streamingPlatforms?.length
+          ? (previewProvider.moviePreview.streamingPlatforms?.length ?? 1)
           : (
             contentProvider.selectedContent == ContentType.tv
-            ? previewProvider.tvPreview.streamingPlatforms?.length
+            ? (previewProvider.tvPreview.streamingPlatforms?.length ?? 1)
             : previewProvider.animePreview.animeStreamingPlatforms?.length
           ),
         itemBuilder: (context, index) {
           final isMovie = contentProvider.selectedContent == ContentType.movie;
           final isTV = contentProvider.selectedContent == ContentType.tv;
+
+          if ((isMovie && previewProvider.moviePreview.streamingPlatforms == null) || (isTV && previewProvider.tvPreview.streamingPlatforms == null)) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const Center(child: Text("Not available in your region."))
+            );
+          }
 
           final streamingPlatform = isMovie
             ? previewProvider.moviePreview.streamingPlatforms![index]

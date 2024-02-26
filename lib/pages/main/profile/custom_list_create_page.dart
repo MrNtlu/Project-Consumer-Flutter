@@ -43,36 +43,36 @@ class CustomListCreatePage extends StatelessWidget {
       showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Please add at least 1 entry."));
       return;
     }
-    
+
     showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
 
     final contentList = createProvider.selectedContent.mapIndexed(
       (index, element) => CustomListContentBody(
-        index + 1, 
-        element.contentID, 
-        element.contentExternalID, 
-        element.contentExternalIntID, 
+        index + 1,
+        element.contentID,
+        element.contentExternalID,
+        element.contentExternalIntID,
         element.contentType
       )
     ).sorted((a, b) => a.order.compareTo(b.order)).toList();
 
     final CreateCustomList createBody = CreateCustomList(
-      title, 
-      description, 
-      isPrivate, 
+      title,
+      description,
+      isPrivate,
       contentList
     );
 
     final UpdateCustomListBody updateBody = UpdateCustomListBody(
-      customList?.id ?? '', 
-      title, 
-      description, 
+      customList?.id ?? '',
+      title,
+      description,
       isPrivate,
       contentList
     );
 
     try {
-      final response = isUpdating 
+      final response = isUpdating
       ? await http.patch(
         Uri.parse(APIRoutes().customListRoutes.updateCustomList),
         body: json.encode(updateBody.convertToJson()),
@@ -83,7 +83,7 @@ class CustomListCreatePage extends StatelessWidget {
         body: json.encode(createBody.convertToJson()),
         headers: UserToken().getBearerToken()
       );
-      
+
       if (context.mounted) {
         Navigator.pop(context);
 
@@ -91,17 +91,17 @@ class CustomListCreatePage extends StatelessWidget {
 
         if (baseMessage.error != null && context.mounted){
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          ); 
+          );
           return;
         }
 
         if (context.mounted) {
           Navigator.pop(context);
-        
+
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => MessageDialog(baseMessage.message ?? "Unkwown error!")
           );
 
@@ -116,7 +116,7 @@ class CustomListCreatePage extends StatelessWidget {
         Navigator.pop(context);
 
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => ErrorDialog(error.toString())
         );
         return;
@@ -237,23 +237,24 @@ class CustomListCreatePage extends StatelessWidget {
                           }
 
                           final content = provider.selectedContent[index];
-                      
+
                           return CustomListEntryCell(
                             index: index + 1,
-                            null, 
+                            null,
                             BaseContent(
-                              content.contentID, 
-                              "", 
-                              content.imageURL ?? '', 
-                              content.titleEn, 
-                              content.titleOriginal, 
+                              content.contentID,
+                              "",
+                              content.imageURL ?? '',
+                              content.titleEn,
+                              content.titleOriginal,
                               content.contentExternalID,
-                              content.contentExternalIntID
-                            ), 
-                            true, 
+                              content.contentExternalIntID,
+                              content.score, null, null,
+                            ),
+                            true,
                             () {
                               provider.removeContent(content.contentID);
-                            }, 
+                            },
                             null,
                             key: ValueKey(content.contentID),
                           );
@@ -262,12 +263,12 @@ class CustomListCreatePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     CupertinoButton.filled(
-                      child: Text(customList != null ? "Update" : "Create", style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                      child: Text(customList != null ? "Update" : "Create", style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         handleCustomListOperation(
-                          context, 
-                          provider, 
-                          nameController.text, 
+                          context,
+                          provider,
+                          nameController.text,
                           descriptionController.text,
                           customList != null,
                           isPrivateSwitch.isPrivate

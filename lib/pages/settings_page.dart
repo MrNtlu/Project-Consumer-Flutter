@@ -29,6 +29,7 @@ import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/settings/change_password_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/change_username_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
+import 'package:watchlistfy/widgets/main/settings/content_switch.dart';
 import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
@@ -254,6 +255,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         _state = DetailState.view;
                       });
                     })),
+                    const CustomSettingsTile(child: ContentSwitch()),
                     const CustomSettingsTile(child: UserListSwitch()),
                     const CustomSettingsTile(child: ConsumeLaterSwitch()),
                     SettingsTile.navigation(

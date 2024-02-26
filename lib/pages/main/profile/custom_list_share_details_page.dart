@@ -202,7 +202,8 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                         content.titleEn.isNotEmpty ? content.titleEn : content.titleOriginal,
                         content.titleOriginal.isNotEmpty ? content.titleOriginal : content.titleEn,
                         content.contentExternalID,
-                        content.contentExternalIntID
+                        content.contentExternalIntID,
+                        content.score, null, null,
                       ),
                       true,
                       null,

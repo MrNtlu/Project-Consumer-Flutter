@@ -252,7 +252,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Description"),
                 ExpandableText(
-                  removeAllHtmlTags(item.description),
+                  item.description.removeAllHtmlTags(),
                   maxLines: 3,
                   expandText: "Read More",
                   collapseText: "Read Less",
@@ -319,11 +319,5 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
       default:
         return const SliverFillRemaining(child: LoadingView("Loading"));
     }
-  }
-
-  String removeAllHtmlTags(String htmlText) {
-     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-
-     return htmlText.replaceAll(exp, '');
   }
 }

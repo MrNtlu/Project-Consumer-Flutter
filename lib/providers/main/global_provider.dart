@@ -5,6 +5,7 @@ import 'package:watchlistfy/static/shared_pref.dart';
 
 class GlobalProvider extends ChangeNotifier {
   String userListMode = Constants.UserListUIModes.first;
+  String contentMode = Constants.ContentUIModes.first;
   String consumeLaterMode = Constants.ConsumeLaterUIModes.first;
   String selectedCountryCode = 'US';
   ContentType contentType = ContentType.movie;
@@ -12,11 +13,20 @@ class GlobalProvider extends ChangeNotifier {
   void initValues() {
     final sharedPref = SharedPref();
     userListMode = sharedPref.getUserListUIMode();
+    contentMode = sharedPref.getContentUIMode();
     selectedCountryCode = sharedPref.getSelectedCountry();
     consumeLaterMode = sharedPref.getConsumeLaterUIMode();
     contentType = ContentType.values
         .where((element) => element.request == sharedPref.getDefaultContent())
         .first;
+  }
+
+  void setContentMode(String mode) {
+    if (mode != contentMode) {
+      contentMode = mode;
+      notifyListeners();
+      SharedPref().setContentUIMode(mode);
+    }
   }
 
   void setUserListMode(String mode) {

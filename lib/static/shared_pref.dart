@@ -67,6 +67,15 @@ class SharedPref {
   }
 
   //User List Mode
+  void setContentUIMode(String mode) {
+    sharedPref?.setString("content_ui_mode", mode);
+  }
+
+  String getContentUIMode() {
+    return _sharedPreference.getString("content_ui_mode") ?? Constants.ContentUIModes.first;
+  }
+
+  //User List Mode
   void setUserListUIMode(String mode) {
     sharedPref?.setString("user_list_ui_mode", mode);
   }
@@ -84,7 +93,7 @@ class SharedPref {
     return _sharedPreference.getString("consume_later_ui_mode") ?? Constants.ConsumeLaterUIModes.first;
   }
 
-  //Default Content Selection
+  //Country Selection
   void setSelectedCountry(String country) {
     sharedPref?.setString("selected_country", country);
   }

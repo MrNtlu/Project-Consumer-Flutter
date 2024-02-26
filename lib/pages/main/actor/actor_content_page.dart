@@ -1,9 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/providers/main/actor/actor_content_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/widgets/common/content_list_cell.dart';
+import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/common/content_list.dart';
@@ -29,6 +35,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
   ListState _state = ListState.init;
 
   late final ActorContentProvider _provider;
+  late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -97,6 +104,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData();
@@ -130,6 +138,22 @@ class _ActorContentPageState extends State<ActorContentPage> {
             Text(widget.name),
           ],
         ),
+        trailing: CupertinoButton(
+          onPressed: () {
+            _globalProvider.setContentMode(
+              _globalProvider.contentMode == Constants.ContentUIModes.first
+              ? Constants.ContentUIModes.last
+              : Constants.ContentUIModes.first
+            );
+          },
+          padding: EdgeInsets.zero,
+          child: Icon(
+            _globalProvider.contentMode == Constants.ContentUIModes.first
+            ? Icons.grid_view_rounded
+            : CupertinoIcons.list_bullet,
+            size: 28
+          )
+        ),
       ),
       child: ChangeNotifierProvider(
         create: (_) => _provider,
@@ -145,12 +169,33 @@ class _ActorContentPageState extends State<ActorContentPage> {
   Widget _body(List<BaseContent> data) {
     switch (_state) {
       case ListState.done:
-        return ContentList(
+        final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
+
+        return isGridView
+        ? ContentList(
           _scrollController,
           _canPaginate,
           _isPaginating,
           widget.isMovie,
           data
+        )
+        : ListView.builder(
+          itemCount: _canPaginate ? data.length + 1 : data.length,
+          controller: _scrollController,
+          itemBuilder: (context, index) {
+            if ((_canPaginate || _isPaginating) && index >= data.length) {
+              return ContentListShimmerCell(
+                widget.isMovie ? ContentType.movie : ContentType.tv
+              );
+            }
+
+            final content = data[index];
+
+            return ContentListCell(
+              widget.isMovie ? ContentType.movie : ContentType.tv,
+              content: content
+            );
+          },
         );
       case ListState.empty:
         return const EmptyView("assets/lottie/empty.json", "Nothing here.");

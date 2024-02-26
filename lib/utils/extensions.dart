@@ -94,6 +94,12 @@ extension StringExt on String {
   bool isEmailValid() {
     return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(this);
   }
+
+  String removeAllHtmlTags() {
+     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+
+     return replaceAll(exp, '');
+  }
 }
 
 extension DynamicMapExt on Map<String, dynamic> {
