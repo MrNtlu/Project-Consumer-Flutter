@@ -263,6 +263,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
             final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
 
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
@@ -284,13 +285,14 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 child: Row(
                   children: [
                     SizedBox(
-                      height: 100,
+                      height: 125,
                       child: ContentCell(
                         content.content.imageUrl, 
-                        content.content.titleEn, cornerRadius: 8, 
+                        content.content.titleEn, 
+                        cornerRadius: 8, 
                         forceRatio: true,
-                        cacheHeight: 350,
-                        cacheWidth: 275,
+                        cacheHeight: 375,
+                        cacheWidth: 300,
                       )
                     ),
                     Expanded(
@@ -303,7 +305,9 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                               children: [
                                 Flexible(
                                   child: AutoSizeText(
-                                    content.content.titleEn,
+                                    content.content.titleEn.isNotEmpty
+                                    ? content.content.titleEn
+                                    : content.content.titleOriginal,
                                     minFontSize: 14,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
@@ -317,14 +321,16 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                                 CupertinoButton(
                                   padding: EdgeInsets.zero,
                                   child: const Icon(CupertinoIcons.ellipsis_vertical),
-                                  onPressed: () {  
+                                  onPressed: () {
                                     showCupertinoModalPopup(
-                                      context: context, 
+                                      context: context,
                                       builder: (_) {
                                         return ConsumeLaterActionSheet(
                                           index,
                                           content.id,
-                                          content.content.titleEn,
+                                          content.content.titleEn.isNotEmpty
+                                          ? content.content.titleEn
+                                          : content.content.titleOriginal,
                                           contentType,
                                           _provider,
                                           content,

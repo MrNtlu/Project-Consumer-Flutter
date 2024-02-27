@@ -21,7 +21,7 @@ class ContentListCell extends StatelessWidget {
     final String extraInfoText;
     switch (_contentType) {
       case ContentType.movie:
-        extraInfoText = content.extraInfo?.toLength() ?? content.extraInfo2 ?? '';
+        extraInfoText = content.extraInfo?.toLength() ?? content.extraInfo2 ?? '?';
         break;
       case ContentType.tv:
         extraInfoText = "${content.extraInfo ?? "?"} seas. ${content.extraInfo2 ?? "?"} eps.";
@@ -39,6 +39,7 @@ class ContentListCell extends StatelessWidget {
     }
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
           CupertinoPageRoute(builder: (_) {
@@ -65,10 +66,11 @@ class ContentListCell extends StatelessWidget {
               height: 135,
               child: ContentCell(
                 content.imageUrl,
-                content.titleEn, cornerRadius: 8,
+                content.titleEn, 
+                cornerRadius: 8,
                 forceRatio: true,
-                cacheHeight: 350,
-                cacheWidth: _contentType != ContentType.game ? 275 : 500,
+                cacheHeight: 425,
+                cacheWidth: _contentType != ContentType.game ? 350 : 500,
               )
             ),
             Expanded(

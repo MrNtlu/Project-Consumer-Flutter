@@ -30,6 +30,7 @@ class CustomListEntryCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: selectedContent != null ? () {
         Navigator.of(context, rootNavigator: true).push(
           CupertinoPageRoute(builder: (_) {

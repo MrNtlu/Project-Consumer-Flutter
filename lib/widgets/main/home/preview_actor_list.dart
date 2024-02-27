@@ -31,6 +31,7 @@ class PreviewActorList extends StatelessWidget {
             : previewProvider.tvPreview.actors![index];
 
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ActorContentPage(
@@ -56,8 +57,8 @@ class PreviewActorList extends StatelessWidget {
                         cacheKey: actor.image,
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
-                        maxHeightDiskCache: 175,
-                        maxWidthDiskCache: 175,
+                        maxHeightDiskCache: 350,
+                        maxWidthDiskCache: 350,
                         errorListener: (_){},
                         progressIndicatorBuilder: (_, __, ___) => ClipRRect(
                           borderRadius: BorderRadius.circular(12),

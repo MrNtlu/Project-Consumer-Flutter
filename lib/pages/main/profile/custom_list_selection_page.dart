@@ -29,7 +29,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
   late final CustomListSearchProvider _searchProvider;
   late final CustomListCreateProvider _customListCreateProvider;
   late final AuthenticationProvider authProvider;
-  late final TextEditingController searchController;
+  TextEditingController? searchController;
 
   int _page = 1;
   bool _canPaginate = false;
@@ -48,7 +48,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
 
     _searchProvider.searchContent(
       selectedContent: _provider.selectedContent,
-      search: searchController.value.text,
+      search: searchController?.value.text ?? '',
       page: _page,
     ).then((response) {
       _error = response.error;
@@ -102,7 +102,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
   @override
   void dispose() {
     _state = ListState.disposed;
-    searchController.dispose();
+    searchController?.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -136,7 +136,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
                           onSuffixTap: () {
                             FocusManager.instance.primaryFocus?.unfocus();
 
-                            if (searchController.value.text.isNotEmpty) {
+                            if (searchController?.value.text.isNotEmpty == true) {
                               _search();
                             }
                           },

@@ -140,6 +140,7 @@ class _CustomListInteractionListPageState extends State<CustomListInteractionLis
             final sortedContent = content.content.sorted((a, b) => a.order.compareTo(b.order));
 
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {

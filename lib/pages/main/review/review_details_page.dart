@@ -58,6 +58,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
               Row(
                 children: [
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(builder: (_) {

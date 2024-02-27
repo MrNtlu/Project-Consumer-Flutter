@@ -128,6 +128,7 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
                   Row(
                     children: [
                       GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
                               CupertinoPageRoute(builder: (_) {
@@ -214,6 +215,7 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
                   ),
                   if (item.isSpoiler)
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                         return ReviewDetailsPage(item, (String id) {

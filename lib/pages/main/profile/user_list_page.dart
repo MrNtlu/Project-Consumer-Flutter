@@ -207,6 +207,7 @@ class _UserListPageState extends State<UserListPage> {
                 data.totalEpisodes
               )
               : GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
                     CupertinoPageRoute(builder: (_) {

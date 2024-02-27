@@ -34,14 +34,14 @@ class _HomePageState extends State<HomePage> {
 
   //TODO Move vote now to bottom of the screen and promote premium membership.
 
-  late final TextEditingController searchController;
+  TextEditingController? searchController;
   late final AuthenticationProvider authenticationProvider;
   late final ContentProvider contentProvider;
   late final GlobalProvider globalProvider;
   PreviewProvider? previewProvider;
 
   void onContentChange() {
-    searchController.text = "";
+    searchController?.text = "";
   }
 
   @override
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     contentProvider.removeListener(onContentChange);
-    searchController.dispose();
+    searchController?.dispose();
     previewProvider?.networkState = NetworkState.disposed;
     super.dispose();
   }

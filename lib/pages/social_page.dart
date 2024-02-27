@@ -110,6 +110,7 @@ class _SocialPageState extends State<SocialPage> {
                       final userInfo = provider.item!.leaderboard[index];
 
                       return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
                             CupertinoPageRoute(builder: (_) {

@@ -67,6 +67,7 @@ class DetailsStreamingLists extends StatelessWidget {
       final item = data[index];
 
       return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () async {
           if (tmdbId.isNotEmpty) {
             final url = Uri.parse(platformURL(contentType, countryCode));

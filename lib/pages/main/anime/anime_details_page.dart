@@ -260,7 +260,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                           },
                           child: SizedBox(
                             height: 125,
-                            child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 200, cacheHeight: 300)
+                            child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 300, cacheHeight: 400)
                           ),
                         ),
                         if (item.trailer != null)

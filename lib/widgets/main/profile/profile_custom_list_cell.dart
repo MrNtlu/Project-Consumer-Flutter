@@ -16,6 +16,7 @@ class ProfileCustomListCell extends StatelessWidget {
     final sortedContent = data.content.sorted((a, b) => a.order.compareTo(b.order));
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
           CupertinoPageRoute(builder: (_) {
@@ -69,8 +70,8 @@ class ProfileCustomListCell extends StatelessWidget {
                             listContent.titleEn, 
                             cornerRadius: 8, 
                             forceRatio: true,
-                            cacheHeight: 187,
-                            cacheWidth: 125,
+                            cacheHeight: 225,
+                            cacheWidth: 175,
                           ),
                         );
                       }

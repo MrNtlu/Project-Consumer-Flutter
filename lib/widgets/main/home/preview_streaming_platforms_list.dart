@@ -52,6 +52,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
             : null;
 
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return StreamingContentPage(
@@ -78,8 +79,8 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                         cacheKey: streamingPlatform?.logo ?? 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
-                        maxHeightDiskCache: 200,
-                        maxWidthDiskCache: 200,
+                        maxHeightDiskCache: 350,
+                        maxWidthDiskCache: 350,
                         errorListener: (_){},
                         placeholder: (context, _) {
                           return ColoredBox(

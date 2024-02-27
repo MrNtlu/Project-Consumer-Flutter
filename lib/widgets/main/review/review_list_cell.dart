@@ -32,6 +32,7 @@ class ReviewListCell extends StatelessWidget {
           Row(
             children: [
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
                       CupertinoPageRoute(builder: (_) {
@@ -131,6 +132,7 @@ class ReviewListCell extends StatelessWidget {
           ),
           if (item.isSpoiler)
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ReviewDetailsPage(item, provider.voteReview);

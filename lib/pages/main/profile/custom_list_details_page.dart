@@ -100,6 +100,7 @@ class CustomListDetailsPage extends StatelessWidget {
                     final content = item.content.sorted((a, b) => a.order.compareTo(b.order))[index];
 
                     return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () {
                         Navigator.of(context, rootNavigator: true).push(
                           CupertinoPageRoute(builder: (_) {

@@ -193,6 +193,7 @@ class _OffersSheetState extends State<OffersSheet> {
                     final product = package.storeProduct;
 
                     return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () async {
                         setState(() {
                           _state = ListState.loading;

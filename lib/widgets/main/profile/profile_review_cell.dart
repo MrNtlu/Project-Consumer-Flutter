@@ -24,6 +24,7 @@ class ProfileReviewCell extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       margin: const EdgeInsets.symmetric(horizontal: 4),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           Navigator.of(context, rootNavigator: true).push(
             CupertinoPageRoute(builder: (_) {
@@ -51,8 +52,8 @@ class ProfileReviewCell extends StatelessWidget {
                     data.content.titleEn,
                     cornerRadius: 6,
                     forceRatio: true,
-                    cacheHeight: 150,
-                    cacheWidth: 100,
+                    cacheHeight: 220,
+                    cacheWidth: 150,
                   ),
                 ),
                 const SizedBox(width: 12),

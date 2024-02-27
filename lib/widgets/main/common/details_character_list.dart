@@ -41,6 +41,7 @@ class DetailsCommonList extends StatelessWidget {
                 image != null
                 ? (isAvatar
                   ? GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       if (getActorID != null) {
                         Navigator.of(context, rootNavigator: true).push(

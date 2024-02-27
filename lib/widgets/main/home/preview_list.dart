@@ -133,6 +133,7 @@ class _PreviewListState extends State<PreviewList> {
               break;
           }
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.of(context, rootNavigator: true)
                   .push(CupertinoPageRoute(builder: (_) {
@@ -154,7 +155,7 @@ class _PreviewListState extends State<PreviewList> {
               padding: const EdgeInsets.symmetric(horizontal: 3),
               child: SizedBox(
                 height: 200,
-                child: ContentCell(data.imageUrl.replaceFirst("original", "w300"), data.titleEn)
+                child: ContentCell(data.imageUrl.replaceFirst("original", "w300"), data.titleEn, cacheHeight: 700, cacheWidth: 550)
               ),
             ),
           );

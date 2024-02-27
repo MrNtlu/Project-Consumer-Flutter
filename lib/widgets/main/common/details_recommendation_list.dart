@@ -32,8 +32,8 @@ class DetailsRecommendationList extends StatelessWidget {
               getImage(index), 
               getTitle(index),
               cornerRadius: 8,
-              cacheHeight: 325,
-              cacheWidth: 250,
+              cacheHeight: 425,
+              cacheWidth: 350,
             )
           ),
         );

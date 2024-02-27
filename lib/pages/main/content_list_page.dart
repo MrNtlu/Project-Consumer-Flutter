@@ -244,7 +244,7 @@ class _ContentListPageState extends State<ContentListPage> {
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 400, cacheHeight: 600),
+                child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 500, cacheHeight: 700),
               )
             );
           }

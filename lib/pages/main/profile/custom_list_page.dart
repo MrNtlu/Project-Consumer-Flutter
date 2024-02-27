@@ -147,6 +147,7 @@ class _CustomListPageState extends State<CustomListPage> {
             final sortedContent = content.content.sorted((a, b) => a.order.compareTo(b.order));
 
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
@@ -197,8 +198,8 @@ class _CustomListPageState extends State<CustomListPage> {
                                     listContent.titleEn, 
                                     cornerRadius: 8, 
                                     forceRatio: true,
-                                    cacheHeight: 220,
-                                    cacheWidth: 150,
+                                    cacheHeight: 300,
+                                    cacheWidth: 200,
                                   ),
                                 );
                               }

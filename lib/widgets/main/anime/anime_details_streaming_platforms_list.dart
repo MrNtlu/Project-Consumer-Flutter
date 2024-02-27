@@ -21,6 +21,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
           final item = data[index];
 
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () async {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return StreamingContentPage(

@@ -19,6 +19,7 @@ class LoggedinHeader extends StatelessWidget {
     final isUrlValid = image != null && Uri.tryParse(image) != null;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
           CupertinoPageRoute(builder: (_) {
