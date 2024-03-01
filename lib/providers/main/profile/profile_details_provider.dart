@@ -56,7 +56,7 @@ class ProfileDetailsProvider with ChangeNotifier {
       );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
-      
+
       isLoading = false;
       var messageResponse = decodedResponse.getBaseMessageResponse();
 

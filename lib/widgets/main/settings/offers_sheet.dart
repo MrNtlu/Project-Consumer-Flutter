@@ -65,7 +65,6 @@ class _OffersSheetState extends State<OffersSheet> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: AppColors().onDarkBackgroundColor,
       navigationBar: const CupertinoNavigationBar(
         middle: Text("Premium Plans"),
       ),

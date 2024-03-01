@@ -2,6 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -20,6 +21,7 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/trailer_sheet.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
@@ -245,18 +247,48 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return ImagePage(item.imageUrl);
-                          })
-                        );
-                      },
-                      child: SizedBox(
-                        height: 125,
-                        child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 300, cacheHeight: 400)
-                      ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(builder: (_) {
+                                return ImagePage(item.imageUrl);
+                              })
+                            );
+                          },
+                          child: SizedBox(
+                            height: 125,
+                            child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 300, cacheHeight: 400)
+                          ),
+                        ),
+                        if (item.trailers != null && item.trailers!.isNotEmpty)
+                        const SizedBox(height: 8),
+                        if (item.trailers != null && item.trailers!.isNotEmpty)
+                        SizedBox(
+                          width: 80,
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            minSize: 0,
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(CupertinoIcons.play_rectangle_fill, size: 18),
+                                SizedBox(width: 6),
+                                Text("Trailers", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                            onPressed: () {
+                              showCupertinoModalBottomSheet(
+                                context: context,
+                                barrierColor: CupertinoColors.black.withOpacity(0.75),
+                                builder: (_) => TrailerSheet(item.trailers!)
+                              );
+                            }
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -266,7 +298,9 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 DetailsGenreList(item.genres, (genre) {
                   return TVDiscoverListPage(genre: genre);
                 }),
+                if (item.description.isNotEmpty)
                 const DetailsTitle("Description"),
+                if (item.description.isNotEmpty)
                 ExpandableText(
                   item.description,
                   maxLines: 3,
@@ -276,7 +310,9 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   style: const TextStyle(fontSize: 16),
                   linkStyle: const TextStyle(fontSize: 14),
                 ),
+                if (item.actors.isNotEmpty)
                 const DetailsTitle("Actors"),
+                if (item.actors.isNotEmpty)
                 SizedBox(
                   height: 110,
                   child: DetailsCommonList(

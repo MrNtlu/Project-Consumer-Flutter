@@ -250,7 +250,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
           ),
         );
       case ListState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const LoadingView("Loading");
     }

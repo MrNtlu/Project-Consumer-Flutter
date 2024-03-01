@@ -41,9 +41,19 @@ class AnimeDiscoverSheet extends StatelessWidget {
       Constants.AnimeStatusRequests.map((e) => e.name).toList()
     );
 
-    final decadeList = DiscoverSheetList(
-      Constants.DecadeList.where((element) => element.request == provider.decade).firstOrNull?.name,
-      Constants.DecadeList.map((e) => e.name).toList()
+    final seasonList = DiscoverSheetList(
+      Constants.AnimeSeasonList.where((element) => element.request == provider.season).firstOrNull?.name,
+      Constants.AnimeSeasonList.map((e) => e.name).toList()
+    );
+
+    int currentYear = DateTime.now().year+1;
+    int startingYear = 1980;
+
+    List yearList = List.generate((currentYear-startingYear)+1, (index) => startingYear+index);
+
+    final yearDiscoverList = DiscoverSheetList(
+      yearList.where((element) => element == provider.year).firstOrNull?.toString(),
+      yearList.map((e) => e.toString()).toList()
     );
 
     return SafeArea(
@@ -59,7 +69,8 @@ class AnimeDiscoverSheet extends StatelessWidget {
                   DiscoverSheetFilterBody("Demographics", demographicList),
                   DiscoverSheetFilterBody("Themes", themeList),
                   DiscoverSheetFilterBody("Status", statusList),
-                  DiscoverSheetFilterBody("Release Date", decadeList),
+                  DiscoverSheetFilterBody("Season", seasonList),
+                  DiscoverSheetFilterBody("Year", yearDiscoverList),
                 ],
               ),
             ),
@@ -67,7 +78,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)), 
+                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
                   onPressed: () {
                     Navigator.pop(context);
                     provider.reset();
@@ -83,14 +94,15 @@ class AnimeDiscoverSheet extends StatelessWidget {
                       demographics: Constants.AnimeDemographicsList.where((element) => element.name == demographicList.selectedValue).firstOrNull?.name,
                       themes: Constants.AnimeThemeList.where((element) => element.name == themeList.selectedValue).firstOrNull?.name,
                       status: Constants.AnimeStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
-                      decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
+                      season: Constants.AnimeSeasonList.where((element) => element.name == seasonList.selectedValue).firstOrNull?.request,
+                      year: yearList.where((element) => element.toString() == yearDiscoverList.selectedValue?.toString()).firstOrNull,
                     );
                     fetchData();
                   },
                   child: const Text(
                     "Done",
                     style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
-                  ), 
+                  ),
                 )
               ],
             )

@@ -61,16 +61,6 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
       _isPaginating = true;
     }
 
-    late final int? from;
-    late final int? to;
-    if (_discoverProvider.decade != null) {
-      from = int.parse(_discoverProvider.decade!);
-      to = from + 10;
-    } else {
-      from = null;
-      to = null;
-    }
-
     Future<BasePaginationResponse<BaseContent>> futureResponse = _animeListProvider.discoverAnime(
       page: _page,
       sort: _discoverProvider.sort,
@@ -79,8 +69,8 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
       themes: _discoverProvider.themes,
       status: _discoverProvider.status,
       studios: _discoverProvider.studios,
-      from: from,
-      to: to,
+      season: _discoverProvider.season,
+      year: _discoverProvider.year,
     );
 
     futureResponse.then((response) {
@@ -270,7 +260,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
           ),
         );
       case ListState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const LoadingView("Loading");
     }

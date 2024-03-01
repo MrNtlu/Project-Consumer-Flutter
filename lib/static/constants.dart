@@ -241,6 +241,13 @@ class Constants {
     BackendRequestMapper("Shounen", "Shounen"),
   ];
 
+  static final AnimeSeasonList = [
+    BackendRequestMapper("Winter", "winter"),
+    BackendRequestMapper("Summer", "summer"),
+    BackendRequestMapper("Fall", "fall"),
+    BackendRequestMapper("Spring", "spring"),
+  ];
+
   static final DecadeList = [
     BackendRequestMapper("1980s", "1980"),
     BackendRequestMapper("1990s", "1990"),

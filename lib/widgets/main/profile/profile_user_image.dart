@@ -30,8 +30,8 @@ class ProfileUserImage extends StatelessWidget {
                 cacheKey: image,
                 height: 75,
                 width: 75,
-                maxHeightDiskCache: 200,
-                maxWidthDiskCache: 200,
+                maxHeightDiskCache: 225,
+                maxWidthDiskCache: 225,
                 fit: BoxFit.cover,
                 progressIndicatorBuilder: (_, __, ___) =>
                   const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),

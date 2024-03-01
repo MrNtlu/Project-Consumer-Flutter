@@ -40,7 +40,7 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().animeRoutes.searchAnime}?page=$page&search=$search"
     );
@@ -54,13 +54,13 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
     String? demographics,
     String? themes,
     String? studios,
-    int? from,
-    int? to,
+    String? season,
+    int? year,
   }) {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().animeRoutes.animeBySortFilter}?page=$page&sort=$sort${
         status != null ? '&status=$status' : ''
@@ -72,6 +72,10 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
         themes != null ? '&themes=$themes' : ''
       }${
         studios != null ? '&studios=$studios' : ''
+      }${
+        season != null ? '&season=$season' : ''
+      }${
+        year != null ? '&year=$year' : ''
       }"
     );
   }

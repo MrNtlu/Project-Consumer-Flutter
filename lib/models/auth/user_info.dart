@@ -25,6 +25,8 @@ class UserInfo {
   final String email;
   final String? image;
   final int level;
+  final int maxStreak;
+  final int streak;
 
   final List<ConsumeLaterResponse> watchLater;
   final List<LegendContent> legendContent;
@@ -36,6 +38,7 @@ class UserInfo {
     this.isFriendsWith, this.friendRequestCount, this.membershipType, this.animeCount,
     this.gameCount, this.movieCount, this.tvCount, this.movieWatchedTime, this.animeWatchedEpisodes,
     this.tvWatchedEpisodes, this.gameTotalHoursPlayed, this.fcmToken, this.username, this.email,
-    this.image, this.level, this.watchLater, this.legendContent, this.reviews, this.customLists
+    this.image, this.level, this.maxStreak, this.streak, this.watchLater,
+    this.legendContent, this.reviews, this.customLists
   );
 }

@@ -365,7 +365,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       leading: const Icon(Icons.logout_rounded),
                       title: const Text('Logout'),
                       onPressed: (ctx) {
-                        _logOut();
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) {
+                            return SureDialog("Do you want to logout?", () {
+                              _logOut();
+                            });
+                          }
+                        );
                       },
                     ),
                     if (authProvider?.isAuthenticated == false)

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -214,7 +215,41 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ProfileUserImage(image),
+              SizedBox(
+                height: 110,
+                width: 115,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: ProfileUserImage(image),
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) => const MessageDialog(
+                            title: "Streak",
+                            "Streaks are counted based on your activity. When you add or make changes on your user list, watch later or reviews."
+                          )
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const FaIcon(FontAwesomeIcons.fire, size: 22),
+                            const SizedBox(width: 6),
+                            Text(item.streak.toString(), style: const TextStyle(fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               ProfileLevelBar(item.level),
               const SizedBox(height: 16),
               Padding(

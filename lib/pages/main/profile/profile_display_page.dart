@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -128,16 +129,52 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
             children: [
               Stack(
                 children: [
-                  ProfileUserImage(image, isProfileDisplay: true),
-                  if (item.isPremium)
-                  Positioned(
-                    bottom: -6,
-                    right: -6,
-                    child: Lottie.asset(
-                      "assets/lottie/premium.json",
-                      height: 45,
-                      width: 45,
-                      frameRate: FrameRate(60)
+                  Align(
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                        ProfileUserImage(image, isProfileDisplay: true),
+                        if (item.isPremium)
+                        Positioned(
+                          bottom: -6,
+                          right: -6,
+                          child: Lottie.asset(
+                            "assets/lottie/premium.json",
+                            height: 45,
+                            width: 45,
+                            frameRate: FrameRate(60)
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16, top: 16),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) => const MessageDialog(
+                              title: "Streak",
+                              "Streaks are counted based on your activity. When you add or make changes on your user list, watch later or reviews."
+                            )
+                          );
+                        },
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const FaIcon(FontAwesomeIcons.fire, size: 22),
+                              const SizedBox(width: 6),
+                              Text(item.streak.toString(), style: const TextStyle(fontWeight: FontWeight.w500)),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

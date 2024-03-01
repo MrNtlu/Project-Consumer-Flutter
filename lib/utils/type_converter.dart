@@ -80,6 +80,8 @@ class TypeConverter<T> {
         response["email"],
         response["image"],
         response["level"] ?? 0,
+        response["max_streak"] ?? 0,
+        response["streak"] ?? 0,
         response["consume_later"] != null
         ? ((response["consume_later"] as List).map((e) =>
           TypeConverter<ConsumeLaterResponse>().convertToObject(e)
@@ -588,8 +590,8 @@ class TypeConverter<T> {
           e["origin_country"]
         )).toList())
         : null,
-        response["trailers"] != null
-        ? ((response["trailers"] as List).map((e) => Trailer(
+        response["videos"] != null
+        ? ((response["videos"] as List).map((e) => Trailer(
           e["name"],
           e["key"],
           e["type"]
@@ -698,8 +700,8 @@ class TypeConverter<T> {
           e["image_url"]
         )).toList())
         : [],
-        response["trailers"] != null
-        ? ((response["trailers"] as List).map((e) => Trailer(
+        response["videos"] != null
+        ? ((response["videos"] as List).map((e) => Trailer(
           e["name"],
           e["key"],
           e["type"]
