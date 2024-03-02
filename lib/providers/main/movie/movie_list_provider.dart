@@ -40,7 +40,7 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().movieRoutes.searchMovies}?page=$page&search=$search"
     );
@@ -58,7 +58,7 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().movieRoutes.movieBySortFilter}?page=$page&sort=$sort${
         status != null ? '&status=$status' : ''

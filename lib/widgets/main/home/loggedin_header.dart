@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
@@ -16,91 +18,92 @@ class LoggedinHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final authenticationProvider = Provider.of<AuthenticationProvider>(context);
     final image = authenticationProvider.basicUserInfo?.image;
+    final streak = authenticationProvider.basicUserInfo?.streak;
     final isUrlValid = image != null && Uri.tryParse(image) != null;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-          CupertinoPageRoute(builder: (_) {
-            return const ProfilePage();
-          })
-        );
-      },
-      child: Row(
-        children: [
-          PopupMenuButton(
-            icon: const Icon(CupertinoIcons.ellipsis_vertical),
-            iconSize: 26,
-            color: CupertinoTheme.of(context).bgColor,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return const ProfilePage();
-                    })
-                  );
-                },
-                child: Row(
-                  children: [
-                    Text("Profile", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-                    const Spacer(),
-                    Icon(CupertinoIcons.profile_circled, color: CupertinoTheme.of(context).bgTextColor, size: 18),
-                  ],
-                )
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return const CustomListPage();
-                    })
-                  );
-                },
-                child: Row(
-                  children: [
-                    Text("Custom Lists", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-                    const Spacer(),
-                    Icon(CupertinoIcons.folder_fill, color: CupertinoTheme.of(context).bgTextColor, size: 18),
-                  ],
-                )
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return const UserListPage();
-                    })
-                  );
-                },
-                child: Row(
-                  children: [
-                    Text("User List", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-                    const Spacer(),
-                    Icon(CupertinoIcons.list_bullet_below_rectangle, color: CupertinoTheme.of(context).bgTextColor, size: 18),
-                  ],
-                )
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return const ConsumeLaterPage();
-                    })
-                  );
-                },
-                child: Row(
-                  children: [
-                    Text("Watch Later", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-                    const Spacer(),
-                    Icon(CupertinoIcons.time, color: CupertinoTheme.of(context).bgTextColor, size: 18),
-                  ],
-                )
-              ),
-            ]
-          ),
-          SizedBox(
+    return Row(
+      children: [
+        PopupMenuButton(
+          icon: const Icon(CupertinoIcons.ellipsis_vertical),
+          iconSize: 26,
+          color: CupertinoTheme.of(context).bgColor,
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return const ProfilePage();
+                  })
+                );
+              },
+              child: Row(
+                children: [
+                  Text("Profile", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  const Spacer(),
+                  Icon(CupertinoIcons.profile_circled, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                ],
+              )
+            ),
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return const CustomListPage();
+                  })
+                );
+              },
+              child: Row(
+                children: [
+                  Text("Custom Lists", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  const Spacer(),
+                  Icon(CupertinoIcons.folder_fill, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                ],
+              )
+            ),
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return const UserListPage();
+                  })
+                );
+              },
+              child: Row(
+                children: [
+                  Text("User List", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  const Spacer(),
+                  Icon(CupertinoIcons.list_bullet_below_rectangle, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                ],
+              )
+            ),
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return const ConsumeLaterPage();
+                  })
+                );
+              },
+              child: Row(
+                children: [
+                  Text("Watch Later", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  const Spacer(),
+                  Icon(CupertinoIcons.time, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                ],
+              )
+            ),
+          ]
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(builder: (_) {
+                return const ProfilePage();
+              })
+            );
+          },
+          child: SizedBox(
             height: 32,
             width: 32,
             child: ClipRRect(
@@ -129,8 +132,38 @@ class LoggedinHeader extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 12, right: 8),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(builder: (_) {
+                  return const ProfilePage();
+                })
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const FaIcon(FontAwesomeIcons.fire, size: 16),
+                const SizedBox(width: 5),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 75),
+                  child: AutoSizeText(
+                    streak.toString(),
+                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                    minFontSize: 12,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }

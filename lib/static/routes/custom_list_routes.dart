@@ -12,6 +12,7 @@ class CustomListRoutes {
   late String addContentCustomList;
   late String deleteBulkContentCustomList;
   late String customListDetails;
+  late String customListSocial;
 
   CustomListRoutes({baseURL}) {
     _baseCustomListRoute = '$baseURL/custom-list';
@@ -27,5 +28,6 @@ class CustomListRoutes {
     bookmarkCustomList = '$_baseCustomListRoute/bookmark';
     addContentCustomList = '$_baseCustomListRoute/add';
     deleteBulkContentCustomList = '$_baseCustomListRoute/content';
+    customListSocial = '$_baseCustomListRoute/social';
   }
 }

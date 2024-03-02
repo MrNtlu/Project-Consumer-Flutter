@@ -21,7 +21,7 @@ class ReviewListPage extends StatefulWidget {
   final VoidCallback fetchData;
 
   const ReviewListPage(
-    this.title, this.contentID, this.contentExternalID, 
+    this.title, this.contentID, this.contentExternalID,
     this.contentExternalIntID, this.contentType, this.fetchData,
     {super.key}
   );
@@ -32,7 +32,7 @@ class ReviewListPage extends StatefulWidget {
 
 class _ReviewListPageState extends State<ReviewListPage> {
   ListState _state = ListState.init;
-  
+
   late final ReviewListProvider _provider;
   late final ScrollController _scrollController;
 
@@ -44,7 +44,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
   void _fetchData() {
     if (_page == 1) {
       setState(() {
-        _state = ListState.loading;  
+        _state = ListState.loading;
       });
     } else {
       _canPaginate = false;
@@ -76,7 +76,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
 
   void _scrollHandler() {
     if (
-      _canPaginate 
+      _canPaginate
       && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
       && !_scrollController.position.outOfRange
     ) {
@@ -129,7 +129,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   CupertinoButton(
                     onPressed: () {
                       showCupertinoModalPopup(
-                        context: context, 
+                        context: context,
                         builder: (context) {
                           return ReviewSortSheet(
                             _provider.sort,
@@ -138,7 +138,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                               _provider.sort = newSort;
 
                               if (shouldFetchData) {
-                                _fetchData(); 
+                                _fetchData();
                               }
                             }
                           );
@@ -153,7 +153,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                         return ReviewCreatePage(
-                          widget.contentID, widget.contentExternalID, widget.contentExternalIntID, 
+                          widget.contentID, widget.contentExternalID, widget.contentExternalIntID,
                           widget.contentType, widget.fetchData, updateReviewData: _fetchData,
                         );
                       }));

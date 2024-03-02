@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
+import 'package:watchlistfy/pages/main/review/review_social_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/social/social_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -62,7 +63,13 @@ class _SocialPageState extends State<SocialPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SeeAllTitle("🗂️ Popular Lists", () {}, shouldHideSeeAllButton: true),
+                  SeeAllTitle("🗂️ Popular Lists", () {
+                    // Navigator.of(context, rootNavigator: true).push(
+                    //   CupertinoPageRoute(builder: (_) {
+                    //     return ProfileDisplayPage(userInfo.username);
+                    //   })
+                    // );
+                  }),
                   SizedBox(
                     height: 175,
                     child: provider.networkState == NetworkState.success
@@ -85,7 +92,13 @@ class _SocialPageState extends State<SocialPage> {
                     : const SocialCustomListsLoading(),
                   ),
                   const SizedBox(height: 16),
-                  SeeAllTitle("💬 Popular Reviews", () {}, shouldHideSeeAllButton: true),
+                  SeeAllTitle("💬 Popular Reviews", () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return const ReviewSocialListPage();
+                      })
+                    );
+                  }),
                   SizedBox(
                     height: 200,
                     child: provider.networkState == NetworkState.success

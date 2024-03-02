@@ -57,6 +57,7 @@ class TypeConverter<T> {
         response["email"],
         response["image"],
         response["username"],
+        response["streak"] ?? 0,
       ) as T;
     } else if (T == UserInfo) {
       return UserInfo(

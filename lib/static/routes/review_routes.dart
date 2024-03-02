@@ -9,6 +9,7 @@ class ReviewRoutes {
   late String updateReview;
   late String reviewsByUser;
   late String reviewDetails;
+  late String reviewListSocial;
   late String voteReview;
 
   ReviewRoutes({baseURL}) {
@@ -23,5 +24,6 @@ class ReviewRoutes {
     reviewsByUser = '$_baseReviewRoute/user';
     reviewDetails = '$_baseReviewRoute/details';
     voteReview = '$_baseReviewRoute/like';
+    reviewListSocial = '$_baseReviewRoute/social';
   }
 }
