@@ -4,6 +4,7 @@ import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class ContentList extends StatelessWidget {
@@ -55,7 +56,7 @@ class ContentList extends StatelessWidget {
                 } else {
                   return TVDetailsPage(content.id);
                 }
-              }, maintainState: false)
+              }, maintainState: NavigationTracker().shouldMaintainState())
             );
           },
           child: Padding(

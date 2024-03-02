@@ -14,6 +14,7 @@ import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_share_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
@@ -189,7 +190,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                             case ContentType.game:
                               return GameDetailsPage(content.contentID.isNotEmpty ? content.contentID : content.contentExternalIntID?.toString() ?? '');
                           }
-                        })
+                        }, maintainState: NavigationTracker().shouldMaintainState())
                       );
                     },
                     child: CustomListEntryCell(
@@ -297,7 +298,7 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                     Navigator.of(context, rootNavigator: true).push(
                       CupertinoPageRoute(builder: (_) {
                         return ProfileDisplayPage(item.author.username);
-                      })
+                      }, maintainState: NavigationTracker().shouldMaintainState())
                     );
                   },
                   child: AuthorInfoRow(item.author),

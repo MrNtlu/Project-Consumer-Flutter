@@ -18,6 +18,7 @@ import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
@@ -58,7 +59,7 @@ Future<void> _trackingTransparencyRequest() async {
   if (status == TrackingStatus.authorized) {
     analytics.setAnalyticsCollectionEnabled(true);
     crashlytics.setCrashlyticsCollectionEnabled(true && kReleaseMode);
-  } else if(status == TrackingStatus.notDetermined) {
+  } else if (status == TrackingStatus.notDetermined) {
     final status = await AppTrackingTransparency.requestTrackingAuthorization();
 
     analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final GoRouter _goRouter = GoRouter(
+    observers: [MyNavigatorObserver()],
     routes: [
       GoRoute(
         path: TabsPage.routeName,
@@ -149,5 +151,27 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class MyNavigatorObserver extends NavigatorObserver {
+  List<Route<dynamic>> routeStack = [];
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    routeStack.add(route);
+    NavigationTracker().stackSize = routeStack.length;
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    routeStack.removeLast();
+    NavigationTracker().stackSize = routeStack.length;
+  }
+
+  @override
+  void didRemove(Route route, Route? previousRoute) {
+    routeStack.removeLast();
+    NavigationTracker().stackSize = routeStack.length;
   }
 }

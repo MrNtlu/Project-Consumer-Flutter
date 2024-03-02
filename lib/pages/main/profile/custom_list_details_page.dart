@@ -11,6 +11,7 @@ import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
@@ -114,7 +115,7 @@ class CustomListDetailsPage extends StatelessWidget {
                               case ContentType.game:
                                 return GameDetailsPage(content.contentID);
                             }
-                          }, maintainState: false)
+                          }, maintainState: NavigationTracker().shouldMaintainState())
                         );
                       },
                       child: CustomListEntryCell(

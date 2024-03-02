@@ -7,6 +7,7 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
@@ -55,7 +56,7 @@ class ContentListCell extends StatelessWidget {
               default:
                 return MovieDetailsPage(content.id);
             }
-          }, maintainState: false)
+          }, maintainState: NavigationTracker().shouldMaintainState())
         );
       },
       child: Padding(

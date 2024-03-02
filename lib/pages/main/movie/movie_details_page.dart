@@ -255,7 +255,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         const SizedBox(height: 8),
                         if (item.trailers != null && item.trailers!.isNotEmpty)
                         SizedBox(
-                          width: 80,
+                          width: 85,
                           child: CupertinoButton(
                             padding: EdgeInsets.zero,
                             minSize: 0,

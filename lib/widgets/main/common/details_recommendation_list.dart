@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class DetailsRecommendationList extends StatelessWidget {
@@ -26,7 +27,7 @@ class DetailsRecommendationList extends StatelessWidget {
                 CupertinoPageRoute(builder: (_) {
                   return onTap(index);
                 }
-              , maintainState: false));
+              , maintainState: NavigationTracker().shouldMaintainState()));
             },
             child: ContentCell(
               getImage(index), 

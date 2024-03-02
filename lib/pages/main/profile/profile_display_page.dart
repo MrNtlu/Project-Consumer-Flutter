@@ -11,6 +11,7 @@ import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_display_details_provider.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
@@ -291,7 +292,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                                   default:
                                     return MovieDetailsPage(data.id);
                                 }
-                              }, maintainState: false)
+                              }, maintainState: NavigationTracker().shouldMaintainState())
                             );
                           },
                           child: ProfileLegendCell(

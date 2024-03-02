@@ -31,29 +31,36 @@ class ReviewListShimmerCell extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "        ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold
-                      ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: const SizedBox(
+                        width: 150,
+                        height: 20,
+                        child: ColoredBox(color: CupertinoColors.systemGrey)
+                      )
                     ),
-                    Text(
-                      "XX XXX XX",
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: CupertinoColors.systemGrey2
-                      ),
-                    ),
+                    const SizedBox(height: 3),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: const SizedBox(
+                        width: 100,
+                        height: 15,
+                        child: ColoredBox(color: CupertinoColors.systemGrey)
+                      )
+                    )
                   ],
                 ),
                 const Spacer(),
-                const Text(
-                  "X",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: const SizedBox(
+                    width: 25,
+                    height: 20,
+                    child: ColoredBox(color: CupertinoColors.systemGrey)
+                  )
                 ),
                 const SizedBox(width: 3),
                 const Icon(
@@ -64,11 +71,13 @@ class ReviewListShimmerCell extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            const Text(
-              "          ",
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 15),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: const SizedBox(
+                height: 25,
+                width: double.infinity,
+                child: ColoredBox(color: CupertinoColors.systemGrey)
+              )
             ),
             const SizedBox(height: 12),
             Row(
@@ -79,7 +88,14 @@ class ReviewListShimmerCell extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                   child: const Icon(CupertinoIcons.heart, size: 20),
                 ),
-                const Text("X"),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: const SizedBox(
+                    width: 25,
+                    height: 20,
+                    child: ColoredBox(color: CupertinoColors.systemGrey)
+                  )
+                ),
                 const Spacer(),
                 CupertinoButton(
                   minSize: 0,

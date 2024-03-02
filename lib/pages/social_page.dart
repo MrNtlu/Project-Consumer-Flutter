@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/pages/main/profile/custom_list_social_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/review/review_social_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
@@ -64,11 +65,11 @@ class _SocialPageState extends State<SocialPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SeeAllTitle("🗂️ Popular Lists", () {
-                    // Navigator.of(context, rootNavigator: true).push(
-                    //   CupertinoPageRoute(builder: (_) {
-                    //     return ProfileDisplayPage(userInfo.username);
-                    //   })
-                    // );
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return const CustomListSocialListPage();
+                      })
+                    );
                   }),
                   SizedBox(
                     height: 175,

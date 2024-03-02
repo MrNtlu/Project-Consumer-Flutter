@@ -1,25 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/main/review/review_with_content.dart';
-import 'package:watchlistfy/providers/main/review/review_social_list_provider.dart';
+import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
+import 'package:watchlistfy/providers/main/profile/custom_list_social_provider.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
-import 'package:watchlistfy/widgets/main/review/review_with_content_shimmer_cell.dart';
-import 'package:watchlistfy/widgets/main/social/social_review_cell.dart';
+import 'package:watchlistfy/widgets/main/profile/custom_list_shimmer_cell.dart';
+import 'package:watchlistfy/widgets/main/profile/custom_list_sort_sheet.dart';
+import 'package:watchlistfy/widgets/main/social/social_custom_list_cell.dart';
 
-class ReviewSocialListPage extends StatefulWidget {
-  const ReviewSocialListPage({super.key});
+class CustomListSocialListPage extends StatefulWidget {
+  const CustomListSocialListPage({super.key});
 
   @override
-  State<ReviewSocialListPage> createState() => _ReviewSocialListPageState();
+  State<CustomListSocialListPage> createState() => _CustomListSocialListPageState();
 }
 
-class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
+class _CustomListSocialListPageState extends State<CustomListSocialListPage> {
   ListState _state = ListState.init;
 
-  late final ReviewSocialListProvider _reviewProvider;
+  late final CustomListSocialProvider _provider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -37,7 +37,7 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
       _isPaginating = true;
     }
 
-    _reviewProvider.getReviews(page: _page).then((response) {
+    _provider.getCustomList(page: _page).then((response) {
       _error = response.error;
       _canPaginate = response.canNextPage;
       _isPaginating = false;
@@ -70,7 +70,7 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
   @override
   void initState() {
     super.initState();
-    _reviewProvider = ReviewSocialListProvider();
+    _provider = CustomListSocialProvider();
   }
 
   @override
@@ -95,17 +95,17 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: const Text("💬 Reviews"),
+        middle: const Text("🗂️ Lists"),
         trailing: CupertinoButton(
           onPressed: () {
             showCupertinoModalPopup(
               context: context,
               builder: (context) {
-                return ReviewSortSheet(
-                  _reviewProvider.sort,
+                return CustomListSortSheet(
+                  _provider.sort,
                   (newSort) {
-                    final shouldFetchData = _reviewProvider.sort != newSort;
-                    _reviewProvider.sort = newSort;
+                    final shouldFetchData = _provider.sort != newSort;
+                    _provider.sort = newSort;
 
                     if (shouldFetchData) {
                       _fetchData();
@@ -120,8 +120,8 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
         ),
       ),
       child: ChangeNotifierProvider(
-        create: (_) => _reviewProvider,
-        child: Consumer<ReviewSocialListProvider>(
+        create: (_) => _provider,
+        child: Consumer<CustomListSocialProvider>(
           builder: (context, provider, child) {
             return _body(provider.items);
           },
@@ -130,7 +130,7 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
     );
   }
 
-  Widget _body(List<ReviewWithContent> data) {
+  Widget _body(List<CustomList> data) {
     switch (_state) {
       case ListState.done:
         return ListView.builder(
@@ -141,8 +141,8 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
               return const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 3, vertical: 5),
                 child: SizedBox(
-                  height: 205,
-                  child: ReviewWithContentShimmerCell()
+                  height: 175,
+                  child: CustomListShimmerCell()
                 ),
               );
             }
@@ -152,14 +152,16 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
               child: SizedBox(
-                height: 205,
-                child: SocialReviewCell(content, _reviewProvider.likeReview)
+                height: 175,
+                child: SocialCustomListCell(
+                  content,
+                )
               ),
             );
           },
         );
       case ListState.empty:
-        return const EmptyView("assets/lottie/review.json", "No reviews yet.");
+        return const EmptyView("assets/lottie/empty.json", "Nothing here.");
       case ListState.error:
         return Center(
           child: Padding(

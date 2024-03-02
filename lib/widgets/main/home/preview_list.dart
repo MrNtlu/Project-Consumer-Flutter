@@ -11,6 +11,7 @@ import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class PreviewList extends StatefulWidget {
@@ -149,7 +150,7 @@ class _PreviewListState extends State<PreviewList> {
                   default:
                     return MovieDetailsPage(data.id);
                 }
-              }, maintainState: false));
+              }, maintainState: NavigationTracker().shouldMaintainState()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 3),

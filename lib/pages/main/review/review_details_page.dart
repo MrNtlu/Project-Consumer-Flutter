@@ -13,6 +13,7 @@ import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
@@ -63,7 +64,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                       Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(builder: (_) {
                           return ProfileDisplayPage(widget.item.author.username);
-                        })
+                        }, maintainState: NavigationTracker().shouldMaintainState())
                       );
                     },
                     child: Row(

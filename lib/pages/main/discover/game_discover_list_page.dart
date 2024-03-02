@@ -13,6 +13,7 @@ import 'package:watchlistfy/providers/main/discover/discover_game_provider.dart'
 import 'package:watchlistfy/providers/main/game/game_list_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
@@ -212,7 +213,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return GameDetailsPage(content.id);
-                  }, maintainState: false)
+                  }, maintainState: NavigationTracker().shouldMaintainState())
                 );
               },
               child: Padding(

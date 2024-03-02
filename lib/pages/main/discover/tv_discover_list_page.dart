@@ -13,6 +13,7 @@ import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_list_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
@@ -225,7 +226,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return TVDetailsPage(content.id);
-                  }, maintainState: false)
+                  }, maintainState: NavigationTracker().shouldMaintainState())
                 );
               },
               child: Padding(

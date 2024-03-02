@@ -38,19 +38,13 @@ class ReviewWithContentShimmerCell extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: const SizedBox(
-                          width: 150,
-                          height: 35,
-                          child: ColoredBox(color: CupertinoColors.systemGrey)
-                        )
-                      ),
-                    ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: const SizedBox(
+                      width: 150,
+                      height: 35,
+                      child: ColoredBox(color: CupertinoColors.systemGrey)
+                    )
                   ),
                 ),
                 const SizedBox(width: 12),
