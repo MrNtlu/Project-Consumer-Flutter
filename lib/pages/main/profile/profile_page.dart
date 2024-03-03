@@ -17,6 +17,7 @@ import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_profile_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
@@ -71,6 +72,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void didChangeDependencies() {
     if (_state == DetailState.init) {
+      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      if (!authProvider.isAuthenticated) {
+        Navigator.pop(context);
+      }
+      
       _fetchData();
     }
     super.didChangeDependencies();

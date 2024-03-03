@@ -76,6 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
           authProvider?.setAuthentication(false);
           authProvider?.setBasicUserInfo(null);
           Purchases.logOut();
+          UserToken().setToken(null);
           GoogleSignInApi().signOut();
           SharedPref().deleteTokenCredentials();
           Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);

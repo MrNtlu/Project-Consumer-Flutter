@@ -11,6 +11,7 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_provider.dart';
@@ -85,6 +86,11 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      if (!authProvider.isAuthenticated) {
+        Navigator.pop(context);
+      }
+      
       _globalProvider = Provider.of<GlobalProvider>(context);
       _fetchData();
     }

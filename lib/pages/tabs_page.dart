@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
 import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
+import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
+import 'package:watchlistfy/pages/main/profile/profile_page.dart';
+import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/settings_page.dart';
 import 'package:watchlistfy/pages/social_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
@@ -33,6 +37,8 @@ class TabsPage extends StatefulWidget {
 class _TabsPageState extends State<TabsPage> {
   BaseState state = BaseState.init;
   int _selectedPageIndex = 0;
+
+  final QuickActions quickActions = const QuickActions();
 
   final List<Widget> _pages = [
     const HomePage(),
@@ -75,8 +81,42 @@ class _TabsPageState extends State<TabsPage> {
     return false;
   }
 
+  initializeQuickActions() {
+    quickActions.initialize((String shortcutType) async {
+      await Future.delayed(const Duration(milliseconds: 1010));
+      if (context.mounted) {
+        if (shortcutType == 'action_user_list') {
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(builder: (_) {
+              return const UserListPage();
+            })
+          );
+        } else if (shortcutType == 'action_consume_later') {
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(builder: (_) {
+              return const ConsumeLaterPage();
+            }
+          ));
+        } else if (shortcutType == 'action_profile') {
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(builder: (_) {
+              return const ProfilePage();
+            }
+          ));
+        }
+      }
+    });
+
+    quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(type: 'action_profile', localizedTitle: 'Profile'),
+      const ShortcutItem(type: 'action_user_list', localizedTitle: 'User List'),
+      const ShortcutItem(type: 'action_consume_later', localizedTitle: 'Watch Later')
+    ]);
+  }
+
   @override
   void initState() {
+    initializeQuickActions();
     super.initState();
     if (Platform.isAndroid) {
       BackButtonInterceptor.add(androidInterceptor);

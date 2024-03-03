@@ -8,6 +8,7 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
@@ -71,6 +72,11 @@ class _UserListPageState extends State<UserListPage> {
   @override
   void didChangeDependencies() {
     if (_state == DetailState.init) {
+      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      if (!authProvider.isAuthenticated) {
+        Navigator.pop(context);
+      }
+
       _globalProvider = Provider.of<GlobalProvider>(context);
       _fetchData();
     }
