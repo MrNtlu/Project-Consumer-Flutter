@@ -1,70 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 
-class UserListContentSelection extends StatefulWidget {
-  final UserListContentSelectionProvider provider;
+class SettingsContentSelection extends StatefulWidget {
+  final GlobalProvider _provider;
 
-  const UserListContentSelection(this.provider, {super.key});
+  const SettingsContentSelection(this._provider, {super.key});
 
   @override
-  State<UserListContentSelection> createState() => _UserListContentSelectionState();
+  State<SettingsContentSelection> createState() => _SettingsContentSelectionState();
 }
 
-class _UserListContentSelectionState extends State<UserListContentSelection> {
+class _SettingsContentSelectionState extends State<SettingsContentSelection> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CupertinoButton(
-          onPressed: () {
-            widget.provider.decrementContentType();
-          },
-          minSize: 0,
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.left_chevron, size: 20),
-        ),
-        const SizedBox(width: 3),
-        CupertinoButton(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            width: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.provider.selectedContent.value,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: CupertinoTheme.of(context).primaryColor,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Icon(
-                  CupertinoIcons.chevron_down_circle_fill,
-                  size: 14,
-                  color: CupertinoTheme.of(context).primaryColor,
-                )
-              ],
+          child: Text(
+            widget._provider.contentType.value,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: CupertinoTheme.of(context).primaryColor,
             ),
           ),
           onPressed: () {
             _showPickerDialog();
           }
         ),
-        const SizedBox(width: 3),
-        CupertinoButton(
-          onPressed: () {
-            widget.provider.incrementContentType();
-          },
-          minSize: 0,
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.right_chevron, size: 20),
-        ),
-        const SizedBox(width: 6,)
       ],
     );
   }
@@ -99,13 +66,13 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
                   itemCount: ContentType.values.length,
                   itemExtent: 50,
                   itemBuilder: (context, index) {
-                    var isSelected = ContentType.values.indexOf(widget.provider.selectedContent) == index;
+                    var isSelected = ContentType.values.indexOf(widget._provider.contentType) == index;
 
                     return CupertinoButton(
                       color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).onBgColor,
                       onPressed: (){
                         if (!isSelected) {
-                          widget.provider.setContentType(ContentType.values[index]);
+                          widget._provider.setContentType(ContentType.values[index]);
                         }
                         Navigator.pop(context);
                       },

@@ -30,6 +30,7 @@ class GenreList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: genreSize,
+        itemExtent: 135,
         shrinkWrap: true,
         itemBuilder: (context, index) {
           List<NameUrl> genreList;
@@ -89,20 +90,34 @@ class GenreList extends StatelessWidget {
                         key: ValueKey<String>(data.url),
                         maxHeightDiskCache: 150,
                         errorListener: (_) {},
+                        progressIndicatorBuilder: (_, __, ___) => const SizedBox(
+                          height: 75,
+                          width: 129,
+                          child: ColoredBox(
+                            color: CupertinoColors.systemGrey2
+                          ),
+                        ),
                         fadeInDuration: const Duration(milliseconds: 0),
                         fadeOutDuration: const Duration(milliseconds: 0),
                       ),
                     ),
-                    ColoredBox(
-                      color: CupertinoColors.black.withOpacity(0.5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Text(
-                          data.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: CupertinoColors.white
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: ColoredBox(
+                          color: CupertinoColors.black.withOpacity(0.6),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                            child: Text(
+                              data.name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: CupertinoColors.white
+                              ),
+                            ),
                           ),
                         ),
                       ),

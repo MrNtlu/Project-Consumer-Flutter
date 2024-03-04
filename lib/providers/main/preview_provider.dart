@@ -10,7 +10,7 @@ import 'package:watchlistfy/utils/extensions.dart';
 
 class PreviewProvider with ChangeNotifier {
   NetworkState networkState = NetworkState.init;
-  
+
   BasePreviewResponse<BaseContent> moviePreview = BasePreviewResponse();
   BasePreviewResponse<BaseContent> tvPreview = BasePreviewResponse();
   BasePreviewResponse<BaseContent> animePreview = BasePreviewResponse();
@@ -44,7 +44,7 @@ class PreviewProvider with ChangeNotifier {
         gamePreview = previewResponse.games!;
       }
       networkState = NetworkState.success;
-      
+
       notifyListeners();
       return previewResponse;
     } catch (error) {

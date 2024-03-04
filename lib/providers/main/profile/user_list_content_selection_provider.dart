@@ -7,6 +7,10 @@ class UserListContentSelectionProvider with ChangeNotifier {
 
   ContentType get selectedContent => _selectedContent;
 
+  void initContentType(ContentType contentType) {
+    _selectedContent = contentType;
+  }
+
   void setContentType(ContentType contentType) {
     _selectedContent = contentType;
     notifyListeners();
@@ -39,7 +43,7 @@ class UserListContentSelectionProvider with ChangeNotifier {
   void setSort(String sort) {
     if (sort != _sort) {
       _sort = sort;
-      notifyListeners(); 
+      notifyListeners();
     }
   }
 }

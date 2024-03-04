@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -13,6 +14,7 @@ import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_compact.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_content_selection.dart';
@@ -40,7 +42,7 @@ class _UserListPageState extends State<UserListPage> {
       _state = DetailState.loading;
     });
 
-    _provider.getUserList(sort: _userListProvider.sort).then((response) {
+    _provider.getUserList(sort: _userListProvider.sort).then((response) async {
       _error = response.error;
 
       if (_state != DetailState.disposed) {
@@ -53,6 +55,17 @@ class _UserListPageState extends State<UserListPage> {
                 : DetailState.error
             );
         });
+
+        try {
+          if (!SharedPref().getIsAskedForReview() && response.data != null && (response.data!.animeList.length + response.data!.movieList.length + response.data!.tvList.length + response.data!.gameList.length) > 10) {
+            final InAppReview inAppReview = InAppReview.instance;
+
+            if (await inAppReview.isAvailable()) {
+                inAppReview.requestReview();
+                SharedPref().setIsAskedForReview(true);
+            }
+          }
+        } catch(_) {}
       }
     });
   }
@@ -70,7 +83,7 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_state == DetailState.init) {
       final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
       if (!authProvider.isAuthenticated) {
@@ -78,6 +91,7 @@ class _UserListPageState extends State<UserListPage> {
       }
 
       _globalProvider = Provider.of<GlobalProvider>(context);
+      _userListProvider.initContentType(_globalProvider.contentType);
       _fetchData();
     }
     super.didChangeDependencies();
@@ -107,7 +121,7 @@ class _UserListPageState extends State<UserListPage> {
         ChangeNotifierProvider(create: (_) => _userListProvider),
       ],
       child: Consumer2<UserListContentSelectionProvider, UserListProvider>(
-        builder: (context, userListProvider, provider, child) {    
+        builder: (context, userListProvider, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: UserListContentSelection(userListProvider),
@@ -117,7 +131,7 @@ class _UserListPageState extends State<UserListPage> {
                   CupertinoButton(
                     onPressed: () {
                       showCupertinoModalPopup(
-                        context: context, 
+                        context: context,
                         builder: (context) {
                           return UserListSettingsSheet(_fetchData, userListProvider);
                         });
@@ -207,9 +221,9 @@ class _UserListPageState extends State<UserListPage> {
               : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
               child: data.isLoading
               ? UserListShimmerCell(
-                data.title, 
+                data.title,
                 provider.selectedContent,
-                data.totalSeasons, 
+                data.totalSeasons,
                 data.totalEpisodes
               )
               : GestureDetector(
@@ -224,7 +238,7 @@ class _UserListPageState extends State<UserListPage> {
                           return TVDetailsPage(data.contentID);
                         case ContentType.anime:
                           return AnimeDetailsPage(data.contentID);
-                        case ContentType.game: 
+                        case ContentType.game:
                           return GameDetailsPage(data.contentID);
                         default:
                           return MovieDetailsPage(data.contentID);
@@ -259,7 +273,7 @@ class _UserListPageState extends State<UserListPage> {
           ),
         );
       case DetailState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const LoadingView("Loading");
     }

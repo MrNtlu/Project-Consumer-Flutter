@@ -82,7 +82,7 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
                     _scoreDropdown,
                     const SizedBox(height: 12),
                     DetailsSheetTextfield(
-                      _episodeTextController, 
+                      _episodeTextController,
                       text: "Episodes",
                       onPressed: () {
                         _episodeTextController.text = (
@@ -95,8 +95,8 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
                     const SizedBox(height: 12),
                     if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
                     DetailsSheetTextfield(
-                      _timesFinishedTextController, 
-                      text: "Times Finished", 
+                      _timesFinishedTextController,
+                      text: "Times Finished",
                       onPressed: () {
                         _timesFinishedTextController.text = (
                           int.parse(_timesFinishedTextController.text != "" ? _timesFinishedTextController.text : "0") + 1
@@ -110,24 +110,24 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
                         final isFinished = provider.selectedStatus.request == Constants.UserListStatus[1].request;
                         final isTimesFinishedEmpty = _timesFinishedTextController.text == "";
                         final isEpisodesEmpty = _episodeTextController.text == "";
-          
+
                         if ((isFinished && isTimesFinishedEmpty) || isEpisodesEmpty) {
                           showCupertinoDialog(
-                            context: context, 
+                            context: context,
                             builder: (context) {
                               return const ErrorDialog("Please fill the empty fields.");
                             }
                           );
                         } else {
                           Navigator.pop(context);
-          
+
                           if (widget.userList != null) {
                             final userList = widget.userList!;
                             final isUpdatingScore = userList.score != _scoreDropdown.selectedValue;
 
                             widget.provider.updateAnimeWatchList(AnimeWatchListUpdateBody(
-                              userList.id, isUpdatingScore, 
-                              isUpdatingScore ? _scoreDropdown.selectedValue : null, 
+                              userList.id, isUpdatingScore,
+                              isUpdatingScore ? _scoreDropdown.selectedValue : null,
                               provider.selectedStatus.request,
                               isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
                               _episodeTextController.value.text == "" ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text),
@@ -136,7 +136,7 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
                             widget.provider.createAnimeWatchList(AnimeWatchListBody(
                               widget.animeID, widget.animeMALId,
                               isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
-                              _scoreDropdown.selectedValue, 
+                              _scoreDropdown.selectedValue,
                               provider.selectedStatus.request,
                               _episodeTextController.value.text == "" ? null : int.parse(_episodeTextController.value.text),
                             ));

@@ -23,7 +23,12 @@ class SocialProvider with ChangeNotifier {
   }
 
   Future<BaseNullableResponse<Social>> getSocial() async {
+    final shouldNotify = networkState != NetworkState.init;
+
     networkState = NetworkState.loading;
+    if (shouldNotify) {
+      notifyListeners();
+    }
 
     try {
       final response = await http.get(

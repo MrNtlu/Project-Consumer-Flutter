@@ -76,8 +76,8 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
                     const SizedBox(height: 12),
                     if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
                     DetailsSheetTextfield(
-                      _timesFinishedTextController, 
-                      text: "Times Finished", 
+                      _timesFinishedTextController,
+                      text: "Times Finished",
                       onPressed: () {
                         _timesFinishedTextController.text = (
                           int.parse(_timesFinishedTextController.text != "" ? _timesFinishedTextController.text : "0") + 1
@@ -90,30 +90,30 @@ class _MovieWatchListSheetState extends State<MovieWatchListSheet> {
                       onPressed: () {
                         final isFinished = provider.selectedStatus.request == Constants.UserListStatus[1].request;
                         final isTimesFinishedEmpty = _timesFinishedTextController.text == "";
-          
+
                         if (isFinished && isTimesFinishedEmpty) {
                           showCupertinoDialog(
-                            context: context, 
+                            context: context,
                             builder: (context) {
                               return const ErrorDialog("Please fill the empty fields.");
                             }
                           );
                         } else {
                           Navigator.pop(context);
-          
+
                           if (widget.userList != null) {
                             final userList = widget.userList!;
                             final isUpdatingScore = userList.score != _scoreDropdown.selectedValue;
-          
+
                             widget.provider.updateMovieWatchList(MovieWatchListUpdateBody(
-                              userList.id, isUpdatingScore, 
-                              isUpdatingScore ? _scoreDropdown.selectedValue : null, 
+                              userList.id, isUpdatingScore,
+                              isUpdatingScore ? _scoreDropdown.selectedValue : null,
                               provider.selectedStatus.request,
                               isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
                             ));
                           } else {
                             widget.provider.createMovieWatchList(MovieWatchListBody(
-                              widget.movieID, widget.movieTMDBId, 
+                              widget.movieID, widget.movieTMDBId,
                               isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
                               _scoreDropdown.selectedValue, provider.selectedStatus.request
                             ));

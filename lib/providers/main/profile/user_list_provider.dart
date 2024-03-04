@@ -82,12 +82,12 @@ class UserListProvider with ChangeNotifier {
     try {
       final response = await http.patch(
         Uri.parse(url),
-        body: json.encode(request.convertToJson()), 
+        body: json.encode(request.convertToJson()),
         headers: UserToken().getBearerToken()
       );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
-      
+
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserListContent>();
       var data = baseItemResponse.data;
 
@@ -132,15 +132,15 @@ class UserListProvider with ChangeNotifier {
     try {
       final response = await http.patch(
         Uri.parse(url),
-        body: json.encode(request.convertToJson()), 
+        body: json.encode(request.convertToJson()),
         headers: UserToken().getBearerToken()
       );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
-      
+
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserListContent>();
       var data = baseItemResponse.data;
-      
+
       isLoading = false;
       if (data != null) {
         switch (type) {
@@ -181,7 +181,7 @@ class UserListProvider with ChangeNotifier {
       );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
-      
+
       isLoading = false;
       var messageResponse = decodedResponse.getBaseMessageResponse();
 

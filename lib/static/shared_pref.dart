@@ -101,4 +101,13 @@ class SharedPref {
   String getSelectedCountry() {
     return _sharedPreference.getString("selected_country") ?? WidgetsBinding.instance.platformDispatcher.locale.countryCode ?? 'US';
   }
+
+  //Ask for Review
+  void setIsAskedForReview(bool isAsked) {
+    sharedPref?.setBool("is_asked_for_review", isAsked);
+  }
+
+  bool getIsAskedForReview() {
+    return _sharedPreference.getBool("is_asked_for_review") ?? false;
+  }
 }

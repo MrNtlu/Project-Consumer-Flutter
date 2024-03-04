@@ -33,7 +33,7 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
   void _fetchData() {
     if (_page == 1) {
       setState(() {
-        _state = ListState.loading;  
+        _state = ListState.loading;
       });
     } else {
       _canPaginate = false;
@@ -61,7 +61,7 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
 
   void _scrollHandler() {
     if (
-      _canPaginate 
+      _canPaginate
       && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
       && !_scrollController.position.outOfRange
     ) {
@@ -108,7 +108,7 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
               trailing: CupertinoButton(
                 onPressed: () {
                   showCupertinoModalPopup(
-                    context: context, 
+                    context: context,
                     builder: (context) {
                       return ReviewSortSheet(
                         _provider.sort,
@@ -117,9 +117,9 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
                           _provider.sort = newSort;
 
                           if (shouldFetchData) {
-                            _fetchData(); 
+                            _fetchData();
                           }
-                        }  
+                        }
                       );
                     }
                   );
@@ -165,7 +165,7 @@ class _ReviewProfileListPageState extends State<ReviewProfileListPage> {
           ),
         );
       case ListState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const LoadingView("Loading");
     }

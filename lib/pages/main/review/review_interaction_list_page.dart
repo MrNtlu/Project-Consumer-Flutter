@@ -82,14 +82,14 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
       create: (_) => _provider,
       child: Consumer<ReviewInteractionProvider>(
         builder: (context, provider, child) {
-      
+
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: const Text("💬 Liked Reviews"),
               trailing: CupertinoButton(
                 onPressed: () {
                   // showCupertinoModalPopup(
-                  //   context: context, 
+                  //   context: context,
                   //   builder: (context) {
                   //     return ReviewSortSheet(_fetchData, _provider);
                   //   }
@@ -239,7 +239,7 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
                     children: [
                       CupertinoButton(
                         onPressed: () async {
-                          if (_authProvider.isAuthenticated) {  
+                          if (_authProvider.isAuthenticated) {
                             showCupertinoDialog(
                               context: context,
                               builder: (_) {
@@ -305,7 +305,7 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
           ),
         );
       case ListState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const LoadingView("Loading");
     }

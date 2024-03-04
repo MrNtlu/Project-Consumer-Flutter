@@ -60,145 +60,154 @@ class _SocialPageState extends State<SocialPage> {
         create: (_) => _provider,
         child: Consumer<SocialProvider>(
           builder: (context, provider, _) {
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SeeAllTitle("🗂️ Popular Lists", () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return const CustomListSocialListPage();
-                      })
-                    );
-                  }),
-                  SizedBox(
-                    height: 175,
-                    child: provider.networkState == NetworkState.success
-                    ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: provider.item?.customList.isNotEmpty == true ? provider.item?.customList.length : 1,
-                      itemExtent: 300,
-                      itemBuilder: (context, index) {
-                        if (provider.item?.customList.isEmpty == true) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text("Nothing here."),
-                            ),
-                          );
-                        }
-                        return SocialCustomListCell(provider.item!.customList[index]);
-                      }
-                    )
-                    : const SocialCustomListsLoading(),
-                  ),
-                  const SizedBox(height: 16),
-                  SeeAllTitle("💬 Popular Reviews", () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return const ReviewSocialListPage();
-                      })
-                    );
-                  }),
-                  SizedBox(
-                    height: 200,
-                    child: provider.networkState == NetworkState.success
-                    ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: provider.item?.reviews.length,
-                      itemExtent: 300,
-                      itemBuilder: (context, index) {
-                        return SocialReviewCell(provider.item!.reviews[index], _provider.likeReview);
-                      }
-                    )
-                    : const SocialReviewLoading(),
-                  ),
-                  const SizedBox(height: 16),
-                  SeeAllTitle("🏆 Leaderboard", () {}, shouldHideSeeAllButton: true),
-                  provider.networkState == NetworkState.success
-                  ? ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: provider.item?.leaderboard.length,
-                    itemBuilder: (context, index) {
-                      final userInfo = provider.item!.leaderboard[index];
-
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(builder: (_) {
-                              return ProfileDisplayPage(userInfo.username);
-                            })
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 25,
-                                child: Text(
-                                  index == 0
-                                  ? "🥇"
-                                  : index == 1
-                                    ? "🥈"
-                                    : index == 2
-                                      ? "🥉"
-                                      : "${index + 1}",
-                                  style: TextStyle(fontSize: 20, color: Colors.grey.shade600),
-                                ),
+            return RefreshIndicator.adaptive(
+              backgroundColor: CupertinoTheme.of(context).bgTextColor,
+              color: CupertinoTheme.of(context).bgColor,
+              onRefresh: () async {
+                if (_provider.networkState == NetworkState.success || _provider.networkState == NetworkState.error) {
+                  await _provider.getSocial();
+                }
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SeeAllTitle("🗂️ Popular Lists", () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return const CustomListSocialListPage();
+                        })
+                      );
+                    }),
+                    SizedBox(
+                      height: 175,
+                      child: provider.networkState == NetworkState.success
+                      ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: provider.item?.customList.isNotEmpty == true ? provider.item?.customList.length : 1,
+                        itemExtent: 300,
+                        itemBuilder: (context, index) {
+                          if (provider.item?.customList.isEmpty == true) {
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text("Nothing here."),
                               ),
-                              const SizedBox(width: 12),
-                              Stack(
-                                children: [
-                                  AuthorImage(userInfo.image ?? '', size: 40),
-                                  if (userInfo.isPremium)
-                                  Positioned(
-                                    bottom: -6,
-                                    right: -6,
-                                    child: Lottie.asset(
-                                      "assets/lottie/premium.json",
-                                      height: 30,
-                                      width: 30,
-                                      frameRate: FrameRate(60)
+                            );
+                          }
+                          return SocialCustomListCell(provider.item!.customList[index]);
+                        }
+                      )
+                      : const SocialCustomListsLoading(),
+                    ),
+                    const SizedBox(height: 16),
+                    SeeAllTitle("💬 Popular Reviews", () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return const ReviewSocialListPage();
+                        })
+                      );
+                    }),
+                    SizedBox(
+                      height: 200,
+                      child: provider.networkState == NetworkState.success
+                      ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: provider.item?.reviews.length,
+                        itemExtent: 300,
+                        itemBuilder: (context, index) {
+                          return SocialReviewCell(provider.item!.reviews[index], _provider.likeReview);
+                        }
+                      )
+                      : const SocialReviewLoading(),
+                    ),
+                    const SizedBox(height: 16),
+                    SeeAllTitle("🏆 Leaderboard", () {}, shouldHideSeeAllButton: true),
+                    provider.networkState == NetworkState.success
+                    ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: provider.item?.leaderboard.length,
+                      itemBuilder: (context, index) {
+                        final userInfo = provider.item!.leaderboard[index];
+
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(builder: (_) {
+                                return ProfileDisplayPage(userInfo.username);
+                              })
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 25,
+                                  child: Text(
+                                    index == 0
+                                    ? "🥇"
+                                    : index == 1
+                                      ? "🥈"
+                                      : index == 2
+                                        ? "🥉"
+                                        : "${index + 1}",
+                                    style: TextStyle(fontSize: 20, color: Colors.grey.shade600),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Stack(
+                                  children: [
+                                    AuthorImage(userInfo.image ?? '', size: 40),
+                                    if (userInfo.isPremium)
+                                    Positioned(
+                                      bottom: -6,
+                                      right: -6,
+                                      child: Lottie.asset(
+                                        "assets/lottie/premium.json",
+                                        height: 30,
+                                        width: 30,
+                                        frameRate: FrameRate(60)
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    userInfo.username.split("@")[0], //TODO Remove later?
+                                    minFontSize: 16,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                      fontSize: 18,
                                     ),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: AutoSizeText(
-                                  userInfo.username.split("@")[0], //TODO Remove later?
-                                  minFontSize: 16,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                ),
+                                const SizedBox(width: 12),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "${userInfo.level} Lvl",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors().primaryColor
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  "${userInfo.level} Lvl",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors().primaryColor
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 3)
-                            ],
+                                const SizedBox(width: 3)
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                  )
-                  : const SocialLeaderboardLoading(),
-                  const SizedBox(height: 16)
-                ],
+                        );
+                      }
+                    )
+                    : const SocialLeaderboardLoading(),
+                    const SizedBox(height: 16)
+                  ],
+                ),
               ),
             );
           },

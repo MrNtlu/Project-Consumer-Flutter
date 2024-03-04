@@ -53,6 +53,8 @@ class _HomePageState extends State<HomePage> {
       globalProvider = Provider.of<GlobalProvider>(context);
       previewProvider = Provider.of<PreviewProvider>(context, listen: false);
 
+      contentProvider.initContentType(globalProvider.contentType);
+
       previewProvider?.getPreviews(region: globalProvider.selectedCountryCode);
       contentProvider.addListener(onContentChange);
 

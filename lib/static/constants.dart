@@ -53,30 +53,6 @@ class Constants {
     BackendRequestMapper("Linux", "Linux"),
   ];
 
-  // static final GamePlatformUIList = [
-  //     GamePlatformUI(BackendRequestMapper("PC", "PC"), R.drawable.steam),
-  //     GamePlatformUI(BackendRequestMapper("PlayStation 5", "PlayStation 5"), R.drawable.ps5),
-  //     GamePlatformUI(BackendRequestMapper("PlayStation 4", "PlayStation 4"), R.drawable.ps4),
-  //     GamePlatformUI(BackendRequestMapper("Xbox Series S/X", "Xbox Series S/X"), R.drawable.xbox),
-  //     GamePlatformUI(BackendRequestMapper("Xbox One", "Xbox One"), R.drawable.xbox),
-  //     GamePlatformUI(BackendRequestMapper("Nintendo Switch", "Nintendo Switch"), R.drawable.nintendo_switch),
-  //     GamePlatformUI(BackendRequestMapper("Nintendo 3DS", "Nintendo 3DS"), R.drawable.nintendo),
-  //     GamePlatformUI(BackendRequestMapper("Linux", "Linux"), R.drawable.linux),
-  // ];
-
-  // static final GameStoreList = [
-  //   Pair("Steam", 1),
-  //   Pair("Xbox Store", 2),
-  //   Pair("PlayStation Store", 3),
-  //   Pair("App Store", 4),
-  //   Pair("GOG", 5),
-  //   Pair("Nintendo Store", 6),
-  //   Pair("Xbox 360 Store", 7),
-  //   Pair("Google Play", 8),
-  //   Pair("itch.io", 9),
-  //   Pair("Epic Games", 11),
-  // ];
-
   //Sort Requests
   static final SortUpcomingRequests = BackendRequestMapper("Popularity", "popularity");
 
@@ -212,6 +188,25 @@ class Constants {
     NameUrl("Strategy", "https://media.rawg.io/media/games/997/997ab4d67e96fb20a4092383477d4463.jpg"),
   ];
 
+  static final MangaGenreList = [
+    NameUrl("Discover", "https://cdn.myanimelist.net/images/manga/2/37846l.jpg"),
+    NameUrl("Action", "https://cdn.myanimelist.net/images/manga/3/216464l.jpg"),
+    NameUrl("Adventure", "https://www.themoviedb.org/t/p/w154/mBxsapX4DNhH1XkOlLp15He5sxL.jpg"),
+    NameUrl("Avant Garde", "https://www.themoviedb.org/t/p/w154/fGXhmKyqRmx6NN3gQHeWNmiEryl.jpg"),
+    NameUrl("Award Winning", "https://www.themoviedb.org/t/p/w154/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg"),
+    NameUrl("Comedy", "https://www.themoviedb.org/t/p/w154/s0w8JbuNNxL1YgaHeDWih12C3jG.jpg"),
+    NameUrl("Drama", "https://www.themoviedb.org/t/p/w154/mMtUybQ6hL24FXo0F3Z4j2KG7kZ.jpg"),
+    NameUrl("Fantasy", "https://www.themoviedb.org/t/p/w154/dTFnU3EQB79aDM4HnUj06Y9Xbq1.jpg"),
+    NameUrl("Horror", "https://www.themoviedb.org/t/p/w154/yOarY3Yo0NMkuTuft87M5oAZa3C.jpg"),
+    NameUrl("Mystery", "https://www.themoviedb.org/t/p/w154/rRGnjRCHdDl3m3oCVSvo5z2E5c5.jpg"),
+    NameUrl("Romance", "https://www.themoviedb.org/t/p/w154/dRGtv7BLMe00RAxtLkaWjcbzsTA.jpg"),
+    NameUrl("Sci-Fi", "https://www.themoviedb.org/t/p/w154/36Ech63X2KU8JUXIBAo167kIC2k.jpg"),
+    NameUrl("Slice of Life", "https://www.themoviedb.org/t/p/w154/4xvQGRIJpPEDf7HQdF0JkBVsmoX.jpg"),
+    NameUrl("Sports", "https://www.themoviedb.org/t/p/w154/12mYMPE7Jy7rhDv0rn95GEtF94V.jpg"),
+    NameUrl("Supernatural", "https://www.themoviedb.org/t/p/w154/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg"),
+    NameUrl("Suspense", "https://www.themoviedb.org/t/p/w154/uAjMQlbPkVHmUahhCouANlHSDW2.jpg"),
+  ];
+
   static final AnimeThemeList = [
     BackendRequestMapper("Detective", "Detective"),
     BackendRequestMapper("Gore", "Gore"),
@@ -246,6 +241,47 @@ class Constants {
     BackendRequestMapper("Summer", "summer"),
     BackendRequestMapper("Fall", "fall"),
     BackendRequestMapper("Spring", "spring"),
+  ];
+
+  static final MangaThemeList = [
+    BackendRequestMapper("Anthropomorphic", "Anthropomorphic"),
+    BackendRequestMapper("CGDCT", "CGDCT"),
+    BackendRequestMapper("Combat Sports", "Combat Sports"),
+    BackendRequestMapper("Delinquents", "Delinquents"),
+    BackendRequestMapper("Detective", "Detective"),
+    BackendRequestMapper("Gore", "Gore"),
+    BackendRequestMapper("High Stakes Game", "High Stakes Game"),
+    BackendRequestMapper("Historical", "Historical"),
+    BackendRequestMapper("Isekai", "Isekai"),
+    BackendRequestMapper("Iyashikei", "Iyashikei"),
+    BackendRequestMapper("Martial Arts", "Martial Arts"),
+    BackendRequestMapper("Mecha", "Mecha"),
+    BackendRequestMapper("Medical", "Medical"),
+    BackendRequestMapper("Military", "Military"),
+    BackendRequestMapper("Music", "Music"),
+    BackendRequestMapper("Mythology", "Mythology"),
+    BackendRequestMapper("Parody", "Parody"),
+    BackendRequestMapper("Psychological", "Psychological"),
+    BackendRequestMapper("Racing", "Racing"),
+    BackendRequestMapper("Reincarnation", "Reincarnation"),
+    BackendRequestMapper("Samurai", "Samurai"),
+    BackendRequestMapper("School", "School"),
+    BackendRequestMapper("Space", "Space"),
+    BackendRequestMapper("Strategy Game", "Strategy Game"),
+    BackendRequestMapper("Super Power", "Super Power"),
+    BackendRequestMapper("Survival", "Survival"),
+    BackendRequestMapper("Team Sports", "Team Sports"),
+    BackendRequestMapper("Time Travel", "Time Travel"),
+    BackendRequestMapper("Vampire", "Vampire"),
+    BackendRequestMapper("Video Game", "Video Game"),
+    BackendRequestMapper("Workplace", "Workplace"),
+  ];
+
+  static final MangaDemographicsList = [
+    BackendRequestMapper("Josei", "Josei"),
+    BackendRequestMapper("Seinen", "Seinen"),
+    BackendRequestMapper("Shoujo", "Shoujo"),
+    BackendRequestMapper("Shounen", "Shounen"),
   ];
 
   static final DecadeList = [

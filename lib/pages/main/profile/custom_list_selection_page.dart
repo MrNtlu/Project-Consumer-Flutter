@@ -39,7 +39,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
   void _search() {
     if (_page == 1) {
       setState(() {
-        _state = ListState.loading;  
+        _state = ListState.loading;
       });
     } else {
       _canPaginate = false;
@@ -71,7 +71,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
 
   void _scrollHandler() {
     if (
-      _canPaginate 
+      _canPaginate
       && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
       && !_scrollController.position.outOfRange
     ) {
@@ -142,7 +142,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
                           },
                           onSubmitted: (value) {
                             FocusManager.instance.primaryFocus?.unfocus();
-                        
+
                             if (value.isNotEmpty) {
                               _search();
                             }
@@ -173,7 +173,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
             if ((_canPaginate || _isPaginating) && index >= data.length) {
               return const SizedBox(
                 height: 150,
-                child: LoadingView("Fetching data"),
+                child: LoadingView("Loading"),
               );
             }
 
@@ -182,30 +182,30 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
             final doesContain = _customListCreateProvider.doesContain(content.id);
 
             return CustomListEntryCell(
-              _provider.selectedContent, 
-              content, 
-              doesContain, 
+              _provider.selectedContent,
+              content,
+              doesContain,
               () {
                 _customListCreateProvider.removeContent(content.id);
-              }, 
+              },
               () {
-                if (_customListCreateProvider.selectedContent.length < limit) {  
+                if (_customListCreateProvider.selectedContent.length < limit) {
                   _customListCreateProvider.addNewContent(
                     CustomListContent(
-                      0, 
-                      content.id, 
-                      content.externalId, 
-                      content.externalIntId, 
-                      _provider.selectedContent.request, 
-                      content.titleEn, 
-                      content.titleOriginal, 
+                      0,
+                      content.id,
+                      content.externalId,
+                      content.externalIntId,
+                      _provider.selectedContent.request,
+                      content.titleEn,
+                      content.titleOriginal,
                       content.imageUrl,
                       null
                     )
                   );
                 } else {
                   showCupertinoDialog(
-                    context: context, 
+                    context: context,
                     builder: (_) => const ErrorDialog("You've reached the limit.\nFree users can add up to 10 entries, Premium users can add up to 25 entries.")
                   );
                 }
@@ -238,7 +238,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
           ),
         );
       case ListState.loading:
-        return const LoadingView("Fetching data");
+        return const LoadingView("Loading");
       default:
        return const Center(
         child: Padding(
