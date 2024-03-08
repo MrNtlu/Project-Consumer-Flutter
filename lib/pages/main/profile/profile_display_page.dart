@@ -17,11 +17,10 @@ import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_custom_list_cell.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_extra_info_text.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_info_text.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_legend_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_level_bar.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_review_cell.dart';
+import 'package:watchlistfy/widgets/main/profile/profile_stats.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_user_image.dart';
 
 class ProfileDisplayPage extends StatefulWidget {
@@ -208,31 +207,8 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
               //   ),
               // ),
               const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ProfileInfoText(item.movieCount.toString(), "Movies"),
-                    ProfileInfoText(item.tvCount.toString(), "TV Series"),
-                    ProfileInfoText(item.animeCount.toString(), "Anime"),
-                    ProfileInfoText(item.gameCount.toString(), "Games"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ProfileExtraInfoText((item.movieWatchedTime / 60).round().toString(), "hrs", "Watched"),
-                    ProfileExtraInfoText(item.tvWatchedEpisodes.toString(), "eps", "Watched"),
-                    ProfileExtraInfoText(item.animeWatchedEpisodes.toString(), "eps", "Watched"),
-                    ProfileExtraInfoText(item.gameTotalHoursPlayed.toString(), "hrs", "Played"),
-                  ],
-                ),
-              ),
+              ProfileStats(item),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(

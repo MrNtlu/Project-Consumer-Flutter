@@ -40,7 +40,7 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().tvRoutes.searchTVSeries}?page=$page&search=$search"
     );
@@ -52,6 +52,7 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
     String? status,
     String? numOfSeason,
     String? productionCompany,
+    String? productionCountry,
     String? genres,
     int? from,
     int? to,
@@ -59,7 +60,7 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().tvRoutes.tvBySortFilter}?page=$page&sort=$sort${
         status != null ? '&status=$status' : ''
@@ -67,6 +68,8 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
         numOfSeason != null ? '&season=$numOfSeason' : ''
       }${
         productionCompany != null ? '&production_companies=$productionCompany' : ''
+      }${
+        productionCountry != null ? '&production_country=$productionCountry' : ''
       }${
         genres != null ? '&genres=$genres' : ''
       }${

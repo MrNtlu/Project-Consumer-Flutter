@@ -6,7 +6,7 @@ import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dar
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class GameDiscoverSheet extends StatelessWidget {
-  final VoidCallback fetchData;
+  final Function(bool) fetchData;
   final DiscoverGameProvider provider;
 
   const GameDiscoverSheet(this.fetchData, this.provider, {super.key});
@@ -49,11 +49,11 @@ class GameDiscoverSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)), 
+                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
                   onPressed: () {
                     Navigator.pop(context);
                     provider.reset();
-                    fetchData();
+                    fetchData(true);
                   }
                 ),
                 CupertinoButton.filled(
@@ -64,15 +64,16 @@ class GameDiscoverSheet extends StatelessWidget {
                       genre: Constants.GameGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
                       platform: Constants.GamePlatformRequests.where((element) => element.name == platformList.selectedValue).firstOrNull?.request,
                     );
-                    fetchData();
+                    fetchData(true);
                   },
                   child: const Text(
                     "Done",
                     style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
-                  ), 
+                  ),
                 )
               ],
-            )
+            ),
+            const SizedBox(height: 3)
           ],
         ),
       ),

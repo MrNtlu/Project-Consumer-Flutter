@@ -23,11 +23,13 @@ class MovieDiscoverListPage extends StatefulWidget {
   final String? genre;
   final String sort;
   final String? productionCompanies;
+  final String? country;
 
   const MovieDiscoverListPage({
     this.genre,
     this.sort = "popularity",
     this.productionCompanies,
+    this.country,
     super.key
   });
 
@@ -48,7 +50,11 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   bool _isPaginating = false;
   String? _error;
 
-  void _fetchData() {
+  void _fetchData(bool isResetting) {
+    if (isResetting) {
+      _page = 1;
+    }
+
     if (_page == 1) {
       setState(() {
         _state = ListState.loading;
@@ -74,6 +80,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
       genres: _discoverProvider.genre,
       status: _discoverProvider.status,
       productionCompany: _discoverProvider.productionCompanies,
+      productionCountry: _discoverProvider.country,
       from: from,
       to: to,
     );
@@ -104,7 +111,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
       && !_scrollController.position.outOfRange
     ) {
       _page ++;
-      _fetchData();
+      _fetchData(false);
     }
   }
 
@@ -115,6 +122,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
     _discoverProvider = DiscoverMovieProvider();
     _discoverProvider.genre = widget.genre;
     _discoverProvider.productionCompanies = widget.productionCompanies;
+    _discoverProvider.country = widget.country;
   }
 
   @override
@@ -131,7 +139,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
       _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
-      _fetchData();
+      _fetchData(true);
     }
     super.didChangeDependencies();
   }

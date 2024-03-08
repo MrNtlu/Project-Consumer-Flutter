@@ -76,6 +76,18 @@ class TypeConverter<T> {
         response["anime_watched_episodes"] ?? 0,
         response["tv_watched_episodes"] ?? 0,
         response["game_total_hours_played"] ?? 0,
+        response["movie_total_score"] is double
+          ? response["movie_total_score"]
+          : (response["movie_total_score"] as int).toDouble(),
+        response["tv_total_score"] is double
+          ? response["tv_total_score"]
+          : (response["tv_total_score"] as int).toDouble(),
+        response["anime_total_score"] is double
+          ? response["anime_total_score"]
+          : (response["anime_total_score"] as int).toDouble(),
+        response["game_total_score"] is double
+          ? response["game_total_score"]
+          : (response["game_total_score"] as int).toDouble(),
         response["fcm_token"],
         response["username"],
         response["email"],
@@ -871,6 +883,7 @@ class TypeConverter<T> {
         extraResponse: response["extra"],
         actorsResponse: response["actors"],
         streamingResponse: response["streaming_platforms"],
+        productionResponse: response["production_companies"],
         animeStreamingResponse: response["anime_streaming_platforms"],
         studiosResponse: response["studios"],
       ) as T;

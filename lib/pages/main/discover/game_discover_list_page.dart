@@ -48,7 +48,11 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
   bool _isPaginating = false;
   String? _error;
 
-  void _fetchData() {
+  void _fetchData(bool isResetting) {
+    if (isResetting) {
+      _page = 1;
+    }
+
     if (_page == 1) {
       setState(() {
         _state = ListState.loading;
@@ -92,7 +96,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
       && !_scrollController.position.outOfRange
     ) {
       _page ++;
-      _fetchData();
+      _fetchData(false);
     }
   }
 
@@ -119,7 +123,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
       _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
-      _fetchData();
+      _fetchData(true);
     }
     super.didChangeDependencies();
   }

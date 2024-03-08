@@ -6,7 +6,7 @@ import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dar
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class MovieDiscoverSheet extends StatelessWidget {
-  final VoidCallback fetchData;
+  final Function(bool) fetchData;
   final DiscoverMovieProvider provider;
 
   const MovieDiscoverSheet(this.fetchData, this.provider, {super.key});
@@ -36,6 +36,11 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.DecadeList.map((e) => e.name).toList()
     );
 
+    final countryList = DiscoverSheetList(
+      Constants.MoviePopularCountries.where((element) => element.request == provider.country).firstOrNull?.name,
+      Constants.MoviePopularCountries.map((e) => e.name).toList()
+    );
+
     return SafeArea(
       child: Container(
         color: CupertinoTheme.of(context).bgColor,
@@ -48,6 +53,7 @@ class MovieDiscoverSheet extends StatelessWidget {
                   DiscoverSheetFilterBody("Genre", genreList),
                   DiscoverSheetFilterBody("Status", statusList),
                   DiscoverSheetFilterBody("Release Date", decadeList),
+                  DiscoverSheetFilterBody("Country", countryList),
                 ],
               ),
             ),
@@ -55,11 +61,11 @@ class MovieDiscoverSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)), 
+                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
                   onPressed: () {
                     Navigator.pop(context);
                     provider.reset();
-                    fetchData();
+                    fetchData(true);
                   }
                 ),
                 CupertinoButton.filled(
@@ -70,16 +76,18 @@ class MovieDiscoverSheet extends StatelessWidget {
                       genre: Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
                       status: Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
                       decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
+                      country: Constants.MoviePopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request,
                     );
-                    fetchData();
+                    fetchData(true);
                   },
                   child: const Text(
                     "Done",
                     style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
-                  ), 
-                )
+                  ),
+                ),
               ],
-            )
+            ),
+            const SizedBox(height: 3)
           ],
         ),
       ),

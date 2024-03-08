@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:watchlistfy/static/colors.dart';
 
 class ProfileExtraInfoText extends StatelessWidget {
@@ -32,7 +33,9 @@ class ProfileExtraInfoText extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 3),
-              Text(
+              extraValue == "⭐"
+              ? Icon(Icons.star_rounded, color: AppColors().primaryColor, size: 12)
+              : Text(
                 extraValue,
                 maxLines: 1,
                 style: TextStyle(

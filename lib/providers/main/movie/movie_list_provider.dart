@@ -51,6 +51,7 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
     required String sort,
     String? status,
     String? productionCompany,
+    String? productionCountry,
     String? genres,
     int? from,
     int? to,
@@ -64,6 +65,8 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
         status != null ? '&status=$status' : ''
       }${
         productionCompany != null ? '&production_companies=$productionCompany' : ''
+      }${
+        productionCountry != null ? '&production_country=$productionCountry' : ''
       }${
         genres != null ? '&genres=$genres' : ''
       }${

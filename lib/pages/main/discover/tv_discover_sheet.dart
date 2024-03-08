@@ -6,7 +6,7 @@ import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dar
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class TVDiscoverSheet extends StatelessWidget {
-  final VoidCallback fetchData;
+  final Function(bool) fetchData;
   final DiscoverTVProvider provider;
 
   const TVDiscoverSheet(this.fetchData, this.provider, {super.key});
@@ -41,6 +41,11 @@ class TVDiscoverSheet extends StatelessWidget {
       Constants.DecadeList.map((e) => e.name).toList()
     );
 
+    final countryList = DiscoverSheetList(
+      Constants.TVPopularCountries.where((element) => element.request == provider.country).firstOrNull?.name,
+      Constants.TVPopularCountries.map((e) => e.name).toList()
+    );
+
     return SafeArea(
       child: Container(
         color: CupertinoTheme.of(context).bgColor,
@@ -54,6 +59,7 @@ class TVDiscoverSheet extends StatelessWidget {
                   DiscoverSheetFilterBody("Status", statusList),
                   DiscoverSheetFilterBody("Number of Seasons", numOfSeasonList),
                   DiscoverSheetFilterBody("Release Date", decadeList),
+                  DiscoverSheetFilterBody("Country", countryList),
                 ],
               ),
             ),
@@ -61,11 +67,11 @@ class TVDiscoverSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)), 
+                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
                   onPressed: () {
                     Navigator.pop(context);
                     provider.reset();
-                    fetchData();
+                    fetchData(true);
                   }
                 ),
                 CupertinoButton.filled(
@@ -77,16 +83,18 @@ class TVDiscoverSheet extends StatelessWidget {
                       status: Constants.TVSeriesStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
                       numOfSeason: Constants.NumOfSeasonList.where((element) => element == numOfSeasonList.selectedValue).firstOrNull,
                       decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
+                      country: Constants.TVPopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request,
                     );
-                    fetchData();
+                    fetchData(true);
                   },
                   child: const Text(
                     "Done",
                     style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
-                  ), 
-                )
+                  ),
+                ),
               ],
-            )
+            ),
+            const SizedBox(height: 3)
           ],
         ),
       ),

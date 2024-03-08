@@ -8,6 +8,7 @@ class DiscoverTVProvider with ChangeNotifier {
   String? productionCompanies;
   String? numOfSeason;
   String? decade;
+  String? country;
 
   void reset() {
     sort = Constants.SortRequests[0].request;
@@ -16,6 +17,7 @@ class DiscoverTVProvider with ChangeNotifier {
     productionCompanies = null;
     numOfSeason = null;
     decade = null;
+    country = null;
   }
 
   void setDiscover({
@@ -25,6 +27,7 @@ class DiscoverTVProvider with ChangeNotifier {
     String? productionCompanies,
     String? numOfSeason,
     String? decade,
+    String? country,
   }) {
     this.sort = sort;
     this.genre = genre;
@@ -32,5 +35,6 @@ class DiscoverTVProvider with ChangeNotifier {
     this.productionCompanies = productionCompanies;
     this.numOfSeason = numOfSeason;
     this.decade = decade;
+    this.country = country;
   }
 }

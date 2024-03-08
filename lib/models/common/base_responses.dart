@@ -44,10 +44,10 @@ class BaseListResponse<T> {
   }){
     if (response != null) {
       var typeConverter = TypeConverter<T>();
-      
+
       response.map((e) {
-        return e as Map<String, dynamic>; 
-      }).forEach((element) { 
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
         data.add(typeConverter.convertToObject(element));
       });
     }
@@ -116,10 +116,10 @@ class BaseSuggestion<T> {
   }){
     if (response != null) {
       var typeConverter = TypeConverter<T>();
-      
+
       response.map((e) {
-        return e as Map<String, dynamic>; 
-      }).forEach((element) { 
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
         data.add(typeConverter.convertToObject(element));
       });
     }
@@ -148,6 +148,7 @@ class BasePreviewResponse<T> {
   late List<T>? extra = [];
   late List<ActorDetails>? actors = [];
   late List<StreamingPlatform>? streamingPlatforms = [];
+  late List<StreamingPlatform>? productionCompanies = [];
   late List<AnimeNameUrl>? animeStreamingPlatforms = [];
   late List<AnimeNameUrl>? studios = [];
 
@@ -158,6 +159,7 @@ class BasePreviewResponse<T> {
     List<dynamic>? extraResponse,
     List<dynamic>? actorsResponse,
     List<dynamic>? streamingResponse,
+    List<dynamic>? productionResponse,
     List<dynamic>? animeStreamingResponse,
     List<dynamic>? studiosResponse,
   }) {
@@ -221,6 +223,16 @@ class BasePreviewResponse<T> {
       });
     } else {
       streamingPlatforms = null;
+    }
+
+    if (productionResponse != null) {
+      productionResponse.map((e){
+        return e as Map<String, dynamic>;
+      }).forEach((element) {
+        productionCompanies!.add(TypeConverter<StreamingPlatform>().convertToObject(element));
+      });
+    } else {
+      productionCompanies = null;
     }
 
     if (animeStreamingResponse != null) {

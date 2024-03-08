@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -19,6 +18,8 @@ import 'package:watchlistfy/widgets/main/home/genre_list.dart';
 import 'package:watchlistfy/widgets/main/home/info_card.dart';
 import 'package:watchlistfy/widgets/main/home/loggedin_header.dart';
 import 'package:watchlistfy/widgets/main/home/preview_actor_list.dart';
+import 'package:watchlistfy/widgets/main/home/preview_company_list.dart';
+import 'package:watchlistfy/widgets/main/home/preview_country_list.dart';
 import 'package:watchlistfy/widgets/main/home/preview_list.dart';
 import 'package:watchlistfy/widgets/main/home/preview_streaming_platforms_list.dart';
 
@@ -73,6 +74,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMovieOrTVSeries = contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv;
+
     return CupertinoPageScaffold(
       child: SingleChildScrollView(
         child: Column(
@@ -136,11 +139,15 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
                 height: 200,
                 child: PreviewList(Constants.ContentTags[1])),
-            if (contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv)
+            if (isMovieOrTVSeries)
             const SizedBox(height: 8),
-            if (contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv)
+            if (isMovieOrTVSeries)
+            SeeAllTitle("🌎 Countries", (){}, shouldHideSeeAllButton: true),
+            if (isMovieOrTVSeries)
+            PreviewCountryList(isMovie: contentProvider.selectedContent == ContentType.movie),
+            if (isMovieOrTVSeries)
             SeeAllTitle("🧛‍♂️ Popular Actors", (){}, shouldHideSeeAllButton: true),
-            if (contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv)
+            if (isMovieOrTVSeries)
             const PreviewActorList(),
             const SizedBox(height: 12),
             SeeAllTitle("🍿 Top Rated", () {
@@ -174,8 +181,8 @@ class _HomePageState extends State<HomePage> {
             PreviewStreamingPlatformsList(globalProvider.selectedCountryCode),
             const SizedBox(height: 12),
             if (contentProvider.selectedContent != ContentType.game)
-              SeeAllTitle(
-                contentProvider.selectedContent == ContentType.movie
+            SeeAllTitle(
+              contentProvider.selectedContent == ContentType.movie
                   ? "🎭 In Theaters"
                   : "📺 Airing Today", () {
                 Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
@@ -185,9 +192,16 @@ class _HomePageState extends State<HomePage> {
               shouldHideSeeAllButton: contentProvider.selectedContent !=ContentType.movie
             ),
             if (contentProvider.selectedContent != ContentType.game)
-              SizedBox(
-                  height: 200,
-                  child: PreviewList(Constants.ContentTags[3])),
+            SizedBox(
+              height: 200,
+              child: PreviewList(Constants.ContentTags[3])
+            ),
+            if (isMovieOrTVSeries)
+            const SizedBox(height: 12),
+            if (isMovieOrTVSeries)
+            SeeAllTitle("🎙️ Popular Studios", (){}, shouldHideSeeAllButton: true),
+            if (isMovieOrTVSeries)
+            PreviewCompanyList(isMovie: contentProvider.selectedContent == ContentType.movie),
             if (contentProvider.selectedContent == ContentType.anime)
             const SizedBox(height: 12),
             if (contentProvider.selectedContent == ContentType.anime)
@@ -215,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                       }
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      padding: EdgeInsets.only(left: index == 0 ? 6 : 2, right: 2),
                       child: Center(
                         child: Text(
                           studio?.name ?? '',

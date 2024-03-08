@@ -100,6 +100,8 @@ class Constants {
   static final SortUserListRequests = [
     BackendRequestMapper("Score", "score"),
     BackendRequestMapper("Times Watched", "timeswatched"),
+    BackendRequestMapper("Alphabetical", "alphabetical"),
+    BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
   ];
 
   static final UserListUIModes = ["Expanded", "Compact",];
@@ -294,6 +296,43 @@ class Constants {
 
   static final NumOfSeasonList = [
     "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"
+  ];
+
+  static final MoviePopularCountries = [
+    BackendRequestMapper("U.S.A.", "US"),
+    BackendRequestMapper("Japan", "JP"),
+    BackendRequestMapper("France", "FR"),
+    BackendRequestMapper("Great Britain", "GB"),
+    BackendRequestMapper("Korea", "KR"),
+    BackendRequestMapper("Canada", "CA"),
+    BackendRequestMapper("Germany", "DE"),
+    BackendRequestMapper("Italy", "IT"),
+    BackendRequestMapper("Spain", "ES"),
+    BackendRequestMapper("India", "IN"),
+    BackendRequestMapper("Belgium", "BE"),
+    BackendRequestMapper("Hong Kong", "HK"),
+    BackendRequestMapper("China", "CN"),
+    BackendRequestMapper("Russia", "RU"),
+    BackendRequestMapper("Turkey", "TR"),
+  ];
+
+  static final TVPopularCountries = [
+    BackendRequestMapper("U.S.A.", "US"),
+    BackendRequestMapper("Korea", "KR"),
+    BackendRequestMapper("Great Britain", "GB"),
+    BackendRequestMapper("Japan", "JP"),
+    BackendRequestMapper("Canada", "CA"),
+    BackendRequestMapper("Hong Kong", "HK"),
+    BackendRequestMapper("France", "FR"),
+    BackendRequestMapper("Germany", "DE"),
+    BackendRequestMapper("China", "CN"),
+    BackendRequestMapper("Brazil", "BR"),
+    BackendRequestMapper("Russia", "RU"),
+    BackendRequestMapper("Australia", "AU"),
+    BackendRequestMapper("Italy", "IT"),
+    BackendRequestMapper("Spain", "ES"),
+    BackendRequestMapper("Turkey", "TR"),
+    BackendRequestMapper("Philippines", "PH"),
   ];
 
   static final ProfileImageList = [

@@ -6,7 +6,7 @@ import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dar
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class AnimeDiscoverSheet extends StatelessWidget {
-  final VoidCallback fetchData;
+  final Function(bool) fetchData;
   final DiscoverAnimeProvider provider;
 
   const AnimeDiscoverSheet(this.fetchData, this.provider, {super.key});
@@ -82,7 +82,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                     provider.reset();
-                    fetchData();
+                    fetchData(true);
                   }
                 ),
                 CupertinoButton.filled(
@@ -97,7 +97,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                       season: Constants.AnimeSeasonList.where((element) => element.name == seasonList.selectedValue).firstOrNull?.request,
                       year: yearList.where((element) => element.toString() == yearDiscoverList.selectedValue?.toString()).firstOrNull,
                     );
-                    fetchData();
+                    fetchData(true);
                   },
                   child: const Text(
                     "Done",
@@ -105,7 +105,8 @@ class AnimeDiscoverSheet extends StatelessWidget {
                   ),
                 )
               ],
-            )
+            ),
+            const SizedBox(height: 3)
           ],
         ),
       ),

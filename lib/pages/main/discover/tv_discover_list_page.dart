@@ -23,11 +23,13 @@ class TVDiscoverListPage extends StatefulWidget {
   final String? genre;
   final String sort;
   final String? productionCompanies;
+  final String? country;
 
   const TVDiscoverListPage({
     this.genre,
     this.sort = "popularity",
     this.productionCompanies,
+    this.country,
     super.key,
   });
 
@@ -48,7 +50,11 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
   bool _isPaginating = false;
   String? _error;
 
-  void _fetchData() {
+  void _fetchData(bool isResetting) {
+    if (isResetting) {
+      _page = 1;
+    }
+
     if (_page == 1) {
       setState(() {
         _state = ListState.loading;
@@ -74,6 +80,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
       genres: _discoverProvider.genre,
       status: _discoverProvider.status,
       productionCompany: _discoverProvider.productionCompanies,
+      productionCountry: _discoverProvider.country,
       numOfSeason: _discoverProvider.numOfSeason,
       from: from,
       to: to,
@@ -105,7 +112,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
       && !_scrollController.position.outOfRange
     ) {
       _page ++;
-      _fetchData();
+      _fetchData(false);
     }
   }
 
@@ -116,6 +123,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
     _discoverProvider = DiscoverTVProvider();
     _discoverProvider.genre = widget.genre;
     _discoverProvider.productionCompanies = widget.productionCompanies;
+    _discoverProvider.country = widget.country;
   }
 
   @override
@@ -132,7 +140,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
       _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
-      _fetchData();
+      _fetchData(true);
     }
     super.didChangeDependencies();
   }
