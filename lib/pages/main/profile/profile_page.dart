@@ -27,6 +27,7 @@ import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_consume_later_cell.dart';
+import 'package:watchlistfy/widgets/main/profile/profile_full_width_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_legend_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_level_bar.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_review_cell.dart';
@@ -283,7 +284,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 16),
               ProfileStats(item),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
+              const ProfileFullWidthButton(),
               SeeAllTitle("🕒 Watch Later", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {

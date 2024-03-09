@@ -54,13 +54,13 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
                 _provider.setContentType(newFilter);
 
                 if (shouldFetchData) {
-                  _fetchData(); 
+                  _fetchData();
                 }
               },
               child: const Text(
                 "Done",
                 style: TextStyle(color: CupertinoColors.systemBlue, fontWeight: FontWeight.bold, fontSize: 16)
-              ), 
+              ),
             )
           ],
         ),

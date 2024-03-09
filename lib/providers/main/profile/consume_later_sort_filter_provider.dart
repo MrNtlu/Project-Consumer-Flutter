@@ -10,7 +10,7 @@ class ConsumeLaterSortFilterProvider with ChangeNotifier {
   void setSort(String sort) {
     if (sort != _sort) {
       _sort = sort;
-      notifyListeners(); 
+      notifyListeners();
     }
   }
 

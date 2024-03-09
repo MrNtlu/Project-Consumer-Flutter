@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -35,7 +36,7 @@ class _ContentSelectionState extends State<ContentSelection> {
           },
           minSize: 0,
           padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.left_chevron, size: 20),
+          child: const FaIcon(FontAwesomeIcons.chevronLeft , size: 20),
         ),
         const SizedBox(width: 3),
         CupertinoButton(
@@ -73,9 +74,9 @@ class _ContentSelectionState extends State<ContentSelection> {
           },
           minSize: 0,
           padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.right_chevron, size: 20),
+          child: const FaIcon(FontAwesomeIcons.chevronRight, size: 20),
         ),
-        const SizedBox(width: 6,)
+        const SizedBox(width: 12)
       ],
     );
   }

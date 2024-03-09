@@ -1,5 +1,6 @@
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
+import 'package:watchlistfy/models/auth/user_stats.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/ai/suggestion_response.dart';
 import 'package:watchlistfy/models/main/anime/anime_details.dart';
@@ -874,6 +875,45 @@ class TypeConverter<T> {
           response["watch_later"]["content_type"]
         )
         : null
+      ) as T;
+    } else if (T == UserStats) {
+      return UserStats(
+        response["genres"] != null
+        ? ((response["genres"] as List).map((e) =>
+          TypeConverter<MostLikedGenres>().convertToObject(e)
+        ).toList())
+        : [],
+        response["stats"] != null
+        ? ((response["stats"] as List).map((e) =>
+          TypeConverter<FinishedLogStats>().convertToObject(e)
+        ).toList())
+        : [],
+        response["logs"] != null
+        ? ((response["logs"] as List).map((e) =>
+          TypeConverter<Logs>().convertToObject(e)
+        ).toList())
+        : []
+      ) as T;
+    } else if (T == MostLikedGenres) {
+      return MostLikedGenres(
+        response["type"],
+        response["genre"],
+        response["max_count"],
+      ) as T;
+    } else if (T == FinishedLogStats) {
+      return FinishedLogStats(
+        response["content_type"],
+        response["length"],
+        response["total_episodes"],
+        response["total_seasons"],
+        response["metacritic_score"],
+        response["count"],
+      ) as T;
+    } else if (T == Logs) {
+      return Logs(
+        response["count"],
+        response["created_at"],
+        response["day_of_week"],
       ) as T;
     } else if (T == BasePreviewResponse<BaseContent>) {
       return BasePreviewResponse<BaseContent>(

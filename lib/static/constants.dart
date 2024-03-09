@@ -110,6 +110,12 @@ class Constants {
 
   static final ConsumeLaterUIModes = ["Grid", "List",];
 
+  static final ProfileStatsInterval = [
+    BackendRequestMapper("Weekly", "weekly"),
+    BackendRequestMapper("Monthly", "monthly"),
+    BackendRequestMapper("3 Months", "3months"),
+  ];
+
   //Genre List
   static final MovieGenreList = [
     NameUrl("Discover", "https://image.tmdb.org/t/p/w154/vv5a8u6e40kyH0Hp6HuamAgzRai.jpg"),

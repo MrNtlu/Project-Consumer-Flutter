@@ -201,7 +201,7 @@ class _TabsPageState extends State<TabsPage> {
           inactiveColor: CupertinoColors.systemGrey,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.house_fill),
+              icon: FaIcon(FontAwesomeIcons.house, size: 24),
               label: "Home",
             ),
             BottomNavigationBarItem(
@@ -213,7 +213,7 @@ class _TabsPageState extends State<TabsPage> {
               label: "Assistant",
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.settings_solid),
+              icon: FaIcon(FontAwesomeIcons.gear, size: 24),
               label: "Settings",
             ),
           ],

@@ -48,7 +48,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
     });
 
     _provider.getConsumeLater(
-      _sortFilterProvider.filterContent?.request, 
+      _sortFilterProvider.filterContent?.request,
       _sortFilterProvider.sort,
     ).then((response) {
       _error = response.error;
@@ -76,7 +76,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
     );
 
     _provider.getConsumeLater(
-      _sortFilterProvider.filterContent?.request, 
+      _sortFilterProvider.filterContent?.request,
       _sortFilterProvider.sort,
     ).then((response) {
       Navigator.pop(context);
@@ -90,7 +90,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
       if (!authProvider.isAuthenticated) {
         Navigator.pop(context);
       }
-      
+
       _globalProvider = Provider.of<GlobalProvider>(context);
       _fetchData();
     }
@@ -147,7 +147,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                   CupertinoButton(
                     onPressed: () {
                       showCupertinoModalPopup(
-                        context: context, 
+                        context: context,
                         builder: (context) {
                           return ConsumeLaterSortFilterSheet(_fetchData, sortFilterProvider);
                         }
@@ -175,9 +175,9 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
         ? GridView.builder(
           itemCount: data.isEmpty ? 1 : data.length,
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150, 
-            childAspectRatio: 2/3, 
-            crossAxisSpacing: 6, 
+            maxCrossAxisExtent: 150,
+            childAspectRatio: 2/3,
+            crossAxisSpacing: 6,
             mainAxisSpacing: 6
           ),
           itemBuilder: (context, index) {
@@ -202,7 +202,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                         return TVDetailsPage(content.contentID);
                       case ContentType.anime:
                         return AnimeDetailsPage(content.contentID);
-                      case ContentType.game: 
+                      case ContentType.game:
                         return GameDetailsPage(content.contentID);
                     }
                   })
@@ -210,10 +210,10 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
               },
               child: ConsumeLaterGridCell(
                 content.content.imageUrl,
-                content.content.titleEn, 
+                content.content.titleEn,
                 () {
                   showCupertinoDialog(
-                    context: context, 
+                    context: context,
                     builder: (_) {
                       return SureDialog("Do you want to remove it?", () {
                         showCupertinoDialog(
@@ -232,7 +232,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 },
                 () {
                   showCupertinoDialog(
-                    context: context, 
+                    context: context,
                     builder: (_) {
                       return SureDialog("Do you want to mark it as finished and add to your list?", () {
                         showCupertinoDialog(
@@ -244,8 +244,8 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
 
                         //TODO Implement score later
                         _provider.moveToUserList(
-                          content.id, 
-                          null, 
+                          content.id,
+                          null,
                           content,
                         ).then((value) {
                           handleMessageResponse(context, value);
@@ -264,7 +264,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
             if (data.isEmpty) {
               return _emptyView();
             }
-            
+
             final content = data[index];
             final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
 
@@ -280,7 +280,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                         return TVDetailsPage(content.contentID);
                       case ContentType.anime:
                         return AnimeDetailsPage(content.contentID);
-                      case ContentType.game: 
+                      case ContentType.game:
                         return GameDetailsPage(content.contentID);
                     }
                   })
@@ -293,9 +293,9 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                     SizedBox(
                       height: 125,
                       child: ContentCell(
-                        content.content.imageUrl, 
-                        content.content.titleEn, 
-                        cornerRadius: 8, 
+                        content.content.imageUrl,
+                        content.content.titleEn,
+                        cornerRadius: 8,
                         forceRatio: true,
                         cacheHeight: 375,
                         cacheWidth: 300,
@@ -350,8 +350,8 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
 
                                             //TODO Implement score later
                                             _provider.moveToUserList(
-                                              content.id, 
-                                              null, 
+                                              content.id,
+                                              null,
                                               content,
                                             ).then((value) {
                                               handleMessageResponse(context, value);
@@ -379,7 +379,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                                                     return TVDetailsPage(content.contentID);
                                                   case ContentType.anime:
                                                     return AnimeDetailsPage(content.contentID);
-                                                  case ContentType.game: 
+                                                  case ContentType.game:
                                                     return GameDetailsPage(content.contentID);
                                                 }
                                               })
@@ -404,8 +404,8 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                                 ),
                                 const Spacer(),
                                 CupertinoChip(
-                                  isSelected: true, 
-                                  onSelected: (value){}, 
+                                  isSelected: true,
+                                  onSelected: (value){},
                                   label: contentType.value,
                                 ),
                               ],
