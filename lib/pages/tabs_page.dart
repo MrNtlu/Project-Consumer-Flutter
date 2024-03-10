@@ -13,6 +13,7 @@ import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
+import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/settings_page.dart';
 import 'package:watchlistfy/pages/social_page.dart';
@@ -103,6 +104,12 @@ class _TabsPageState extends State<TabsPage> {
               return const ProfilePage();
             }
           ));
+        } else if (shortcutType == 'action_stats') {
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(builder: (_) {
+              return const ProfileStatsPage();
+            }
+          ));
         }
       }
     });
@@ -110,7 +117,8 @@ class _TabsPageState extends State<TabsPage> {
     quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(type: 'action_profile', localizedTitle: 'Profile'),
       const ShortcutItem(type: 'action_user_list', localizedTitle: 'User List'),
-      const ShortcutItem(type: 'action_consume_later', localizedTitle: 'Watch Later')
+      const ShortcutItem(type: 'action_consume_later', localizedTitle: 'Watch Later'),
+      const ShortcutItem(type: 'action_stats', localizedTitle: 'Statistics')
     ]);
   }
 

@@ -198,7 +198,8 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
           ),
         );
       case DetailState.error:
-        return Center(child: ErrorView(_error ?? "Unknown error", _fetchData));
+        final isPremiumRequired = _error == "This feature requires premium membership.";
+        return Center(child: ErrorView(_error ?? "Unknown error", _fetchData, isPremiumError: isPremiumRequired));
       case DetailState.loading:
         return const Center(child: LoadingView("Loading"));
       default:

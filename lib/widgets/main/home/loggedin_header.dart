@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
+import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -89,6 +90,22 @@ class LoggedinHeader extends StatelessWidget {
                   Text("Watch Later", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
                   const Spacer(),
                   Icon(CupertinoIcons.time, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                ],
+              )
+            ),
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return const ProfileStatsPage();
+                  }
+                ));
+              },
+              child: Row(
+                children: [
+                  Text("Statistics", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  const Spacer(),
+                  Icon(CupertinoIcons.chart_bar_alt_fill, color: CupertinoTheme.of(context).bgTextColor, size: 18),
                 ],
               )
             ),

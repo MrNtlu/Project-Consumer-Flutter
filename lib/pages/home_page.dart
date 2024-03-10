@@ -112,7 +112,6 @@ class _HomePageState extends State<HomePage> {
                     }));
                   }
                 },
-                keyboardType: TextInputType.name,
               ),
             ),
             const SizedBox(height: 12),

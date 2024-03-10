@@ -3,7 +3,7 @@ import 'package:watchlistfy/providers/main/profile/profile_stats_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
-import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_premium_list.dart';
 
 class ProfileStatsSortSheet extends StatelessWidget {
   final VoidCallback _fetchData;
@@ -13,12 +13,13 @@ class ProfileStatsSortSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final intervalList = DiscoverSheetList(
+    final intervalList = DiscoverSheetPremiumList(
       Constants.ProfileStatsInterval.where(
         (element) => element.request == _provider.interval.request
       ).first.name,
-      Constants.ProfileStatsInterval.map((e) => e.name).toList(),
-      allowUnSelect: false,
+      Constants.ProfileStatsInterval.map((e) {
+        return PremiumSheet(e.name, e.request != "weekly");
+      }).toList(),
     );
 
     return SafeArea(
@@ -32,7 +33,7 @@ class ProfileStatsSortSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            DiscoverSheetFilterBody("Interval", intervalList),
+            DiscoverSheetFilterPremiumBody("Interval", intervalList),
             const SizedBox(height: 16),
             CupertinoButton(
               onPressed: () {

@@ -27,3 +27,7 @@ arch -x86_64 pod install --repo-update
 flutter clean
 flutter pub get
 flutter build appbundle
+
+// Update packages
+flutter packages upgrade
+flutter pub upgrade --major-versions

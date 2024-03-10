@@ -5,8 +5,9 @@ class CupertinoChip extends StatelessWidget {
   final bool isSelected;
   final String label;
   final Function(bool) onSelected;
+  final Widget? leading;
 
-  const CupertinoChip({required this.isSelected, required this.onSelected, required this.label, super.key});
+  const CupertinoChip({required this.isSelected, required this.onSelected, required this.label, this.leading, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +24,21 @@ class CupertinoChip extends StatelessWidget {
           color: isSelected ? AppColors().primaryColor : CupertinoTheme.of(context).onBgColor,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
-        child: Text(
-          label, 
-          style: TextStyle(
-            color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
-            fontWeight: FontWeight.w500,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (leading != null)
+            leading!,
+            if (leading != null)
+            const SizedBox(width: 3),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );

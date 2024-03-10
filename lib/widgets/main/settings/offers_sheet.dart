@@ -172,6 +172,18 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
+                            child: Icon(Icons.line_axis_rounded, color: CupertinoColors.white),
+                          ),
+                          Text("Detailed Statistics", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 8),
                             child: Icon(Icons.more_horiz_rounded, color: CupertinoColors.white),
                           ),
                           Text("More soon...", style: TextStyle(color: CupertinoColors.white, fontSize: 16))

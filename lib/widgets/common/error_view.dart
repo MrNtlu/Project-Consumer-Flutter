@@ -1,16 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
 
 class ErrorView extends StatelessWidget {
   final String _text;
   final VoidCallback _onPressed;
-  
-  const ErrorView(this._text, this._onPressed, {Key? key}) : super(key: key);
+  final bool isPremiumError;
+
+  const ErrorView(this._text, this._onPressed, {this.isPremiumError = false, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (!isPremiumError)
         Container(
           alignment: Alignment.centerRight,
           margin: const EdgeInsets.only(right: 8, top: 8),
@@ -22,7 +26,7 @@ class ErrorView extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 36),
           child: Lottie.asset(
-            "assets/lottie/error.json",
+            isPremiumError ? "assets/lottie/premium.json" : "assets/lottie/error.json",
             height: 125,
             width: 125,
             frameRate: FrameRate(60)
@@ -37,6 +41,23 @@ class ErrorView extends StatelessWidget {
               fontSize: 18,
             ),
           ),
+        ),
+        if (isPremiumError)
+        const SizedBox(height: 16),
+        if (isPremiumError)
+        CupertinoButton.filled(
+          child: const Text(
+            "Upgrade Account",
+            style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.w500
+            )
+          ),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(builder: (_) {
+                return const OffersSheet();
+              })
+            );
+          }
         )
       ],
     );
