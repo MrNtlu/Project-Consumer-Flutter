@@ -5,9 +5,10 @@ class CupertinoChip extends StatelessWidget {
   final bool isSelected;
   final String label;
   final Function(bool) onSelected;
+  final EdgeInsets padding;
   final Widget? leading;
 
-  const CupertinoChip({required this.isSelected, required this.onSelected, required this.label, this.leading, super.key});
+  const CupertinoChip({required this.isSelected, required this.onSelected, required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2), this.leading, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class CupertinoChip extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: padding,
         margin: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           color: isSelected ? AppColors().primaryColor : CupertinoTheme.of(context).onBgColor,

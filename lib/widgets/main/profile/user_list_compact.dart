@@ -24,9 +24,9 @@ class UserListCompact extends StatelessWidget {
   final Function(UserListContent) _updateData;
 
   const UserListCompact(
-    this.data, 
-    this.provider, 
-    this.userListProvider, 
+    this.data,
+    this.provider,
+    this.userListProvider,
     this.index,
     this._updateData,
     {super.key}
@@ -51,13 +51,13 @@ class UserListCompact extends StatelessWidget {
         SizedBox(
           height: 75,
           child: ContentCell(
-            data.imageUrl ?? '', 
-            data.title.isEmpty ? 
-            data.titleOriginal : data.title, 
-            cornerRadius: 8, 
+            data.imageUrl ?? '',
+            data.title.isEmpty ?
+            data.titleOriginal : data.title,
+            cornerRadius: 8,
             forceRatio: true,
-            cacheHeight: 275,
-            cacheWidth: 175,
+            cacheHeight: 250,
+            cacheWidth: 150,
           )
         ),
         Expanded(
@@ -89,13 +89,13 @@ class UserListCompact extends StatelessWidget {
                       child: const Icon(CupertinoIcons.ellipsis_vertical, size: 18),
                       onPressed: () {
                         showCupertinoModalPopup(
-                          context: context, 
+                          context: context,
                           builder: (context) {
                             return UserListActionSheet(
-                              index, 
-                              data.id, 
-                              data.title.isEmpty ? data.titleOriginal : data.title, 
-                              provider.selectedContent, 
+                              index,
+                              data.id,
+                              data.title.isEmpty ? data.titleOriginal : data.title,
+                              provider.selectedContent,
                               data,
                               userListProvider,
                               () {
@@ -108,7 +108,7 @@ class UserListCompact extends StatelessWidget {
                                         return TVDetailsPage(data.contentID);
                                       case ContentType.anime:
                                         return AnimeDetailsPage(data.contentID);
-                                      case ContentType.game: 
+                                      case ContentType.game:
                                         return GameDetailsPage(data.contentID);
                                       default:
                                         return MovieDetailsPage(data.contentID);
@@ -155,7 +155,7 @@ class UserListCompact extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       minSize: 16,
                       child: Icon(
-                        CupertinoIcons.add_circled_solid, 
+                        CupertinoIcons.add_circled_solid,
                         color: AppColors().primaryColor,
                         size: 16,
                       ),
@@ -176,8 +176,8 @@ class UserListCompact extends StatelessWidget {
                     const Spacer(),
                     if(
                       data.status == Constants.UserListStatus[0].request &&
-                      provider.selectedContent != ContentType.movie && 
-                      !userListProvider.isLoading 
+                      provider.selectedContent != ContentType.movie &&
+                      !userListProvider.isLoading
                     )
                     CupertinoButton(
                       onPressed: () {
@@ -192,7 +192,7 @@ class UserListCompact extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       minSize: 16,
                       child: Icon(
-                        CupertinoIcons.add_circled_solid, 
+                        CupertinoIcons.add_circled_solid,
                         color: AppColors().primaryColor,
                         size: 16,
                       ),

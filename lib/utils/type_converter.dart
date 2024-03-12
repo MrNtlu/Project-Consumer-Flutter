@@ -883,6 +883,11 @@ class TypeConverter<T> {
           TypeConverter<MostLikedGenres>().convertToObject(e)
         ).toList())
         : [],
+        response["country"] != null
+        ? ((response["country"] as List).map((e) =>
+          TypeConverter<MostLikedCountry>().convertToObject(e)
+        ).toList())
+        : [],
         response["stats"] != null
         ? ((response["stats"] as List).map((e) =>
           TypeConverter<FinishedLogStats>().convertToObject(e)
@@ -898,7 +903,11 @@ class TypeConverter<T> {
       return MostLikedGenres(
         response["type"],
         response["genre"],
-        response["max_count"],
+      ) as T;
+    } else if (T == MostLikedCountry) {
+      return MostLikedCountry(
+        response["type"],
+        response["country"],
       ) as T;
     } else if (T == FinishedLogStats) {
       return FinishedLogStats(

@@ -24,9 +24,9 @@ class UserListExpanded extends StatelessWidget {
   final Function(UserListContent) _updateData;
 
   const UserListExpanded(
-    this.data, 
-    this.provider, 
-    this.userListProvider, 
+    this.data,
+    this.provider,
+    this.userListProvider,
     this.index,
     this._updateData,
     {super.key}
@@ -39,11 +39,11 @@ class UserListExpanded extends StatelessWidget {
         SizedBox(
           height: 125,
           child: ContentCell(
-            data.imageUrl ?? '', 
-            data.title.isEmpty ? data.titleOriginal : data.title, 
+            data.imageUrl ?? '',
+            data.title.isEmpty ? data.titleOriginal : data.title,
             forceRatio: true,
-            cacheHeight: 375,
-            cacheWidth: 300,
+            cacheHeight: 325,
+            cacheWidth: 250,
           )
         ),
         Expanded(
@@ -74,15 +74,15 @@ class UserListExpanded extends StatelessWidget {
                       child: const Icon(CupertinoIcons.ellipsis_vertical),
                       onPressed: () {
                         showCupertinoModalPopup(
-                          context: context, 
+                          context: context,
                           builder: (context) {
                             return UserListActionSheet(
-                              index, 
-                              data.id, 
+                              index,
+                              data.id,
                               data.title.isEmpty ? data.titleOriginal : data.title,
                               provider.selectedContent,
                               data,
-                              userListProvider, 
+                              userListProvider,
                               () {
                                 Navigator.of(context, rootNavigator: true).push(
                                   CupertinoPageRoute(builder: (_) {
@@ -93,7 +93,7 @@ class UserListExpanded extends StatelessWidget {
                                         return TVDetailsPage(data.contentID);
                                       case ContentType.anime:
                                         return AnimeDetailsPage(data.contentID);
-                                      case ContentType.game: 
+                                      case ContentType.game:
                                         return GameDetailsPage(data.contentID);
                                       default:
                                         return MovieDetailsPage(data.contentID);
@@ -158,7 +158,7 @@ class UserListExpanded extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       minSize: 16,
                       child: Icon(
-                        CupertinoIcons.add_circled_solid, 
+                        CupertinoIcons.add_circled_solid,
                         color: AppColors().primaryColor,
                         size: 16,
                       ),
@@ -195,7 +195,7 @@ class UserListExpanded extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       minSize: 16,
                       child: Icon(
-                        CupertinoIcons.add_circled_solid, 
+                        CupertinoIcons.add_circled_solid,
                         color: AppColors().primaryColor,
                         size: 16,
                       ),

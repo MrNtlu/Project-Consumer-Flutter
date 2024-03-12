@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -128,7 +129,8 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                 child: Row(
                   children: [
                     CupertinoChip(
-                      isSelected: false,
+                      isSelected: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                       label: genre.genre,
                       onSelected: (_) {
                         Navigator.of(context, rootNavigator: true).push(
@@ -169,6 +171,66 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
               if (data.genres.isNotEmpty)
               const SizedBox(height: 16),
               if (data.genres.isEmpty)
+              const Text("No data yet!"),
+              SeeAllTitle("🌍 Country", () {}, shouldHideSeeAllButton: true),
+              for (MostLikedCountry country in data.countries)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                child: Row(
+                  children: [
+                    CupertinoChip(
+                      isSelected: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      leading: country.type != "anime"
+                      ? Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: CountryFlag.fromCountryCode(
+                          country.country,
+                          width: 20,
+                          height: 15,
+                          borderRadius: 3,
+                        ),
+                      )
+                      : null,
+                      label: country.country,
+                      onSelected: (_) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            switch (ContentType.values.where((element) => element.request == country.type).first) {
+                              case ContentType.movie:
+                                return MovieDiscoverListPage(country: country.country);
+                              case ContentType.tv:
+                                return TVDiscoverListPage(country: country.country);
+                              case ContentType.anime:
+                                return AnimeDiscoverListPage(demographic: Uri.encodeQueryComponent(country.country));
+                              default:
+                              return MovieDiscoverListPage(country: country.country);
+                            }
+                          })
+                        );
+                      }
+                    ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: AutoSizeText(
+                        " is your favourite ${country.type == "anime" ? "demographics" : "country"} in ",
+                        minFontSize: 12,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 15)
+                      ),
+                    ),
+                    Text(
+                      "${ContentType.values.where((element) => element.request == country.type).first.value}.",
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 15, color: AppColors().primaryColor, fontWeight: FontWeight.w500)
+                    ),
+                  ],
+                ),
+              ),
+              if (data.countries.isNotEmpty)
+              const SizedBox(height: 16),
+              if (data.countries.isEmpty)
               const Text("No data yet!"),
               SeeAllTitle("📊 ${provider.interval.name} Stats", () {}, shouldHideSeeAllButton: true),
               if (data.stats.isNotEmpty)

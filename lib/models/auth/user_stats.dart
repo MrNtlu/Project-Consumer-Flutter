@@ -1,18 +1,26 @@
 class UserStats {
   final List<MostLikedGenres> genres;
+  final List<MostLikedCountry> countries;
   final List<FinishedLogStats> stats;
   final List<Logs> logs;
 
-  UserStats(this.genres, this.stats, this.logs);
+  UserStats(this.genres, this.countries, this.stats, this.logs);
 }
 
 class MostLikedGenres {
   final String type;
   final String genre;
-  final int maxCount;
 
-  MostLikedGenres(this.type, this.genre, this.maxCount);
+  MostLikedGenres(this.type, this.genre);
 }
+
+class MostLikedCountry {
+  final String type;
+  final String country;
+
+  MostLikedCountry(this.type, this.country);
+}
+
 
 class FinishedLogStats {
   final String contentType;

@@ -279,7 +279,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     SettingsTile.navigation(
-                      leading: const Icon(CupertinoIcons.globe),
+                      leading: const FaIcon(FontAwesomeIcons.globe),
                       title: Text('Region: ${globalProvider?.selectedCountryCode ?? 'US'}'),
                       onPressed: (ctx) {
                         showCountryPicker(
@@ -339,8 +339,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     if (_userInfo != null)
                     _userInfoText("Email", _userInfo!.email),
-                    if (_userInfo != null)
-                    _userInfoText("Username", _userInfo!.username),
                     if (_userInfo != null)
                     _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
                     if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
@@ -420,6 +418,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 )
               ],
             ),
+            // Social Media
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     CupertinoButton(
+            //       child: const FaIcon(FontAwesomeIcons.twitter),
+            //       onPressed: () {
+
+            //       }
+            //     ),
+            //     CupertinoButton(
+            //       child: const FaIcon(FontAwesomeIcons.instagram),
+            //       onPressed: () {
+
+            //       }
+            //     ),
+            //   ],
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
