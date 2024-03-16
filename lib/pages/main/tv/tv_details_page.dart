@@ -34,6 +34,7 @@ import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/tv/tv_seasons_list.dart';
 import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 
 class TVDetailsPage extends StatefulWidget {
@@ -332,6 +333,12 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                     false,
                   )
                 ),
+                if (item.seasons.isNotEmpty)
+                const DetailsTitle("Seasons"),
+                SizedBox(
+                  height: 190,
+                  child: TVSeasonList(item.seasons),
+                ),
                 if(item.recommendations.isNotEmpty)
                 const DetailsTitle("Recommendations"),
                 if(item.recommendations.isNotEmpty)
@@ -389,6 +396,13 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   child: DetailsCommonList(
                     false, item.productionCompanies!.length,
                     null,
+                    onClick: (index) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return TVDiscoverListPage(productionCompanies: item.productionCompanies![index].name);
+                        })
+                      );
+                    },
                     (index) {
                       return item.productionCompanies![index].logo;
                     },

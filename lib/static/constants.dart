@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:watchlistfy/models/common/backend_request_mapper.dart';
 import 'package:watchlistfy/models/common/name_url.dart';
 
@@ -51,6 +53,17 @@ class Constants {
     BackendRequestMapper("Nintendo Switch", "Nintendo Switch"),
     BackendRequestMapper("Nintendo 3DS", "Nintendo 3DS"),
     BackendRequestMapper("Linux", "Linux"),
+  ];
+
+  static final GamePlatformIcons = [
+    FontAwesomeIcons.computerMouse,
+    FontAwesomeIcons.playstation,
+    FontAwesomeIcons.playstation,
+    FontAwesomeIcons.xbox,
+    FontAwesomeIcons.xbox,
+    Icons.gamepad_outlined,
+    Icons.gamepad_outlined,
+    FontAwesomeIcons.linux,
   ];
 
   //Sort Requests
@@ -245,10 +258,10 @@ class Constants {
   ];
 
   static final AnimeSeasonList = [
-    BackendRequestMapper("Winter", "winter"),
-    BackendRequestMapper("Summer", "summer"),
-    BackendRequestMapper("Fall", "fall"),
-    BackendRequestMapper("Spring", "spring"),
+    BackendRequestMapper("❄️ Winter", "winter"),
+    BackendRequestMapper("☀️ Summer", "summer"),
+    BackendRequestMapper("🍁 Fall", "fall"),
+    BackendRequestMapper("🌸 Spring", "spring"),
   ];
 
   static final MangaThemeList = [

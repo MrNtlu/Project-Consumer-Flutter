@@ -8,7 +8,11 @@ class CupertinoChip extends StatelessWidget {
   final EdgeInsets padding;
   final Widget? leading;
 
-  const CupertinoChip({required this.isSelected, required this.onSelected, required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2), this.leading, super.key});
+  const CupertinoChip({
+    required this.isSelected, required this.onSelected, 
+    required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2), 
+    this.leading, super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class CupertinoChip extends StatelessWidget {
             if (leading != null)
             leading!,
             if (leading != null)
-            const SizedBox(width: 3),
+            const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(

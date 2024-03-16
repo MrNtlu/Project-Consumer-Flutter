@@ -28,7 +28,8 @@ class GameDiscoverSheet extends StatelessWidget {
 
     final platformList = DiscoverSheetList(
       Constants.GamePlatformRequests.where((element) => element.request == provider.platform).firstOrNull?.name,
-      Constants.GamePlatformRequests.map((e) => e.name).toList()
+      Constants.GamePlatformRequests.map((e) => e.name).toList(),
+      iconList: Constants.GamePlatformIcons,
     );
 
     return SafeArea(

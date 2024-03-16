@@ -227,7 +227,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               DetailsInfoColumn(
                                 item.title != item.titleOriginal,
                                 item.titleOriginal,
-                                item.length.toLength(),
+                                item.length < 5
+                                ? "?"
+                                : item.length.toLength(),
                                 DateTime.parse(item.releaseDate).dateToHumanDate(),
                                 null, null,
                               )
@@ -371,8 +373,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 SizedBox(
                   height: 130,
                   child: DetailsCommonList(
-                    false, item.productionCompanies!.length,
+                    false, 
+                    item.productionCompanies!.length,
                     null,
+                    onClick: (index) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return MovieDiscoverListPage(productionCompanies: item.productionCompanies![index].name);
+                        })
+                      );
+                    },
                     (index) {
                       return item.productionCompanies![index].logo;
                     },

@@ -264,12 +264,16 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                 DetailsGenreList(item.genres, (genre) {
                   return GameDiscoverListPage(genre: genre);
                 }),
+                if (item.developers.isNotEmpty)
                 const DetailsTitle("Developers"),
+                if (item.developers.isNotEmpty)
                 Text(
                   item.developers.isNotEmpty ? item.developers.join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
+                if (item.publishers.isNotEmpty)
                 const DetailsTitle("Publishers"),
+                if (item.publishers.isNotEmpty)
                 Text(
                   item.publishers.isNotEmpty ? item.publishers.join(" • ") : "",
                   style: const TextStyle(fontWeight: FontWeight.w500),

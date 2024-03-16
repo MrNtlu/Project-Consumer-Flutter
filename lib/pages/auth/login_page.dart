@@ -216,6 +216,8 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Image.asset("assets/images/logo.png", cacheHeight: 105),
+                      const SizedBox(height: 24),
                       EmailField(_emailTextController),
                       const SizedBox(height: 24),
                       PasswordField(_passwordTextController),
