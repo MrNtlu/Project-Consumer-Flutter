@@ -5,16 +5,19 @@ class ConsumeLaterResponse {
   final String contentExternalID;
   final int? contentExternalIntID;
   final String contentType;
+  final String createdAt;
   final ConsumeLaterContent content;
 
   ConsumeLaterResponse(
-      this.id,
-      this.userID,
-      this.contentID,
-      this.contentExternalID,
-      this.contentExternalIntID,
-      this.contentType,
-      this.content);
+    this.id,
+    this.userID,
+    this.contentID,
+    this.contentExternalID,
+    this.contentExternalIntID,
+    this.contentType,
+    this.createdAt,
+    this.content,
+  );
 }
 
 class ConsumeLaterContent {

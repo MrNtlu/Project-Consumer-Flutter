@@ -67,7 +67,7 @@ class ContentListCell extends StatelessWidget {
               height: 135,
               child: ContentCell(
                 content.imageUrl,
-                content.titleEn, 
+                content.titleEn,
                 cornerRadius: 8,
                 forceRatio: true,
                 cacheHeight: 425,
@@ -106,6 +106,7 @@ class ContentListCell extends StatelessWidget {
                     Text(
                       content.description.removeAllHtmlTags(),
                       maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 14,
                       ),

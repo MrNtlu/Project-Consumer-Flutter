@@ -17,7 +17,7 @@ class TVSeasonList extends StatelessWidget {
       itemExtent: 93,
       itemBuilder: (context, index) {
         final season = seasons[index];
-    
+
         return Padding(
           padding: index == 0
           ? const EdgeInsets.only(right: 3)
@@ -42,7 +42,13 @@ class TVSeasonList extends StatelessWidget {
                     children: [
                       SizedBox(
                         height: 120,
-                        child: ContentCell(season.imageURL, season.seasonNum.toString(), forceRatio: true)
+                        child: ContentCell(
+                          season.imageURL,
+                          season.seasonNum.toString(),
+                          cacheHeight: 265,
+                          cacheWidth: 225,
+                          forceRatio: true,
+                        )
                       ),
                       const SizedBox(height: 8),
                       Text("Season ${season.seasonNum}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),

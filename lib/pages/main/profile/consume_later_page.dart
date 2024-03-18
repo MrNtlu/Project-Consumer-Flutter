@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
@@ -16,6 +17,7 @@ import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -291,7 +293,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 child: Row(
                   children: [
                     SizedBox(
-                      height: 125,
+                      height: 135,
                       child: ContentCell(
                         content.content.imageUrl,
                         content.content.titleEn,
@@ -305,23 +307,40 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
-                                  child: AutoSizeText(
-                                    content.content.titleEn.isNotEmpty
-                                    ? content.content.titleEn
-                                    : content.content.titleOriginal,
-                                    minFontSize: 14,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    wrapWords: true,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      AutoSizeText(
+                                        content.content.titleEn.isNotEmpty
+                                        ? content.content.titleEn
+                                        : content.content.titleOriginal,
+                                        minFontSize: 14,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        wrapWords: true,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500
+                                        ),
+                                      ),
+                                      const SizedBox(height: 3),
+                                      AutoSizeText(
+                                        content.content.titleOriginal,
+                                        minFontSize: 12,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: CupertinoColors.systemGrey2
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 CupertinoButton(
@@ -392,6 +411,20 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                                 )
                               ],
                             ),
+                            const SizedBox(height: 12),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Text(
+                                content.contentType == "game"
+                                ? content.content.description.removeAllHtmlTags()
+                                : content.content.description,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 8),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -405,11 +438,16 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                                 const Spacer(),
                                 CupertinoChip(
                                   isSelected: true,
-                                  onSelected: (value){},
+                                  onSelected: null,
                                   label: contentType.value,
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 3),
+                            Text(
+                              "Created at ${DateTime.parse(content.createdAt).dateToHumanDate()}",
+                              style: const TextStyle(fontSize: 11, color: CupertinoColors.systemGrey2),
+                            )
                           ]
                         ),
                       )

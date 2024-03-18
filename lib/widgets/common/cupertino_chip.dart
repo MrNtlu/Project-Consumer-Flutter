@@ -4,13 +4,13 @@ import 'package:watchlistfy/static/colors.dart';
 class CupertinoChip extends StatelessWidget {
   final bool isSelected;
   final String label;
-  final Function(bool) onSelected;
+  final Function(bool)? onSelected;
   final EdgeInsets padding;
   final Widget? leading;
 
   const CupertinoChip({
-    required this.isSelected, required this.onSelected, 
-    required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2), 
+    required this.isSelected, required this.onSelected,
+    required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
     this.leading, super.key,
   });
 
@@ -18,9 +18,11 @@ class CupertinoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        onSelected(isSelected);
-      },
+      onTap: onSelected != null
+      ? () {
+        onSelected!(isSelected);
+      }
+      : null,
       child: Container(
         alignment: Alignment.center,
         padding: padding,

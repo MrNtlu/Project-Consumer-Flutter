@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
+import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/main/actor/actor_content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -120,18 +121,27 @@ class _ActorContentPageState extends State<ActorContentPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.image != null && widget.image!.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(18),
-              child: CachedNetworkImage(
-                imageUrl: widget.image!,
-                key: ValueKey<String>(widget.image!),
-                cacheKey: widget.image,
-                fit: BoxFit.cover,
-                height: 36,
-                width: 36,
-                maxHeightDiskCache: 100,
-                maxWidthDiskCache: 100,
-              )
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(builder: (_) {
+                    return ImagePage(widget.image!);
+                  })
+                );
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: CachedNetworkImage(
+                  imageUrl: widget.image!,
+                  key: ValueKey<String>(widget.image!),
+                  cacheKey: widget.image,
+                  fit: BoxFit.cover,
+                  height: 36,
+                  width: 36,
+                  maxHeightDiskCache: 100,
+                  maxWidthDiskCache: 100,
+                )
+              ),
             ),
             if (widget.image != null && widget.image!.isNotEmpty)
             const SizedBox(width: 6),

@@ -411,6 +411,7 @@ class TypeConverter<T> {
         response["content_external_id"],
         response["content_external_int_id"] ?? 0,
         response["content_type"],
+        response["created_at"],
         TypeConverter<ConsumeLaterContent>().convertToObject(response["content"]),
       ) as T;
     } else if (T == ConsumeLaterContent) {
@@ -893,6 +894,16 @@ class TypeConverter<T> {
           TypeConverter<FinishedLogStats>().convertToObject(e)
         ).toList())
         : [],
+        response["actors"] != null
+        ? ((response["actors"] as List).map((e) =>
+          TypeConverter<MostWatchedActors>().convertToObject(e)
+        ).toList())
+        : [],
+        response["studios"] != null
+        ? ((response["studios"] as List).map((e) =>
+          TypeConverter<MostLikedStudios>().convertToObject(e)
+        ).toList())
+        : [],
         response["logs"] != null
         ? ((response["logs"] as List).map((e) =>
           TypeConverter<Logs>().convertToObject(e)
@@ -908,6 +919,20 @@ class TypeConverter<T> {
       return MostLikedCountry(
         response["type"],
         response["country"],
+      ) as T;
+    } else if (T == MostWatchedActors) {
+      return MostWatchedActors(
+        response["type"],
+        response["actors"] != null
+        ? (response["actors"] as List).map((e) => MostWatchedActor(e["id"], e["name"], e["image"])).toList()
+        : [],
+      ) as T;
+    } else if (T == MostLikedStudios) {
+      return MostLikedStudios(
+        response["type"],
+        response["studios"] != null
+        ? (response["studios"] as List).map((e) => e.toString()).toList()
+        : [],
       ) as T;
     } else if (T == FinishedLogStats) {
       return FinishedLogStats(

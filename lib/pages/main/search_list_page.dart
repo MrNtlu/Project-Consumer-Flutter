@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -44,6 +45,7 @@ class _SearchListPageState extends State<SearchListPage> {
   late final GameListProvider _gameListProvider;
   late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
+  TextEditingController? _searchController;
 
   int _page = 1;
   bool _canPaginate = false;
@@ -122,6 +124,7 @@ class _SearchListPageState extends State<SearchListPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      _searchController = TextEditingController(text: provider.search);
       _contentProvider = Provider.of<ContentProvider>(context, listen: false);
       _globalProvider = Provider.of<GlobalProvider>(context);
       provider.setSearch(widget.initialSearch);
@@ -175,19 +178,21 @@ class _SearchListPageState extends State<SearchListPage> {
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: CupertinoTextField(
-                  controller: TextEditingController(text: provider.search),
+                  controller: _searchController,
+                  clearButtonMode: OverlayVisibilityMode.editing,
+                  suffixMode: OverlayVisibilityMode.notEditing,
                   suffix: Icon(CupertinoIcons.search, color: CupertinoTheme.of(context).bgTextColor),
                   cursorColor: CupertinoTheme.of(context).bgTextColor,
                   decoration: BoxDecoration(
                     color: CupertinoTheme.of(context).onBgColor,
                     borderRadius: BorderRadius.circular(8)
                   ),
-                  keyboardType: TextInputType.name,
                   maxLines: 1,
                   onTapOutside: (event) {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   textInputAction: TextInputAction.search,
+                  placeholder: "Search",
                   onSubmitted: (value) {
                     if (value.isNotEmpty) {
                       provider.setSearch(value);

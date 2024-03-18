@@ -1,11 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/auth/user_stats.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/pages/main/actor/actor_content_page.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/game_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
@@ -32,6 +35,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
   String? _error;
 
   late final ProfileStatsProvider _provider;
+  late final AuthenticationProvider _authProvider;
 
   void _fetchData() {
     setState(() {
@@ -58,8 +62,8 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
   @override
   void didChangeDependencies() {
     if (_state == DetailState.init) {
-      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
-      if (!authProvider.isAuthenticated) {
+      _authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      if (!_authProvider.isAuthenticated) {
         Navigator.pop(context);
       }
 
@@ -122,6 +126,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
         return SingleChildScrollView(
           child: Column(
             children: [
+              // Genres
               SeeAllTitle("🎭 Genres", () {}, shouldHideSeeAllButton: true),
               for (MostLikedGenres genre in data.genres)
               Padding(
@@ -171,7 +176,9 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
               if (data.genres.isNotEmpty)
               const SizedBox(height: 16),
               if (data.genres.isEmpty)
-              const Text("No data yet!"),
+              _noDataText(),
+
+              // Country
               SeeAllTitle("🌍 Country", () {}, shouldHideSeeAllButton: true),
               for (MostLikedCountry country in data.countries)
               Padding(
@@ -228,17 +235,86 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                   ],
                 ),
               ),
-              if (data.countries.isNotEmpty)
-              const SizedBox(height: 16),
               if (data.countries.isEmpty)
-              const Text("No data yet!"),
-              SeeAllTitle("📊 ${provider.interval.name} Stats", () {}, shouldHideSeeAllButton: true),
-              if (data.stats.isNotEmpty)
-              _statsBody(data.stats),
-              if (data.stats.isEmpty)
-              const Text("No data yet!"),
-              if (data.stats.isNotEmpty)
+              _noDataText(),
               const SizedBox(height: 16),
+
+              // Actors
+              SeeAllTitle("🧛‍♂️ Actors", () {}, shouldHideSeeAllButton: true),
+              for (MostWatchedActors actors in data.actors)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Your favourite actors in ${ContentType.values.where((element) => element.request == actors.type).first.value}",
+                      style: const TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.systemGrey2),
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 40,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: List.generate(
+                                actors.actors.length,
+                                (index) {
+                                  final actor = actors.actors[index];
+
+                                  return CupertinoChip(
+                                    isSelected: true,
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                    leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(18),
+                                    child: CachedNetworkImage(
+                                      imageUrl: actor.image,
+                                      key: ValueKey<String>(actor.image),
+                                      cacheKey: actor.image,
+                                      fit: BoxFit.cover,
+                                      height: 24,
+                                      width: 24,
+                                      maxHeightDiskCache: 100,
+                                      maxWidthDiskCache: 100,
+                                    )
+                                  ),
+                                    label: actor.name,
+                                    onSelected: (_) {
+                                      Navigator.of(context, rootNavigator: true).push(
+                                        CupertinoPageRoute(builder: (_) {
+                                          return ActorContentPage(
+                                            actor.id,
+                                            actor.name,
+                                            actor.image,
+                                            isMovie: actors.type == "movie",
+                                          );
+                                        })
+                                      );
+                                    }
+                                  );
+                                }
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              if (_authProvider.basicUserInfo?.isPremium == false && data.actors.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text("You need premium membership to access this."),
+              ),
+              if (_authProvider.basicUserInfo?.isPremium == true && data.actors.isEmpty)
+              _noDataText(),
+              const SizedBox(height: 16),
+
+              // Stats
               Row(
                 children: [
                   SeeAllTitle("📈 Your ${provider.interval.name} Activity", () {}, shouldHideSeeAllButton: true),
@@ -255,7 +331,16 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                 child: ProfileChart(data.logs)
               ),
               if (data.logs.isEmpty)
-              const Text("No data yet!"),
+              _noDataText(),
+              const SizedBox(height: 16),
+
+              // Interval Stats
+              SeeAllTitle("📊 ${provider.interval.name} Stats", () {}, shouldHideSeeAllButton: true),
+              if (data.stats.isNotEmpty)
+              _statsBody(data.stats),
+              if (data.stats.isEmpty)
+              _noDataText(),
+              const SizedBox(height: 16),
             ],
           ),
         );
@@ -268,6 +353,11 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
         return const Center(child: LoadingView("Loading"));
     }
   }
+
+  Widget _noDataText() => const Padding(
+    padding: EdgeInsets.symmetric(vertical: 16),
+    child: Text("No data yet!"),
+  );
 
   Widget _statsBody(List<FinishedLogStats> stats) {
     return Padding(

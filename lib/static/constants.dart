@@ -96,8 +96,10 @@ class Constants {
   ];
 
   static final SortConsumeLaterRequests = [
-    BackendRequestMapper("Newest", "new"),
-    BackendRequestMapper("Oldest", "old"),
+    BackendRequestMapper("Recently Added", "new"),
+    BackendRequestMapper("Previously Added", "old"),
+    BackendRequestMapper("Release Date", "soon"),
+    BackendRequestMapper("Reverse Release Date", "later"),
     BackendRequestMapper("Alphabetical", "alphabetical"),
     BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
   ];
