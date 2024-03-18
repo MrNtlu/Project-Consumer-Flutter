@@ -2,8 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/auth/user_stats.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -22,6 +22,7 @@ import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_chart.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_stats_sort_sheet.dart';
+import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
 
 class ProfileStatsPage extends StatefulWidget {
   const ProfileStatsPage({super.key});
@@ -270,17 +271,17 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                                     leading: ClipRRect(
                                     borderRadius: BorderRadius.circular(18),
-                                    child: CachedNetworkImage(
-                                      imageUrl: actor.image,
-                                      key: ValueKey<String>(actor.image),
-                                      cacheKey: actor.image,
-                                      fit: BoxFit.cover,
-                                      height: 24,
-                                      width: 24,
-                                      maxHeightDiskCache: 100,
-                                      maxWidthDiskCache: 100,
-                                    )
-                                  ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: actor.image,
+                                        key: ValueKey<String>(actor.image),
+                                        cacheKey: actor.image,
+                                        fit: BoxFit.cover,
+                                        height: 24,
+                                        width: 24,
+                                        maxHeightDiskCache: 100,
+                                        maxWidthDiskCache: 100,
+                                      )
+                                    ),
                                     label: actor.name,
                                     onSelected: (_) {
                                       Navigator.of(context, rootNavigator: true).push(
@@ -306,15 +307,71 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                 ),
               ),
               if (_authProvider.basicUserInfo?.isPremium == false && data.actors.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text("You need premium membership to access this."),
-              ),
+              _premiumError(),
               if (_authProvider.basicUserInfo?.isPremium == true && data.actors.isEmpty)
               _noDataText(),
               const SizedBox(height: 16),
 
-              // Stats
+              // Studios
+              SeeAllTitle("🎙️ Studios", () {}, shouldHideSeeAllButton: true),
+              for (MostLikedStudios studio in data.studios)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Your favourite studios in ${ContentType.values.where((element) => element.request == studio.type).first.value}",
+                      style: const TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.systemGrey2),
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 40,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: List.generate(
+                                studio.studios.length,
+                                (index) {
+                                  final studioName = studio.studios[index];
+
+                                  return CupertinoChip(
+                                    isSelected: true,
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                    label: studioName,
+                                    onSelected: (_) {
+                                      // Navigator.of(context, rootNavigator: true).push(
+                                      //   CupertinoPageRoute(builder: (_) {
+                                      //     return StudioContentPage(
+                                      //       actor.id,
+                                      //       actor.name,
+                                      //       actor.image,
+                                      //       isMovie: actors.type == "movie",
+                                      //     );
+                                      //   })
+                                      // );
+                                    }
+                                  );
+                                }
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              if (_authProvider.basicUserInfo?.isPremium == false && data.actors.isEmpty)
+              _premiumError(),
+              if (_authProvider.basicUserInfo?.isPremium == true && data.actors.isEmpty)
+              _noDataText(),
+              const SizedBox(height: 16),
+
+              // Stats Chart
               Row(
                 children: [
                   SeeAllTitle("📈 Your ${provider.interval.name} Activity", () {}, shouldHideSeeAllButton: true),
@@ -353,6 +410,40 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
         return const Center(child: LoadingView("Loading"));
     }
   }
+
+  Widget _premiumError() => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              "assets/lottie/premium.json",
+              height: 32,
+              width: 32,
+              frameRate: FrameRate(60)
+            ),
+            const Text("You need premium membership to access this.", style: TextStyle(fontWeight: FontWeight.w500))
+          ],
+        ),
+        const SizedBox(height: 8),
+        CupertinoButton(
+          child: const Text("Purchase", style: TextStyle(fontWeight: FontWeight.bold)),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(builder: (_) {
+                return const OffersSheet();
+              })
+            );
+          }
+        )
+      ],
+    ),
+  );
 
   Widget _noDataText() => const Padding(
     padding: EdgeInsets.symmetric(vertical: 16),
