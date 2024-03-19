@@ -337,27 +337,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     }
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const DetailsTitle("Platforms"),
-                    CupertinoButton(
-                      child: const Icon(CupertinoIcons.info_circle),
-                      onPressed: () {
-                        final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
-
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) => MessageDialog(
-                            title: "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
-                            "You can change your region from Settings."
-                          )
-                        );
-                      }
-                    )
-                  ],
-                ),
-                DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
                 DetailsReviewSummary(
                   item.title.isNotEmpty ? item.title : item.titleOriginal,
                   item.reviewSummary, item.id, item.tmdbID,
@@ -373,7 +352,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 SizedBox(
                   height: 130,
                   child: DetailsCommonList(
-                    false, 
+                    false,
                     item.productionCompanies!.length,
                     null,
                     onClick: (index) {
@@ -396,6 +375,27 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     true,
                   )
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const DetailsTitle("Platforms"),
+                    CupertinoButton(
+                      child: const Icon(CupertinoIcons.info_circle),
+                      onPressed: () {
+                        final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
+
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) => MessageDialog(
+                            title: "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
+                            "You can change your region from Settings."
+                          )
+                        );
+                      }
+                    )
+                  ],
+                ),
+                DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
                 const SizedBox(height: 32)
               ],
             ),

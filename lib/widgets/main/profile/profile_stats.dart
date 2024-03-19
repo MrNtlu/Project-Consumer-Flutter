@@ -69,7 +69,7 @@ class _ProfileStatsState extends State<ProfileStats> {
               ),
             ),
           ),
-          if(isExpanded)
+          if (isExpanded)
           _infoText()
         ],
       ),

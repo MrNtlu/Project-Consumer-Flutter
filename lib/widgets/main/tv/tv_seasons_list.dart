@@ -24,7 +24,7 @@ class TVSeasonList extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 3),
           child: GestureDetector(
             onTap: () {
-              if (season.imageURL.isNotEmpty) {
+              if (season.imageURL.isNotEmpty & !season.imageURL.contains("null")) {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
                     return ImagePage(season.imageURL);

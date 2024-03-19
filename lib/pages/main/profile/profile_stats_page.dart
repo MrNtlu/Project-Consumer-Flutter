@@ -127,6 +127,14 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
         return SingleChildScrollView(
           child: Column(
             children: [
+              // Interval Stats
+              SeeAllTitle("📊 ${provider.interval.name} Stats", () {}, shouldHideSeeAllButton: true),
+              if (data.stats.isNotEmpty)
+              _statsBody(data.stats),
+              if (data.stats.isEmpty)
+              _noDataText(),
+              const SizedBox(height: 16),
+
               // Genres
               SeeAllTitle("🎭 Genres", () {}, shouldHideSeeAllButton: true),
               for (MostLikedGenres genre in data.genres)
@@ -343,16 +351,15 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                                     label: studioName,
                                     onSelected: (_) {
-                                      // Navigator.of(context, rootNavigator: true).push(
-                                      //   CupertinoPageRoute(builder: (_) {
-                                      //     return StudioContentPage(
-                                      //       actor.id,
-                                      //       actor.name,
-                                      //       actor.image,
-                                      //       isMovie: actors.type == "movie",
-                                      //     );
-                                      //   })
-                                      // );
+                                      Navigator.of(context, rootNavigator: true).push(
+                                        CupertinoPageRoute(builder: (_) {
+                                          if (studio.type == "game") {
+                                            return GameDiscoverListPage(publisher: Uri.encodeQueryComponent(studioName));
+                                          } else {
+                                            return AnimeDiscoverListPage(studios: Uri.encodeQueryComponent(studioName));
+                                          }
+                                        })
+                                      );
                                     }
                                   );
                                 }
@@ -388,14 +395,6 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                 child: ProfileChart(data.logs)
               ),
               if (data.logs.isEmpty)
-              _noDataText(),
-              const SizedBox(height: 16),
-
-              // Interval Stats
-              SeeAllTitle("📊 ${provider.interval.name} Stats", () {}, shouldHideSeeAllButton: true),
-              if (data.stats.isNotEmpty)
-              _statsBody(data.stats),
-              if (data.stats.isEmpty)
               _noDataText(),
               const SizedBox(height: 16),
             ],

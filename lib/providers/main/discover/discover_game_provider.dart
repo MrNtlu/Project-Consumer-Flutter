@@ -6,12 +6,14 @@ class DiscoverGameProvider with ChangeNotifier {
   String sort = Constants.SortRequests[0].request;
   bool? tba;
   String? platform;
+  String? publisher;
 
   void reset() {
     sort = Constants.SortRequests[0].request;
     genre = null;
     tba = null;
     platform = null;
+    publisher = null;
   }
 
   void setDiscover({
@@ -19,6 +21,7 @@ class DiscoverGameProvider with ChangeNotifier {
     bool? tba,
     String? genre,
     String? platform,
+    String? publisher,
   }) {
     this.sort = sort;
     this.genre = genre;

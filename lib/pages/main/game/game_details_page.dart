@@ -12,6 +12,7 @@ import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
+import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
@@ -274,9 +275,27 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                 if (item.publishers.isNotEmpty)
                 const DetailsTitle("Publishers"),
                 if (item.publishers.isNotEmpty)
-                Text(
-                  item.publishers.isNotEmpty ? item.publishers.join(" • ") : "",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: item.publishers.length,
+                    itemBuilder: (context, index) {
+                      final publisher = item.publishers[index];
+
+                      return CupertinoChip(
+                        isSelected: false,
+                        onSelected: (_) {
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(builder: (_) {
+                              return GameDiscoverListPage(publisher: Uri.encodeQueryComponent(publisher));
+                            })
+                          );
+                        },
+                        label: publisher,
+                      );
+                    },
+                  ),
                 ),
                 const DetailsTitle("Platforms"),
                 DetailsGenreList(item.platforms, (platform) {

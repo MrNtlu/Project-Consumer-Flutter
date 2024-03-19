@@ -124,10 +124,10 @@ class _SearchListPageState extends State<SearchListPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
-      _searchController = TextEditingController(text: provider.search);
       _contentProvider = Provider.of<ContentProvider>(context, listen: false);
       _globalProvider = Provider.of<GlobalProvider>(context);
       provider.setSearch(widget.initialSearch);
+      _searchController = TextEditingController(text: widget.initialSearch);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData();

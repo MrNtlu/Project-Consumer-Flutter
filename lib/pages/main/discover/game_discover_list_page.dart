@@ -23,11 +23,13 @@ class GameDiscoverListPage extends StatefulWidget {
   final String? genre;
   final String sort;
   final String? platform;
+  final String? publisher;
 
   const GameDiscoverListPage({
     this.genre,
     this.sort = "popularity",
     this.platform,
+    this.publisher,
     super.key
   });
 
@@ -67,6 +69,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
       sort: _discoverProvider.sort,
       genres: _discoverProvider.genre,
       platform: _discoverProvider.platform,
+      publisher: _discoverProvider.publisher,
       tba: _discoverProvider.tba,
     );
 
@@ -107,6 +110,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
     _discoverProvider = DiscoverGameProvider();
     _discoverProvider.genre = widget.genre;
     _discoverProvider.platform = widget.platform;
+    _discoverProvider.publisher = widget.publisher;
   }
 
   @override
@@ -118,7 +122,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
   }
 
   @override
-  void didChangeDependencies() {
+void didChangeDependencies() {
     if (_state == ListState.init) {
       _globalProvider = Provider.of<GlobalProvider>(context);
       _scrollController = ScrollController();
@@ -141,7 +145,11 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'),
+              middle: Text(
+                provider.publisher != null
+                ? Uri.decodeQueryComponent(provider.publisher!)
+                : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+              ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

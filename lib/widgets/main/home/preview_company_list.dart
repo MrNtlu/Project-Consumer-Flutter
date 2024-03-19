@@ -51,7 +51,8 @@ class PreviewCompanyList extends StatelessWidget {
                     imageUrl: company.logo,
                     cacheKey: company.logo,
                     key: ValueKey<String>(company.logo),
-                    maxHeightDiskCache: 150,
+                    maxHeightDiskCache: 200,
+                    maxWidthDiskCache: 275,
                     errorListener: (_) {},
                     progressIndicatorBuilder: (_, __, ___) => const SizedBox(
                       height: 75,

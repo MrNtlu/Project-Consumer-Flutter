@@ -37,7 +37,6 @@ class DiscoverAnimeProvider with ChangeNotifier {
     this.demographics = demographics;
     this.themes = themes;
     this.status = status;
-    this.studios = studios;
     this.season = season;
     this.year = year;
   }

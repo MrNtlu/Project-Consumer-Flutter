@@ -20,7 +20,7 @@ class ConsumeLaterProvider extends BaseProvider<ConsumeLaterResponse> {
   ) => deleteItem(id, url: APIRoutes().userInteractionRoutes.consumeLater, deleteItem: response);
 
   Future<BaseMessageResponse> moveToUserList(
-    String id, 
+    String id,
     int? score,
     ConsumeLaterResponse deleteItem,
   ) async {
@@ -37,12 +37,17 @@ class ConsumeLaterProvider extends BaseProvider<ConsumeLaterResponse> {
 
       if (response.getBaseMessageResponse().error == null) {
         pitems.remove(deleteItem);
-        notifyListeners();   
+        notifyListeners();
       }
 
       return response.getBaseMessageResponse();
     } catch (error) {
       return BaseMessageResponse(error.toString(), error.toString());
     }
+  }
+
+  void removeItem(ConsumeLaterResponse deleteItem) {
+    items.remove(deleteItem);
+    notifyListeners();
   }
 }

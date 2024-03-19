@@ -15,6 +15,7 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
@@ -142,7 +143,16 @@ class _UserListPageState extends State<UserListPage> {
                 child: FaIcon(toggleSearch ? FontAwesomeIcons.barsStaggered : FontAwesomeIcons.bars, size: 24)
               ),
             ),
-            child: _body(userListProvider, provider),
+            child: RefreshIndicator.adaptive(
+              backgroundColor: CupertinoTheme.of(context).bgTextColor,
+              color: CupertinoTheme.of(context).bgColor,
+              onRefresh: () async {
+                if (_state == DetailState.view || _state == DetailState.error) {
+                  _fetchData();
+                }
+              },
+              child: _body(userListProvider, provider)
+            ),
           );
         }
       ),

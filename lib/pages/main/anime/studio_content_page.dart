@@ -16,8 +16,9 @@ import 'package:watchlistfy/widgets/main/common/streaming_sort_sheet.dart';
 
 class StudioContentPage extends StatefulWidget {
   final String studio;
+  final bool isAnime;
 
-  const StudioContentPage(this.studio, {super.key});
+  const StudioContentPage(this.studio, {this.isAnime = true, super.key});
 
   @override
   State<StudioContentPage> createState() => _StudioContentPageState();

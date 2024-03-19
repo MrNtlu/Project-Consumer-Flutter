@@ -49,7 +49,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
     int currentYear = DateTime.now().year+1;
     int startingYear = 1980;
 
-    List yearList = List.generate((currentYear-startingYear)+1, (index) => startingYear+index);
+    List yearList = List.generate((currentYear-startingYear)+1, (index) => startingYear+index).reversed.toList();
 
     final yearDiscoverList = DiscoverSheetList(
       yearList.where((element) => element == provider.year).firstOrNull?.toString(),

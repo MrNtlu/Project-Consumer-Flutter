@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/pages/main/anime/studio_content_page.dart';
 import 'package:watchlistfy/pages/main/content_list_page.dart';
+import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/search_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -12,6 +12,7 @@ import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_selection.dart';
+import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/home/anonymous_header.dart';
 import 'package:watchlistfy/widgets/main/home/genre_list.dart';
@@ -207,39 +208,23 @@ class _HomePageState extends State<HomePage> {
             SeeAllTitle("🎙️ Popular Studios", (){}, shouldHideSeeAllButton: true),
             if (contentProvider.selectedContent == ContentType.anime)
             SizedBox(
-              height: 35,
-              child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return const Center(child: Text(" • ", style: TextStyle(fontSize: 16)));
-                },
+              height: 40,
+              child: ListView.builder(
                 itemCount: previewProvider?.animePreview.studios?.length ?? 0,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   final studio = previewProvider?.animePreview.studios?[index];
 
-                  return GestureDetector(
-                    onTap: () {
-                      if (studio?.name != null) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return StudioContentPage(studio!.name);
-                          })
-                        );
-                      }
+                  return CupertinoChip(
+                    isSelected: false,
+                    onSelected: (_) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return AnimeDiscoverListPage(studios: Uri.encodeQueryComponent(studio.name));
+                        })
+                      );
                     },
-                    child: Padding(
-                      padding: EdgeInsets.only(left: index == 0 ? 6 : 2, right: 2),
-                      child: Center(
-                        child: Text(
-                          studio?.name ?? '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline
-                          ),
-                        ),
-                      ),
-                    ),
+                    label: studio!.name,
                   );
                 }
               ),

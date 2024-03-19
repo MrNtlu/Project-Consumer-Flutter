@@ -174,7 +174,7 @@ class _OffersSheetState extends State<OffersSheet> {
                             padding: EdgeInsets.only(right: 8),
                             child: Icon(Icons.line_axis_rounded, color: CupertinoColors.white),
                           ),
-                          Text("Detailed Statistics", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text("Detailed and More Statistics", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
                         ],
                       ),
                       const SizedBox(height: 6),

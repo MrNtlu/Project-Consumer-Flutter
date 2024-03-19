@@ -16,6 +16,7 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -66,22 +67,6 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
             );
         });
       }
-    });
-  }
-
-  void _updateData() {
-    showCupertinoDialog(
-      context: context,
-      builder: (_) {
-        return const LoadingDialog();
-      }
-    );
-
-    _provider.getConsumeLater(
-      _sortFilterProvider.filterContent?.request,
-      _sortFilterProvider.sort,
-    ).then((response) {
-      Navigator.pop(context);
     });
   }
 
@@ -161,7 +146,16 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 ],
               ),
             ),
-            child: _body(provider.items),
+            child: RefreshIndicator.adaptive(
+              backgroundColor: CupertinoTheme.of(context).bgTextColor,
+              color: CupertinoTheme.of(context).bgColor,
+              onRefresh: () async {
+                if (_state == ListState.done || _state == ListState.error) {
+                  _fetchData();
+                }
+              },
+              child: _body(provider.items)
+            ),
           );
         },
       ),
@@ -208,7 +202,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                         return GameDetailsPage(content.contentID);
                     }
                   })
-                ).then((value) => _updateData());
+                );
               },
               child: ConsumeLaterGridCell(
                 content.content.imageUrl,
@@ -226,7 +220,12 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                         );
 
                         _provider.deleteConsumeLater(content.id, content).then((value) {
-                          handleMessageResponse(context, value);
+                          if (value.error != null && value.error == "Could not found.") {
+                            Navigator.pop(context);
+                            _provider.removeItem(content);
+                          } else {
+                            handleMessageResponse(context, value);
+                          }
                         });
                       });
                     }
@@ -250,7 +249,12 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                           null,
                           content,
                         ).then((value) {
-                          handleMessageResponse(context, value);
+                          if (value.error != null && value.error == "Could not found.") {
+                            Navigator.pop(context);
+                            _provider.removeItem(content);
+                          } else {
+                            handleMessageResponse(context, value);
+                          }
                         });
                       });
                     }
@@ -286,7 +290,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                         return GameDetailsPage(content.contentID);
                     }
                   })
-                ).then((value) => _updateData());
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
@@ -402,7 +406,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                                                     return GameDetailsPage(content.contentID);
                                                 }
                                               })
-                                            ).then((value) => _updateData());
+                                            );
                                           }
                                         );
                                       }

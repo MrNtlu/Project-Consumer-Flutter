@@ -157,7 +157,11 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'),
+              middle: Text(
+                widget.productionCompanies != null
+                ? Uri.decodeQueryComponent(widget.productionCompanies!)
+                : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+              ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

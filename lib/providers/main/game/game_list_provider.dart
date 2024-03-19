@@ -36,7 +36,7 @@ class GameListProvider extends BasePaginationProvider<BaseContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().gameRoutes.searchGames}?page=$page&search=$search"
     );
@@ -48,16 +48,19 @@ class GameListProvider extends BasePaginationProvider<BaseContent> {
     bool? tba,
     String? genres,
     String? platform,
+    String? publisher,
   }) {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().gameRoutes.gameBySortFilter}?page=$page&sort=$sort${
         tba != null ? '&tba=$tba' : ''
       }${
         platform != null ? '&platform=$platform' : ''
+      }${
+        publisher != null ? '&publisher=$publisher' : ''
       }${
         genres != null ? '&genres=$genres' : ''
       }"

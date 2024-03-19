@@ -20,7 +20,7 @@ class BaseProvider<T> with ChangeNotifier {
         Uri.parse(url),
         headers: UserToken().getBearerToken()
       );
-      
+
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
       var baseListResponse = decodedResponse.getBaseListResponse<T>();
@@ -49,7 +49,7 @@ class BaseProvider<T> with ChangeNotifier {
       var baseItemResponse = decodedResponse.getBaseItemResponse<T>();
       var data = baseItemResponse.data;
 
-      if (baseItemResponse.error == null && data != null) {  
+      if (baseItemResponse.error == null && data != null) {
         pitems.add(data);
         notifyListeners();
       }
@@ -76,7 +76,7 @@ class BaseProvider<T> with ChangeNotifier {
 
       if (response.getBaseMessageResponse().error == null) {
         pitems.remove(deleteItem);
-        notifyListeners();   
+        notifyListeners();
       }
 
       return response.getBaseMessageResponse();
