@@ -143,7 +143,7 @@ class _UserListPageState extends State<UserListPage> {
                 child: FaIcon(toggleSearch ? FontAwesomeIcons.barsStaggered : FontAwesomeIcons.bars, size: 24)
               ),
             ),
-            child: RefreshIndicator.adaptive(
+            child: RefreshIndicator(
               backgroundColor: CupertinoTheme.of(context).bgTextColor,
               color: CupertinoTheme.of(context).bgColor,
               onRefresh: () async {

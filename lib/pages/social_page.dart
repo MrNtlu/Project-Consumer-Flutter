@@ -60,7 +60,7 @@ class _SocialPageState extends State<SocialPage> {
         create: (_) => _provider,
         child: Consumer<SocialProvider>(
           builder: (context, provider, _) {
-            return RefreshIndicator.adaptive(
+            return RefreshIndicator(
               backgroundColor: CupertinoTheme.of(context).bgTextColor,
               color: CupertinoTheme.of(context).bgColor,
               onRefresh: () async {

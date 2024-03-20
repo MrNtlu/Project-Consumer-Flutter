@@ -9,9 +9,13 @@ import 'package:watchlistfy/utils/extensions.dart';
 
 class ConsumeLaterProvider extends BaseProvider<ConsumeLaterResponse> {
   Future<BaseListResponse<ConsumeLaterResponse>> getConsumeLater(
-    String? contentType, String sort,
+    String? contentType, String sort, String? genre,
   ) => getList(
-    url: "${APIRoutes().userInteractionRoutes.consumeLater}?sort=$sort${contentType != null ? '&type=$contentType' : ''}"
+    url: "${APIRoutes().userInteractionRoutes.consumeLater}?sort=$sort${
+      contentType != null ? '&type=$contentType' : ''
+    }${
+      genre != null ? '&genre=$genre' : ''
+    }"
   );
 
   Future<BaseMessageResponse> deleteConsumeLater(

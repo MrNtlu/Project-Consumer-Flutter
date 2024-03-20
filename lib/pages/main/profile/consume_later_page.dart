@@ -53,6 +53,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
     _provider.getConsumeLater(
       _sortFilterProvider.filterContent?.request,
       _sortFilterProvider.sort,
+      _sortFilterProvider.genre,
     ).then((response) {
       _error = response.error;
 
@@ -146,7 +147,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 ],
               ),
             ),
-            child: RefreshIndicator.adaptive(
+            child: RefreshIndicator(
               backgroundColor: CupertinoTheme.of(context).bgTextColor,
               color: CupertinoTheme.of(context).bgColor,
               onRefresh: () async {
