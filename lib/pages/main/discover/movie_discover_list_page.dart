@@ -206,59 +206,65 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
         final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
 
         return isGridView
-        ? GridView.builder(
-          itemCount: _canPaginate ? data.length + 2 : data.length,
-          controller: _scrollController,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 350,
-            childAspectRatio: 2/3,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6
+        ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3),
+          child: GridView.builder(
+            itemCount: _canPaginate ? data.length + 2 : data.length,
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 350,
+              childAspectRatio: 2/3,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 6
+            ),
+            itemBuilder: (context, index) {
+              if ((_canPaginate || _isPaginating) && index >= data.length) {
+                return AspectRatio(
+                  aspectRatio: 2/3,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Shimmer.fromColors(
+                      baseColor: CupertinoColors.systemGrey,
+                      highlightColor: CupertinoColors.systemGrey3,
+                      child: Container(color: CupertinoColors.systemGrey,)
+                    )
+                  ),
+                );
+              }
+
+              final content = data[index];
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(builder: (_) {
+                      return MovieDetailsPage(content.id);
+                    }, maintainState: NavigationTracker().shouldMaintainState())
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+                  child: ContentCell(content.imageUrl, content.titleEn, forceRatio: true),
+                )
+              );
+            }
           ),
+        )
+      : Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        child: ListView.builder(
+          itemCount: _canPaginate ? data.length + 1 : data.length,
+          controller: _scrollController,
           itemBuilder: (context, index) {
             if ((_canPaginate || _isPaginating) && index >= data.length) {
-              return AspectRatio(
-                aspectRatio: 2/3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Shimmer.fromColors(
-                    baseColor: CupertinoColors.systemGrey,
-                    highlightColor: CupertinoColors.systemGrey3,
-                    child: Container(color: CupertinoColors.systemGrey,)
-                  )
-                ),
-              );
+              return const ContentListShimmerCell(ContentType.movie);
             }
 
             final content = data[index];
 
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return MovieDetailsPage(content.id);
-                  }, maintainState: NavigationTracker().shouldMaintainState())
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                child: ContentCell(content.imageUrl, content.titleEn, forceRatio: true),
-              )
-            );
-          }
-        )
-      : ListView.builder(
-        itemCount: _canPaginate ? data.length + 1 : data.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          if ((_canPaginate || _isPaginating) && index >= data.length) {
-            return const ContentListShimmerCell(ContentType.movie);
-          }
-
-          final content = data[index];
-
-          return ContentListCell(ContentType.movie, content: content);
-        },
+            return ContentListCell(ContentType.movie, content: content);
+          },
+        ),
       );
       case ListState.empty:
         return const Center(

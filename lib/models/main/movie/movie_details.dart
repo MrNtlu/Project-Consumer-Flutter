@@ -45,7 +45,4 @@ class MovieDetails extends DetailsModel<MovieWatchList> {
     this.recommendations, this.actors, this.reviewSummary, this.streaming,
     this.productionCompanies, this.trailers, this.userList, this.consumeLater,
   );
-
-    //TODO List implementation https://github.com/MrNtlu/Asset-Manager-Flutter/blob/0699c81d620d1d96d04073c6cfbc3afe6202b8bb/lib/common/models/response.dart#L374
-    // val translations: List<Translation>?,
 }

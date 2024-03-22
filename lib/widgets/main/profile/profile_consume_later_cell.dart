@@ -8,7 +8,7 @@ class ProfileConsumeLaterCell extends StatelessWidget {
   final VoidCallback onTap;
 
   const ProfileConsumeLaterCell(
-    this.url, 
+    this.url,
     this.title,
     this.onTap,
     {
@@ -24,7 +24,7 @@ class ProfileConsumeLaterCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true, cacheWidth: 300, cacheHeight: 400,),
+            ContentCell(url, title, forceRatio: true, cacheWidth: 300, cacheHeight: 400),
             Positioned(
               top: -3,
               right: 0,

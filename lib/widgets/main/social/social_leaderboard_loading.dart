@@ -15,7 +15,7 @@ class SocialLeaderboardLoading extends StatelessWidget {
           baseColor: CupertinoColors.systemGrey,
           highlightColor: CupertinoColors.systemGrey3,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: const SizedBox(

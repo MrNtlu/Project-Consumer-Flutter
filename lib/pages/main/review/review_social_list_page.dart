@@ -153,7 +153,7 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
               child: SizedBox(
                 height: 205,
-                child: SocialReviewCell(content, _reviewProvider.likeReview)
+                child: SocialReviewCell(index, content, _reviewProvider.likeReview)
               ),
             );
           },

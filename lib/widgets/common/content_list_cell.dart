@@ -60,7 +60,7 @@ class ContentListCell extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 3),
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
         child: Row(
           children: [
             SizedBox(
@@ -70,7 +70,7 @@ class ContentListCell extends StatelessWidget {
                 content.titleEn,
                 cornerRadius: 8,
                 forceRatio: true,
-                cacheHeight: 425,
+                cacheHeight: 400,
                 cacheWidth: _contentType != ContentType.game ? 350 : 500,
               )
             ),

@@ -34,8 +34,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isInit = false;
 
-  //TODO Move vote now to bottom of the screen and promote premium membership.
-
   TextEditingController? searchController;
   late final AuthenticationProvider authenticationProvider;
   late final ContentProvider contentProvider;
@@ -122,8 +120,9 @@ class _HomePageState extends State<HomePage> {
               }));
             }),
             SizedBox(
-                height: 200,
-                child: PreviewList(Constants.ContentTags[0])),
+              height: 200,
+              child: PreviewList(Constants.ContentTags[0])
+            ),
             const SizedBox(height: 20),
             if (!authenticationProvider.isAuthenticated)
             const InfoCard(),
@@ -137,8 +136,9 @@ class _HomePageState extends State<HomePage> {
               }));
             }),
             SizedBox(
-                height: 200,
-                child: PreviewList(Constants.ContentTags[1])),
+              height: 200,
+              child: PreviewList(Constants.ContentTags[1])
+            ),
             if (isMovieOrTVSeries)
             const SizedBox(height: 8),
             if (isMovieOrTVSeries)
@@ -156,8 +156,9 @@ class _HomePageState extends State<HomePage> {
               }));
             }),
             SizedBox(
-                height: 200,
-                child: PreviewList(Constants.ContentTags[2])),
+              height: 200,
+              child: PreviewList(Constants.ContentTags[2])
+            ),
             const SizedBox(height: 12),
             if (contentProvider.selectedContent != ContentType.game)
             Padding(
@@ -215,16 +216,19 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   final studio = previewProvider?.animePreview.studios?[index];
 
-                  return CupertinoChip(
-                    isSelected: false,
-                    onSelected: (_) {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return AnimeDiscoverListPage(studios: Uri.encodeQueryComponent(studio.name));
-                        })
-                      );
-                    },
-                    label: studio!.name,
+                  return Padding(
+                    padding: index == 0 ? const EdgeInsets.only(left: 8) : EdgeInsets.zero,
+                    child: CupertinoChip(
+                      isSelected: false,
+                      onSelected: (_) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return AnimeDiscoverListPage(studios: Uri.encodeQueryComponent(studio.name));
+                          })
+                        );
+                      },
+                      label: studio!.name,
+                    ),
                   );
                 }
               ),

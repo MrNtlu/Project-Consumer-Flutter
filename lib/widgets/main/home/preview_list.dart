@@ -153,7 +153,7 @@ class _PreviewListState extends State<PreviewList> {
               }, maintainState: NavigationTracker().shouldMaintainState()));
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
+              padding: index == 0 ? const EdgeInsets.only(left: 8, right: 3) : const EdgeInsets.symmetric(horizontal: 3),
               child: SizedBox(
                 height: 200,
                 child: ContentCell(data.imageUrl.replaceFirst("original", "w300"), data.titleEn, cacheHeight: 700, cacheWidth: 550)
@@ -167,7 +167,7 @@ class _PreviewListState extends State<PreviewList> {
         children: List.generate(
           listCount,
           (index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
+            padding: index == 0 ? const EdgeInsets.only(left: 8, right: 3) : const EdgeInsets.symmetric(horizontal: 3),
             child: SizedBox(
               height: 200,
               child: AspectRatio(

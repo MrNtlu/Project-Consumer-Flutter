@@ -154,7 +154,7 @@ class _CustomListSocialListPageState extends State<CustomListSocialListPage> {
               child: SizedBox(
                 height: 175,
                 child: SocialCustomListCell(
-                  content,
+                  -1, content,
                 )
               ),
             );

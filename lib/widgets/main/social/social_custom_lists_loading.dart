@@ -9,12 +9,12 @@ class SocialCustomListsLoading extends StatelessWidget {
     return ListView(
       scrollDirection: Axis.horizontal,
       children: List.generate(
-        20, 
+        20,
         (index) => Shimmer.fromColors(
           baseColor: CupertinoColors.systemGrey,
           highlightColor: CupertinoColors.systemGrey3,
           child: Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: index == 0 ? const EdgeInsets.only(left: 8, right: 8) : const EdgeInsets.symmetric(horizontal: 4),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: const SizedBox(

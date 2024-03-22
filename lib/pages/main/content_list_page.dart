@@ -198,70 +198,76 @@ class _ContentListPageState extends State<ContentListPage> {
         final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
 
         return isGridView
-        ? GridView.builder(
-          itemCount: _canPaginate ? data.length + 2 : data.length,
-          controller: _scrollController,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 350,
-            childAspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6
+        ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3),
+          child: GridView.builder(
+            itemCount: _canPaginate ? data.length + 2 : data.length,
+            controller: _scrollController,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 350,
+              childAspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 6
+            ),
+            itemBuilder: (context, index) {
+              if ((_canPaginate || _isPaginating) && index >= data.length) {
+                return AspectRatio(
+                  aspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Shimmer.fromColors(
+                      baseColor: CupertinoColors.systemGrey,
+                      highlightColor: CupertinoColors.systemGrey3,
+                      child: const ColoredBox(color: CupertinoColors.systemGrey,)
+                    )
+                  ),
+                );
+              }
+
+              final content = data[index];
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(builder: (_) {
+                      switch (_contentProvider.selectedContent) {
+                        case ContentType.movie:
+                          return MovieDetailsPage(content.id);
+                        case ContentType.tv:
+                          return TVDetailsPage(content.id);
+                        case ContentType.anime:
+                          return AnimeDetailsPage(content.id);
+                        case ContentType.game:
+                          return GameDetailsPage(content.id);
+                        default:
+                          return MovieDetailsPage(content.id);
+                      }
+                    }, maintainState: NavigationTracker().shouldMaintainState())
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+                  child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 500, cacheHeight: 700),
+                )
+              );
+            }
           ),
+        )
+      : Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        child: ListView.builder(
+          itemCount: _canPaginate ? data.length + 1 : data.length,
+          controller: _scrollController,
           itemBuilder: (context, index) {
             if ((_canPaginate || _isPaginating) && index >= data.length) {
-              return AspectRatio(
-                aspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Shimmer.fromColors(
-                    baseColor: CupertinoColors.systemGrey,
-                    highlightColor: CupertinoColors.systemGrey3,
-                    child: const ColoredBox(color: CupertinoColors.systemGrey,)
-                  )
-                ),
-              );
+              return ContentListShimmerCell(_contentProvider.selectedContent);
             }
 
             final content = data[index];
 
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    switch (_contentProvider.selectedContent) {
-                      case ContentType.movie:
-                        return MovieDetailsPage(content.id);
-                      case ContentType.tv:
-                        return TVDetailsPage(content.id);
-                      case ContentType.anime:
-                        return AnimeDetailsPage(content.id);
-                      case ContentType.game:
-                        return GameDetailsPage(content.id);
-                      default:
-                        return MovieDetailsPage(content.id);
-                    }
-                  }, maintainState: NavigationTracker().shouldMaintainState())
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 500, cacheHeight: 700),
-              )
-            );
-          }
-        )
-      : ListView.builder(
-        itemCount: _canPaginate ? data.length + 1 : data.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          if ((_canPaginate || _isPaginating) && index >= data.length) {
-            return ContentListShimmerCell(_contentProvider.selectedContent);
-          }
-
-          final content = data[index];
-
-          return ContentListCell(_contentProvider.selectedContent, content: content);
-        },
+            return ContentListCell(_contentProvider.selectedContent, content: content);
+          },
+        ),
       );
       case ListState.empty:
         return const Center(

@@ -25,9 +25,6 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
 
   List<String> commands = [];
 
-  //TODO handle not premium case
-  //TODO implement premium
-
   void _getOpinion() {
     setState(() {
       _state = DetailState.loading;

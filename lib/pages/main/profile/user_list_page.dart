@@ -314,7 +314,7 @@ class _UserListPageState extends State<UserListPage> {
 
                   return Padding(
                     padding: _globalProvider.userListMode == Constants.UserListUIModes.first
-                    ? const EdgeInsets.symmetric(horizontal: 3, vertical: 4)
+                    ? const EdgeInsets.only(left: 6, right: 3, top: 4, bottom: 4)
                     : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
                     child: data.isLoading
                     ? UserListShimmerCell(

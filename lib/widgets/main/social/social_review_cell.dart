@@ -9,10 +9,11 @@ import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/main/common/author_info_row.dart';
 
 class SocialReviewCell extends StatelessWidget {
+  final int index;
   final ReviewWithContent data;
   final Future<BaseMessageResponse> Function(String) likeReview;
 
-  const SocialReviewCell(this.data, this.likeReview, {super.key});
+  const SocialReviewCell(this.index, this.data, this.likeReview, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class SocialReviewCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.all(6),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {

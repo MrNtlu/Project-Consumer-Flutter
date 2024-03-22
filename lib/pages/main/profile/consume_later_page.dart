@@ -169,101 +169,104 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
         final isGridView = _globalProvider.consumeLaterMode == Constants.ConsumeLaterUIModes.first;
 
         return isGridView
-        ? GridView.builder(
-          itemCount: data.isEmpty ? 1 : data.length,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150,
-            childAspectRatio: 2/3,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6
-          ),
-          itemBuilder: (context, index) {
-            if (data.isEmpty) {
-              return SizedBox(
-                height: 150,
-                child: _emptyView(),
-              );
-            }
-
-            final content = data[index];
-            final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
-
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    switch (contentType) {
-                      case ContentType.movie:
-                        return MovieDetailsPage(content.contentID);
-                      case ContentType.tv:
-                        return TVDetailsPage(content.contentID);
-                      case ContentType.anime:
-                        return AnimeDetailsPage(content.contentID);
-                      case ContentType.game:
-                        return GameDetailsPage(content.contentID);
-                    }
-                  })
+        ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: GridView.builder(
+            itemCount: data.isEmpty ? 1 : data.length,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150,
+              childAspectRatio: 2/3,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 6
+            ),
+            itemBuilder: (context, index) {
+              if (data.isEmpty) {
+                return SizedBox(
+                  height: 150,
+                  child: _emptyView(),
                 );
-              },
-              child: ConsumeLaterGridCell(
-                content.content.imageUrl,
-                content.content.titleEn,
-                () {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (_) {
-                      return SureDialog("Do you want to remove it?", () {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) {
-                            return const LoadingDialog();
-                          }
-                        );
+              }
 
-                        _provider.deleteConsumeLater(content.id, content).then((value) {
-                          if (value.error != null && value.error == "Could not found.") {
-                            Navigator.pop(context);
-                            _provider.removeItem(content);
-                          } else {
-                            handleMessageResponse(context, value);
-                          }
-                        });
-                      });
-                    }
+              final content = data[index];
+              final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(builder: (_) {
+                      switch (contentType) {
+                        case ContentType.movie:
+                          return MovieDetailsPage(content.contentID);
+                        case ContentType.tv:
+                          return TVDetailsPage(content.contentID);
+                        case ContentType.anime:
+                          return AnimeDetailsPage(content.contentID);
+                        case ContentType.game:
+                          return GameDetailsPage(content.contentID);
+                      }
+                    })
                   );
                 },
-                () {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (_) {
-                      return SureDialog("Do you want to mark it as finished and add to your list?", () {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) {
-                            return const LoadingDialog();
-                          }
-                        );
+                child: ConsumeLaterGridCell(
+                  content.content.imageUrl,
+                  content.content.titleEn,
+                  () {
+                    showCupertinoDialog(
+                      context: context,
+                      builder: (_) {
+                        return SureDialog("Do you want to remove it?", () {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) {
+                              return const LoadingDialog();
+                            }
+                          );
 
-                        //TODO Implement score later
-                        _provider.moveToUserList(
-                          content.id,
-                          null,
-                          content,
-                        ).then((value) {
-                          if (value.error != null && value.error == "Could not found.") {
-                            Navigator.pop(context);
-                            _provider.removeItem(content);
-                          } else {
-                            handleMessageResponse(context, value);
-                          }
+                          _provider.deleteConsumeLater(content.id, content).then((value) {
+                            if (value.error != null && value.error == "Could not found.") {
+                              Navigator.pop(context);
+                              _provider.removeItem(content);
+                            } else {
+                              handleMessageResponse(context, value);
+                            }
+                          });
                         });
-                      });
-                    }
-                  );
-                }
-              ),
-            );
-          }
+                      }
+                    );
+                  },
+                  () {
+                    showCupertinoDialog(
+                      context: context,
+                      builder: (_) {
+                        return SureDialog("Do you want to mark it as finished and add to your list?", () {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) {
+                              return const LoadingDialog();
+                            }
+                          );
+
+                          //TODO Implement score later
+                          _provider.moveToUserList(
+                            content.id,
+                            null,
+                            content,
+                          ).then((value) {
+                            if (value.error != null && value.error == "Could not found.") {
+                              Navigator.pop(context);
+                              _provider.removeItem(content);
+                            } else {
+                              handleMessageResponse(context, value);
+                            }
+                          });
+                        });
+                      }
+                    );
+                  }
+                ),
+              );
+            }
+          ),
         )
         : ListView.builder(
           itemCount: data.isEmpty ? 1 : data.length,
@@ -294,7 +297,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
+                padding: const EdgeInsets.only(left: 6, right: 3, top: 4, bottom: 4),
                 child: Row(
                   children: [
                     SizedBox(

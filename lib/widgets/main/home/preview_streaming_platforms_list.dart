@@ -65,7 +65,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
               }));
             },
             child: Padding(
-              padding: EdgeInsets.only(right: 12, left: index == 0 ? 3 : 0),
+              padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -140,7 +140,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
         children: List.generate(
           20,
           (index) => Padding(
-            padding: EdgeInsets.only(right: 12, left: index == 0 ? 3 : 0),
+            padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
             child: Shimmer.fromColors(
               baseColor: CupertinoColors.systemGrey,
               highlightColor: CupertinoColors.systemGrey3,

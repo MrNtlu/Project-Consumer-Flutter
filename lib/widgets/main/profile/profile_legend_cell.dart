@@ -8,13 +8,15 @@ class ProfileLegendCell extends StatelessWidget {
   final String title;
   final int? timesFinished;
   final int? hoursPlayed;
+  final bool isGame;
 
   const ProfileLegendCell(
-    this.url, 
-    this.title, 
+    this.url,
+    this.title,
     {
-      this.timesFinished, 
+      this.timesFinished,
       this.hoursPlayed,
+      this.isGame = false,
       super.key,
     }
   );
@@ -27,7 +29,7 @@ class ProfileLegendCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true, cacheHeight: 400, cacheWidth: 270),
+            ContentCell(url, title, forceRatio: true, cacheHeight: 350, cacheWidth: isGame ? 400 : 270),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
@@ -51,7 +53,7 @@ class ProfileLegendCell extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.end,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w500, 
+                              fontWeight: FontWeight.w500,
                               color: CupertinoColors.white
                             ),
                           ),
@@ -59,7 +61,7 @@ class ProfileLegendCell extends StatelessWidget {
                         Text(
                           hoursPlayed == null ? " times" : " hrs",
                           style: const TextStyle(
-                            fontWeight: FontWeight.w500, 
+                            fontWeight: FontWeight.w500,
                             color: CupertinoColors.white,
                             fontSize: 13
                           ),

@@ -329,7 +329,6 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                 const DetailsTitle("Screenshots"),
                 if (item.screenshots.isNotEmpty)
                 DetailsCarouselSlider(item.screenshots),
-                //TODO Store id map
                 const SizedBox(height: 32)
               ],
             ),

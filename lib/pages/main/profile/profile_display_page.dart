@@ -234,102 +234,111 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
               ),
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
-                  itemExtent: 200 * 2 / 3,
-                  itemBuilder: (context, index) {
-                    if (item.legendContent.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.legendContent[index];
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
+                    itemExtent: 200 * 2 / 3,
+                    itemBuilder: (context, index) {
+                      if (item.legendContent.isEmpty) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.legendContent[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(builder: (_) {
-                                switch (ContentType.values.where((element) => element.request == data.contentType).first) {
-                                  case ContentType.movie:
-                                    return MovieDetailsPage(data.id);
-                                  case ContentType.tv:
-                                    return TVDetailsPage(data.id);
-                                  case ContentType.anime:
-                                    return AnimeDetailsPage(data.id);
-                                  case ContentType.game:
-                                    return GameDetailsPage(data.id);
-                                  default:
-                                    return MovieDetailsPage(data.id);
-                                }
-                              }, maintainState: NavigationTracker().shouldMaintainState())
-                            );
-                          },
-                          child: ProfileLegendCell(
-                            data.imageUrl, data.titleEn,
-                            timesFinished: data.timesFinished,
-                            hoursPlayed: data.hoursPlayed,
-                          )
-                        ),
-                      );
-                    }
-                  },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(builder: (_) {
+                                  switch (ContentType.values.where((element) => element.request == data.contentType).first) {
+                                    case ContentType.movie:
+                                      return MovieDetailsPage(data.id);
+                                    case ContentType.tv:
+                                      return TVDetailsPage(data.id);
+                                    case ContentType.anime:
+                                      return AnimeDetailsPage(data.id);
+                                    case ContentType.game:
+                                      return GameDetailsPage(data.id);
+                                    default:
+                                      return MovieDetailsPage(data.id);
+                                  }
+                                }, maintainState: NavigationTracker().shouldMaintainState())
+                              );
+                            },
+                            child: ProfileLegendCell(
+                              data.imageUrl, data.titleEn,
+                              timesFinished: data.timesFinished,
+                              hoursPlayed: data.hoursPlayed,
+                            )
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
               SeeAllTitle("💬 Reviews", (){}, shouldHideSeeAllButton: true),
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
-                  itemExtent: 300,
-                  itemBuilder: (context, index) {
-                    if (item.reviews.isEmpty) {
-                      return const Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 64),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.reviews[index];
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
+                    itemExtent: 300,
+                    itemBuilder: (context, index) {
+                      if (item.reviews.isEmpty) {
+                        return const Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 64),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.reviews[index];
 
-                      return ProfileReviewCell(data, _fetchData);
-                    }
-                  },
+                        return ProfileReviewCell(data, _fetchData);
+                      }
+                    },
+                  ),
                 ),
               ),
               SeeAllTitle("🗂️ Lists", (){}, shouldHideSeeAllButton: true),
               SizedBox(
                 height: 125,
-                child: ListView.builder(
-                  scrollDirection: item.customLists.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.customLists.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.customLists.isEmpty ? 1 : item.customLists.length,
-                  itemExtent: 300,
-                  itemBuilder: (context, index) {
-                    if (item.customLists.isEmpty) {
-                      return const Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 64),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.customLists[index];
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.customLists.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.customLists.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.customLists.isEmpty ? 1 : item.customLists.length,
+                    itemExtent: 300,
+                    itemBuilder: (context, index) {
+                      if (item.customLists.isEmpty) {
+                        return const Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 64),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.customLists[index];
 
-                      return ProfileCustomListCell(data);
-                    }
-                  },
+                        return ProfileCustomListCell(data);
+                      }
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 16)

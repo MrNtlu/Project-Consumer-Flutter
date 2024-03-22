@@ -147,7 +147,6 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
                               _search();
                             }
                           },
-                          keyboardType: TextInputType.name,
                         ),
                       ),
                       UserListContentSelection(provider),

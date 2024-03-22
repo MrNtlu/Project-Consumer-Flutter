@@ -23,7 +23,7 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
             widget.provider.decrementContentType();
           },
           minSize: 0,
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.all(3),
           child: const Icon(CupertinoIcons.left_chevron, size: 20),
         ),
         const SizedBox(width: 3),
@@ -61,7 +61,7 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
             widget.provider.incrementContentType();
           },
           minSize: 0,
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.all(3),
           child: const Icon(CupertinoIcons.right_chevron, size: 20),
         ),
         const SizedBox(width: 6,)

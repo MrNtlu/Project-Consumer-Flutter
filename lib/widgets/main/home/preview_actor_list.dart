@@ -19,15 +19,15 @@ class PreviewActorList extends StatelessWidget {
 
     return SizedBox(
       height: 140,
-      child: previewProvider.networkState == NetworkState.success 
+      child: previewProvider.networkState == NetworkState.success
       ? ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: contentProvider.selectedContent == ContentType.movie 
-          ? previewProvider.moviePreview.actors?.length 
+        itemCount: contentProvider.selectedContent == ContentType.movie
+          ? previewProvider.moviePreview.actors?.length
           : previewProvider.tvPreview.actors?.length,
         itemBuilder: (context, index) {
-          final actor = contentProvider.selectedContent == ContentType.movie 
-            ? previewProvider.moviePreview.actors![index] 
+          final actor = contentProvider.selectedContent == ContentType.movie
+            ? previewProvider.moviePreview.actors![index]
             : previewProvider.tvPreview.actors![index];
 
           return GestureDetector(
@@ -43,7 +43,7 @@ class PreviewActorList extends StatelessWidget {
               }));
             },
             child: Padding(
-              padding: EdgeInsets.only(right: 12, left: index == 0 ? 3 : 0),
+              padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -63,7 +63,7 @@ class PreviewActorList extends StatelessWidget {
                         progressIndicatorBuilder: (_, __, ___) => ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Shimmer.fromColors(
-                            baseColor: CupertinoColors.systemGrey, 
+                            baseColor: CupertinoColors.systemGrey,
                             highlightColor: CupertinoColors.systemGrey3,
                             child: const ColoredBox(color: CupertinoColors.systemGrey,)
                           )
@@ -97,7 +97,7 @@ class PreviewActorList extends StatelessWidget {
         children: List.generate(
           20,
           (index) => Padding(
-            padding: EdgeInsets.only(right: 12, left: index == 0 ? 3 : 0),
+            padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
             child: Shimmer.fromColors(
               baseColor: CupertinoColors.systemGrey,
               highlightColor: CupertinoColors.systemGrey3,

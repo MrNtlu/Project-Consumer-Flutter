@@ -29,6 +29,7 @@ import 'package:watchlistfy/models/main/game/game_play_list.dart';
 import 'package:watchlistfy/models/main/legend_content.dart';
 import 'package:watchlistfy/models/main/movie/movie_details.dart';
 import 'package:watchlistfy/models/main/movie/movie_watch_list.dart';
+import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
 import 'package:watchlistfy/models/main/review/author.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/models/main/review/review_with_content.dart';
@@ -362,6 +363,23 @@ class TypeConverter<T> {
         createdAt: response["created_at"],
         updatedAt: response["updated_at"],
         content: TypeConverter<ReviewContent>().convertToObject(response["content"])
+      ) as T;
+    } else if (T == RecommendationWithContent) {
+      return RecommendationWithContent(
+        author: TypeConverter<Author>().convertToObject(response["author"]),
+        reason: response["reason"],
+        popularity: response["popularity"],
+        likes: (response["likes"] as List).map((e) => e.toString()).toList(),
+        isAuthor: response["is_author"],
+        isLiked: response["is_liked"],
+        id: response["_id"],
+        userID: response["user_id"],
+        contentID: response["content_id"],
+        recommendationID: response["recommendation_id"],
+        contentType: response["content_type"],
+        createdAt: response["created_at"],
+        content: TypeConverter<ReviewContent>().convertToObject(response["content"]),
+        recommendationContent: TypeConverter<ReviewContent>().convertToObject(response["recommendation_content"]),
       ) as T;
     } else if (T == ReviewContent) {
       return ReviewContent(

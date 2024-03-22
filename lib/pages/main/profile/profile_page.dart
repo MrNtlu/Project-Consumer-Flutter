@@ -297,64 +297,67 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 200,
                 child: _provider.isLoading
                 ? const CupertinoActivityIndicator()
-                : ListView.builder(
-                  scrollDirection: item.watchLater.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.watchLater.isEmpty ? 1 : item.watchLater.length,
-                  itemExtent: 200 * 2 / 3,
-                  itemBuilder: (context, index) {
-                    if (item.watchLater.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.watchLater[index];
+                : Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.watchLater.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.watchLater.isEmpty ? 1 : item.watchLater.length,
+                    itemExtent: 200 * 2 / 3,
+                    itemBuilder: (context, index) {
+                      if (item.watchLater.isEmpty) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.watchLater[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!_provider.isLoading) {
-                              Navigator.of(context, rootNavigator: true).push(
-                                CupertinoPageRoute(builder: (_) {
-                                  switch (ContentType.values.where((element) => element.request == data.contentType).first) {
-                                    case ContentType.movie:
-                                      return MovieDetailsPage(data.contentID);
-                                    case ContentType.tv:
-                                      return TVDetailsPage(data.contentID);
-                                    case ContentType.anime:
-                                      return AnimeDetailsPage(data.contentID);
-                                    case ContentType.game:
-                                      return GameDetailsPage(data.contentID);
-                                    default:
-                                      return MovieDetailsPage(data.contentID);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (!_provider.isLoading) {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(builder: (_) {
+                                    switch (ContentType.values.where((element) => element.request == data.contentType).first) {
+                                      case ContentType.movie:
+                                        return MovieDetailsPage(data.contentID);
+                                      case ContentType.tv:
+                                        return TVDetailsPage(data.contentID);
+                                      case ContentType.anime:
+                                        return AnimeDetailsPage(data.contentID);
+                                      case ContentType.game:
+                                        return GameDetailsPage(data.contentID);
+                                      default:
+                                        return MovieDetailsPage(data.contentID);
+                                    }
+                                  })
+                                ).then((value) => _fetchData());
+                              }
+                            },
+                            child: ProfileConsumeLaterCell(
+                              data.content.imageUrl, data.content.titleEn,
+                              () {
+                                HapticFeedback.lightImpact();
+
+                                showCupertinoDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return SureDialog("Do you want to remove it?", () {
+                                      _provider.deleteConsumeLater(index, IDBody(data.id));
+                                    });
                                   }
-                                })
-                              ).then((value) => _fetchData());
-                            }
-                          },
-                          child: ProfileConsumeLaterCell(
-                            data.content.imageUrl, data.content.titleEn,
-                            () {
-                              HapticFeedback.lightImpact();
-
-                              showCupertinoDialog(
-                                context: context,
-                                builder: (_) {
-                                  return SureDialog("Do you want to remove it?", () {
-                                    _provider.deleteConsumeLater(index, IDBody(data.id));
-                                  });
-                                }
-                              );
-                            }
-                          )
-                        ),
-                      );
-                    }
-                  },
+                                );
+                              }
+                            )
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
               Padding(
@@ -382,52 +385,56 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
-                  itemExtent: 200 * 2 / 3,
-                  itemBuilder: (context, index) {
-                    if (item.legendContent.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.legendContent[index];
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
+                    itemExtent: 200 * 2 / 3,
+                    itemBuilder: (context, index) {
+                      if (item.legendContent.isEmpty) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.legendContent[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(builder: (_) {
-                                switch (ContentType.values.where((element) => element.request == data.contentType).first) {
-                                  case ContentType.movie:
-                                    return MovieDetailsPage(data.id);
-                                  case ContentType.tv:
-                                    return TVDetailsPage(data.id);
-                                  case ContentType.anime:
-                                    return AnimeDetailsPage(data.id);
-                                  case ContentType.game:
-                                    return GameDetailsPage(data.id);
-                                  default:
-                                    return MovieDetailsPage(data.id);
-                                }
-                              })
-                            );
-                          },
-                          child: ProfileLegendCell(
-                            data.imageUrl, data.titleEn,
-                            timesFinished: data.timesFinished,
-                            hoursPlayed: data.hoursPlayed,
-                          )
-                        ),
-                      );
-                    }
-                  },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(builder: (_) {
+                                  switch (ContentType.values.where((element) => element.request == data.contentType).first) {
+                                    case ContentType.movie:
+                                      return MovieDetailsPage(data.id);
+                                    case ContentType.tv:
+                                      return TVDetailsPage(data.id);
+                                    case ContentType.anime:
+                                      return AnimeDetailsPage(data.id);
+                                    case ContentType.game:
+                                      return GameDetailsPage(data.id);
+                                    default:
+                                      return MovieDetailsPage(data.id);
+                                  }
+                                })
+                              );
+                            },
+                            child: ProfileLegendCell(
+                              data.imageUrl, data.titleEn,
+                              timesFinished: data.timesFinished,
+                              hoursPlayed: data.hoursPlayed,
+                              isGame: data.contentType == "game",
+                            )
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
               SeeAllTitle("💬 Reviews", () {
@@ -439,26 +446,29 @@ class _ProfilePageState extends State<ProfilePage> {
               }),
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
-                  physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                  itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
-                  itemExtent: 300,
-                  itemBuilder: (context, index) {
-                    if (item.reviews.isEmpty) {
-                      return const Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 64),
-                          child: Text("Nothing here."),
-                        ),
-                      );
-                    } else {
-                      final data = item.reviews[index];
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
+                    itemExtent: 300,
+                    itemBuilder: (context, index) {
+                      if (item.reviews.isEmpty) {
+                        return const Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 64),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.reviews[index];
 
-                      return ProfileReviewCell(data, _fetchData);
-                    }
-                  },
+                        return ProfileReviewCell(data, _fetchData);
+                      }
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 16)

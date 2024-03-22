@@ -25,109 +25,112 @@ class GenreList extends StatelessWidget {
       ContentType.game => Constants.GameGenreList.length,
     };
 
-    return SizedBox(
-      height: 75,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: genreSize,
-        itemExtent: 135,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          List<NameUrl> genreList;
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: SizedBox(
+        height: 75,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: genreSize,
+          itemExtent: 135,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            List<NameUrl> genreList;
 
-          switch (contentProvider.selectedContent) {
-            case ContentType.movie:
-              genreList = Constants.MovieGenreList;
-              break;
-            case ContentType.tv:
-              genreList = Constants.TVGenreList;
-              break;
-            case ContentType.anime:
-              genreList = Constants.AnimeGenreList;
-              break;
-            case ContentType.game:
-              genreList = Constants.GameGenreList;
-              break;
-            default:
-              genreList = Constants.MovieGenreList;
-              break;
-          }
+            switch (contentProvider.selectedContent) {
+              case ContentType.movie:
+                genreList = Constants.MovieGenreList;
+                break;
+              case ContentType.tv:
+                genreList = Constants.TVGenreList;
+                break;
+              case ContentType.anime:
+                genreList = Constants.AnimeGenreList;
+                break;
+              case ContentType.game:
+                genreList = Constants.GameGenreList;
+                break;
+              default:
+                genreList = Constants.MovieGenreList;
+                break;
+            }
 
-          final data = genreList[index];
+            final data = genreList[index];
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    switch (contentProvider.selectedContent) {
-                      case ContentType.movie:
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(builder: (_) {
+                      switch (contentProvider.selectedContent) {
+                        case ContentType.movie:
+                          return MovieDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
+                        case ContentType.tv:
+                          return TVDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
+                        case ContentType.anime:
+                          return AnimeDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
+                        case ContentType.game:
+                          return GameDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
+                        default:
                         return MovieDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
-                      case ContentType.tv:
-                        return TVDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
-                      case ContentType.anime:
-                        return AnimeDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
-                      case ContentType.game:
-                        return GameDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
-                      default:
-                      return MovieDiscoverListPage(genre: data.name != "Discover" ? Uri.encodeQueryComponent(data.name) : null);
-                    }
-                  })
-                );
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    ImageFiltered(
-                      imageFilter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-                      child: CachedNetworkImage(
-                        imageUrl: data.url,
-                        cacheKey: data.url,
-                        key: ValueKey<String>(data.url),
-                        maxHeightDiskCache: 150,
-                        errorListener: (_) {},
-                        progressIndicatorBuilder: (_, __, ___) => const SizedBox(
-                          height: 75,
-                          width: 129,
-                          child: ColoredBox(
-                            color: CupertinoColors.systemGrey2
+                      }
+                    })
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ImageFiltered(
+                        imageFilter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+                        child: CachedNetworkImage(
+                          imageUrl: data.url,
+                          cacheKey: data.url,
+                          key: ValueKey<String>(data.url),
+                          maxHeightDiskCache: 150,
+                          errorListener: (_) {},
+                          progressIndicatorBuilder: (_, __, ___) => const SizedBox(
+                            height: 75,
+                            width: 129,
+                            child: ColoredBox(
+                              color: CupertinoColors.systemGrey2
+                            ),
                           ),
+                          fadeInDuration: const Duration(milliseconds: 0),
+                          fadeOutDuration: const Duration(milliseconds: 0),
                         ),
-                        fadeInDuration: const Duration(milliseconds: 0),
-                        fadeOutDuration: const Duration(milliseconds: 0),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: ColoredBox(
-                          color: CupertinoColors.black.withOpacity(0.6),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                            child: Text(
-                              data.name,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: CupertinoColors.white
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: ColoredBox(
+                            color: CupertinoColors.black.withOpacity(0.6),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                              child: Text(
+                                data.name,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: CupertinoColors.white
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

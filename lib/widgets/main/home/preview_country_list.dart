@@ -19,7 +19,7 @@ class PreviewCountryList extends StatelessWidget {
           final country = (isMovie ? Constants.MoviePopularCountries : Constants.TVPopularCountries)[index];
 
           return Padding(
-            padding: EdgeInsets.only(right: 12, left: index == 0 ? 3 : 0),
+            padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(

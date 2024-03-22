@@ -95,7 +95,7 @@ class _SocialPageState extends State<SocialPage> {
                               ),
                             );
                           }
-                          return SocialCustomListCell(provider.item!.customList[index]);
+                          return SocialCustomListCell(index, provider.item!.customList[index]);
                         }
                       )
                       : const SocialCustomListsLoading(),
@@ -116,7 +116,7 @@ class _SocialPageState extends State<SocialPage> {
                         itemCount: provider.item?.reviews.length,
                         itemExtent: 300,
                         itemBuilder: (context, index) {
-                          return SocialReviewCell(provider.item!.reviews[index], _provider.likeReview);
+                          return SocialReviewCell(index, provider.item!.reviews[index], _provider.likeReview);
                         }
                       )
                       : const SocialReviewLoading(),
@@ -141,7 +141,7 @@ class _SocialPageState extends State<SocialPage> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                             child: Row(
                               children: [
                                 SizedBox(

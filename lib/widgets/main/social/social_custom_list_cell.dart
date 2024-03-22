@@ -8,16 +8,17 @@ import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/main/common/author_info_row.dart';
 
 class SocialCustomListCell extends StatelessWidget {
+  final int index;
   final CustomList data;
 
-  const SocialCustomListCell(this.data, {super.key});
+  const SocialCustomListCell(this.index, this.data, {super.key});
 
   @override
   Widget build(BuildContext context) {
     final sortedContent = data.content.sorted((a, b) => a.order.compareTo(b.order));
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -65,7 +66,7 @@ class SocialCustomListCell extends StatelessWidget {
                         itemCount: sortedContent.length,
                         itemBuilder: (context, index) {
                           final listContent = sortedContent[index];
-                          
+
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 3),
                             child: ContentCell(listContent.imageURL ?? '', listContent.titleEn, cornerRadius: 8, forceRatio: true),

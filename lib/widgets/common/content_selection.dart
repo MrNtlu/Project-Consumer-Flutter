@@ -35,7 +35,7 @@ class _ContentSelectionState extends State<ContentSelection> {
             contentProvider.decrementContentType();
           },
           minSize: 0,
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.all(3),
           child: const FaIcon(FontAwesomeIcons.chevronLeft , size: 20),
         ),
         const SizedBox(width: 3),
@@ -73,7 +73,7 @@ class _ContentSelectionState extends State<ContentSelection> {
             contentProvider.incrementContentType();
           },
           minSize: 0,
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.all(3),
           child: const FaIcon(FontAwesomeIcons.chevronRight, size: 20),
         ),
         const SizedBox(width: 12)

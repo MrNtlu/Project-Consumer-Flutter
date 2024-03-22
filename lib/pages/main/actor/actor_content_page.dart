@@ -189,23 +189,26 @@ class _ActorContentPageState extends State<ActorContentPage> {
           widget.isMovie,
           data
         )
-        : ListView.builder(
-          itemCount: _canPaginate ? data.length + 1 : data.length,
-          controller: _scrollController,
-          itemBuilder: (context, index) {
-            if ((_canPaginate || _isPaginating) && index >= data.length) {
-              return ContentListShimmerCell(
-                widget.isMovie ? ContentType.movie : ContentType.tv
+        : Padding(
+          padding: const EdgeInsets.only(left: 3, right: 1),
+          child: ListView.builder(
+            itemCount: _canPaginate ? data.length + 1 : data.length,
+            controller: _scrollController,
+            itemBuilder: (context, index) {
+              if ((_canPaginate || _isPaginating) && index >= data.length) {
+                return ContentListShimmerCell(
+                  widget.isMovie ? ContentType.movie : ContentType.tv
+                );
+              }
+
+              final content = data[index];
+
+              return ContentListCell(
+                widget.isMovie ? ContentType.movie : ContentType.tv,
+                content: content
               );
-            }
-
-            final content = data[index];
-
-            return ContentListCell(
-              widget.isMovie ? ContentType.movie : ContentType.tv,
-              content: content
-            );
-          },
+            },
+          ),
         );
       case ListState.empty:
         return const EmptyView("assets/lottie/empty.json", "Nothing here.");

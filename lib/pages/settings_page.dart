@@ -48,9 +48,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  /* TODO
-  * - [ ] Default content type selection
-  */
   DetailState _state = DetailState.init;
   String? error;
   BasicUserInfo? _userInfo;

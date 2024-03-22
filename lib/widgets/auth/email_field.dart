@@ -14,7 +14,6 @@ class EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoTextField(
       controller: _controller,
-      keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -27,7 +26,7 @@ class EmailField extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: CupertinoTheme.of(context).bgTextColor, 
+              color: CupertinoTheme.of(context).bgTextColor,
               fontSize: 16
             ),
           ),
