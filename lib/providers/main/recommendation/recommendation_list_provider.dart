@@ -1,22 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:watchlistfy/models/common/base_responses.dart';
-import 'package:watchlistfy/models/main/review/review.dart';
+import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
 import 'package:watchlistfy/providers/common/base_pagination_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/routes.dart';
-import 'package:http/http.dart' as http;
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 
-class ReviewListProvider extends BasePaginationProvider<Review> {
+class RecommendationListProvider extends BasePaginationProvider<RecommendationWithContent> {
   String sort = Constants.SortReviewRequests[0].request;
 
-  Future<BasePaginationResponse<Review>> getReviews({
+  Future<BasePaginationResponse<RecommendationWithContent>> getRecommendations({
     int page = 1,
     required String contentID,
-    String? contentExternalID,
-    int? contentExternalIntID,
     required String contentType,
   }) {
     if (page == 1) {
@@ -24,21 +22,17 @@ class ReviewListProvider extends BasePaginationProvider<Review> {
     }
 
     return getList(
-      url: "${APIRoutes().reviewRoutes.review}?page=$page&content_id=$contentID&content_type=$contentType&sort=$sort${
-        contentExternalID != null ? '&content_external_id=$contentExternalID' : ''
-      }${
-        contentExternalIntID != null ? '&content_external_int_id=$contentExternalIntID' : ''
-      }"
+      url: "${APIRoutes().recommendationRoutes.recommendationByContent}?page=$page&content_id=$contentID&content_type=$contentType&sort=$sort"
     );
   }
 
-  Future<BaseMessageResponse> deleteReview(
+  Future<BaseMessageResponse> deleteRecommendation(
     String id,
-    Review deleteItem,
+    RecommendationWithContent deleteItem,
   ) async {
     try {
       final response = await http.delete(
-        Uri.parse(APIRoutes().reviewRoutes.deleteReview),
+        Uri.parse(APIRoutes().recommendationRoutes.deleteRecommendation),
         body: json.encode({
           "id": id
         }),
@@ -56,21 +50,23 @@ class ReviewListProvider extends BasePaginationProvider<Review> {
     }
   }
 
-  Future<BaseMessageResponse> voteReview(
+  Future<BaseMessageResponse> likeRecommendation(
     String id,
+    String contentType,
   ) async {
     try {
       final response = await http.patch(
-        Uri.parse(APIRoutes().reviewRoutes.voteReview),
+        Uri.parse(APIRoutes().recommendationRoutes.likeRecommendation),
         body: json.encode({
-          "id": id
+          "id": id,
+          "type": contentType,
         }),
         headers: UserToken().getBearerToken()
       );
 
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
-      var baseItemResponse = decodedResponse.getBaseItemResponse<Review>();
+      var baseItemResponse = decodedResponse.getBaseItemResponse<RecommendationWithContent>();
       var data = baseItemResponse.data;
 
       if (response.getBaseMessageResponse().error == null && data != null) {

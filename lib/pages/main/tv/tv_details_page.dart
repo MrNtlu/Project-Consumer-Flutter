@@ -10,6 +10,7 @@ import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
+import 'package:watchlistfy/pages/main/recommendation/recommendation_content_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
@@ -31,6 +32,7 @@ import 'package:watchlistfy/widgets/main/common/details_info_column.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
+import 'package:watchlistfy/widgets/main/common/details_recommendations_title.dart';
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
@@ -340,7 +342,17 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   child: TVSeasonList(item.seasons),
                 ),
                 if(item.recommendations.isNotEmpty)
-                const DetailsTitle("Recommendations"),
+                DetailsRecommendationsTitle(() {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(builder: (_) {
+                      return RecommendationContentList(
+                        item.title.isNotEmpty ? item.title : item.titleOriginal,
+                        item.id,
+                        ContentType.tv.request,
+                      );
+                    })
+                  );
+                }),
                 if(item.recommendations.isNotEmpty)
                 SizedBox(
                   height: 150,

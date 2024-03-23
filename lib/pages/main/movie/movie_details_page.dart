@@ -1,6 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -9,6 +10,7 @@ import 'package:watchlistfy/models/main/common/request/consume_later_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
+import 'package:watchlistfy/pages/main/recommendation/recommendation_content_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/movie/movie_details_provider.dart';
@@ -26,6 +28,7 @@ import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
+import 'package:watchlistfy/widgets/main/common/details_recommendations_title.dart';
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
@@ -320,7 +323,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   )
                 ),
                 if(item.recommendations.isNotEmpty)
-                const DetailsTitle("Recommendations"),
+                DetailsRecommendationsTitle(() {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(builder: (_) {
+                      return RecommendationContentList(
+                        item.title.isNotEmpty ? item.title : item.titleOriginal,
+                        item.id,
+                        ContentType.movie.request,
+                      );
+                    })
+                  );
+                }),
                 if(item.recommendations.isNotEmpty)
                 SizedBox(
                   height: 150,

@@ -32,10 +32,11 @@ class DetailsCommonList extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(right: 8),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 100,
-            ),
+          child: SizedBox(
+            // constraints: const BoxConstraints(
+            //   maxWidth: 100,
+            // ),
+            width: 100,
             child: GestureDetector(
               onTap: () {
                 if (onClick != null) {
@@ -83,7 +84,7 @@ class DetailsCommonList extends StatelessWidget {
                             progressIndicatorBuilder: (_, __, ___) => ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Shimmer.fromColors(
-                                baseColor: CupertinoColors.systemGrey, 
+                                baseColor: CupertinoColors.systemGrey,
                                 highlightColor: CupertinoColors.systemGrey3,
                                 child: const ColoredBox(color: CupertinoColors.systemGrey,)
                               )
@@ -93,6 +94,7 @@ class DetailsCommonList extends StatelessWidget {
                       ),
                     )
                     : Container(
+                      width: 100,
                       decoration: BoxDecoration(
                         color: CupertinoColors.white,
                         borderRadius: BorderRadius.circular(8),
@@ -112,11 +114,12 @@ class DetailsCommonList extends StatelessWidget {
                   : Container(
                     decoration: BoxDecoration(
                       color: CupertinoColors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
+                    width: 100,
                     child: Icon(
-                      placeHolderIcon, 
-                      size: 64, 
+                      placeHolderIcon,
+                      size: 72,
                       color: CupertinoColors.black
                     ),
                   ),
