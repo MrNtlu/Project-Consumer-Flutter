@@ -36,6 +36,7 @@ import 'package:watchlistfy/widgets/main/common/details_recommendations_title.da
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/common/recommendation_button.dart';
 import 'package:watchlistfy/widgets/main/tv/tv_seasons_list.dart';
 import 'package:watchlistfy/widgets/main/tv/tv_watch_list_sheet.dart';
 
@@ -341,18 +342,38 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                   height: 190,
                   child: TVSeasonList(item.seasons),
                 ),
-                if(item.recommendations.isNotEmpty)
-                DetailsRecommendationsTitle(() {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return RecommendationContentList(
-                        item.title.isNotEmpty ? item.title : item.titleOriginal,
-                        item.id,
-                        ContentType.tv.request,
+                DetailsRecommendationsTitle(
+                  isRecommendationEmpty: item.recommendations.isEmpty,
+                  () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return RecommendationContentList(
+                          item.title.isNotEmpty ? item.title : item.titleOriginal,
+                          item.id,
+                          ContentType.tv.request,
+                        );
+                      })
+                    );
+                  }
+                ),
+                if(item.recommendations.isEmpty)
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: RecommendationButton(() {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return RecommendationContentList(
+                            item.title.isNotEmpty ? item.title : item.titleOriginal,
+                            item.id,
+                            ContentType.tv.request,
+                          );
+                        })
                       );
-                    })
-                  );
-                }),
+                    }),
+                  ),
+                ),
                 if(item.recommendations.isNotEmpty)
                 SizedBox(
                   height: 150,

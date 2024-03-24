@@ -17,6 +17,7 @@ class CustomListEntryCell extends StatelessWidget {
   final String? contentType;
   final VoidCallback? onRemove;
   final VoidCallback? onAdd;
+  final bool isRecommendation;
 
   const CustomListEntryCell(
     this.selectedContent,
@@ -24,7 +25,12 @@ class CustomListEntryCell extends StatelessWidget {
     this.doesContain,
     this.onRemove,
     this.onAdd,
-    {this.index, this.contentType, super.key}
+    {
+      this.index,
+      this.contentType,
+      this.isRecommendation = false,
+      super.key
+    }
   );
 
   @override
@@ -41,7 +47,7 @@ class CustomListEntryCell extends StatelessWidget {
                 return TVDetailsPage(content.id);
               case ContentType.anime:
                 return AnimeDetailsPage(content.id);
-              case ContentType.game: 
+              case ContentType.game:
                 return GameDetailsPage(content.id);
               default:
                 return MovieDetailsPage(content.id);
@@ -50,7 +56,7 @@ class CustomListEntryCell extends StatelessWidget {
         );
       } : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+        padding: const EdgeInsets.only(left: 6, right: 3, top: 4, bottom: 4),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -67,8 +73,8 @@ class CustomListEntryCell extends StatelessWidget {
             SizedBox(
               height: onAdd != null ? 150 : 125,
               child: ContentCell(
-                content.imageUrl, 
-                content.titleEn, 
+                content.imageUrl,
+                content.titleEn,
                 forceRatio: true,
                 cacheHeight: onAdd != null ? 400 : 325,
                 cacheWidth: onAdd != null ? 270 : 225,
@@ -99,14 +105,15 @@ class CustomListEntryCell extends StatelessWidget {
             ),
             if (contentType != null)
             CupertinoChip(
-              isSelected: true, 
-              onSelected: (value){}, 
+              isSelected: true,
+              onSelected: (value){},
               label: contentType!,
             ),
             if (onRemove != null)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (!isRecommendation)
                 CupertinoButton(
                   padding: const EdgeInsets.all(3),
                   onPressed: doesContain ? () {
@@ -118,7 +125,10 @@ class CustomListEntryCell extends StatelessWidget {
                 CupertinoButton(
                   padding: const EdgeInsets.all(3),
                   onPressed: doesContain ? (){} : () {
-                    onAdd!(); 
+                    if (isRecommendation) {
+                      Navigator.pop(context);
+                    }
+                    onAdd!();
                   },
                   child: Icon(Icons.add_circle, color: doesContain ? CupertinoColors.systemGrey2 : CupertinoColors.activeGreen),
                 ),

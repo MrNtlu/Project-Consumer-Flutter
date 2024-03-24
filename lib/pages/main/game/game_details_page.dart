@@ -28,6 +28,7 @@ import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart
 import 'package:watchlistfy/widgets/main/common/details_recommendations_title.dart';
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/common/recommendation_button.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_play_list_sheet.dart';
 
@@ -304,17 +305,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                   return GameDiscoverListPage(platform: platform);
                 }),
                 if(item.relatedGames.isNotEmpty)
-                DetailsRecommendationsTitle(title: "Related Games", () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(builder: (_) {
-                      return RecommendationContentList(
-                        item.title.isNotEmpty ? item.title : item.titleOriginal,
-                        item.id,
-                        ContentType.game.request,
-                      );
-                    })
-                  );
-                }),
+                const DetailsTitle("Related Games"),
                 if(item.relatedGames.isNotEmpty)
                 SizedBox(
                   height: 150,
@@ -329,6 +320,37 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                     (index) {
                       return GameDetailsPage(item.relatedGames[index].rawgId.toString());
                     }
+                  ),
+                ),
+                DetailsRecommendationsTitle(
+                  isRecommendationEmpty: true,
+                  () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return RecommendationContentList(
+                          item.title.isNotEmpty ? item.title : item.titleOriginal,
+                          item.id,
+                          ContentType.movie.request,
+                        );
+                      })
+                    );
+                  }
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: RecommendationButton(() {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(builder: (_) {
+                          return RecommendationContentList(
+                            item.title.isNotEmpty ? item.title : item.titleOriginal,
+                            item.id,
+                            ContentType.game.request,
+                          );
+                        })
+                      );
+                    }),
                   ),
                 ),
                 DetailsReviewSummary(

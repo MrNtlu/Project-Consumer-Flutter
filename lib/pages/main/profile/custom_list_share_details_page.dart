@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -292,16 +293,22 @@ class _CustomListShareDetailsPageState extends State<CustomListShareDetailsPage>
                   child: Icon(item.isBookmarked ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark, size: 22),
                 ),
                 Text(item.bookmarkCount.toString()),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return ProfileDisplayPage(item.author.username);
-                      }, maintainState: NavigationTracker().shouldMaintainState())
-                    );
-                  },
-                  child: AuthorInfoRow(item.author),
+                const SizedBox(width: 24),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return ProfileDisplayPage(item.author.username);
+                          }, maintainState: NavigationTracker().shouldMaintainState())
+                        );
+                      },
+                      child: AuthorInfoRow(item.author),
+                    ),
+                  ),
                 )
               ],
             )

@@ -15,7 +15,9 @@ import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_content_selection.dart';
 
 class CustomListSelectionPage extends StatefulWidget {
-  const CustomListSelectionPage({super.key});
+  final bool isRecommendation;
+  final ContentType? contentType;
+  const CustomListSelectionPage({this.isRecommendation = false, this.contentType, super.key});
 
   @override
   State<CustomListSelectionPage> createState() => _CustomListSelectionPageState();
@@ -116,16 +118,23 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
       ],
       child: Consumer2<UserListContentSelectionProvider, CustomListSearchProvider>(
         builder: (context, provider, searchProvider, _) {
+          if (widget.contentType != null) {
+            provider.initContentType(widget.contentType!);
+          }
 
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: const Text("🔍 Search"),
-              trailing: Text("${_customListCreateProvider.selectedContent.length}/${authProvider.basicUserInfo?.isPremium == true ? "25" : "10"}"),
+              middle: widget.contentType != null
+              ? Text("🔍 Search ${widget.contentType!.value}")
+              : const Text("🔍 Search"),
+              trailing: widget.isRecommendation
+              ? null
+              : Text("${_customListCreateProvider.selectedContent.length}/${authProvider.basicUserInfo?.isPremium == true ? "25" : "10"}"),
             ),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                   child: Row(
                     children: [
                       Flexible(
@@ -149,6 +158,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
                           },
                         ),
                       ),
+                      if (!widget.isRecommendation)
                       UserListContentSelection(provider),
                     ],
                   ),
@@ -177,13 +187,16 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
             }
 
             final content = data[index];
-            final limit = authProvider.basicUserInfo?.isPremium == true ? 25 : 10;
+            final limit = widget.isRecommendation
+            ? 1
+            : authProvider.basicUserInfo?.isPremium == true ? 25 : 10;
             final doesContain = _customListCreateProvider.doesContain(content.id);
 
             return CustomListEntryCell(
               _provider.selectedContent,
               content,
               doesContain,
+              isRecommendation: widget.isRecommendation,
               () {
                 _customListCreateProvider.removeContent(content.id);
               },
@@ -205,7 +218,11 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
                 } else {
                   showCupertinoDialog(
                     context: context,
-                    builder: (_) => const ErrorDialog("You've reached the limit.\nFree users can add up to 10 entries, Premium users can add up to 25 entries.")
+                    builder: (_) => ErrorDialog(
+                      widget.isRecommendation
+                      ? "You've already selected a ${widget.contentType?.value}."
+                      : "You've reached the limit.\nFree users can add up to 10 entries, Premium users can add up to 25 entries."
+                    )
                   );
                 }
               }
@@ -221,7 +238,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
             children: [
               Lottie.asset(
                 "assets/lottie/empty.json",
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.35,
                 frameRate: FrameRate(60)
               ),
               const Text("Couldn't find anything.", style: TextStyle(fontWeight: FontWeight.w500)),

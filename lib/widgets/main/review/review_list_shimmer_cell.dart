@@ -8,7 +8,7 @@ class ReviewListShimmerCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: CupertinoColors.systemGrey, 
+      baseColor: CupertinoColors.systemGrey,
       highlightColor: CupertinoColors.systemGrey3,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),

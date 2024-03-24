@@ -35,10 +35,10 @@ class ReviewListCell extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return ProfileDisplayPage(item.author.username);
-                      })
-                    );
+                    CupertinoPageRoute(builder: (_) {
+                      return ProfileDisplayPage(item.author.username);
+                    })
+                  );
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -193,7 +193,7 @@ class ReviewListCell extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                           return ReviewCreatePage(
-                            item.contentID, item.contentExternalID, item.contentExternalIntID, 
+                            item.contentID, item.contentExternalID, item.contentExternalIntID,
                             item.contentType, fetchData, review: item, updateReviewData: updateData,
                           );
                         }));
@@ -205,7 +205,7 @@ class ReviewListCell extends StatelessWidget {
                     CupertinoButton(
                       onPressed: () {
                         showCupertinoDialog(
-                          context: context, 
+                          context: context,
                           builder: (_) {
                             return SureDialog("Do you want to delete your review?", () {
                               showCupertinoDialog(

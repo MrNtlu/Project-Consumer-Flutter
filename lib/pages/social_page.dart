@@ -9,7 +9,9 @@ import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/main/review/review_social_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/social/social_provider.dart';
+import 'package:watchlistfy/providers/main/social/social_tab_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/common/author_image.dart';
 import 'package:watchlistfy/widgets/main/social/social_custom_list_cell.dart';
@@ -30,21 +32,40 @@ class _SocialPageState extends State<SocialPage> {
 
   late final AuthenticationProvider authenticationProvider;
   late final SocialProvider _provider;
+  late final SocialTabProvider _tabProvider;
+  late final ScrollController _scrollController;
+
+  final List<String> socialTabs = [
+    "🗂️ Lists",
+    "💬 Reviews",
+    "💡 Recommendations",
+    "🏆 Leaderboard",
+  ];
+
+  final List<GlobalKey> socialTabKeys = [
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+  ];
 
   @override
   void initState() {
     super.initState();
     _provider = SocialProvider();
+    _tabProvider = SocialTabProvider();
   }
 
   @override
   void didChangeDependencies() {
     if (!isInit) {
       authenticationProvider = Provider.of<AuthenticationProvider>(context);
+      _scrollController = ScrollController();
       _provider.getSocial();
 
       isInit = true;
     }
+
     super.didChangeDependencies();
   }
 
@@ -56,10 +77,13 @@ class _SocialPageState extends State<SocialPage> {
         backgroundColor: CupertinoTheme.of(context).bgColor,
         brightness: CupertinoTheme.of(context).brightness,
       ),
-      child: ChangeNotifierProvider(
-        create: (_) => _provider,
-        child: Consumer<SocialProvider>(
-          builder: (context, provider, _) {
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => _provider),
+          ChangeNotifierProvider(create: (_) => _tabProvider),
+        ],
+        child: Consumer2<SocialProvider, SocialTabProvider>(
+          builder: (context, provider, tabProvider, _) {
             return RefreshIndicator(
               backgroundColor: CupertinoTheme.of(context).bgTextColor,
               color: CupertinoTheme.of(context).bgColor,
@@ -72,6 +96,31 @@ class _SocialPageState extends State<SocialPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      child: SizedBox(
+                        height: 50,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
+                          children: List.generate(
+                            socialTabs.length, (index) {
+                              return CupertinoChip(
+                                key: socialTabKeys[index],
+                                isSelected: index == tabProvider.selectedIndex,
+                                onSelected: (_) {
+                                  tabProvider.setNewIndex(index);
+                                  if (_scrollController.hasClients && socialTabKeys[index].currentContext != null) {
+                                    Scrollable.ensureVisible(socialTabKeys[index].currentContext!);
+                                  }
+                                },
+                                label: socialTabs[index],
+                              );
+                            }
+                          ),
+                        ),
+                      ),
+                    ),
                     SeeAllTitle("🗂️ Popular Lists", () {
                       Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(builder: (_) {

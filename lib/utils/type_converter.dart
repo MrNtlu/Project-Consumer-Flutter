@@ -143,6 +143,11 @@ class TypeConverter<T> {
             response["leaderboard"] as List
           ).map((e) => TypeConverter<Leaderboard>().convertToObject(e)).toList())
         : [],
+        response["recommendations"] != null
+        ? ((
+            response["recommendations"] as List
+          ).map((e) => TypeConverter<RecommendationWithContent>().convertToObject(e)).toList())
+        : [],
       ) as T;
     } else if (T == UserListContent) {
       return UserListContent(

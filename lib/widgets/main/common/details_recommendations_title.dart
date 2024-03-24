@@ -1,14 +1,15 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/common/recommendation_button.dart';
 
 class DetailsRecommendationsTitle extends StatelessWidget {
-  final String title;
+  final bool isRecommendationEmpty;
   final VoidCallback onTap;
 
   const DetailsRecommendationsTitle(
-    this.onTap, {
-    this.title = "Recommendations",
+    this.onTap,
+    {
+    this.isRecommendationEmpty = false,
     super.key
   });
 
@@ -20,17 +21,9 @@ class DetailsRecommendationsTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: DetailsTitle(title)),
-          CupertinoButton.filled(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-            minSize: 0,
-            onPressed: onTap,
-            child: const AutoSizeText(
-              "💡 User Recommendations",
-              minFontSize: 12,
-              style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.w500)
-            ),
-          )
+          const Expanded(child: DetailsTitle("Recommendations")),
+          if (!isRecommendationEmpty)
+          RecommendationButton(onTap)
         ],
       ),
     );

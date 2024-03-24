@@ -2,10 +2,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
+import 'package:watchlistfy/pages/main/recommendation/recommendation_create_page.dart';
 import 'package:watchlistfy/providers/main/recommendation/recommendation_list_provider.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/main/recommendation/recommendation_list_cell.dart';
+import 'package:watchlistfy/widgets/main/recommendation/recommendation_list_shimmer_cell.dart';
 import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
 
 class RecommendationContentList extends StatefulWidget {
@@ -143,12 +147,13 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
                   if (data.where((element) => element.isAuthor).isEmpty && _state != ListState.loading)
                   CupertinoButton(
                     onPressed: () {
-                      // Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                      //   return ReviewCreatePage(
-                      //     widget.contentID, widget.contentExternalID, widget.contentExternalIntID,
-                      //     widget.contentType, widget.fetchData, updateReviewData: _fetchData,
-                      //   );
-                      // }));
+                      Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                        return RecommendationCreatePage(
+                          widget.contentID,
+                          ContentType.values.where((element) => element.request == widget.contentType).first,
+                          _fetchData,
+                        );
+                      }));
                     },
                     padding: EdgeInsets.zero,
                     child: const Icon(CupertinoIcons.add, size: 28)
@@ -170,20 +175,13 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
           itemCount: data.length,
           controller: _scrollController,
           itemBuilder: (context, index) {
-            // if ((_canPaginate || _isPaginating) && index >= data.length) {
-            //   return const ReviewListShimmerCell();
-            // }
+            if ((_canPaginate || _isPaginating) && index >= data.length) {
+              return const RecommendationListShimmerCell();
+            }
 
             final item = data[index];
 
-            //TODO Show recommended content
-            // Author, is users is the author show it
-            // Reason if not empty
-            // Like button + popularity
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-
-            );
+            return RecommendationListCell(item, _provider);
           }
         );
       case ListState.empty:
