@@ -17,6 +17,6 @@ class RecommendationBody extends JSONConverter {
     "recommendation_id": recommendationID,
     "content_type": contentType,
     if (reason != null)
-    "review": reason!
+    "reason": reason!
   };
 }

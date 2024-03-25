@@ -30,13 +30,13 @@ class UserListViewSheet extends StatelessWidget {
   final BaseUserList userList;
 
   const UserListViewSheet(
-    this.contentID, this.title, 
+    this.contentID, this.title,
     this.message, this.userList, {
       this.externalID,
       this.externalIntID,
       this.episodePrefix,
       this.seasonPrefix,
-      required this.contentType, 
+      required this.contentType,
       this.movieProvider,
       this.tvProvider,
       this.animeProvider,
@@ -84,7 +84,7 @@ class UserListViewSheet extends StatelessWidget {
                   context: context,
                   barrierDismissible: false,
                   builder: (context) {
-                    return TVWatchListSheet(tvProvider!, contentID, externalID!, userList: userList);
+                    return TVWatchListSheet(tvProvider!, contentID, externalID!, userList: userList, episodePrefix: episodePrefix, seasonPrefix: seasonPrefix);
                   }
                 );
               case ContentType.anime:
@@ -92,7 +92,7 @@ class UserListViewSheet extends StatelessWidget {
                   context: context,
                   barrierDismissible: false,
                   builder: (context) {
-                    return AnimeWatchListSheet(animeProvider!, contentID, externalIntID!, userList: userList);
+                    return AnimeWatchListSheet(animeProvider!, contentID, externalIntID!, userList: userList, episodePrefix: episodePrefix);
                   }
                 );
               case ContentType.game:
@@ -113,7 +113,7 @@ class UserListViewSheet extends StatelessWidget {
           isDestructiveAction: true,
           onPressed: () {
             showCupertinoDialog(
-              context: context, 
+              context: context,
               builder: (_) {
                 return SureDialog("Do you want to remove it from your list?", () {
                   Navigator.pop(context);

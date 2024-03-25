@@ -2,6 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/main/custom-list/custom_list.dart';
 
 class CustomListCreateProvider with ChangeNotifier {
+  int reasonTextCount = 0;
+
+  void updateTextCount(int newCount) {
+    reasonTextCount = newCount;
+    notifyListeners();
+  }
+
   List<CustomListContent> selectedContent = [];
 
   void addNewContent(CustomListContent content) {

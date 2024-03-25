@@ -1,12 +1,17 @@
 import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/recommendation/request/recommendation_body.dart';
+import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
+import 'package:watchlistfy/pages/main/game/game_details_page.dart';
+import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_selection_page.dart';
+import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_create_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/routes.dart';
@@ -104,7 +109,6 @@ class RecommendationCreatePage extends StatelessWidget {
       lazy: false,
       child: Consumer<CustomListCreateProvider>(
         builder: (context, provider, _) {
-
           return CupertinoPageScaffold(
             navigationBar: const CupertinoNavigationBar(
               middle: Text("Make a Recommendation"),
@@ -128,16 +132,30 @@ class RecommendationCreatePage extends StatelessWidget {
                     const SizedBox(height: 16),
                     CupertinoTextField(
                       maxLength: 250,
-                      maxLines: 3,
+                      maxLines: 5,
                       controller: reasonController,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       placeholder: "Why are you recommending? How is it similar?",
                       onTapOutside: (event) {
                         FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      onChanged: (value) {
+                        provider.updateTextCount(value.length);
                       },
                       decoration: BoxDecoration(
                         color: CupertinoTheme.of(context).onBgColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
+                    ),
+                    const SizedBox(height: 3),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        provider.reasonTextCount > 0 ? "${provider.reasonTextCount}/250" : "",
+                        style: TextStyle(
+                          color: (provider.reasonTextCount == 250 || provider.reasonTextCount < 6) ? CupertinoColors.systemRed : CupertinoColors.systemGrey2,
+                        ),
+                      )
                     ),
                     const SizedBox(height: 16),
                     Align(
@@ -157,9 +175,29 @@ class RecommendationCreatePage extends StatelessWidget {
                       height: 150,
                       child: Row(
                         children: [
-                          ContentCell(
-                            provider.selectedContent.first.imageURL ?? '',
-                            provider.selectedContent.first.titleOriginal,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(builder: (_) {
+                                  switch (_contentType) {
+                                    case ContentType.movie:
+                                      return MovieDetailsPage(provider.selectedContent.first.contentID);
+                                    case ContentType.tv:
+                                      return TVDetailsPage(provider.selectedContent.first.contentID);
+                                    case ContentType.anime:
+                                      return AnimeDetailsPage(provider.selectedContent.first.contentID);
+                                    case ContentType.game:
+                                      return GameDetailsPage(provider.selectedContent.first.contentID);
+                                    default:
+                                      return MovieDetailsPage(provider.selectedContent.first.contentID);
+                                  }
+                                })
+                              );
+                            },
+                            child: ContentCell(
+                              provider.selectedContent.first.imageURL ?? '',
+                              provider.selectedContent.first.titleOriginal,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 8),
