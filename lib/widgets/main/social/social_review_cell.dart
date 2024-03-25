@@ -26,7 +26,7 @@ class SocialReviewCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.all(6),
-      margin: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {

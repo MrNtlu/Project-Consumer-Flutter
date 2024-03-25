@@ -18,7 +18,7 @@ class SocialCustomListCell extends StatelessWidget {
     final sortedContent = data.content.sorted((a, b) => a.order.compareTo(b.order));
 
     return Padding(
-      padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -30,12 +30,12 @@ class SocialCustomListCell extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-          border: Border.all(
-            color: CupertinoTheme.of(context).brightness == Brightness.dark ? const Color(0xFF212121) : CupertinoColors.systemGrey3,
-            width: 1.75,
+            border: Border.all(
+              color: CupertinoTheme.of(context).brightness == Brightness.dark ? const Color(0xFF212121) : CupertinoColors.systemGrey3,
+              width: 1.75,
+            ),
+            borderRadius: BorderRadius.circular(8),
           ),
-          borderRadius: BorderRadius.circular(8),
-        ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             children: [

@@ -172,9 +172,13 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
     switch (_state) {
       case ListState.done:
         return ListView.builder(
-          itemCount: data.length,
+          itemCount: data.isNotEmpty ? data.length : 1,
           controller: _scrollController,
           itemBuilder: (context, index) {
+            if (index == 0 && data.isEmpty) {
+              return const EmptyView("assets/lottie/empty.json", "No recommendations yet.");
+            }
+
             if ((_canPaginate || _isPaginating) && index >= data.length) {
               return const RecommendationListShimmerCell();
             }

@@ -7,10 +7,12 @@ class CupertinoChip extends StatelessWidget {
   final Function(bool)? onSelected;
   final EdgeInsets padding;
   final Widget? leading;
+  final double size;
 
   const CupertinoChip({
     required this.isSelected, required this.onSelected,
     required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    this.size = 14,
     this.leading, super.key,
   });
 
@@ -42,6 +44,7 @@ class CupertinoChip extends StatelessWidget {
               label,
               style: TextStyle(
                 color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
+                fontSize: size,
                 fontWeight: FontWeight.w500,
               ),
             ),

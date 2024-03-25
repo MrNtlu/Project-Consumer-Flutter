@@ -149,14 +149,11 @@ class _CustomListSocialListPageState extends State<CustomListSocialListPage> {
 
             final content = data[index];
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
-              child: SizedBox(
-                height: 175,
-                child: SocialCustomListCell(
-                  -1, content,
-                )
-              ),
+            return SizedBox(
+              height: 175,
+              child: SocialCustomListCell(
+                -1, content,
+              )
             );
           },
         );

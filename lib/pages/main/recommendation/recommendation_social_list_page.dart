@@ -1,25 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/main/review/review_with_content.dart';
-import 'package:watchlistfy/providers/main/review/review_social_list_provider.dart';
+import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
+import 'package:watchlistfy/providers/main/recommendation/recommendation_social_list_provider.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
-import 'package:watchlistfy/widgets/main/review/review_with_content_shimmer_cell.dart';
-import 'package:watchlistfy/widgets/main/social/social_review_cell.dart';
+import 'package:watchlistfy/widgets/main/social/social_recommendation_cell.dart';
+import 'package:watchlistfy/widgets/main/social/social_recommendation_loading.dart';
 
-class ReviewSocialListPage extends StatefulWidget {
-  const ReviewSocialListPage({super.key});
+class RecommendationSocialListPage extends StatefulWidget {
+  const RecommendationSocialListPage({super.key});
 
   @override
-  State<ReviewSocialListPage> createState() => _ReviewSocialListPageState();
+  State<RecommendationSocialListPage> createState() => _RecommendationSocialListPageState();
 }
 
-class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
+class _RecommendationSocialListPageState extends State<RecommendationSocialListPage> {
   ListState _state = ListState.init;
 
-  late final ReviewSocialListProvider _reviewProvider;
+  late final RecommendationSocialListProvider _provider;
   late final ScrollController _scrollController;
 
   int _page = 1;
@@ -37,7 +37,7 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
       _isPaginating = true;
     }
 
-    _reviewProvider.getReviews(page: _page).then((response) {
+    _provider.getRecommendations(page: _page).then((response) {
       _error = response.error;
       _canPaginate = response.canNextPage;
       _isPaginating = false;
@@ -70,7 +70,7 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
   @override
   void initState() {
     super.initState();
-    _reviewProvider = ReviewSocialListProvider();
+    _provider = RecommendationSocialListProvider();
   }
 
   @override
@@ -95,17 +95,17 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: const Text("💬 Reviews"),
+        middle: const Text("💡 Recommendations"),
         trailing: CupertinoButton(
           onPressed: () {
             showCupertinoModalPopup(
               context: context,
               builder: (context) {
                 return ReviewSortSheet(
-                  _reviewProvider.sort,
+                  _provider.sort,
                   (newSort) {
-                    final shouldFetchData = _reviewProvider.sort != newSort;
-                    _reviewProvider.sort = newSort;
+                    final shouldFetchData = _provider.sort != newSort;
+                    _provider.sort = newSort;
 
                     if (shouldFetchData) {
                       _fetchData();
@@ -120,8 +120,8 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
         ),
       ),
       child: ChangeNotifierProvider(
-        create: (_) => _reviewProvider,
-        child: Consumer<ReviewSocialListProvider>(
+        create: (_) => _provider,
+        child: Consumer<RecommendationSocialListProvider>(
           builder: (context, provider, child) {
             return _body(provider.items);
           },
@@ -130,29 +130,27 @@ class _ReviewSocialListPageState extends State<ReviewSocialListPage> {
     );
   }
 
-  Widget _body(List<ReviewWithContent> data) {
+  Widget _body(List<RecommendationWithContent> data) {
     switch (_state) {
       case ListState.done:
         return ListView.builder(
           itemCount: _canPaginate ? data.length + 1 : data.length,
           controller: _scrollController,
+          shrinkWrap: true,
           itemBuilder: (context, index) {
             if ((_canPaginate || _isPaginating) && index >= data.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 3, vertical: 5),
                 child: SizedBox(
-                  height: 205,
-                  child: ReviewWithContentShimmerCell()
+                  height: 200,
+                  child: SocialRecommendationLoading()
                 ),
               );
             }
 
             final content = data[index];
 
-            return SizedBox(
-              height: 205,
-              child: SocialReviewCell(index, content, _reviewProvider.likeReview)
-            );
+            return SocialRecommendationCell(content);
           },
         );
       case ListState.empty:

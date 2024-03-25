@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shimmer/shimmer.dart';
 
-class SocialCustomListsLoading extends StatelessWidget {
-  const SocialCustomListsLoading({super.key});
+class SocialRecommendationLoading extends StatelessWidget {
+  const SocialRecommendationLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class SocialCustomListsLoading extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: const SizedBox(
-                height: 125,
+                height: 200,
                 child: ColoredBox(color: CupertinoColors.systemGrey)
               )
             ),
