@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
@@ -29,7 +30,10 @@ class ProfileLegendCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true, cacheHeight: 350, cacheWidth: isGame ? 400 : 270),
+            SizedBox(
+              height: double.infinity,
+              child: ContentCell(url, title, forceRatio: true, cacheHeight: 350, cacheWidth: isGame ? 450 : 270)
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(

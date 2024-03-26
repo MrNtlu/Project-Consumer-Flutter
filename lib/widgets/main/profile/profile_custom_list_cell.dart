@@ -26,13 +26,14 @@ class ProfileCustomListCell extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-        border: Border.all(
-          color: CupertinoTheme.of(context).brightness == Brightness.dark ? const Color(0xFF212121) : CupertinoColors.systemGrey3,
-          width: 1.75,
+          border: Border.all(
+            color: CupertinoTheme.of(context).brightness == Brightness.dark ? const Color(0xFF212121) : CupertinoColors.systemGrey3,
+            width: 1.75,
+          ),
+          borderRadius: BorderRadius.circular(8),
         ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.all(6),
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
         child: Column(
           children: [
             Row(
@@ -62,13 +63,13 @@ class ProfileCustomListCell extends StatelessWidget {
                       itemCount: sortedContent.length,
                       itemBuilder: (context, index) {
                         final listContent = sortedContent[index];
-                        
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 3),
                           child: ContentCell(
                             listContent.imageURL ?? '',
-                            listContent.titleEn, 
-                            cornerRadius: 8, 
+                            listContent.titleEn,
+                            cornerRadius: 8,
                             forceRatio: true,
                             cacheHeight: 225,
                             cacheWidth: 175,

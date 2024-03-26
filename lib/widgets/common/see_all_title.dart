@@ -25,8 +25,8 @@ class SeeAllTitle extends StatelessWidget {
             onPressed: () {
               onTap();
             },
-            child: const Icon(CupertinoIcons.chevron_right
-          ))
+            child: const Icon(CupertinoIcons.chevron_right)
+          )
         ],
       ),
     );

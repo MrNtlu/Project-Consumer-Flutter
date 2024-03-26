@@ -237,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           context: context,
                           builder: (_) => const MessageDialog(
                             title: "Streak",
-                            "Streaks are counted based on your activity. When you add or make changes on your user list, watch later or reviews."
+                            "Streaks are counted based on your activity. When you add or make changes on your user list, watch later, recommendations or reviews."
                           )
                         );
                       },
@@ -402,7 +402,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         );
                       } else {
                         final data = item.legendContent[index];
-
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: GestureDetector(

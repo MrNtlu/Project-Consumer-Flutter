@@ -80,35 +80,33 @@ class GenreList extends StatelessWidget {
                   );
                 },
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-                        child: CachedNetworkImage(
-                          imageUrl: data.url,
-                          cacheKey: data.url,
-                          key: ValueKey<String>(data.url),
-                          maxHeightDiskCache: 150,
-                          errorListener: (_) {},
-                          progressIndicatorBuilder: (_, __, ___) => const SizedBox(
-                            height: 75,
-                            width: 129,
-                            child: ColoredBox(
-                              color: CupertinoColors.systemGrey2
-                            ),
+                      CachedNetworkImage(
+                        imageUrl: data.url,
+                        cacheKey: data.url,
+                        key: ValueKey<String>(data.url),
+                        maxHeightDiskCache: 250,
+                        maxWidthDiskCache: contentProvider.selectedContent == ContentType.game ? 300 : 200,
+                        errorListener: (_) {},
+                        progressIndicatorBuilder: (_, __, ___) => const SizedBox(
+                          height: 75,
+                          width: 129,
+                          child: ColoredBox(
+                            color: CupertinoColors.systemGrey2
                           ),
-                          fadeInDuration: const Duration(milliseconds: 0),
-                          fadeOutDuration: const Duration(milliseconds: 0),
                         ),
+                        fadeInDuration: const Duration(milliseconds: 0),
+                        fadeOutDuration: const Duration(milliseconds: 0),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: ColoredBox(
-                            color: CupertinoColors.black.withOpacity(0.6),
+                            color: CupertinoColors.black.withOpacity(0.75),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                               child: Text(

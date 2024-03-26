@@ -22,7 +22,7 @@ class ProfileReviewCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.all(6),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -30,7 +30,7 @@ class ProfileReviewCell extends StatelessWidget {
             CupertinoPageRoute(builder: (_) {
               return ReviewListPage(
                 data.content.titleEn.isNotEmpty ? data.content.titleEn : data.content.titleOriginal, data.contentID,
-                data.contentExternalID, data.contentExternalIntID, 
+                data.contentExternalID, data.contentExternalIntID,
                 data.contentType, _fetchData
               );
             })

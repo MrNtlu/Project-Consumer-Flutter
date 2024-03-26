@@ -77,7 +77,7 @@ class CustomListEntryCell extends StatelessWidget {
                 content.titleEn,
                 forceRatio: true,
                 cacheHeight: onAdd != null ? 400 : 325,
-                cacheWidth: onAdd != null ? 270 : 225,
+                cacheWidth: contentType == "Game" ? 450 : (onAdd != null ? 270 : 225),
               ),
             ),
             Expanded(

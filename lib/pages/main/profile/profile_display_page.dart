@@ -209,6 +209,62 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
               const SizedBox(height: 32),
               ProfileStats(item),
               const SizedBox(height: 8),
+              SeeAllTitle("💬 Reviews", (){}, shouldHideSeeAllButton: true),
+              SizedBox(
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
+                    itemExtent: 300,
+                    itemBuilder: (context, index) {
+                      if (item.reviews.isEmpty) {
+                        return const Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 64),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.reviews[index];
+
+                        return ProfileReviewCell(data, _fetchData);
+                      }
+                    },
+                  ),
+                ),
+              ),
+              SeeAllTitle("🗂️ Lists", (){}, shouldHideSeeAllButton: true),
+              SizedBox(
+                height: 125,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListView.builder(
+                    scrollDirection: item.customLists.isEmpty ? Axis.vertical : Axis.horizontal,
+                    physics: item.customLists.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                    itemCount: item.customLists.isEmpty ? 1 : item.customLists.length,
+                    itemExtent: 300,
+                    itemBuilder: (context, index) {
+                      if (item.customLists.isEmpty) {
+                        return const Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 64),
+                            child: Text("Nothing here."),
+                          ),
+                        );
+                      } else {
+                        final data = item.customLists[index];
+
+                        return ProfileCustomListCell(data);
+                      }
+                    },
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -277,65 +333,10 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                               data.imageUrl, data.titleEn,
                               timesFinished: data.timesFinished,
                               hoursPlayed: data.hoursPlayed,
+                              isGame: data.contentType == "game",
                             )
                           ),
                         );
-                      }
-                    },
-                  ),
-                ),
-              ),
-              SeeAllTitle("💬 Reviews", (){}, shouldHideSeeAllButton: true),
-              SizedBox(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: ListView.builder(
-                    scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
-                    physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                    itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
-                    itemExtent: 300,
-                    itemBuilder: (context, index) {
-                      if (item.reviews.isEmpty) {
-                        return const Align(
-                          alignment: Alignment.topCenter,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 64),
-                            child: Text("Nothing here."),
-                          ),
-                        );
-                      } else {
-                        final data = item.reviews[index];
-
-                        return ProfileReviewCell(data, _fetchData);
-                      }
-                    },
-                  ),
-                ),
-              ),
-              SeeAllTitle("🗂️ Lists", (){}, shouldHideSeeAllButton: true),
-              SizedBox(
-                height: 125,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: ListView.builder(
-                    scrollDirection: item.customLists.isEmpty ? Axis.vertical : Axis.horizontal,
-                    physics: item.customLists.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                    itemCount: item.customLists.isEmpty ? 1 : item.customLists.length,
-                    itemExtent: 300,
-                    itemBuilder: (context, index) {
-                      if (item.customLists.isEmpty) {
-                        return const Align(
-                          alignment: Alignment.topCenter,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 64),
-                            child: Text("Nothing here."),
-                          ),
-                        );
-                      } else {
-                        final data = item.customLists[index];
-
-                        return ProfileCustomListCell(data);
                       }
                     },
                   ),
