@@ -13,25 +13,27 @@ import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
+import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
+import 'package:watchlistfy/pages/main/recommendation/recommendation_profile_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_profile_list_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_button.dart';
+import 'package:watchlistfy/widgets/main/profile/profile_avatar_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_consume_later_cell.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_full_width_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_legend_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_level_bar.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_review_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_stats.dart';
+import 'package:watchlistfy/widgets/main/profile/profile_sub_menu_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_user_image.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -110,94 +112,28 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: const TextStyle(fontSize: 18),
                 overflow: TextOverflow.ellipsis,
               ),
-              trailing: _provider.item?.username != null ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.share),
-                    onPressed: () async {
-                      final url = '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}';
-                      try {
-                        final box = context.findRenderObject() as RenderBox?;
+              trailing: _provider.item?.username != null ? CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Icon(CupertinoIcons.share),
+                onPressed: () async {
+                  final url = '${Constants.BASE_DOMAIN_URL}/profile/${_provider.item!.username}';
+                  try {
+                    final box = context.findRenderObject() as RenderBox?;
 
-                        if (box != null) {
-                          Share.share(
-                            url,
-                            subject: 'Share Profile',
-                            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                          );
-                        }
-                      } catch (_) {
-                        await Clipboard.setData(ClipboardData(text: url));
-                        if (context.mounted) {
-                          showCupertinoDialog(context: context, builder: (_) => const MessageDialog("Copied to clipboard."));
-                        }
-                      }
-                    }
-                  ),
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.ellipsis_vertical),
-                    onPressed: () {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) {
-                          return CupertinoActionSheet(
-                            cancelButton: CupertinoActionSheetAction(
-                              isDestructiveAction: true,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Close'),
-                            ),
-                            actions: [
-                              CupertinoActionSheetAction(
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    CupertinoPageRoute(builder: (_) {
-                                      return const ReviewInteractionListPage();
-                                    })
-                                  );
-                                },
-                                child: const Text('Liked Reviews'),
-                              ),
-                              CupertinoActionSheetAction(
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    CupertinoPageRoute(builder: (_) {
-                                      return const CustomListInteractionListPage(isBookmark: false);
-                                    })
-                                  );
-                                },
-                                child: const Text('Liked Custom Lists'),
-                              ),
-                              CupertinoActionSheetAction(
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    CupertinoPageRoute(builder: (_) {
-                                      return const CustomListInteractionListPage();
-                                    })
-                                  );
-                                },
-                                child: const Text('Bookmarked Custom Lists'),
-                              ),
-                            ],
-                          );
-                        }
+                    if (box != null) {
+                      Share.share(
+                        url,
+                        subject: 'Share Profile',
+                        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
                       );
                     }
-                  ),
-                ],
+                  } catch (_) {
+                    await Clipboard.setData(ClipboardData(text: url));
+                    if (context.mounted) {
+                      showCupertinoDialog(context: context, builder: (_) => const MessageDialog("Copied to clipboard."));
+                    }
+                  }
+                }
               ) : null,
             ),
             child: CustomScrollView(
@@ -260,32 +196,84 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ProfileButton("Custom Lists", () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return const CustomListPage();
-                        })
-                      );
-                    }, CupertinoIcons.folder_fill),
-                    const SizedBox(width: 12),
-                    ProfileButton("User List", () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return const UserListPage();
-                        })
-                      ).then((value) => _fetchData());
-                    }, CupertinoIcons.list_bullet),
-                  ],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ColoredBox(
+                    color: CupertinoTheme.of(context).profileButton,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ProfileAvatarButton(
+                              "User List",
+                              FontAwesomeIcons.listUl,
+                              () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(builder: (_) {
+                                    return const UserListPage();
+                                  })
+                                );
+                              }
+                            ),
+                            ProfileAvatarButton(
+                              "Watch Later",
+                              FontAwesomeIcons.solidClock,
+                              () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(builder: (_) {
+                                    return const ConsumeLaterPage();
+                                  })
+                                ).then((value) => _fetchData());
+                              }
+                            ),
+                            ProfileAvatarButton(
+                              "Detailed Stats",
+                              FontAwesomeIcons.squarePollVertical,
+                              () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(builder: (_) {
+                                    return const ProfileStatsPage();
+                                  })
+                                );
+                              }
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
+              // const SizedBox(height: 16),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 12),
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.max,
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       ProfileButton("Custom Lists", () {
+                      // Navigator.of(context, rootNavigator: true).push(
+                      //   CupertinoPageRoute(builder: (_) {
+                      //     return const CustomListPage();
+                      //   })
+                      // );
+              //       }, CupertinoIcons.folder_fill),
+              //       const SizedBox(width: 12),
+              //       ProfileButton("User List", () {
+                      // Navigator.of(context, rootNavigator: true).push(
+                      //   CupertinoPageRoute(builder: (_) {
+                      //     return const UserListPage();
+                      //   })
+                      // ).then((value) => _fetchData());
+              //       }, CupertinoIcons.list_bullet),
+              //     ],
+              //   ),
+              // ),
               const SizedBox(height: 16),
               ProfileStats(item),
-              const SizedBox(height: 16),
-              const ProfileFullWidthButton(),
+              // const SizedBox(height: 16),
+              // const ProfileFullWidthButton(),
               SeeAllTitle("🕒 Watch Later", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
@@ -294,7 +282,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ).then((value) => _fetchData());
               }),
               SizedBox(
-                height: 200,
+                height: 165,
                 child: _provider.isLoading
                 ? const CupertinoActivityIndicator()
                 : Padding(
@@ -303,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     scrollDirection: item.watchLater.isEmpty ? Axis.vertical : Axis.horizontal,
                     physics: item.watchLater.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                     itemCount: item.watchLater.isEmpty ? 1 : item.watchLater.length,
-                    itemExtent: 200 * 2 / 3,
+                    itemExtent: 165 * 2 / 3,
                     itemBuilder: (context, index) {
                       if (item.watchLater.isEmpty) {
                         return const Center(
@@ -384,14 +372,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(
-                height: 200,
+                height: 165,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: ListView.builder(
                     scrollDirection: item.legendContent.isEmpty ? Axis.vertical : Axis.horizontal,
                     physics: item.legendContent.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                     itemCount: item.legendContent.isEmpty ? 1 : item.legendContent.length,
-                    itemExtent: 200 * 2 / 3,
+                    itemExtent: 165 * 2 / 3,
                     itemBuilder: (context, index) {
                       if (item.legendContent.isEmpty) {
                         return const Center(
@@ -436,38 +424,118 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              SeeAllTitle("💬 Reviews", () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return ReviewProfileListPage(_fetchData);
-                  })
-                );
-              }),
-              SizedBox(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: ListView.builder(
-                    scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
-                    physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                    itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
-                    itemExtent: 300,
-                    itemBuilder: (context, index) {
-                      if (item.reviews.isEmpty) {
-                        return const Align(
-                          alignment: Alignment.topCenter,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 64),
-                            child: Text("Nothing here."),
-                          ),
-                        );
-                      } else {
-                        final data = item.reviews[index];
+              // SeeAllTitle("💬 Reviews", () {
+              //   Navigator.of(context, rootNavigator: true).push(
+              //     CupertinoPageRoute(builder: (_) {
+              //       return ReviewProfileListPage(_fetchData);
+              //     })
+              //   );
+              // }),
+              // SizedBox(
+              //   height: 200,
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 8),
+              //     child: ListView.builder(
+              //       scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
+              //       physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+              //       itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
+              //       itemExtent: 300,
+              //       itemBuilder: (context, index) {
+              //         if (item.reviews.isEmpty) {
+              //           return const Align(
+              //             alignment: Alignment.topCenter,
+              //             child: Padding(
+              //               padding: EdgeInsets.only(top: 64),
+              //               child: Text("Nothing here."),
+              //             ),
+              //           );
+              //         } else {
+              //           final data = item.reviews[index];
 
-                        return ProfileReviewCell(data, _fetchData);
+              //           return ProfileReviewCell(data, _fetchData);
+              //         }
+              //       },
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  children: [
+                    ProfileSubMenuButton(
+                      "Custom Lists",
+                      FontAwesomeIcons.solidFolder,
+                      CupertinoColors.activeOrange,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const CustomListPage();
+                          })
+                        );
                       }
-                    },
-                  ),
+                    ),
+                    ProfileSubMenuButton(
+                      "Reviews",
+                      FontAwesomeIcons.solidComments,
+                      CupertinoColors.activeBlue,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return ReviewProfileListPage(_fetchData);
+                          })
+                        );
+                      }
+                    ),
+                    ProfileSubMenuButton(
+                      "Recommendations",
+                      FontAwesomeIcons.solidLightbulb,
+                      CupertinoColors.systemYellow,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const RecommendationProfileListPage();
+                          })
+                        );
+                      }
+                    ),
+                    ProfileSubMenuButton(
+                      "Liked Reviews",
+                      FontAwesomeIcons.solidHeart,
+                      CupertinoColors.systemRed,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const ReviewInteractionListPage();
+                          })
+                        );
+                      }
+                    ),
+                    ProfileSubMenuButton(
+                      "Liked Custom Lists",
+                      FontAwesomeIcons.solidHeart,
+                      CupertinoColors.systemRed,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const CustomListInteractionListPage(isBookmark: false);
+                          })
+                        );
+                      }
+                    ),
+                    ProfileSubMenuButton(
+                      "Bookmarked Custom Lists",
+                      FontAwesomeIcons.solidBookmark,
+                      CupertinoColors.black,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const CustomListInteractionListPage();
+                          })
+                        );
+                      }
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 16)

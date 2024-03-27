@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
@@ -12,12 +13,15 @@ import 'package:watchlistfy/providers/main/social/social_recommendation_provider
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
+import 'package:watchlistfy/widgets/common/loading_dialog.dart';
+import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/author_info_row.dart';
 
 class SocialRecommendationCell extends StatelessWidget {
   final RecommendationWithContent item;
+  final bool isProfile;
 
-  const SocialRecommendationCell(this.item, {super.key});
+  const SocialRecommendationCell(this.item, {this.isProfile = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -185,11 +189,13 @@ class SocialRecommendationCell extends StatelessWidget {
                   children: [
                     !socialProvider.isLoading
                     ? CupertinoButton(
-                      onPressed: () async {
+                      onPressed: isProfile
+                      ? null
+                      : () async {
                         socialProvider.setLoading(true);
 
                         provider.likeRecommendation(item.id, item.contentType).then((value) {
-                          if (context.mounted) {          
+                          if (context.mounted) {
                             socialProvider.setLoading(false);
 
                             if (value.error != null) {
@@ -209,6 +215,44 @@ class SocialRecommendationCell extends StatelessWidget {
                     )
                     : const CupertinoActivityIndicator(),
                     Text(item.popularity.toString()),
+                    if (item.isAuthor)
+                    const SizedBox(width: 6),
+                    if (item.isAuthor)
+                    CupertinoButton(
+                      onPressed: () async {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) {
+                            return SureDialog("Do you want to delete it?", () {
+                              showCupertinoDialog(
+                                context: context,
+                                builder: (_) {
+                                  return const LoadingDialog();
+                                }
+                              );
+
+                              provider.deleteRecommendation(item.id, item).then((value) {
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+
+                                  if (value.error != null) {
+                                    showCupertinoDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
+                                      }
+                                    );
+                                  }
+                                }
+                              });
+                            });
+                          }
+                        );
+                      },
+                      minSize: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                      child: const Icon(Icons.delete, size: 20),
+                    ),
                     const SizedBox(width: 24),
                     Expanded(
                       child: Align(

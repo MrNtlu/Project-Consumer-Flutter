@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:lottie/lottie.dart';
@@ -29,6 +30,7 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
+import 'package:watchlistfy/widgets/main/common/author_image.dart';
 import 'package:watchlistfy/widgets/main/settings/change_password_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/change_username_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
@@ -229,6 +231,83 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          AuthorImage(_userInfo!.image ?? '', size: 55),
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: CupertinoButton(
+                              minSize: 0,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                //TODO ON pressed open
+                                // ProfileImageList(), maybe use wrap instead of list and add more images with higher quality
+                                //TODO On image click, open image page
+                              },
+                              child: CircleAvatar(
+                                radius: 11,
+                                backgroundColor: AppColors().primaryColor,
+                                child: const Icon(Icons.edit, size: 14, color: CupertinoColors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: AutoSizeText(
+                               _userInfo!.username,
+                               minFontSize: 14,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                _userInfo!.email,
+                                style: const TextStyle(
+                                  color: CupertinoColors.systemGrey2
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_userInfo!.isPremium)
+                      Lottie.asset(
+                        "assets/lottie/premium.json",
+                        height: 36,
+                        width: 36,
+                        frameRate: FrameRate(60)
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
             SettingsList(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -334,10 +413,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         );
                       },
                     ),
-                    if (_userInfo != null)
-                    _userInfoText("Email", _userInfo!.email),
-                    if (_userInfo != null)
-                    _userInfoText("Membership", _userInfo!.isPremium ? "Premium" : "Free"),
                     if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.person_2_fill),
@@ -477,25 +552,4 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-
-  SettingsTile _userInfoText(String title, String data) => SettingsTile(
-    title: Row(
-      children: [
-        Text(title),
-        const SizedBox(width: 8),
-        Expanded(
-          child: AutoSizeText(
-            data,
-            textAlign: TextAlign.right,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold
-            ),
-            maxLines: 1,
-            maxFontSize: 16,
-            minFontSize: 12,
-          ),
-        ),
-      ],
-    )
-  );
 }

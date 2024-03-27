@@ -18,7 +18,7 @@ class ReviewUserListProvider extends BasePaginationProvider<ReviewWithContent> {
     if (page == 1) {
       pitems.clear();
     }
-    
+
     return getList(
       url: "${APIRoutes().reviewRoutes.getSelfReviews}?page=$page&sort=$sort",
     );
@@ -39,7 +39,7 @@ class ReviewUserListProvider extends BasePaginationProvider<ReviewWithContent> {
 
       if (response.getBaseMessageResponse().error == null) {
         pitems.remove(deleteItem);
-        notifyListeners();   
+        notifyListeners();
       }
 
       return response.getBaseMessageResponse();

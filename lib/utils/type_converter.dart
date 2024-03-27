@@ -46,6 +46,7 @@ class TypeConverter<T> {
   T convertToObject(Map<String, dynamic> response) {
     if (T == BasicUserInfo) {
       return BasicUserInfo(
+        response["_id"],
         response["fcm_token"] ?? "",
         response["is_oauth"] ?? false,
         response["is_premium"] ?? false,

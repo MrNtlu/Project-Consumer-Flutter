@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
@@ -46,7 +45,7 @@ class ProfileLegendCell extends StatelessWidget {
                       children: [
                         Icon(
                           hoursPlayed == null ? CupertinoIcons.flag_fill : CupertinoIcons.time_solid,
-                          size: 18,
+                          size: 16,
                           color: AppColors().primaryColor,
                         ),
                         Expanded(

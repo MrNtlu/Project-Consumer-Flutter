@@ -176,7 +176,7 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
           controller: _scrollController,
           itemBuilder: (context, index) {
             if (index == 0 && data.isEmpty) {
-              return const EmptyView("assets/lottie/empty.json", "No recommendations yet.");
+              return const EmptyView("assets/lottie/recommendations.json", "No recommendations yet.");
             }
 
             if ((_canPaginate || _isPaginating) && index >= data.length) {

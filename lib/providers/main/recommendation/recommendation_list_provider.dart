@@ -26,6 +26,19 @@ class RecommendationListProvider extends BasePaginationProvider<RecommendationWi
     );
   }
 
+  Future<BasePaginationResponse<RecommendationWithContent>> getUserRecommendations({
+    int page = 1,
+    required String userID
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+
+    return getList(
+      url: "${APIRoutes().recommendationRoutes.recommendationsByUserID}?page=$page&user_id=$userID&sort=$sort"
+    );
+  }
+
   Future<BaseMessageResponse> deleteRecommendation(
     String id,
     RecommendationWithContent deleteItem,

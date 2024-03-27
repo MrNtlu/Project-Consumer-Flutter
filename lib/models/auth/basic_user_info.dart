@@ -1,4 +1,5 @@
 class BasicUserInfo {
+  final String id;
   String fcmToken;
   final bool isOAuth;
   final bool isPremium;
@@ -12,8 +13,9 @@ class BasicUserInfo {
   final int streak;
 
   BasicUserInfo(
-    this.fcmToken, this.isOAuth, this.isPremium,
-    this.membershipType, this.oAuthType, this.canChangeUsername,
+    this.id, this.fcmToken, this.isOAuth,
+    this.isPremium, this.membershipType,
+    this.oAuthType, this.canChangeUsername,
     this.appNotification, this.email, this.image,
     this.username, this.streak,
   );

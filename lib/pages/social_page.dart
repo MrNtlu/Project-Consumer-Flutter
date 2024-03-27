@@ -38,8 +38,8 @@ class _SocialPageState extends State<SocialPage> {
   late final ScrollController _scrollController;
 
   final List<String> socialTabs = [
-    "🗂️ Lists",
     "💬 Reviews",
+    "🗂️ Lists",
     "💡 Recommendations",
     "🏆 Leaderboard",
   ];
@@ -168,7 +168,7 @@ class _SocialPageState extends State<SocialPage> {
 
   Widget _body(SocialProvider provider, SocialTabProvider tabProvider) {
     switch (tabProvider.selectedIndex) {
-      case 0: // Custom Lists
+      case 1: // Custom Lists
         return provider.networkState == NetworkState.success
         ? ListView.builder(
           itemCount: provider.item?.customList.isNotEmpty == true ? provider.item?.customList.length : 1,
@@ -188,7 +188,7 @@ class _SocialPageState extends State<SocialPage> {
           }
         )
         : const SocialCustomListsLoading();
-      case 1: // Reviews
+      case 0: // Reviews
         return provider.networkState == NetworkState.success
         ? ListView.builder(
           itemCount: provider.item?.reviews.length,
@@ -201,7 +201,7 @@ class _SocialPageState extends State<SocialPage> {
         )
         : const SocialReviewLoading();
       case 2: // Recommendations
-        
+
         return provider.networkState == NetworkState.success
         ? ListView.builder(
           shrinkWrap: true,

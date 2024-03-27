@@ -154,7 +154,7 @@ class _RecommendationSocialListPageState extends State<RecommendationSocialListP
           },
         );
       case ListState.empty:
-        return const EmptyView("assets/lottie/review.json", "No reviews yet.");
+        return const EmptyView("assets/lottie/recommendations.json", "No recommendations yet.");
       case ListState.error:
         return Center(
           child: Padding(
