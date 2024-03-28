@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:lottie/lottie.dart';
@@ -31,9 +29,9 @@ import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
-import 'package:watchlistfy/widgets/common/profile_image_list.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/author_image.dart';
+import 'package:watchlistfy/widgets/main/settings/change_image_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/change_password_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/change_username_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
@@ -197,6 +195,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _changeImage(String newImage) {
+    if (newImage == _userInfo?.image) {
+      return;
+    }
+
     setState(() {
       _state = DetailState.loading;
     });
@@ -210,11 +212,12 @@ class _SettingsPageState extends State<SettingsPage> {
         }),
       ).then((response){
         if (_state != DetailState.disposed) {
-          _userInfo = response.getBaseItemResponse<BasicUserInfo>().data;
-          error = _userInfo == null ? response.getBaseItemResponse<UserInfo>().message : null;
+          error = response.getBaseItemResponse<UserInfo>().error;
 
-          if (_userInfo != null && PurchaseApi().userInfo == null) {
+          if (error == null) {
+            _userInfo?.image = newImage;
             PurchaseApi().userInfo = _userInfo;
+            authProvider?.setBasicUserInfo(_userInfo);
           }
 
           setState(() {
@@ -298,33 +301,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                   context: context,
                                   barrierColor: CupertinoColors.black.withOpacity(0.75),
                                   builder: (_) {
-                                    final imageList = ProfileImageList();
 
-                                    return SafeArea(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            imageList,
-                                            const SizedBox(height: 16),
-                                            CupertinoButton.filled(
-                                              child: const Text("Change Image", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
-                                              onPressed: () {
-                                                print(imageList.selectedIndex);
-                                                // TODO ON pressed open
-                                                // TODO Update image
-                                                // TODO Extract it
-                                                // onChangePasswordPressed(
-                                                //   context,
-                                                //   oldPasswordTextEditingController.text,
-                                                //   newPasswordTextEditingController.text,
-                                                // );
-                                              }
-                                            )
-                                          ],
-                                        ),
-                                      )
+                                    return ChangeImageSheet(
+                                      currentImage: _userInfo?.image,
+                                      _changeImage,
                                     );
                                   }
                                 );

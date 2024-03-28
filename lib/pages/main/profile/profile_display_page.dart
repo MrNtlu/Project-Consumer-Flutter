@@ -12,6 +12,7 @@ import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_display_details_provider.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
+import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
@@ -177,35 +178,22 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16, top: 16),
+                      child: Text(
+                        "Since ${DateTime.parse(item.createdAt).dateToHumanDate()}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               ProfileLevelBar(item.level),
-              //TODO Friend request button
-              // const SizedBox(height: 16),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 12),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.max,
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       ProfileButton("Custom Lists", () {
-              //         Navigator.of(context, rootNavigator: true).push(
-              //           CupertinoPageRoute(builder: (_) {
-              //             return const CustomListPage();
-              //           })
-              //         );
-              //       }, CupertinoIcons.folder_fill),
-              //       const SizedBox(width: 12),
-              //       ProfileButton("User List", () {
-              //         Navigator.of(context, rootNavigator: true).push(
-              //           CupertinoPageRoute(builder: (_) {
-              //             return const UserListPage();
-              //           })
-              //         ).then((value) => _fetchData());
-              //       }, CupertinoIcons.list_bullet),
-              //     ],
-              //   ),
-              // ),
               const SizedBox(height: 32),
               ProfileStats(item),
               const SizedBox(height: 8),

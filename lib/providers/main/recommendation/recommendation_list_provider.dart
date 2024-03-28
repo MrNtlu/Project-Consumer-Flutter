@@ -26,6 +26,18 @@ class RecommendationListProvider extends BasePaginationProvider<RecommendationWi
     );
   }
 
+  Future<BasePaginationResponse<RecommendationWithContent>> getLikedRecommendations({
+    int page = 1,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+
+    return getList(
+      url: "${APIRoutes().recommendationRoutes.likedRecommendation}?page=$page&sort=$sort"
+    );
+  }
+
   Future<BasePaginationResponse<RecommendationWithContent>> getUserRecommendations({
     int page = 1,
     required String userID

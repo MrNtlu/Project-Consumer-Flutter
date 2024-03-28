@@ -61,6 +61,7 @@ class TypeConverter<T> {
         response["image"],
         response["username"],
         response["streak"] ?? 0,
+        response["created_at"],
       ) as T;
     } else if (T == UserInfo) {
       return UserInfo(
@@ -92,6 +93,7 @@ class TypeConverter<T> {
           ? response["game_total_score"]
           : (response["game_total_score"] as int).toDouble(),
         response["fcm_token"],
+        response["created_at"],
         response["username"],
         response["email"],
         response["image"],

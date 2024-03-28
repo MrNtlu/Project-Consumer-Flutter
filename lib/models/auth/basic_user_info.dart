@@ -8,16 +8,17 @@ class BasicUserInfo {
   final bool canChangeUsername;
   final Notification appNotification;
   final String email;
-  final String? image;
+  String? image;
   final String username;
   final int streak;
+  final String createdAt;
 
   BasicUserInfo(
     this.id, this.fcmToken, this.isOAuth,
     this.isPremium, this.membershipType,
     this.oAuthType, this.canChangeUsername,
     this.appNotification, this.email, this.image,
-    this.username, this.streak,
+    this.username, this.streak, this.createdAt,
   );
 }
 

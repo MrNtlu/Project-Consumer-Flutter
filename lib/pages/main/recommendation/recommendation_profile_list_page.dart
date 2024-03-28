@@ -142,7 +142,9 @@ class _RecommendationProfileListPageState extends State<RecommendationProfileLis
       case ListState.done:
         return ListView.separated(
           separatorBuilder: (_, __) => const CustomDivider(height: 1, opacity: 0.3),
-          itemCount: data.isEmpty ? 1 : data.length,
+          itemCount: data.isEmpty
+          ? 1
+          : _canPaginate ? data.length + 1 : data.length,
           controller: _scrollController,
           itemBuilder: (context, index) {
             if (data.isEmpty) {

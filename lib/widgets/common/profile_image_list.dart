@@ -4,9 +4,9 @@ import 'package:watchlistfy/static/constants.dart';
 
 // ignore: must_be_immutable
 class ProfileImageList extends StatefulWidget {
-  int selectedIndex = 0;
+  int selectedIndex;
 
-  ProfileImageList({selectedIndex, super.key});
+  ProfileImageList({this.selectedIndex = 0, super.key});
 
   @override
   State<ProfileImageList> createState() => _ProfileImageListState();

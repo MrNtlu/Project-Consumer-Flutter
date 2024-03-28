@@ -2,19 +2,27 @@ import 'dart:convert';
 
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
-import 'package:watchlistfy/providers/common/base_list_provider.dart';
+import 'package:watchlistfy/providers/common/base_pagination_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 
-class ReviewInteractionProvider extends BaseProvider<Review> {
+class ReviewInteractionProvider extends BasePaginationProvider<Review> {
   String sort = Constants.SortReviewRequests[0].request;
 
-  Future<BaseListResponse<Review>> getLikedReviews() => getList(
-    url: '${APIRoutes().reviewRoutes.likedReview}?sort=$sort'
-  );
+  Future<BasePaginationResponse<Review>> getLikedReviews({
+    int page = 1,
+  }) {
+    if (page == 1) {
+      pitems.clear();
+    }
+
+    return getList(
+      url: '${APIRoutes().reviewRoutes.likedReview}?page=$page&sort=$sort'
+    );
+  }
 
   Future<BaseMessageResponse> likeReview(
     String id,
@@ -31,7 +39,7 @@ class ReviewInteractionProvider extends BaseProvider<Review> {
 
       if (response.getBaseMessageResponse().error == null) {
         pitems.remove(deleteItem);
-        notifyListeners();   
+        notifyListeners();
       }
 
       return response.getBaseMessageResponse();

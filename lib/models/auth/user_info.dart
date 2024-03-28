@@ -24,6 +24,7 @@ class UserInfo {
   final double animeAvgScore;
   final double gameAvgScore;
   final String fcmToken;
+  final String createdAt;
 
   final String username;
   final String email;
@@ -42,7 +43,7 @@ class UserInfo {
     this.isFriendsWith, this.friendRequestCount, this.membershipType, this.animeCount,
     this.gameCount, this.movieCount, this.tvCount, this.movieWatchedTime, this.animeWatchedEpisodes,
     this.tvWatchedEpisodes, this.gameTotalHoursPlayed, this.movieAvgScore, this.tvAvgScore,
-    this.animeAvgScore, this.gameAvgScore, this.fcmToken, this.username, this.email,
+    this.animeAvgScore, this.gameAvgScore, this.fcmToken, this.createdAt, this.username, this.email,
     this.image, this.level, this.maxStreak, this.streak, this.watchLater,
     this.legendContent, this.reviews, this.customLists
   );

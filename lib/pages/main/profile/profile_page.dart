@@ -15,6 +15,7 @@ import 'package:watchlistfy/pages/main/profile/custom_list_interaction_list_page
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
+import 'package:watchlistfy/pages/main/recommendation/recommendation_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/recommendation/recommendation_profile_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_profile_list_page.dart';
@@ -507,6 +508,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.of(context, rootNavigator: true).push(
                           CupertinoPageRoute(builder: (_) {
                             return const ReviewInteractionListPage();
+                          })
+                        );
+                      }
+                    ),
+                    ProfileSubMenuButton(
+                      "Liked Recommendations",
+                      FontAwesomeIcons.solidHeart,
+                      CupertinoColors.systemRed,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const RecommendationInteractionListPage();
                           })
                         );
                       }

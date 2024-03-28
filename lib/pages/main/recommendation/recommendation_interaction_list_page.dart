@@ -1,10 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
-import 'package:watchlistfy/pages/main/recommendation/recommendation_create_page.dart';
 import 'package:watchlistfy/providers/main/recommendation/recommendation_list_provider.dart';
 import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
@@ -12,23 +9,14 @@ import 'package:watchlistfy/widgets/main/recommendation/recommendation_list_cell
 import 'package:watchlistfy/widgets/main/recommendation/recommendation_list_shimmer_cell.dart';
 import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
 
-class RecommendationContentList extends StatefulWidget {
-  final String? title;
-  final String contentID;
-  final String contentType;
-
-  const RecommendationContentList(
-    this.title,
-    this.contentID,
-    this.contentType,
-    {super.key}
-  );
+class RecommendationInteractionListPage extends StatefulWidget {
+  const RecommendationInteractionListPage({super.key});
 
   @override
-  State<RecommendationContentList> createState() => _RecommendationContentListState();
+  State<RecommendationInteractionListPage> createState() => _RecommendationInteractionListPageState();
 }
 
-class _RecommendationContentListState extends State<RecommendationContentList> {
+class _RecommendationInteractionListPageState extends State<RecommendationInteractionListPage> {
   ListState _state = ListState.init;
 
   late final RecommendationListProvider _provider;
@@ -49,10 +37,8 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
       _isPaginating = true;
     }
 
-    _provider.getRecommendations(
+    _provider.getLikedRecommendations(
       page: _page,
-      contentID: widget.contentID,
-      contentType: widget.contentType,
     ).then((response) {
       _error = response.error;
 
@@ -115,9 +101,8 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
 
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: AutoSizeText(
-                "💡 ${widget.title ?? ''} Recommendations", maxLines: 1, overflow: TextOverflow.ellipsis,
-                minFontSize: 13,
+              middle: const Text(
+                "💡 Liked Recommendations",
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -143,20 +128,6 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
                     },
                     padding: EdgeInsets.zero,
                     child: const Icon(CupertinoIcons.sort_down, size: 28)
-                  ),
-                  if (data.where((element) => element.isAuthor).isEmpty && _state != ListState.loading)
-                  CupertinoButton(
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                        return RecommendationCreatePage(
-                          widget.contentID,
-                          ContentType.values.where((element) => element.request == widget.contentType).first,
-                          _fetchData,
-                        );
-                      }));
-                    },
-                    padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.add, size: 28)
                   ),
                 ],
               ),
@@ -191,7 +162,7 @@ class _RecommendationContentListState extends State<RecommendationContentList> {
           }
         );
       case ListState.empty:
-        return const EmptyView("assets/lottie/recommendations.json", "No recommendations yet.");
+        return const EmptyView("assets/lottie/recommendations.json", "You didn't like anything yet.");
       case ListState.error:
         return Center(
           child: Padding(

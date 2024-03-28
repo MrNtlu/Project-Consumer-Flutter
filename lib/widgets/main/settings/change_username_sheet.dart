@@ -21,10 +21,10 @@ class ChangeUsernameSheet extends StatelessWidget {
       showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid password."));
       return;
     }
-    
+
     try {
       showCupertinoModalBottomSheet(
-        context: context, 
+        context: context,
         builder: (_) => const LoadingDialog()
       );
 
@@ -39,18 +39,18 @@ class ChangeUsernameSheet extends StatelessWidget {
       if (context.mounted) {
         Navigator.pop(context);
 
-        if (response.getBaseMessageResponse().error != null){          
+        if (response.getBaseMessageResponse().error != null){
           showCupertinoDialog(
-            context: context, 
+            context: context,
             builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          ); 
+          );
           return;
         }
-        
+
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => MessageDialog(
-            response.getBaseMessageResponse().message ?? 
+            response.getBaseMessageResponse().message ??
             "Successfully changed the username. Please logout and login to see the changes."
           )
         );
@@ -60,7 +60,7 @@ class ChangeUsernameSheet extends StatelessWidget {
         Navigator.pop(context);
 
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => ErrorDialog(error.toString())
         );
       }
@@ -97,10 +97,10 @@ class ChangeUsernameSheet extends StatelessWidget {
               )
             ),
             CupertinoButton.filled(
-              child: const Text("Change Username", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+              child: const Text("Change Username", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
               onPressed: () {
                 onChangePasswordPressed(
-                  context, 
+                  context,
                   usernameTextEditingController.text,
                 );
               }

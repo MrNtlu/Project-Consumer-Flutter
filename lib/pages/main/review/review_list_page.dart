@@ -176,9 +176,15 @@ class _ReviewListPageState extends State<ReviewListPage> {
       case ListState.done:
         return ListView.separated(
           separatorBuilder: (_, __) => const CustomDivider(height: 1, opacity: 0.3),
-          itemCount: data.length,
+          itemCount: data.isEmpty
+          ? 1
+          : _canPaginate ? data.length + 1 : data.length,
           controller: _scrollController,
           itemBuilder: (context, index) {
+            if (data.isEmpty) {
+              return const EmptyView("assets/lottie/review.json", "You didn't like anything yet.");
+            }
+
             if ((_canPaginate || _isPaginating) && index >= data.length) {
               return const ReviewListShimmerCell();
             }

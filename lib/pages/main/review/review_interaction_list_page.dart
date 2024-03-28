@@ -15,6 +15,8 @@ import 'package:watchlistfy/widgets/common/empty_view.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
+import 'package:watchlistfy/widgets/main/review/review_list_shimmer_cell.dart';
+import 'package:watchlistfy/widgets/main/review/review_sort_sheet.dart';
 
 class ReviewInteractionListPage extends StatefulWidget {
   const ReviewInteractionListPage({super.key});
@@ -25,17 +27,29 @@ class ReviewInteractionListPage extends StatefulWidget {
 
 class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
   ListState _state = ListState.init;
-  String? _error;
 
   late final ReviewInteractionProvider _provider;
   late final AuthenticationProvider _authProvider;
+  late final ScrollController _scrollController;
+
+  int _page = 1;
+  bool _canPaginate = false;
+  bool _isPaginating = false;
+  String? _error;
 
   void _fetchData() {
-    setState(() {
-      _state = ListState.loading;
-    });
+    if (_page == 1) {
+      setState(() {
+        _state = ListState.loading;
+      });
+    } else {
+      _canPaginate = false;
+      _isPaginating = true;
+    }
 
-    _provider.getLikedReviews().then((response) {
+    _provider.getLikedReviews(
+      page: _page,
+    ).then((response) {
       _error = response.error;
 
       if (_state != ListState.disposed) {
@@ -52,13 +66,15 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    if (_state == ListState.init) {
-      _authProvider = Provider.of<AuthenticationProvider>(context);
+  void _scrollHandler() {
+    if (
+      _canPaginate
+      && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
+      && !_scrollController.position.outOfRange
+    ) {
+      _page ++;
       _fetchData();
     }
-    super.didChangeDependencies();
   }
 
   @override
@@ -71,8 +87,21 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (_state == ListState.init) {
+      _scrollController = ScrollController();
+      _scrollController.addListener(_scrollHandler);
+      _authProvider = Provider.of<AuthenticationProvider>(context);
+      _fetchData();
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
+    _scrollController.removeListener(_scrollHandler);
     _state = ListState.disposed;
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -88,12 +117,22 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
               middle: const Text("💬 Liked Reviews"),
               trailing: CupertinoButton(
                 onPressed: () {
-                  // showCupertinoModalPopup(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return ReviewSortSheet(_fetchData, _provider);
-                  //   }
-                  // );
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) {
+                      return ReviewSortSheet(
+                        _provider.sort,
+                        (newSort) {
+                          final shouldFetchData = _provider.sort != newSort;
+                          _provider.sort = newSort;
+
+                          if (shouldFetchData) {
+                            _fetchData();
+                          }
+                        }
+                      );
+                    }
+                  );
                 },
                 padding: EdgeInsets.zero,
                 child: const Icon(CupertinoIcons.sort_down, size: 28)
@@ -111,10 +150,16 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
       case ListState.done:
         return ListView.separated(
           separatorBuilder: (_, __) => const CustomDivider(height: 1, opacity: 0.3),
-          itemCount: data.isEmpty ? 1 : data.length,
+          itemCount: data.isEmpty
+          ? 1
+          : _canPaginate ? data.length + 1 : data.length,
           itemBuilder: (context, index) {
             if (data.isEmpty) {
               return const EmptyView("assets/lottie/review.json", "You didn't like anything yet.");
+            }
+
+            if ((_canPaginate || _isPaginating) && index >= data.length) {
+              return const ReviewListShimmerCell();
             }
 
             final item = data[index];
@@ -131,10 +176,10 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(builder: (_) {
-                                return ProfileDisplayPage(item.author.username);
-                              })
-                            );
+                            CupertinoPageRoute(builder: (_) {
+                              return ProfileDisplayPage(item.author.username);
+                            })
+                          );
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

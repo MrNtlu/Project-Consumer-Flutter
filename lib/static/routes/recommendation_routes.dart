@@ -2,7 +2,7 @@ class RecommendationRoutes {
   late String _baseRecommendationRoute;
 
   late String recommendationByContent;
-  // late String likedRecommendation;
+  late String likedRecommendation;
   late String createRecommendation;
   late String deleteRecommendation;
   // late String updateRecommendation;
@@ -19,7 +19,7 @@ class RecommendationRoutes {
     recommendationsByUserID = '$_baseRecommendationRoute/profile';
     likeRecommendation = '$_baseRecommendationRoute/like';
     recommendationListSocial = '$_baseRecommendationRoute/social';
+    likedRecommendation = '$_baseRecommendationRoute/liked';
     // updateRecommendation = _baseRecommendationRoute;
-    // likedRecommendation = '$_baseRecommendationRoute/liked';
   }
 }
