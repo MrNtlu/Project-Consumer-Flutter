@@ -96,6 +96,7 @@ class UserRoutes {
   late String changeNotification;
   late String changeMembership;
   late String changeUsername;
+  late String changeImage;
   late String updateFCMToken;
   late String deleteUser;
 
@@ -112,6 +113,7 @@ class UserRoutes {
     updateFCMToken = '$_baseUserURL/token';
     changeMembership = '$_baseUserURL/membership';
     changeUsername = '$_baseUserURL/username';
+    changeImage = '$_baseUserURL/image';
     deleteUser = _baseUserURL;
   }
 }

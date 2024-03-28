@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +31,7 @@ import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/profile_image_list.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/author_image.dart';
 import 'package:watchlistfy/widgets/main/settings/change_password_sheet.dart';
@@ -193,6 +196,45 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void _changeImage(String newImage) {
+    setState(() {
+      _state = DetailState.loading;
+    });
+
+    try {
+      http.patch(
+        Uri.parse(APIRoutes().userRoutes.changeImage),
+        headers: UserToken().getBearerToken(),
+        body: json.encode({
+          "image": newImage,
+        }),
+      ).then((response){
+        if (_state != DetailState.disposed) {
+          _userInfo = response.getBaseItemResponse<BasicUserInfo>().data;
+          error = _userInfo == null ? response.getBaseItemResponse<UserInfo>().message : null;
+
+          if (_userInfo != null && PurchaseApi().userInfo == null) {
+            PurchaseApi().userInfo = _userInfo;
+          }
+
+          setState(() {
+            _state = _userInfo == null ? DetailState.error : DetailState.view;
+          });
+        }
+      }).onError((error, stackTrace) {
+        this.error = error.toString();
+        setState(() {
+          _state = DetailState.error;
+        });
+      });
+    } catch(error) {
+      this.error = error.toString();
+      setState(() {
+        _state = DetailState.error;
+      });
+    }
+  }
+
   @override
   void dispose() {
     _state = DetailState.disposed;
@@ -252,9 +294,40 @@ class _SettingsPageState extends State<SettingsPage> {
                               minSize: 0,
                               padding: EdgeInsets.zero,
                               onPressed: () {
-                                //TODO ON pressed open
-                                // ProfileImageList(), maybe use wrap instead of list and add more images with higher quality
-                                //TODO On image click, open image page
+                                showCupertinoModalBottomSheet(
+                                  context: context,
+                                  barrierColor: CupertinoColors.black.withOpacity(0.75),
+                                  builder: (_) {
+                                    final imageList = ProfileImageList();
+
+                                    return SafeArea(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            imageList,
+                                            const SizedBox(height: 16),
+                                            CupertinoButton.filled(
+                                              child: const Text("Change Image", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
+                                              onPressed: () {
+                                                print(imageList.selectedIndex);
+                                                // TODO ON pressed open
+                                                // TODO Update image
+                                                // TODO Extract it
+                                                // onChangePasswordPressed(
+                                                //   context,
+                                                //   oldPasswordTextEditingController.text,
+                                                //   newPasswordTextEditingController.text,
+                                                // );
+                                              }
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    );
+                                  }
+                                );
                               },
                               child: CircleAvatar(
                                 radius: 11,
@@ -328,13 +401,35 @@ class _SettingsPageState extends State<SettingsPage> {
               applicationType: ApplicationType.cupertino,
               sections: [
                 SettingsSection(
-                  title: const Text("Application"),
+                  // title: const Text("Application"),
                   tiles: [
                     CustomSettingsTile(child: ThemeSwitch(() {
                       setState(() {
                         _state = DetailState.view;
                       });
                     })),
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.settings),
+                      title: const Text('Application Settings'),
+                      onPressed: (ctx) {
+                        // TODO Application settings page
+                      },
+                    ),
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.notifications),
+                      title: const Text('Notification Settings'),
+                      onPressed: (ctx) {
+                        // TODO Account Settings Page
+                      },
+                    ),
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Account Settings'),
+                      onPressed: (ctx) {
+                        // TODO Account Settings Page
+                      },
+                    ),
+
                     const CustomSettingsTile(child: ContentSwitch()),
                     const CustomSettingsTile(child: UserListSwitch()),
                     const CustomSettingsTile(child: ConsumeLaterSwitch()),

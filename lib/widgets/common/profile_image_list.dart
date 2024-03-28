@@ -23,7 +23,7 @@ class _ProfileImageListState extends State<ProfileImageList> {
         itemBuilder: (context, index) {
           final image = Constants.ProfileImageList[index];
           final isSelected = widget.selectedIndex == index;
-      
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
             child: GestureDetector(
