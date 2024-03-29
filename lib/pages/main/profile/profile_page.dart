@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/request/id_body.dart';
+import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
@@ -464,6 +465,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
                   children: [
+                    ProfileSubMenuButton(
+                      "AI Recommendations",
+                      FontAwesomeIcons.robot,
+                      CupertinoColors.systemGrey,
+                      () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const AIRecommendationPage();
+                          })
+                        );
+                      }
+                    ),
                     ProfileSubMenuButton(
                       "Custom Lists",
                       FontAwesomeIcons.solidFolder,

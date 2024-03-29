@@ -34,7 +34,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
 
   void _fetchData() {
     setState(() {
-      _state = ListState.loading;  
+      _state = ListState.loading;
     });
 
     _recommendationsProvider.getRecommendations().then((response) {
@@ -57,7 +57,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
 
   void _generateData() {
     setState(() {
-      _state = ListState.loading;  
+      _state = ListState.loading;
     });
 
     _recommendationsProvider.generateRecommendations().then((response) {
@@ -113,6 +113,9 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
           final endDate = startDate?.add(Duration(days: deadlineDayRange));
 
           return CupertinoPageScaffold(
+            navigationBar: const CupertinoNavigationBar(
+              middle: Text("AI Recommendations"),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -173,10 +176,10 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                         ),
                       ),
                       CupertinoButton(
-                        child: const Icon(CupertinoIcons.info_circle), 
+                        child: const Icon(CupertinoIcons.info_circle),
                         onPressed: () {
                           showCupertinoModalBottomSheet(
-                            context: context, 
+                            context: context,
                             builder: (_) {
                               return SafeArea(
                                 child: Container(
@@ -211,7 +214,7 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                 Expanded(
                   child: Center(
                     child: CupertinoButton.filled(
-                      child: const Text("Generate Now!", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                      child: const Text("Generate Now!", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         _generateData();
                       }
@@ -222,7 +225,7 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                 Expanded(
                   child: Center(
                     child: CupertinoButton.filled(
-                      child: const Text("Refresh", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                      child: const Text("Refresh", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         _fetchData();
                       }
@@ -235,14 +238,14 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                     itemCount: provider.items.length,
                     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 250,
-                      childAspectRatio: 2/3, 
-                      crossAxisSpacing: 6, 
+                      childAspectRatio: 2/3,
+                      crossAxisSpacing: 6,
                       mainAxisSpacing: 6
-                    ), 
+                    ),
                     itemBuilder: (context, index) {
                       final content = provider.items[index];
                       final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
-                  
+
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
@@ -254,7 +257,7 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                                   return TVDetailsPage(content.id);
                                 case ContentType.anime:
                                   return AnimeDetailsPage(content.id);
-                                case ContentType.game: 
+                                case ContentType.game:
                                   return GameDetailsPage(content.id);
                                 default:
                                   return MovieDetailsPage(content.id);
@@ -274,7 +277,7 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                 Expanded(
                   child: Center(
                     child: CupertinoButton.filled(
-                      child: const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+                      child: const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true).push(
                           CupertinoPageRoute(builder: (_) {

@@ -9,7 +9,6 @@ import 'package:watchlistfy/models/main/common/request/id_Body.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/pages/main/recommendation/recommendation_content_list_page.dart';
-import 'package:watchlistfy/pages/main/trailer_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -24,16 +23,15 @@ import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_streaming_platforms_list.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
+import 'package:watchlistfy/widgets/main/common/details_button_row.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_main_info.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
 import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart';
-import 'package:watchlistfy/widgets/main/common/details_recommendations_title.dart';
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 import "package:collection/collection.dart";
-import 'package:watchlistfy/widgets/main/common/recommendation_button.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
   final String id;
@@ -113,7 +111,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   _provider.item?.consumeLater == null,
                   provider.isUserListLoading,
                   provider.isLoading,
-                  isAuthenticated: _authProvider.isAuthenticated,
                   onBookmarkTap: () {
                     if (!provider.isLoading && _authProvider.isAuthenticated) {
                       final item = provider.item;
@@ -227,10 +224,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             DetailsMainInfo(
                               item.malScore.toStringAsFixed(2),
                               item.status,
-                              "anime",
-                              item.id
                             ),
-                            const SizedBox(height: 32,),
                             AnimeDetailsInfoColumn(
                               item.titleOriginal,
                               item.titleJP,
@@ -265,35 +259,32 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 300, cacheHeight: 400)
                           ),
                         ),
-                        if (item.trailer != null)
-                        const SizedBox(height: 8),
-                        if (item.trailer != null)
-                        SizedBox(
-                          width: 80,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            minSize: 0,
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(CupertinoIcons.play_rectangle_fill, size: 18),
-                                SizedBox(width: 6),
-                                Text("Trailer", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                                return TrailerPage(trailerURL: item.trailer!);
-                              }));
-                            }
-                          ),
-                        )
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 16,),
+                const SizedBox(height: 12),
+                DetailsButtonRow(
+                  trailer: item.trailer,
+                  _state == DetailState.view ? (
+                    _provider.item?.title.isNotEmpty == true ? _provider.item!.title : _provider.item?.titleOriginal ?? _provider.item?.titleJP ?? ''
+                  ) : "",
+                  _authProvider.isAuthenticated,
+                  null,
+                  "anime",
+                  item.id,
+                  () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return RecommendationContentList(
+                          item.title.isNotEmpty ? item.title : item.titleOriginal,
+                          item.id,
+                          ContentType.anime.request,
+                        );
+                      })
+                    );
+                  }
+                ),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
                 DetailsGenreList(item.genres != null ? item.genres!.map((e) => e.name).toList() : [], (genre) {
@@ -339,38 +330,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     false,
                   )
                 ),
-                DetailsRecommendationsTitle(
-                  isRecommendationEmpty: item.recommendations.isEmpty,
-                  () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return RecommendationContentList(
-                          item.title.isNotEmpty ? item.title : item.titleOriginal,
-                          item.id,
-                          ContentType.anime.request,
-                        );
-                      })
-                    );
-                  }
-                ),
-                if(item.recommendations.isEmpty)
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: RecommendationButton(() {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return RecommendationContentList(
-                            item.title.isNotEmpty ? item.title : item.titleOriginal,
-                            item.id,
-                            ContentType.anime.request,
-                          );
-                        })
-                      );
-                    }),
-                  ),
-                ),
+                if(item.recommendations.isNotEmpty)
+                const DetailsTitle("Recommendations"),
                 if(item.recommendations.isNotEmpty)
                 SizedBox(
                   height: 150,

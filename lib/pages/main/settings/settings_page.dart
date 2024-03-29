@@ -1,20 +1,16 @@
 import 'dart:convert';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
-import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/pages/auth/policy_page.dart';
+import 'package:watchlistfy/pages/main/settings/settings_application_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
@@ -30,17 +26,13 @@ import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
-import 'package:watchlistfy/widgets/main/common/author_image.dart';
-import 'package:watchlistfy/widgets/main/settings/change_image_sheet.dart';
+import 'package:watchlistfy/widgets/common/whats_new_dialog.dart';
 import 'package:watchlistfy/widgets/main/settings/change_password_sheet.dart';
 import 'package:watchlistfy/widgets/main/settings/change_username_sheet.dart';
-import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
-import 'package:watchlistfy/widgets/main/settings/content_switch.dart';
-import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
-import 'package:watchlistfy/widgets/main/settings/settings_content_selection.dart';
+import 'package:watchlistfy/widgets/main/settings/settings_premium_promo.dart';
+import 'package:watchlistfy/widgets/main/settings/settings_profile.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
-import 'package:watchlistfy/widgets/main/settings/user_list_switch.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -276,93 +268,18 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          AuthorImage(_userInfo!.image ?? '', size: 55),
-                          Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: CupertinoButton(
-                              minSize: 0,
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                showCupertinoModalBottomSheet(
-                                  context: context,
-                                  barrierColor: CupertinoColors.black.withOpacity(0.75),
-                                  builder: (_) {
-
-                                    return ChangeImageSheet(
-                                      currentImage: _userInfo?.image,
-                                      _changeImage,
-                                    );
-                                  }
-                                );
-                              },
-                              child: CircleAvatar(
-                                radius: 11,
-                                backgroundColor: AppColors().primaryColor,
-                                child: const Icon(Icons.edit, size: 14, color: CupertinoColors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: AutoSizeText(
-                               _userInfo!.username,
-                               minFontSize: 14,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                _userInfo!.email,
-                                style: const TextStyle(
-                                  color: CupertinoColors.systemGrey2
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (_userInfo!.isPremium)
-                      Lottie.asset(
-                        "assets/lottie/premium.json",
-                        height: 36,
-                        width: 36,
-                        frameRate: FrameRate(60)
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            if (_userInfo != null)
+            const SizedBox(height: 16),
+            if (_userInfo != null)
+            SettingsProfile(_userInfo!, _changeImage),
+            if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
+            const SizedBox(height: 16),
+            if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
+            const SettingsPremiumPromo(),
 
             SettingsList(
               shrinkWrap: true,
+              contentPadding: const EdgeInsets.symmetric(vertical: 6),
               physics: const NeverScrollableScrollPhysics(),
               darkTheme: SettingsThemeData(
                 settingsListBackground: cupertinoTheme.bgColor,
@@ -381,7 +298,6 @@ class _SettingsPageState extends State<SettingsPage> {
               applicationType: ApplicationType.cupertino,
               sections: [
                 SettingsSection(
-                  // title: const Text("Application"),
                   tiles: [
                     CustomSettingsTile(child: ThemeSwitch(() {
                       setState(() {
@@ -392,102 +308,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       leading: const Icon(Icons.settings),
                       title: const Text('Application Settings'),
                       onPressed: (ctx) {
-                        // TODO Application settings page
-                      },
-                    ),
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.notifications),
-                      title: const Text('Notification Settings'),
-                      onPressed: (ctx) {
-                        // TODO Account Settings Page
-                      },
-                    ),
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.person),
-                      title: const Text('Account Settings'),
-                      onPressed: (ctx) {
-                        // TODO Account Settings Page
-                      },
-                    ),
-
-                    const CustomSettingsTile(child: ContentSwitch()),
-                    const CustomSettingsTile(child: UserListSwitch()),
-                    const CustomSettingsTile(child: ConsumeLaterSwitch()),
-                    if (globalProvider != null)
-                    CustomSettingsTile(
-                      child: SettingsTile(
-                        leading: Icon(
-                          globalProvider!.contentType == ContentType.movie
-                          ? FontAwesomeIcons.ticket
-                          : globalProvider!.contentType == ContentType.tv
-                            ? CupertinoIcons.tv_fill
-                            : globalProvider!.contentType == ContentType.anime
-                              ? FontAwesomeIcons.userNinja
-                              : FontAwesomeIcons.gamepad
-                        ),
-                        title: const Text('Default Selection'),
-                        trailing: SettingsContentSelection(globalProvider!),
-                      ),
-                    ),
-                    SettingsTile.navigation(
-                      leading: const FaIcon(FontAwesomeIcons.globe),
-                      title: Text('Region: ${globalProvider?.selectedCountryCode ?? 'US'}'),
-                      onPressed: (ctx) {
-                        showCountryPicker(
+                        showCupertinoModalBottomSheet(
                           context: context,
-                          useSafeArea: true,
-                          showPhoneCode: false,
-                          countryListTheme: CountryListThemeData(
-                            flagSize: 35,
-                            backgroundColor: CupertinoTheme.of(context).onBgColor,
-                            searchTextStyle: TextStyle(fontSize: 16, color: CupertinoTheme.of(context).bgTextColor),
-                            textStyle: TextStyle(fontSize: 16, color: CupertinoTheme.of(context).bgTextColor),
-                            bottomSheetHeight: 500,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(24),
-                              topRight: Radius.circular(24),
-                            ),
-                            inputDecoration: InputDecoration(
-                              labelText: 'Search',
-                              hintText: 'Start typing to search',
-                              hintStyle: const TextStyle(color: CupertinoColors.systemGrey2),
-                              prefixIcon: const Icon(CupertinoIcons.search),
-                              prefixIconColor: CupertinoTheme.of(context).bgTextColor,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: CupertinoTheme.of(context).bgTextColor.withOpacity(0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          onSelect: (Country country) {
-                            globalProvider?.setSelectedCountry(country.countryCode);
-                          },
+                          barrierColor: CupertinoColors.black.withOpacity(0.65),
+                          builder: (context) => const SettingsApplicationPage()
                         );
                       },
                     ),
-                  ]
-                ),
-                SettingsSection(
-                  title: const Text("Account"),
-                  tiles: [
-                    if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
-                    SettingsTile.navigation(
-                      leading: Lottie.asset(
-                        "assets/lottie/premium.json",
-                        height: 36,
-                        width: 36,
-                        frameRate: FrameRate(60)
-                      ),
-                      title: const Text('Upgrade Account'),
-                      onPressed: (ctx) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return const OffersSheet();
-                          })
-                        );
-                      },
-                    ),
+                    // SettingsTile.navigation(
+                    //   leading: const Icon(Icons.notifications),
+                    //   title: const Text('Notification Settings'),
+                    //   onPressed: (ctx) {
+                    // Account Settings Page
+                    //   },
+                    // ),
                     if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.person_2_fill),
@@ -514,7 +348,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.mail_solid),
-                      title: const Text('Feedback & Suggestions'),
+                      title: const Text('Contact Us'),
                       onPressed: (ctx) async {
                         final url = Uri.parse('mailto:mrntlu@gmail.com');
                         if (!await  launchUrl(url) && context.mounted) {
@@ -532,6 +366,16 @@ class _SettingsPageState extends State<SettingsPage> {
                         final InAppReview inAppReview = InAppReview.instance;
 
                         inAppReview.openStoreListing(appStoreId: 'id6476311748');
+                      },
+                    ),
+                    SettingsTile.navigation(
+                      leading: const Icon(CupertinoIcons.sparkles),
+                      title: const Text("What's New"),
+                      onPressed: (ctx) {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) => const WhatsNewDialog()
+                        );
                       },
                     ),
                     if (authProvider?.isAuthenticated == true)
@@ -562,27 +406,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     ),
                   ]
-                )
+                ),
               ],
             ),
-            // Social Media
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     CupertinoButton(
-            //       child: const FaIcon(FontAwesomeIcons.twitter),
-            //       onPressed: () {
-
-            //       }
-            //     ),
-            //     CupertinoButton(
-            //       child: const FaIcon(FontAwesomeIcons.instagram),
-            //       onPressed: () {
-
-            //       }
-            //     ),
-            //   ],
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

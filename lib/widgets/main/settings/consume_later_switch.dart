@@ -24,7 +24,28 @@ class ConsumeLaterSwitch extends StatelessWidget {
       },
       initialValue: isGrid,
       leading: Icon(isGrid ? Icons.grid_view_rounded : CupertinoIcons.list_bullet),
-      title: AutoSizeText('Watch Later ${isGrid ? 'Grid' : 'List'} View'),
+      title: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AutoSizeText(
+            'Watch Later ${isGrid ? 'Grid' : 'List'} View',
+            minFontSize: 13,
+            maxLines: 1,
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 3),
+          AutoSizeText(
+            "Watch later layout will be ${isGrid ? 'grid' : 'list'} view.",
+            minFontSize: 10,
+            maxLines: 2,
+            style: const TextStyle(
+              fontSize: 11,
+              color: CupertinoColors.systemGrey
+            ),
+          ),
+        ],
+      )
     );
   }
 }

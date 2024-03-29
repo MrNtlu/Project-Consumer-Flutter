@@ -15,6 +15,7 @@ class Constants {
 
   static const THEME_PREF = "theme";
   static const INTRODUCTION_PREF = "is_introduction_presented";
+  static const WHATSNEW_PREF = "whats_new";
   static const TOKEN_PREF = "refresh_token";
 
   static final ContentTags = ["popular", "upcoming", "top", "extra"];
@@ -120,6 +121,8 @@ class Constants {
   ];
 
   static final UserListUIModes = ["Expanded", "Compact",];
+
+  static final ProfileStatisticsUIModes = ["Expanded", "Collapsed",];
 
   static final ContentUIModes = ["Grid", "List",];
 

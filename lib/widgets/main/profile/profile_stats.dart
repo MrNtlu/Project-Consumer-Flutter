@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/auth/user_info.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_extra_info_text.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_info_text.dart';
 
@@ -15,7 +18,19 @@ class ProfileStats extends StatefulWidget {
 }
 
 class _ProfileStatsState extends State<ProfileStats> {
+  bool isInit = false;
   bool isExpanded = false;
+  late final GlobalProvider globalProvider;
+
+  @override
+  void didChangeDependencies() {
+    if (!isInit) {
+      globalProvider = Provider.of<GlobalProvider>(context);
+      isExpanded = globalProvider.statsMode == Constants.ProfileStatisticsUIModes.first;
+      isInit = true;
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {

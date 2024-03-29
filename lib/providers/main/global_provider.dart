@@ -7,6 +7,7 @@ class GlobalProvider extends ChangeNotifier {
   String userListMode = Constants.UserListUIModes.first;
   String contentMode = Constants.ContentUIModes.first;
   String consumeLaterMode = Constants.ConsumeLaterUIModes.first;
+  String statsMode = Constants.ProfileStatisticsUIModes.first;
   String selectedCountryCode = 'US';
   ContentType contentType = ContentType.movie;
 
@@ -16,6 +17,7 @@ class GlobalProvider extends ChangeNotifier {
     contentMode = sharedPref.getContentUIMode();
     selectedCountryCode = sharedPref.getSelectedCountry();
     consumeLaterMode = sharedPref.getConsumeLaterUIMode();
+    statsMode = sharedPref.getProfileStatisticsUIMode();
     contentType = ContentType.values
         .where((element) => element.request == sharedPref.getDefaultContent())
         .first;
@@ -42,6 +44,14 @@ class GlobalProvider extends ChangeNotifier {
       consumeLaterMode = mode;
       notifyListeners();
       SharedPref().setConsumeLaterUIMode(mode);
+    }
+  }
+
+  void setStatsMode(String mode) {
+    if (mode != statsMode) {
+      statsMode = mode;
+      notifyListeners();
+      SharedPref().setProfileStatisticsUIMode(mode);
     }
   }
 

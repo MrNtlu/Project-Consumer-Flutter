@@ -44,6 +44,27 @@ class SharedPref {
     return _sharedPreference.getBool(Constants.INTRODUCTION_PREF) ?? false;
   }
 
+  //What's New
+  void setShouldShowWhatsNewDialog(bool shouldShow) {
+    sharedPref?.setBool(Constants.WHATSNEW_PREF, shouldShow);
+  }
+
+  bool getShouldShowWhatsNewDialog() {
+    return _sharedPreference.getBool(Constants.WHATSNEW_PREF) ?? true;
+  }
+
+  final newVersion = "1_6_1";
+  final oldVersion = "1_6_0";
+
+  void setDidShowVersionPatch(bool didShow) {
+    sharedPref?.setBool(newVersion, didShow);
+    sharedPref?.remove(oldVersion);
+  }
+
+  bool getDidShowVersionPatch() {
+    return _sharedPreference.getBool(newVersion) ?? false;
+  }
+
   //OAuth Refresh Token
   void setTokenCredentials(String token) {
     sharedPref?.setString(Constants.TOKEN_PREF, token);
@@ -91,6 +112,15 @@ class SharedPref {
 
   String getConsumeLaterUIMode() {
     return _sharedPreference.getString("consume_later_ui_mode") ?? Constants.ConsumeLaterUIModes.first;
+  }
+
+  //Profile Stats Mode
+  void setProfileStatisticsUIMode(String mode) {
+    sharedPref?.setString("profile_statistics_ui_mode", mode);
+  }
+
+  String getProfileStatisticsUIMode() {
+    return _sharedPreference.getString("profile_statistics_ui_mode") ?? Constants.ProfileStatisticsUIModes.first;
   }
 
   //Country Selection

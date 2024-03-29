@@ -1,8 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -23,15 +21,13 @@ import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
-import 'package:watchlistfy/widgets/common/trailer_sheet.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
+import 'package:watchlistfy/widgets/main/common/details_button_row.dart';
 import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_navigation_bar.dart';
-import 'package:watchlistfy/widgets/main/common/details_recommendations_title.dart';
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
-import 'package:watchlistfy/widgets/main/common/recommendation_button.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
@@ -116,7 +112,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   _provider.item?.consumeLater == null,
                   provider.isUserListLoading,
                   provider.isLoading,
-                  isAuthenticated: _authProvider.isAuthenticated,
                   onBookmarkTap: () {
                     if (!provider.isLoading && _authProvider.isAuthenticated) {
                       final item = provider.item;
@@ -214,31 +209,26 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: SizedBox(
-                        height: item.title != item.titleOriginal ? 162 : 145,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              DetailsMainInfo(
-                                item.tmdbVote.toStringAsFixed(2),
-                                item.status,
-                                "movie",
-                                item.id,
-                              ),
-                              DetailsInfoColumn(
-                                item.title != item.titleOriginal,
-                                item.titleOriginal,
-                                item.length < 5
-                                ? "?"
-                                : item.length.toLength(),
-                                DateTime.parse(item.releaseDate).dateToHumanDate(),
-                                null, null,
-                              )
-                            ],
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            DetailsMainInfo(
+                              item.tmdbVote.toStringAsFixed(2),
+                              item.status,
+                            ),
+                            DetailsInfoColumn(
+                              item.title != item.titleOriginal,
+                              item.titleOriginal,
+                              item.length < 5
+                              ? "?"
+                              : item.length.toLength(),
+                              DateTime.parse(item.releaseDate).dateToHumanDate(),
+                              null, null,
+                            )
+                          ],
                         ),
                       ),
                     ),
@@ -257,37 +247,29 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 300, cacheHeight: 400)
                           ),
                         ),
-                        if (item.trailers != null && item.trailers!.isNotEmpty)
-                        const SizedBox(height: 8),
-                        if (item.trailers != null && item.trailers!.isNotEmpty)
-                        SizedBox(
-                          width: 85,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            minSize: 0,
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(CupertinoIcons.play_rectangle_fill, size: 18),
-                                SizedBox(width: 6),
-                                Text("Trailers", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                              ],
-                            ),
-                            onPressed: () {
-                              showCupertinoModalBottomSheet(
-                                context: context,
-                                barrierColor: CupertinoColors.black.withOpacity(0.75),
-                                builder: (_) => TrailerSheet(item.trailers!)
-                              );
-                            }
-                          ),
-                        )
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 16,),
+                const SizedBox(height: 12),
+                DetailsButtonRow(
+                  _provider.item?.title.isNotEmpty == true ? _provider.item!.title : _provider.item?.titleOriginal ?? '',
+                  _authProvider.isAuthenticated,
+                  item.trailers,
+                  "movie",
+                  item.id,
+                  () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(builder: (_) {
+                        return RecommendationContentList(
+                          item.title.isNotEmpty ? item.title : item.titleOriginal,
+                          item.id,
+                          ContentType.movie.request,
+                        );
+                      })
+                    );
+                  }
+                ),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
                 DetailsGenreList(item.genres, (genre) {
@@ -323,38 +305,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     true,
                   )
                 ),
-                DetailsRecommendationsTitle(
-                  isRecommendationEmpty: item.recommendations.isEmpty,
-                  () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return RecommendationContentList(
-                          item.title.isNotEmpty ? item.title : item.titleOriginal,
-                          item.id,
-                          ContentType.movie.request,
-                        );
-                      })
-                    );
-                  }
-                ),
-                if(item.recommendations.isEmpty)
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: RecommendationButton(() {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return RecommendationContentList(
-                            item.title.isNotEmpty ? item.title : item.titleOriginal,
-                            item.id,
-                            ContentType.movie.request,
-                          );
-                        })
-                      );
-                    }),
-                  ),
-                ),
+                if(item.recommendations.isNotEmpty)
+                const DetailsTitle("Recommendations"),
                 if(item.recommendations.isNotEmpty)
                 SizedBox(
                   height: 150,

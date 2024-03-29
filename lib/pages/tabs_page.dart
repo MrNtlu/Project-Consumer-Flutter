@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,13 +8,12 @@ import 'package:quick_actions/quick_actions.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
-import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
-import 'package:watchlistfy/pages/settings_page.dart';
+import 'package:watchlistfy/pages/main/settings/settings_page.dart';
 import 'package:watchlistfy/pages/social_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
@@ -25,6 +23,7 @@ import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:watchlistfy/widgets/common/whats_new_dialog.dart';
 
 class TabsPage extends StatefulWidget {
   static const routeName = "/";
@@ -44,7 +43,7 @@ class _TabsPageState extends State<TabsPage> {
   final List<Widget> _pages = [
     const HomePage(),
     const SocialPage(),
-    const AIRecommendationPage(),
+    // const AIRecommendationPage(),
     const SettingsPage(),
   ];
 
@@ -150,6 +149,8 @@ class _TabsPageState extends State<TabsPage> {
       await SharedPref().init().then((_) async {
         final token = SharedPref().getTokenCredentials();
         final isIntroductionPresented = SharedPref().getIsIntroductionPresented();
+        final canShowWhatsNewDialog = SharedPref().getShouldShowWhatsNewDialog();
+        final didShowVersionPatch = SharedPref().getDidShowVersionPatch();
         final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
         UserToken().setToken(token);
 
@@ -183,15 +184,27 @@ class _TabsPageState extends State<TabsPage> {
         });
 
         if (!isIntroductionPresented) {
-            await Future.delayed(const Duration(milliseconds: 300));
-            if (context.mounted) {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(builder: (_) {
-                  return const OnboardingPage();
-                })
-              );
-            }
+          await Future.delayed(const Duration(milliseconds: 300));
+          if (context.mounted) {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(builder: (_) {
+                return const OnboardingPage();
+              })
+            );
           }
+        }
+
+        if (isIntroductionPresented && canShowWhatsNewDialog && !didShowVersionPatch) {
+          await Future.delayed(const Duration(milliseconds: 300));
+          if (context.mounted) {
+            try {
+              showCupertinoDialog(
+                context: context,
+                builder: (_) => const WhatsNewDialog()
+              );
+            } catch(_) {}
+          }
+        }
       });
     }
   }
@@ -216,10 +229,10 @@ class _TabsPageState extends State<TabsPage> {
               icon: Icon(CupertinoIcons.person_2_fill),
               label: "Socials",
             ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.robot, size: 24),
-              label: "Assistant",
-            ),
+            // BottomNavigationBarItem(
+            //   icon: FaIcon(FontAwesomeIcons.robot, size: 24),
+            //   label: "Assistant",
+            // ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.gear, size: 24),
               label: "Settings",
