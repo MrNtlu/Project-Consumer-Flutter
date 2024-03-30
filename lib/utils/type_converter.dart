@@ -54,9 +54,19 @@ class TypeConverter<T> {
         response["oauth_type"] ?? -1,
         response["can_change_username"] ?? false,
         Notification(
-          response["app_notification"]["friend_request"] ?? false,
-          response["app_notification"]["review_likes"] ?? false
+          response["app_notification"]["promotions"] ?? true,
+          response["app_notification"]["updates"] ?? true,
+          response["app_notification"]["follows"] ?? true,
+          response["app_notification"]["review_likes"] ?? true,
         ),
+        response["mail_notification"] != null
+        ? Notification(
+          response["mail_notification"]["promotions"] ?? true,
+          response["mail_notification"]["updates"] ?? true,
+          response["mail_notification"]["follows"] ?? false,
+          response["mail_notification"]["review_likes"] ?? false,
+        )
+        : Notification(true, true, false, false),
         response["email"],
         response["image"],
         response["username"],

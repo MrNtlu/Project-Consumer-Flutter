@@ -11,6 +11,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/pages/auth/policy_page.dart';
 import 'package:watchlistfy/pages/main/settings/settings_application_page.dart';
+import 'package:watchlistfy/pages/main/settings/settings_notification_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
@@ -315,13 +316,30 @@ class _SettingsPageState extends State<SettingsPage> {
                         );
                       },
                     ),
-                    // SettingsTile.navigation(
-                    //   leading: const Icon(Icons.notifications),
-                    //   title: const Text('Notification Settings'),
-                    //   onPressed: (ctx) {
-                    // Account Settings Page
-                    //   },
-                    // ),
+                    if (_userInfo != null)
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.mark_email_unread_rounded),
+                      title: const Text('Mail Notification Settings'),
+                      onPressed: (ctx) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return SettingsNotificationPage(_userInfo!);
+                          })
+                        );
+                      },
+                    ),
+                    if (_userInfo != null)
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.notifications_on_rounded),
+                      title: const Text('In-App Notification Settings'),
+                      onPressed: (ctx) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return SettingsNotificationPage(_userInfo!, isMail: false);
+                          })
+                        );
+                      },
+                    ),
                     if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.person_2_fill),

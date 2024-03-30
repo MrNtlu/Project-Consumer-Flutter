@@ -86,6 +86,7 @@ class OAuthRoutes {
 
 class UserRoutes {
   late String _baseUserURL;
+  late String feedbackURL;
 
   late String info;
   late String profileFromUsername;
@@ -93,7 +94,8 @@ class UserRoutes {
   late String basic;
   late String forgotPassword;
   late String changePassword;
-  late String changeNotification;
+  late String changeAppNotification;
+  late String changeMailNotification;
   late String changeMembership;
   late String changeUsername;
   late String changeImage;
@@ -102,6 +104,7 @@ class UserRoutes {
 
   UserRoutes({baseURL}) {
     _baseUserURL = '$baseURL/user';
+    feedbackURL = '$baseURL/feedback';
 
     info = '$_baseUserURL/info';
     basic = '$_baseUserURL/basic';
@@ -109,7 +112,8 @@ class UserRoutes {
     profileFromUsername = '$_baseUserURL/profile';
     forgotPassword = '$_baseUserURL/forgot-password';
     changePassword = '$_baseUserURL/password';
-    changeNotification = '$_baseUserURL/notification';
+    changeAppNotification = '$_baseUserURL/notification/app';
+    changeMailNotification = '$_baseUserURL/notification/mail';
     updateFCMToken = '$_baseUserURL/token';
     changeMembership = '$_baseUserURL/membership';
     changeUsername = '$_baseUserURL/username';
