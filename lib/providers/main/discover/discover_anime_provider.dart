@@ -10,6 +10,7 @@ class DiscoverAnimeProvider with ChangeNotifier {
   String? studios;
   String? season;
   int? year;
+  String? streaming;
 
   void reset() {
     sort = Constants.SortRequests[0].request;
@@ -20,6 +21,7 @@ class DiscoverAnimeProvider with ChangeNotifier {
     studios = null;
     season = null;
     year = null;
+    streaming = null;
   }
 
   void setDiscover({
@@ -31,6 +33,7 @@ class DiscoverAnimeProvider with ChangeNotifier {
     String? studios,
     String? season,
     int? year,
+    String? streaming,
   }) {
     this.sort = sort;
     this.genre = genre;
@@ -39,5 +42,6 @@ class DiscoverAnimeProvider with ChangeNotifier {
     this.status = status;
     this.season = season;
     this.year = year;
+    this.streaming = streaming;
   }
 }

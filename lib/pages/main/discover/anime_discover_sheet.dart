@@ -3,6 +3,7 @@ import 'package:watchlistfy/providers/main/discover/discover_anime_provider.dart
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class AnimeDiscoverSheet extends StatelessWidget {
@@ -56,22 +57,33 @@ class AnimeDiscoverSheet extends StatelessWidget {
       yearList.map((e) => e.toString()).toList()
     );
 
+    final streamingPlatformList = DiscoverSheetImageList(
+      Constants.AnimeStreamingPlatformList.where(
+        (element) => element.request == provider.streaming
+      ).firstOrNull?.name,
+      Constants.AnimeStreamingPlatformList.map((e) => e.name).toList(),
+      Constants.AnimeStreamingPlatformList.map((e) => e.image).toList(),
+    );
+
     return SafeArea(
-      child: Container(
+      child: ColoredBox(
         color: CupertinoTheme.of(context).bgColor,
         child: Column(
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  DiscoverSheetFilterBody("Sort", sortList),
-                  DiscoverSheetFilterBody("Genre", genreList),
-                  DiscoverSheetFilterBody("Demographics", demographicList),
-                  DiscoverSheetFilterBody("Themes", themeList),
-                  DiscoverSheetFilterBody("Status", statusList),
-                  DiscoverSheetFilterBody("Season", seasonList),
-                  DiscoverSheetFilterBody("Year", yearDiscoverList),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DiscoverSheetFilterBody("Sort", sortList),
+                    DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    DiscoverSheetFilterBody("Genre", genreList),
+                    DiscoverSheetFilterBody("Demographics", demographicList),
+                    DiscoverSheetFilterBody("Themes", themeList),
+                    DiscoverSheetFilterBody("Status", statusList),
+                    DiscoverSheetFilterBody("Season", seasonList),
+                    DiscoverSheetFilterBody("Year", yearDiscoverList),
+                  ],
+                ),
               ),
             ),
             Row(
@@ -96,6 +108,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                       status: Constants.AnimeStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
                       season: Constants.AnimeSeasonList.where((element) => element.name == seasonList.selectedValue).firstOrNull?.request,
                       year: yearList.where((element) => element.toString() == yearDiscoverList.selectedValue?.toString()).firstOrNull,
+                      streaming: Constants.AnimeStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request,
                     );
                     fetchData(true);
                   },

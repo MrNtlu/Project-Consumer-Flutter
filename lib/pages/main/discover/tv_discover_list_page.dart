@@ -84,6 +84,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
       numOfSeason: _discoverProvider.numOfSeason,
       from: from,
       to: to,
+      streaming: _discoverProvider.streaming,
     );
 
     futureResponse.then((response) {

@@ -3,6 +3,7 @@ import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class TVDiscoverSheet extends StatelessWidget {
@@ -46,21 +47,32 @@ class TVDiscoverSheet extends StatelessWidget {
       Constants.TVPopularCountries.map((e) => e.name).toList()
     );
 
+    final streamingPlatformList = DiscoverSheetImageList(
+      Constants.TVStreamingPlatformList.where(
+        (element) => element.request == provider.streaming
+      ).firstOrNull?.name,
+      Constants.TVStreamingPlatformList.map((e) => e.name).toList(),
+      Constants.TVStreamingPlatformList.map((e) => e.image).toList(),
+    );
+
     return SafeArea(
-      child: Container(
+      child: ColoredBox(
         color: CupertinoTheme.of(context).bgColor,
         child: Column(
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  DiscoverSheetFilterBody("Sort", sortList),
-                  DiscoverSheetFilterBody("Genre", genreList),
-                  DiscoverSheetFilterBody("Status", statusList),
-                  DiscoverSheetFilterBody("Number of Seasons", numOfSeasonList),
-                  DiscoverSheetFilterBody("Release Date", decadeList),
-                  DiscoverSheetFilterBody("Country", countryList),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DiscoverSheetFilterBody("Sort", sortList),
+                    DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    DiscoverSheetFilterBody("Genre", genreList),
+                    DiscoverSheetFilterBody("Status", statusList),
+                    DiscoverSheetFilterBody("Number of Seasons", numOfSeasonList),
+                    DiscoverSheetFilterBody("Release Date", decadeList),
+                    DiscoverSheetFilterBody("Country", countryList),
+                  ],
+                ),
               ),
             ),
             Row(
@@ -77,15 +89,37 @@ class TVDiscoverSheet extends StatelessWidget {
                 CupertinoButton.filled(
                   onPressed: () {
                     Navigator.pop(context);
+
+                    final newSort = Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request;
+                    final newGenre = Constants.TVGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name;
+                    final newStatus = Constants.TVSeriesStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request;
+                    final newNumOfSeason = Constants.NumOfSeasonList.where((element) => element == numOfSeasonList.selectedValue).firstOrNull;
+                    final newDecade = Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request;
+                    final newCountry = Constants.TVPopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request;
+                    final newStreaming = Constants.TVStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
+
+                    final shouldFetchData = provider.sort != newSort
+                      || provider.genre != newGenre
+                      || provider.status != newStatus
+                      || provider.numOfSeason != newNumOfSeason
+                      || provider.streaming != newStreaming
+                      || provider.decade != newDecade
+                      || provider.country != newCountry
+                      || provider.streaming != newStreaming;
+
                     provider.setDiscover(
-                      sort: Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request,
-                      genre: Constants.TVGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
-                      status: Constants.TVSeriesStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
-                      numOfSeason: Constants.NumOfSeasonList.where((element) => element == numOfSeasonList.selectedValue).firstOrNull,
-                      decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
-                      country: Constants.TVPopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request,
+                      sort: newSort,
+                      genre: newGenre,
+                      status: newStatus,
+                      numOfSeason: newNumOfSeason,
+                      decade: newDecade,
+                      country: newCountry,
+                      streaming: newStreaming,
                     );
-                    fetchData(true);
+
+                    if (shouldFetchData) {
+                      fetchData(true);
+                    }
                   },
                   child: const Text(
                     "Done",

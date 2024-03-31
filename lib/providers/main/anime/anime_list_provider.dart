@@ -56,6 +56,7 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
     String? studios,
     String? season,
     int? year,
+    String? streaming,
   }) {
     if (page == 1) {
       pitems.clear();
@@ -70,6 +71,8 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
         demographics != null ? '&demographics=$demographics' : ''
       }${
         themes != null ? '&themes=$themes' : ''
+      }${
+        streaming != null ? '&streaming_platforms=$streaming' : ''
       }${
         studios != null ? '&studios=$studios' : ''
       }${

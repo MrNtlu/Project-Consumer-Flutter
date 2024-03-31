@@ -55,6 +55,7 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
     String? genres,
     int? from,
     int? to,
+    String? streaming,
   }) {
     if (page == 1) {
       pitems.clear();
@@ -69,6 +70,8 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
         productionCountry != null ? '&production_country=$productionCountry' : ''
       }${
         genres != null ? '&genres=$genres' : ''
+      }${
+        streaming != null ? '&streaming_platforms=$streaming' : ''
       }${
         from != null && to != null ? '&from=$from&to=$to' : ''
       }"

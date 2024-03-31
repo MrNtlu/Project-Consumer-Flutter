@@ -8,6 +8,7 @@ class DiscoverMovieProvider with ChangeNotifier {
   String? productionCompanies;
   String? decade;
   String? country;
+  String? streaming;
 
   void reset() {
     sort = Constants.SortRequests[0].request;
@@ -16,6 +17,7 @@ class DiscoverMovieProvider with ChangeNotifier {
     productionCompanies = null;
     decade = null;
     country = null;
+    streaming = null;
   }
 
   void setDiscover({
@@ -25,6 +27,7 @@ class DiscoverMovieProvider with ChangeNotifier {
     String? productionCompanies,
     String? decade,
     String? country,
+    String? streaming,
   }) {
     this.sort = sort;
     this.genre = genre;
@@ -32,5 +35,6 @@ class DiscoverMovieProvider with ChangeNotifier {
     this.productionCompanies = productionCompanies;
     this.decade = decade;
     this.country = country;
+    this.streaming = streaming;
   }
 }

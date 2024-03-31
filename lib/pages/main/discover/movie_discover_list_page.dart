@@ -83,6 +83,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
       productionCountry: _discoverProvider.country,
       from: from,
       to: to,
+      streaming: _discoverProvider.streaming,
     );
 
     futureResponse.then((response) {

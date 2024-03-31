@@ -3,6 +3,7 @@ import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class MovieDiscoverSheet extends StatelessWidget {
@@ -41,20 +42,31 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.MoviePopularCountries.map((e) => e.name).toList()
     );
 
+    final streamingPlatformList = DiscoverSheetImageList(
+      Constants.MovieStreamingPlatformList.where(
+        (element) => element.request == provider.streaming
+      ).firstOrNull?.name,
+      Constants.MovieStreamingPlatformList.map((e) => e.name).toList(),
+      Constants.MovieStreamingPlatformList.map((e) => e.image).toList(),
+    );
+
     return SafeArea(
-      child: Container(
+      child: ColoredBox(
         color: CupertinoTheme.of(context).bgColor,
         child: Column(
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  DiscoverSheetFilterBody("Sort", sortList),
-                  DiscoverSheetFilterBody("Genre", genreList),
-                  DiscoverSheetFilterBody("Status", statusList),
-                  DiscoverSheetFilterBody("Release Date", decadeList),
-                  DiscoverSheetFilterBody("Country", countryList),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DiscoverSheetFilterBody("Sort", sortList),
+                    DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    DiscoverSheetFilterBody("Genre", genreList),
+                    DiscoverSheetFilterBody("Status", statusList),
+                    DiscoverSheetFilterBody("Release Date", decadeList),
+                    DiscoverSheetFilterBody("Country", countryList),
+                  ],
+                ),
               ),
             ),
             Row(
@@ -71,14 +83,33 @@ class MovieDiscoverSheet extends StatelessWidget {
                 CupertinoButton.filled(
                   onPressed: () {
                     Navigator.pop(context);
+
+                    final newSort = Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request;
+                    final newGenre = Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name;
+                    final newStatus = Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request;
+                    final newDecade = Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request;
+                    final newCountry = Constants.MoviePopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request;
+                    final newStreaming = Constants.MovieStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
+
+                    final shouldFetchData = provider.sort != newSort
+                      || provider.genre != newGenre
+                      || provider.status != newStatus
+                      || provider.streaming != newStreaming
+                      || provider.decade != newDecade
+                      || provider.country != newCountry;
+
                     provider.setDiscover(
-                      sort: Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request,
-                      genre: Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
-                      status: Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
-                      decade: Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request,
-                      country: Constants.MoviePopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request,
+                      sort: newSort,
+                      genre: newGenre,
+                      status: newStatus,
+                      decade: newDecade,
+                      country: newCountry,
+                      streaming: newStreaming,
                     );
-                    fetchData(true);
+
+                    if (shouldFetchData) {
+                      fetchData(true);
+                    }
                   },
                   child: const Text(
                     "Done",

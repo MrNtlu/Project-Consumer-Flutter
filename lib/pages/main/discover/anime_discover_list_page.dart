@@ -76,6 +76,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
       studios: _discoverProvider.studios,
       season: _discoverProvider.season,
       year: _discoverProvider.year,
+      streaming: _discoverProvider.streaming,
     );
 
     futureResponse.then((response) {

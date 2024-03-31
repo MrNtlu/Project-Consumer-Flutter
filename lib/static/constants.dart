@@ -136,6 +136,40 @@ class Constants {
   ];
 
   //Streaming Platform List
+  static final MovieStreamingPlatformList = [
+    BackendRequestMapperWithImage("Netflix", "Netflix", image: "https://image.tmdb.org/t/p/w154/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"),
+    BackendRequestMapperWithImage("Disney Plus", "Disney Plus", image: "https://image.tmdb.org/t/p/w154/7YPdUs60C9qQQQfOFCgxpnF07D9.jpg"),
+    BackendRequestMapperWithImage("Apple TV Plus", "Apple TV Plus", image: "https://image.tmdb.org/t/p/original/2E03IAZsX4ZaUqM7tXlctEPMGWS.jpg"),
+    BackendRequestMapperWithImage("Amazon Prime Video", "Amazon Prime Video", image: "https://image.tmdb.org/t/p/w154/dQeAar5H991VYporEjUspolDarG.jpg"),
+    BackendRequestMapperWithImage("FilmBox+", "FilmBox+", image: "https://image.tmdb.org/t/p/w154/fbveJTcro9Xw2KuPIIoPPePHiwy.jpg"),
+    BackendRequestMapperWithImage("MUBI", "MUBI", image: "https://image.tmdb.org/t/p/original/fj9Y8iIMFUC6952HwxbGixTQPb7.jpg"),
+    BackendRequestMapperWithImage("Rakuten Viki", "Rakuten Viki", image: "https://image.tmdb.org/t/p/w154/5L2bwr9DhUg28oSMEPRCNwB2y7B.jpg"),
+    BackendRequestMapperWithImage("HBO Max", "HBO Max", image: "https://image.tmdb.org/t/p/w154/b8edpTaLCHFrUnhpGQIZJUpFX7T.jpg"),
+    BackendRequestMapperWithImage("Paramount Plus", "Paramount Plus", image: "https://image.tmdb.org/t/p/w154/h5DcR0J2EESLitnhR8xLG1QymTE.jpg"),
+    BackendRequestMapperWithImage("Hulu", "Hulu", image: "https://image.tmdb.org/t/p/w154/bxBlRPEPpMVDc4jMhSrTf2339DW.jpg"),
+    BackendRequestMapperWithImage("Sky Go", "Sky Go", image: "https://image.tmdb.org/t/p/w154/1UrT2H9x6DuQ9ytNhsSCUFtTUwS.jpg"),
+  ];
+
+  static final TVStreamingPlatformList = [
+    BackendRequestMapperWithImage("Netflix", "Netflix", image: "https://image.tmdb.org/t/p/w154/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"),
+    BackendRequestMapperWithImage("Disney Plus", "Disney Plus", image: "https://image.tmdb.org/t/p/w154/7YPdUs60C9qQQQfOFCgxpnF07D9.jpg"),
+    BackendRequestMapperWithImage("Apple TV Plus", "Apple TV Plus", image: "https://image.tmdb.org/t/p/original/2E03IAZsX4ZaUqM7tXlctEPMGWS.jpg"),
+    BackendRequestMapperWithImage("Amazon Prime Video", "Amazon Prime Video", image: "https://image.tmdb.org/t/p/w154/dQeAar5H991VYporEjUspolDarG.jpg"),
+    BackendRequestMapperWithImage("Rakuten Viki", "Rakuten Viki", image: "https://image.tmdb.org/t/p/w154/5L2bwr9DhUg28oSMEPRCNwB2y7B.jpg"),
+    BackendRequestMapperWithImage("HBO Max", "HBO Max", image: "https://image.tmdb.org/t/p/w154/b8edpTaLCHFrUnhpGQIZJUpFX7T.jpg"),
+    BackendRequestMapperWithImage("Sky Go", "Sky Go", image: "https://image.tmdb.org/t/p/w154/1UrT2H9x6DuQ9ytNhsSCUFtTUwS.jpg"),
+    BackendRequestMapperWithImage("Paramount Plus", "Paramount Plus", image: "https://image.tmdb.org/t/p/w154/h5DcR0J2EESLitnhR8xLG1QymTE.jpg"),
+    BackendRequestMapperWithImage("Canal+", "Canal+", image: "https://image.tmdb.org/t/p/w154/eBXzkFEupZjKaIKY7zBUaSdCY8I.jpg"),
+    BackendRequestMapperWithImage("Hulu", "Hulu", image: "https://image.tmdb.org/t/p/w154/bxBlRPEPpMVDc4jMhSrTf2339DW.jpg"),
+  ];
+
+  static final AnimeStreamingPlatformList = [
+    BackendRequestMapperWithImage("Crunchyroll", "Crunchyroll", image: "https://image.tmdb.org/t/p/w154/mXeC4TrcgdU6ltE9bCBCEORwSQR.jpg"),
+    BackendRequestMapperWithImage("Netflix", "Netflix", image: "https://image.tmdb.org/t/p/w154/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"),
+    BackendRequestMapperWithImage("Disney+", "Disney+", image: "https://image.tmdb.org/t/p/w154/7YPdUs60C9qQQQfOFCgxpnF07D9.jpg"),
+    BackendRequestMapperWithImage("Aniplus TV", "Aniplus TV", image: "https://image.tmdb.org/t/p/w300/eLdbuyJUQzLJwVuwrENT3ssQxFx.png"),
+  ];
+
   static final StreamingPlatformList = [
     BackendRequestMapperWithImage("Netflix", "Netflix", image: "https://image.tmdb.org/t/p/w154/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"),
     BackendRequestMapperWithImage("Disney Plus", "Disney Plus", image: "https://image.tmdb.org/t/p/w154/7YPdUs60C9qQQQfOFCgxpnF07D9.jpg"),
