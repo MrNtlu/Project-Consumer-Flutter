@@ -99,7 +99,8 @@ class SettingsNotificationPage extends StatelessWidget {
     final cupertinoTheme = CupertinoTheme.of(context);
 
     final promotionSwitch = NotificationSwitch(
-      "Promotion",
+      "Promotional",
+      "Receive occasional promotional ${isMail ? "emails" : "notifications"}. They won't be frequent.",
       FontAwesomeIcons.rectangleAd,
       value: isMail
       ? _userInfo.mailNotification.promotions
@@ -108,7 +109,8 @@ class SettingsNotificationPage extends StatelessWidget {
 
     final updateSwitch = NotificationSwitch(
       "What's New Update",
-      FontAwesomeIcons.solidNewspaper,
+      "Receive ${isMail ? "email" : "notification"} when there is a new update.",
+      CupertinoIcons.sparkles,
       value: isMail
       ? _userInfo.mailNotification.updates
       : _userInfo.appNotification.updates,

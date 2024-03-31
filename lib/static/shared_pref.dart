@@ -44,6 +44,15 @@ class SharedPref {
     return _sharedPreference.getBool(Constants.INTRODUCTION_PREF) ?? false;
   }
 
+  //Feedback
+  void setCanShowFeedbackDialog(bool canShow) {
+    sharedPref?.setBool(Constants.FEEDBACK_PREF, canShow);
+  }
+
+  bool getCanShowFeedbackDialog() {
+    return _sharedPreference.getBool(Constants.FEEDBACK_PREF) ?? true;
+  }
+
   //What's New
   void setShouldShowWhatsNewDialog(bool shouldShow) {
     sharedPref?.setBool(Constants.WHATSNEW_PREF, shouldShow);

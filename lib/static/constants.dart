@@ -16,6 +16,7 @@ class Constants {
   static const THEME_PREF = "theme";
   static const INTRODUCTION_PREF = "is_introduction_presented";
   static const WHATSNEW_PREF = "whats_new";
+  static const FEEDBACK_PREF = "feedback";
   static const TOKEN_PREF = "refresh_token";
 
   static final ContentTags = ["popular", "upcoming", "top", "extra"];

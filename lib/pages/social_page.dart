@@ -91,9 +91,9 @@ class _SocialPageState extends State<SocialPage> {
                   Navigator.of(context, rootNavigator: true).push(
                     CupertinoPageRoute(builder: (_) {
                       switch (tabProvider.selectedIndex) {
-                        case 0:
-                          return const CustomListSocialListPage();
                         case 1:
+                          return const CustomListSocialListPage();
+                        case 0:
                           return const ReviewSocialListPage();
                         case 2:
                           return const RecommendationSocialListPage();

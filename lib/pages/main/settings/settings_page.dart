@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/pages/auth/policy_page.dart';
 import 'package:watchlistfy/pages/main/settings/settings_application_page.dart';
+import 'package:watchlistfy/pages/main/settings/settings_feedback_page.dart';
 import 'package:watchlistfy/pages/main/settings/settings_notification_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
@@ -364,38 +366,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         );
                       },
                     ),
-                    SettingsTile.navigation(
-                      leading: const Icon(CupertinoIcons.mail_solid),
-                      title: const Text('Contact Us'),
-                      onPressed: (ctx) async {
-                        final url = Uri.parse('mailto:mrntlu@gmail.com');
-                        if (!await  launchUrl(url) && context.mounted) {
-                          showCupertinoDialog(
-                            context: context,
-                            builder: (_) => const MessageDialog("You can send email to, mrntlu@gmail.com", title: "Contact Us")
-                          );
-                        }
-                      },
-                    ),
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.reviews_rounded),
-                      title: const Text('Review & Support Us'),
-                      onPressed: (ctx) async {
-                        final InAppReview inAppReview = InAppReview.instance;
-
-                        inAppReview.openStoreListing(appStoreId: 'id6476311748');
-                      },
-                    ),
-                    SettingsTile.navigation(
-                      leading: const Icon(CupertinoIcons.sparkles),
-                      title: const Text("What's New"),
-                      onPressed: (ctx) {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) => const WhatsNewDialog()
-                        );
-                      },
-                    ),
                     if (authProvider?.isAuthenticated == true)
                     SettingsTile.navigation(
                       leading: const Icon(Icons.logout_rounded),
@@ -425,6 +395,54 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ]
                 ),
+                SettingsSection(
+                  tiles: [
+                    SettingsTile.navigation(
+                      leading: const Icon(CupertinoIcons.mail_solid),
+                      title: const Text('Contact Us'),
+                      onPressed: (ctx) async {
+                        final url = Uri.parse('mailto:mrntlu@gmail.com');
+                        if (!await  launchUrl(url) && context.mounted) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) => const MessageDialog("You can send email to, mrntlu@gmail.com", title: "Contact Us")
+                          );
+                        }
+                      },
+                    ),
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.rate_review_rounded),
+                      title: const Text('Support Us'),
+                      onPressed: (ctx) async {
+                        final InAppReview inAppReview = InAppReview.instance;
+
+                        inAppReview.openStoreListing(appStoreId: 'id6476311748');
+                      },
+                    ),
+                    if (authProvider?.isAuthenticated == true)
+                    SettingsTile.navigation(
+                      leading: const Icon(FontAwesomeIcons.clipboardList),
+                      title: const Text('Survey'),
+                      onPressed: (ctx) async {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(builder: (_) {
+                            return const SettingsFeedbackPage();
+                          })
+                        );
+                      },
+                    ),
+                    SettingsTile.navigation(
+                      leading: const Icon(CupertinoIcons.sparkles),
+                      title: const Text("What's New"),
+                      onPressed: (ctx) {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (_) => const WhatsNewDialog()
+                        );
+                      },
+                    ),
+                  ],
+                )
               ],
             ),
             Row(

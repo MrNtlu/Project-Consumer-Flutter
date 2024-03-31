@@ -13,6 +13,7 @@ Major UI Improvements 🎉
 - Profile design changed.
 - Content details design changed.
 - Settings design changed.
+- Notification settings added.
 - AI Recommendations moved to Profile.
 - Recommendations page added.
 - Recommendation bug fixes.
@@ -72,6 +73,7 @@ Major UI Improvements 🎉
           isDestructiveAction: true,
           child: const Text("Don't show again!", style: TextStyle(fontSize: 12)),
           onPressed: () {
+            SharedPref().setShouldShowWhatsNewDialog(false);
             Navigator.pop(context);
           },
         ),
@@ -79,6 +81,7 @@ Major UI Improvements 🎉
           isDefaultAction: true,
           child: const Text("OK!"),
           onPressed: () {
+            SharedPref().setDidShowVersionPatch(true);
             Navigator.pop(context);
           },
         )

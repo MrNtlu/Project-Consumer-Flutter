@@ -126,6 +126,8 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             if (!authenticationProvider.isAuthenticated)
             const InfoCard(),
+            if (!authenticationProvider.isAuthenticated)
+            const SizedBox(height: 20),
             if (!Platform.isAndroid)
             const SizedBox(height: 20),
             const GenreList(),
