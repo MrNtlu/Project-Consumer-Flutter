@@ -4,6 +4,7 @@ import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_pro
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 
 class ConsumeLaterSortFilterSheet extends StatelessWidget {
@@ -30,7 +31,7 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
       ).firstOrNull?.value,
       ContentType.values.map((e) => e.value).toList(),
     );
-    
+
     final combinedGenres = combineUniqueLists(
       [
         Constants.MovieGenreList.map((e) => e.name).toList(),
@@ -45,6 +46,14 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
         (element) => element == _provider.genre
       ).firstOrNull,
       combinedGenres,
+    );
+
+    final streamingPlatformList = DiscoverSheetImageList(
+      Constants.StreamingPlatformList.where(
+        (element) => element.request == _provider.streaming
+      ).firstOrNull?.name,
+      Constants.StreamingPlatformList.map((e) => e.name).toList(),
+      Constants.StreamingPlatformList.map((e) => e.image).toList(),
     );
 
     final sortList = DiscoverSheetList(
@@ -69,6 +78,7 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
             DiscoverSheetFilterBody("Sort", sortList),
             DiscoverSheetFilterBody("Type", filterList),
             DiscoverSheetFilterBody("Genre", genreList),
+            DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
             const SizedBox(height: 16),
             CupertinoButton(
               onPressed: () {
@@ -76,14 +86,17 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
                 final newSort = Constants.SortConsumeLaterRequests.where((element) => element.name == sortList.selectedValue!).first.request;
                 final newFilter = ContentType.values.where((element) => element.value == filterList.selectedValue).firstOrNull;
                 final newGenre = combinedGenres.where((element) => element == genreList.selectedValue).firstOrNull;
+                final newStreaming = Constants.StreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
 
-                final shouldFetchData = _provider.sort != newSort 
+                final shouldFetchData = _provider.sort != newSort
                   || _provider.filterContent != newFilter
-                  || _provider.genre != newGenre;
+                  || _provider.genre != newGenre
+                  || _provider.streaming != newStreaming;
 
                 _provider.setSort(newSort);
                 _provider.setContentType(newFilter);
                 _provider.setGenre(newGenre);
+                _provider.setStreamingPlatform(newStreaming);
 
                 if (shouldFetchData) {
                   _fetchData();

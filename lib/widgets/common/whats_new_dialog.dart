@@ -8,22 +8,22 @@ class WhatsNewDialog extends StatelessWidget {
   const WhatsNewDialog({super.key});
 
   final String patchNotes = """
-Major UI Improvements 🎉
+QoL Improvements 🎉
 
+- Watch Later, streaming filter added.
+- Anime genre images improved.
+- No internet error added.
+- User list automatic mark as finished added.
+- User list design improved.
+Previously,
 - Profile design changed.
-- Content details design changed.
 - Settings design changed.
 - Notification settings added.
 - AI Recommendations moved to Profile.
-- Recommendations page added.
-- Recommendation bug fixes.
-- User List bug fixed.
-- Genre design improved.
-- Pagination loading bug fixed.
 - UI bug fixes.
   """;
 
-  final String version = "1.6.1";
+  final String version = "1.6.2";
 
   @override
   Widget build(BuildContext context) {

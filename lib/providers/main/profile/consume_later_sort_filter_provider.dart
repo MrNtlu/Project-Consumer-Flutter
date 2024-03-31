@@ -19,7 +19,7 @@ class ConsumeLaterSortFilterProvider with ChangeNotifier {
   ContentType? get filterContent => _filterContent;
 
   void setContentType(ContentType? contentType) {
-    if (_filterContent != contentType) {  
+    if (_filterContent != contentType) {
       _filterContent = contentType;
       notifyListeners();
     }
@@ -32,6 +32,17 @@ class ConsumeLaterSortFilterProvider with ChangeNotifier {
   void setGenre(String? genre) {
     if (_genre != genre) {
       _genre = genre;
+      notifyListeners();
+    }
+  }
+
+  String? _streaming;
+
+  String? get streaming => _streaming;
+
+  void setStreamingPlatform(String? streaming) {
+    if (_streaming != streaming) {
+      _streaming = streaming;
       notifyListeners();
     }
   }

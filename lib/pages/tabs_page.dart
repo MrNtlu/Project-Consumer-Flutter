@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
@@ -21,6 +22,7 @@ import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/static/token.dart';
+import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/feedback_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -156,9 +158,11 @@ class _TabsPageState extends State<TabsPage> {
         final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
         UserToken().setToken(token);
 
+        bool isInternetAvailable = await InternetConnectionChecker().hasConnection;
+
         if (token == null) {
           authProvider.initAuthentication(false, null);
-        } else {
+        } else if (isInternetAvailable) {
           await RefreshToken(token).refresh().then((value) async {
             if (value.token != null) {
               await PurchaseApi().userInit();
@@ -179,6 +183,13 @@ class _TabsPageState extends State<TabsPage> {
               authProvider.initAuthentication(false, null);
             }
           });
+        } else {
+          if (context.mounted) {
+            showCupertinoDialog(
+              context: context,
+              builder: (_) => const ErrorDialog("No internet connection! You need internet access to use the app.")
+            );
+          }
         }
 
         setState(() {

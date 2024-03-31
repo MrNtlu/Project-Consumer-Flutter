@@ -135,6 +135,22 @@ class Constants {
     BackendRequestMapper("3 Months", "3months"),
   ];
 
+  //Streaming Platform List
+  static final StreamingPlatformList = [
+    BackendRequestMapperWithImage("Netflix", "Netflix", image: "https://image.tmdb.org/t/p/w154/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"),
+    BackendRequestMapperWithImage("Disney Plus", "Disney Plus", image: "https://image.tmdb.org/t/p/w154/7YPdUs60C9qQQQfOFCgxpnF07D9.jpg"),
+    BackendRequestMapperWithImage("Apple TV Plus", "Apple TV Plus", image: "https://image.tmdb.org/t/p/original/2E03IAZsX4ZaUqM7tXlctEPMGWS.jpg"),
+    BackendRequestMapperWithImage("Amazon Prime Video", "Amazon Prime Video", image: "https://image.tmdb.org/t/p/w154/dQeAar5H991VYporEjUspolDarG.jpg"),
+    BackendRequestMapperWithImage("FilmBox+", "FilmBox+", image: "https://image.tmdb.org/t/p/w154/fbveJTcro9Xw2KuPIIoPPePHiwy.jpg"),
+    BackendRequestMapperWithImage("Crunchyroll", "Crunchyroll", image: "https://image.tmdb.org/t/p/w154/mXeC4TrcgdU6ltE9bCBCEORwSQR.jpg"),
+    BackendRequestMapperWithImage("Rakuten Viki", "Rakuten Viki", image: "https://image.tmdb.org/t/p/w154/5L2bwr9DhUg28oSMEPRCNwB2y7B.jpg"),
+    BackendRequestMapperWithImage("HBO Max", "HBO Max", image: "https://image.tmdb.org/t/p/w154/b8edpTaLCHFrUnhpGQIZJUpFX7T.jpg"),
+    BackendRequestMapperWithImage("Sky Go", "Sky Go", image: "https://image.tmdb.org/t/p/w154/1UrT2H9x6DuQ9ytNhsSCUFtTUwS.jpg"),
+    BackendRequestMapperWithImage("Paramount Plus", "Paramount Plus", image: "https://image.tmdb.org/t/p/w154/h5DcR0J2EESLitnhR8xLG1QymTE.jpg"),
+    BackendRequestMapperWithImage("Canal+", "Canal+", image: "https://image.tmdb.org/t/p/w154/eBXzkFEupZjKaIKY7zBUaSdCY8I.jpg"),
+    BackendRequestMapperWithImage("Hulu", "Hulu", image: "https://image.tmdb.org/t/p/w154/bxBlRPEPpMVDc4jMhSrTf2339DW.jpg"),
+  ];
+
   //Genre List
   static final MovieGenreList = [
     NameUrl("Discover", "https://image.tmdb.org/t/p/w154/vv5a8u6e40kyH0Hp6HuamAgzRai.jpg"),
@@ -175,22 +191,22 @@ class Constants {
   ];
 
   static final AnimeGenreList = [
-    NameUrl("Discover", "https://www.themoviedb.org/t/p/w154/mRwV4W2BAEpte7xlawJP4fsBpmS.jpg"),
-    NameUrl("Action", "https://www.themoviedb.org/t/p/w154/xVXbesCdNt37b3Kh6d3FgOtdajB.jpg"),
-    NameUrl("Adventure", "https://www.themoviedb.org/t/p/w154/mBxsapX4DNhH1XkOlLp15He5sxL.jpg"),
-    NameUrl("Avant Garde", "https://www.themoviedb.org/t/p/w154/fGXhmKyqRmx6NN3gQHeWNmiEryl.jpg"),
-    NameUrl("Award Winning", "https://www.themoviedb.org/t/p/w154/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg"),
-    NameUrl("Comedy", "https://www.themoviedb.org/t/p/w154/s0w8JbuNNxL1YgaHeDWih12C3jG.jpg"),
-    NameUrl("Drama", "https://www.themoviedb.org/t/p/w154/mMtUybQ6hL24FXo0F3Z4j2KG7kZ.jpg"),
-    NameUrl("Fantasy", "https://www.themoviedb.org/t/p/w154/dTFnU3EQB79aDM4HnUj06Y9Xbq1.jpg"),
-    NameUrl("Horror", "https://www.themoviedb.org/t/p/w154/yOarY3Yo0NMkuTuft87M5oAZa3C.jpg"),
-    NameUrl("Mystery", "https://www.themoviedb.org/t/p/w154/rRGnjRCHdDl3m3oCVSvo5z2E5c5.jpg"),
-    NameUrl("Romance", "https://www.themoviedb.org/t/p/w154/dRGtv7BLMe00RAxtLkaWjcbzsTA.jpg"),
-    NameUrl("Sci-Fi", "https://www.themoviedb.org/t/p/w154/36Ech63X2KU8JUXIBAo167kIC2k.jpg"),
-    NameUrl("Slice of Life", "https://www.themoviedb.org/t/p/w154/4xvQGRIJpPEDf7HQdF0JkBVsmoX.jpg"),
-    NameUrl("Sports", "https://www.themoviedb.org/t/p/w154/12mYMPE7Jy7rhDv0rn95GEtF94V.jpg"),
-    NameUrl("Supernatural", "https://www.themoviedb.org/t/p/w154/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg"),
-    NameUrl("Suspense", "https://www.themoviedb.org/t/p/w154/uAjMQlbPkVHmUahhCouANlHSDW2.jpg"),
+    NameUrl("Discover", "https://image.tmdb.org/t/p/w300/odVlTMqPPiMksmxpN9cCbPCjUPP.jpg"),
+    NameUrl("Action", "https://www.themoviedb.org/t/p/w300/xVXbesCdNt37b3Kh6d3FgOtdajB.jpg"),
+    NameUrl("Adventure", "https://www.themoviedb.org/t/p/w300/mBxsapX4DNhH1XkOlLp15He5sxL.jpg"),
+    NameUrl("Avant Garde", "https://www.themoviedb.org/t/p/w300/fGXhmKyqRmx6NN3gQHeWNmiEryl.jpg"),
+    NameUrl("Award Winning", "https://www.themoviedb.org/t/p/w300/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg"),
+    NameUrl("Comedy", "https://www.themoviedb.org/t/p/w300/s0w8JbuNNxL1YgaHeDWih12C3jG.jpg"),
+    NameUrl("Drama", "https://www.themoviedb.org/t/p/w300/mMtUybQ6hL24FXo0F3Z4j2KG7kZ.jpg"),
+    NameUrl("Fantasy", "https://www.themoviedb.org/t/p/w300/dTFnU3EQB79aDM4HnUj06Y9Xbq1.jpg"),
+    NameUrl("Horror", "https://www.themoviedb.org/t/p/w300/yOarY3Yo0NMkuTuft87M5oAZa3C.jpg"),
+    NameUrl("Mystery", "https://www.themoviedb.org/t/p/w300/rRGnjRCHdDl3m3oCVSvo5z2E5c5.jpg"),
+    NameUrl("Romance", "https://www.themoviedb.org/t/p/w300/dRGtv7BLMe00RAxtLkaWjcbzsTA.jpg"),
+    NameUrl("Sci-Fi", "https://www.themoviedb.org/t/p/w300/36Ech63X2KU8JUXIBAo167kIC2k.jpg"),
+    NameUrl("Slice of Life", "https://www.themoviedb.org/t/p/w300/4xvQGRIJpPEDf7HQdF0JkBVsmoX.jpg"),
+    NameUrl("Sports", "https://www.themoviedb.org/t/p/w300/12mYMPE7Jy7rhDv0rn95GEtF94V.jpg"),
+    NameUrl("Supernatural", "https://www.themoviedb.org/t/p/w300/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg"),
+    NameUrl("Suspense", "https://www.themoviedb.org/t/p/w300/uAjMQlbPkVHmUahhCouANlHSDW2.jpg"),
   ];
 
   static final GameGenreList = [

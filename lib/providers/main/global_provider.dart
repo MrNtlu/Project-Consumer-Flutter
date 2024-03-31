@@ -7,7 +7,7 @@ class GlobalProvider extends ChangeNotifier {
   String userListMode = Constants.UserListUIModes.first;
   String contentMode = Constants.ContentUIModes.first;
   String consumeLaterMode = Constants.ConsumeLaterUIModes.first;
-  String statsMode = Constants.ProfileStatisticsUIModes.first;
+  String statsMode = Constants.ProfileStatisticsUIModes.last;
   String selectedCountryCode = 'US';
   ContentType contentType = ContentType.movie;
 

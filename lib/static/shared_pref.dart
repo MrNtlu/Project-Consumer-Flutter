@@ -62,8 +62,8 @@ class SharedPref {
     return _sharedPreference.getBool(Constants.WHATSNEW_PREF) ?? true;
   }
 
-  final newVersion = "1_6_1";
-  final oldVersion = "1_6_0";
+  final newVersion = "1_6_2";
+  final oldVersion = "1_6_1";
 
   void setDidShowVersionPatch(bool didShow) {
     sharedPref?.setBool(newVersion, didShow);
@@ -129,7 +129,7 @@ class SharedPref {
   }
 
   String getProfileStatisticsUIMode() {
-    return _sharedPreference.getString("profile_statistics_ui_mode") ?? Constants.ProfileStatisticsUIModes.first;
+    return _sharedPreference.getString("profile_statistics_ui_mode") ?? Constants.ProfileStatisticsUIModes.last;
   }
 
   //Country Selection

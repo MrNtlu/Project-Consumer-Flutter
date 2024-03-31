@@ -9,12 +9,17 @@ import 'package:watchlistfy/utils/extensions.dart';
 
 class ConsumeLaterProvider extends BaseProvider<ConsumeLaterResponse> {
   Future<BaseListResponse<ConsumeLaterResponse>> getConsumeLater(
-    String? contentType, String sort, String? genre,
+    String? contentType,
+    String sort,
+    String? genre,
+    String? streaming,
   ) => getList(
     url: "${APIRoutes().userInteractionRoutes.consumeLater}?sort=$sort${
       contentType != null ? '&type=$contentType' : ''
     }${
       genre != null ? '&genre=$genre' : ''
+    }${
+      streaming != null ? '&streaming_platform=$streaming' : ''
     }"
   );
 

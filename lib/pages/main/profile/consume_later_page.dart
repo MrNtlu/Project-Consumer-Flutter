@@ -54,6 +54,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
       _sortFilterProvider.filterContent?.request,
       _sortFilterProvider.sort,
       _sortFilterProvider.genre,
+      _sortFilterProvider.streaming,
     ).then((response) {
       _error = response.error;
 

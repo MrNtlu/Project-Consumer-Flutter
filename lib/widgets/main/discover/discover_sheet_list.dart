@@ -30,7 +30,7 @@ class _DiscoverSheetListState extends State<DiscoverSheetList> {
             isSelected: data == widget.selectedValue,
             leading: widget.iconList != null
             ? Icon(
-              size: 20, 
+              size: 20,
               widget.iconList![index],
               color: data == widget.selectedValue ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor
             )

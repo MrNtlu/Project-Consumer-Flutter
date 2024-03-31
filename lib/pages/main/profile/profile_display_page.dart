@@ -199,7 +199,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
               const SizedBox(height: 8),
               SeeAllTitle("💬 Reviews", (){}, shouldHideSeeAllButton: true),
               SizedBox(
-                height: 200,
+                height: item.reviews.isEmpty ? 100 : 200,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: ListView.builder(
@@ -212,7 +212,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                         return const Align(
                           alignment: Alignment.topCenter,
                           child: Padding(
-                            padding: EdgeInsets.only(top: 64),
+                            padding: EdgeInsets.only(top: 32),
                             child: Text("Nothing here."),
                           ),
                         );
@@ -227,7 +227,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
               ),
               SeeAllTitle("🗂️ Lists", (){}, shouldHideSeeAllButton: true),
               SizedBox(
-                height: 125,
+                height: item.customLists.isEmpty ? 100 : 125,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: ListView.builder(
@@ -240,7 +240,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                         return const Align(
                           alignment: Alignment.topCenter,
                           child: Padding(
-                            padding: EdgeInsets.only(top: 64),
+                            padding: EdgeInsets.only(top: 32),
                             child: Text("Nothing here."),
                           ),
                         );
@@ -277,7 +277,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                 ),
               ),
               SizedBox(
-                height: 200,
+                height: item.legendContent.isEmpty ? 100 : 200,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: ListView.builder(
