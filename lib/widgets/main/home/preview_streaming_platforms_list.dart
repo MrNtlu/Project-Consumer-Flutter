@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/pages/main/streaming/streaming_content_page.dart';
+import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
+import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -21,7 +23,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
     final ContentProvider contentProvider = Provider.of<ContentProvider>(context);
 
     return SizedBox(
-      height: 75,
+      height: 65,
       child: previewProvider.networkState == NetworkState.success
       ? ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -55,13 +57,24 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                return StreamingContentPage(
-                  region,
-                  streamingPlatform?.name ?? animeStreamingPlatform!.name,
-                  streamingPlatform?.logo ?? 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
-                  isMovie: isMovie,
-                  isAnime: !(isMovie || isTV),
-                );
+                if (isMovie) {
+                  return MovieDiscoverListPage(
+                    streaming: streamingPlatform?.name,
+                    streamingLogo: streamingPlatform?.logo,
+                    region: region,
+                  );
+                } else if (isTV) {
+                  return TVDiscoverListPage(
+                    streaming: streamingPlatform?.name,
+                    streamingLogo: streamingPlatform?.logo,
+                    region: region,
+                  );
+                } else {
+                  return AnimeDiscoverListPage(
+                    streaming: animeStreamingPlatform!.name,
+                    streamingLogo: 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
+                  );
+                }
               }));
             },
             child: Padding(
@@ -70,8 +83,8 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: 75,
-                    width: 75,
+                    height: 65,
+                    width: 65,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
@@ -79,15 +92,15 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                         cacheKey: streamingPlatform?.logo ?? 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
-                        maxHeightDiskCache: 350,
-                        maxWidthDiskCache: 350,
+                        maxHeightDiskCache: 250,
+                        maxWidthDiskCache: 250,
                         errorListener: (_){},
                         placeholder: (context, _) {
                           return ColoredBox(
                             color: CupertinoTheme.of(context).bgTextColor,
                             child: SizedBox(
-                              height: 75,
-                              width: 75,
+                              height: 65,
+                              width: 65,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Center(
@@ -106,8 +119,8 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                           return ColoredBox(
                             color: CupertinoTheme.of(context).bgTextColor,
                             child: SizedBox(
-                              height: 75,
-                              width: 75,
+                              height: 65,
+                              width: 65,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Center(

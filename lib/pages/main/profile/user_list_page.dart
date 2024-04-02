@@ -15,7 +15,6 @@ import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:watchlistfy/widgets/main/profile/user_list_content_selection.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_grid_view.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_list_view.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_settings_sheet.dart';
@@ -127,7 +126,8 @@ class _UserListPageState extends State<UserListPage> {
         builder: (context, userListContentSelectionProvider, userListProvider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: const Text("My List"),//UserListContentSelection(userListContentSelectionProvider),
+              middle: const Text("My List"),
+              //UserListContentSelection(userListContentSelectionProvider),
               trailing: CupertinoButton(
                 onPressed: () {
                   setState(() {

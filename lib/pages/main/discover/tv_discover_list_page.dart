@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -12,6 +14,7 @@ import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_list_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -24,12 +27,18 @@ class TVDiscoverListPage extends StatefulWidget {
   final String sort;
   final String? productionCompanies;
   final String? country;
+  final String? streaming;
+  final String? streamingLogo;
+  final String? region;
 
   const TVDiscoverListPage({
     this.genre,
     this.sort = "popularity",
     this.productionCompanies,
     this.country,
+    this.streaming,
+    this.streamingLogo,
+    this.region,
     super.key,
   });
 
@@ -127,6 +136,11 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
     _discoverProvider.genre = widget.genre;
     _discoverProvider.productionCompanies = widget.productionCompanies;
     _discoverProvider.country = widget.country;
+    if (widget.streaming != null && widget.region != null) {
+      _discoverProvider.streaming = widget.streaming;
+      _discoverProvider.streamingRegion = widget.region!;
+      _discoverProvider.isStreamingRegionFiltered = true;
+    }
   }
 
   @override
@@ -161,7 +175,57 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(
+              middle: (
+                _discoverProvider.streaming != null
+                && widget.streaming != null
+                && _discoverProvider.streaming == widget.streaming
+              )
+              ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.streamingLogo != null && widget.streamingLogo!.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.streamingLogo!,
+                      key: ValueKey<String>(widget.streamingLogo!),
+                      cacheKey: widget.streamingLogo,
+                      fit: BoxFit.cover,
+                      height: 32,
+                      width: 32,
+                      maxHeightDiskCache: 100,
+                      maxWidthDiskCache: 100,
+                      errorWidget: (context, _, __) {
+                        return ColoredBox(
+                          color: CupertinoTheme.of(context).bgTextColor,
+                          child: SizedBox(
+                            height: 75,
+                            width: 75,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Center(
+                                child: AutoSizeText(
+                                  widget.streaming!,
+                                  minFontSize: 10,
+                                  style: TextStyle(
+                                    color: CupertinoTheme.of(context).bgColor,
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  ),
+                  if (widget.streamingLogo != null && widget.streamingLogo!.isNotEmpty)
+                  const SizedBox(width: 8),
+                  Text(widget.streaming!),
+                ],
+              )
+              : Text(
                 widget.productionCompanies != null
                 ? Uri.decodeQueryComponent(widget.productionCompanies!)
                 : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'

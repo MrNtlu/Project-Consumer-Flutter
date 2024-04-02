@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -12,6 +14,7 @@ import 'package:watchlistfy/pages/main/discover/anime_discover_sheet.dart';
 import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_anime_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -25,6 +28,8 @@ class AnimeDiscoverListPage extends StatefulWidget {
   final String? theme;
   final String sort;
   final String? studios;
+  final String? streaming;
+  final String? streamingLogo;
 
   const AnimeDiscoverListPage({
     this.genre,
@@ -32,6 +37,8 @@ class AnimeDiscoverListPage extends StatefulWidget {
     this.theme,
     this.sort = "popularity",
     this.studios,
+    this.streaming,
+    this.streamingLogo,
     super.key
   });
 
@@ -118,6 +125,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
     _discoverProvider.demographics = widget.demographic;
     _discoverProvider.themes = widget.theme;
     _discoverProvider.studios = widget.studios;
+    _discoverProvider.streaming = widget.streaming;
   }
 
   @override
@@ -152,7 +160,57 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(
+              middle: (
+                _discoverProvider.streaming != null
+                && widget.streaming != null
+                && _discoverProvider.streaming == widget.streaming
+              )
+              ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.streamingLogo != null && widget.streamingLogo!.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.streamingLogo!,
+                      key: ValueKey<String>(widget.streamingLogo!),
+                      cacheKey: widget.streamingLogo,
+                      fit: BoxFit.cover,
+                      height: 32,
+                      width: 32,
+                      maxHeightDiskCache: 100,
+                      maxWidthDiskCache: 100,
+                      errorWidget: (context, _, __) {
+                        return ColoredBox(
+                          color: CupertinoTheme.of(context).bgTextColor,
+                          child: SizedBox(
+                            height: 75,
+                            width: 75,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Center(
+                                child: AutoSizeText(
+                                  widget.streaming!,
+                                  minFontSize: 10,
+                                  style: TextStyle(
+                                    color: CupertinoTheme.of(context).bgColor,
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  ),
+                  if (widget.streamingLogo != null && widget.streamingLogo!.isNotEmpty)
+                  const SizedBox(width: 8),
+                  Text(widget.streaming!),
+                ],
+              )
+              : Text(
                 provider.studios != null
                 ? Uri.decodeQueryComponent(provider.studios!)
                 : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'

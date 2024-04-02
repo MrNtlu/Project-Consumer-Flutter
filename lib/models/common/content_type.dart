@@ -22,6 +22,19 @@ extension ContentTypeExtension on ContentType {
     }
   }
 
+  String get valueWithEmoji {
+    switch (this) {
+      case ContentType.anime:
+        return "⛩️ Anime";
+      case ContentType.movie:
+        return "🍿 Movie";
+      case ContentType.tv:
+        return "🎭 TV Series";
+      case ContentType.game:
+        return "🎮 Game";
+    }
+  }
+
   String get request {
     switch (this) {
       case ContentType.anime:

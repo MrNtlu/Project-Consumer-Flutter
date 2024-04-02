@@ -36,7 +36,7 @@ class _ContentSelectionState extends State<ContentSelection> {
           },
           minSize: 0,
           padding: const EdgeInsets.all(3),
-          child: const FaIcon(FontAwesomeIcons.chevronLeft , size: 20),
+          child: const FaIcon(FontAwesomeIcons.chevronLeft , size: 22),
         ),
         const SizedBox(width: 3),
         CupertinoButton(
@@ -56,8 +56,8 @@ class _ContentSelectionState extends State<ContentSelection> {
                 ),
                 const SizedBox(width: 6),
                 Icon(
-                  CupertinoIcons.chevron_down_circle_fill,
-                  size: 14,
+                  FontAwesomeIcons.solidHandPointer,
+                  size: 12,
                   color: CupertinoTheme.of(context).primaryColor,
                 )
               ],
@@ -74,7 +74,7 @@ class _ContentSelectionState extends State<ContentSelection> {
           },
           minSize: 0,
           padding: const EdgeInsets.all(3),
-          child: const FaIcon(FontAwesomeIcons.chevronRight, size: 20),
+          child: const FaIcon(FontAwesomeIcons.chevronRight, size: 22),
         ),
         const SizedBox(width: 12)
       ],

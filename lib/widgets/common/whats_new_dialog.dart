@@ -10,7 +10,11 @@ class WhatsNewDialog extends StatelessWidget {
   final String patchNotes = """
 QoL Improvements 🎉
 
--
+- Discover improvements.
+- Discover by streaming platform region added.
+- User List, grid view design added.
+- User List, content selection design changed.
+- Statistics chart improvements.
 Previously,
 - Watch Later, streaming filter added.
 - Notification settings added.
