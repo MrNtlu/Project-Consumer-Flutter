@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_country_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_region_selection.dart';
 
 class TVDiscoverSheet extends StatelessWidget {
   final Function(bool) fetchData;
@@ -42,9 +46,10 @@ class TVDiscoverSheet extends StatelessWidget {
       Constants.DecadeList.map((e) => e.name).toList()
     );
 
-    final countryList = DiscoverSheetList(
+    final countryList = DiscoverSheetCountryList(
       Constants.TVPopularCountries.where((element) => element.request == provider.country).firstOrNull?.name,
-      Constants.TVPopularCountries.map((e) => e.name).toList()
+      Constants.TVPopularCountries.map((e) => e.name).toList(),
+      Constants.TVPopularCountries.map((e) => e.request).toList(),
     );
 
     final streamingPlatformList = DiscoverSheetImageList(
@@ -53,6 +58,16 @@ class TVDiscoverSheet extends StatelessWidget {
       ).firstOrNull?.name,
       Constants.TVStreamingPlatformList.map((e) => e.name).toList(),
       Constants.TVStreamingPlatformList.map((e) => e.image).toList(),
+    );
+
+    final regionFilter = DiscoverSheetRegionSelection(
+      provider.streamingRegion.isEmpty
+      ? Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode
+      : provider.streamingRegion,
+      isStreamingRegionFiltered: provider.isStreamingRegionFiltered,
+      onStreamingRegionFilteredChanged: (bool newValue) {
+        provider.isStreamingRegionFiltered = newValue;
+      },
     );
 
     return SafeArea(
@@ -66,11 +81,13 @@ class TVDiscoverSheet extends StatelessWidget {
                   children: [
                     DiscoverSheetFilterBody("Sort", sortList),
                     DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    regionFilter,
                     DiscoverSheetFilterBody("Genre", genreList),
                     DiscoverSheetFilterBody("Status", statusList),
                     DiscoverSheetFilterBody("Number of Seasons", numOfSeasonList),
                     DiscoverSheetFilterBody("Release Date", decadeList),
-                    DiscoverSheetFilterBody("Country", countryList),
+                    DiscoverSheetCountryFilterBody("Country", countryList),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -105,7 +122,9 @@ class TVDiscoverSheet extends StatelessWidget {
                       || provider.streaming != newStreaming
                       || provider.decade != newDecade
                       || provider.country != newCountry
-                      || provider.streaming != newStreaming;
+                      || provider.streaming != newStreaming
+                      || regionFilter.isStreamingRegionFiltered != provider.isStreamingRegionFiltered
+                      || regionFilter.streamingRegion != provider.streamingRegion;
 
                     provider.setDiscover(
                       sort: newSort,
@@ -115,6 +134,8 @@ class TVDiscoverSheet extends StatelessWidget {
                       decade: newDecade,
                       country: newCountry,
                       streaming: newStreaming,
+                      streamingRegion: regionFilter.streamingRegion,
+                      isStreamingRegionFiltered: provider.isStreamingRegionFiltered,
                     );
 
                     if (shouldFetchData) {

@@ -12,7 +12,7 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait  || Platform.isMacOS || Platform.isWindows;
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait || Platform.isMacOS || Platform.isWindows;
 
     return Padding(
       padding: const EdgeInsets.all(8),

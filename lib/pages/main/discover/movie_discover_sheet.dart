@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_movie_provider.dart';
+import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_country_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_region_selection.dart';
 
 class MovieDiscoverSheet extends StatelessWidget {
   final Function(bool) fetchData;
@@ -37,9 +41,10 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.DecadeList.map((e) => e.name).toList()
     );
 
-    final countryList = DiscoverSheetList(
+    final countryList = DiscoverSheetCountryList(
       Constants.MoviePopularCountries.where((element) => element.request == provider.country).firstOrNull?.name,
-      Constants.MoviePopularCountries.map((e) => e.name).toList()
+      Constants.MoviePopularCountries.map((e) => e.name).toList(),
+      Constants.MoviePopularCountries.map((e) => e.request).toList(),
     );
 
     final streamingPlatformList = DiscoverSheetImageList(
@@ -48,6 +53,16 @@ class MovieDiscoverSheet extends StatelessWidget {
       ).firstOrNull?.name,
       Constants.MovieStreamingPlatformList.map((e) => e.name).toList(),
       Constants.MovieStreamingPlatformList.map((e) => e.image).toList(),
+    );
+
+    final regionFilter = DiscoverSheetRegionSelection(
+      provider.streamingRegion.isEmpty
+      ? Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode
+      : provider.streamingRegion,
+      isStreamingRegionFiltered: provider.isStreamingRegionFiltered,
+      onStreamingRegionFilteredChanged: (bool newValue) {
+        provider.isStreamingRegionFiltered = newValue;
+      },
     );
 
     return SafeArea(
@@ -61,10 +76,12 @@ class MovieDiscoverSheet extends StatelessWidget {
                   children: [
                     DiscoverSheetFilterBody("Sort", sortList),
                     DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    regionFilter,
                     DiscoverSheetFilterBody("Genre", genreList),
                     DiscoverSheetFilterBody("Status", statusList),
                     DiscoverSheetFilterBody("Release Date", decadeList),
-                    DiscoverSheetFilterBody("Country", countryList),
+                    DiscoverSheetCountryFilterBody("Country", countryList),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -96,7 +113,9 @@ class MovieDiscoverSheet extends StatelessWidget {
                       || provider.status != newStatus
                       || provider.streaming != newStreaming
                       || provider.decade != newDecade
-                      || provider.country != newCountry;
+                      || provider.country != newCountry
+                      || regionFilter.isStreamingRegionFiltered != provider.isStreamingRegionFiltered
+                      || regionFilter.streamingRegion != provider.streamingRegion;
 
                     provider.setDiscover(
                       sort: newSort,
@@ -105,6 +124,8 @@ class MovieDiscoverSheet extends StatelessWidget {
                       decade: newDecade,
                       country: newCountry,
                       streaming: newStreaming,
+                      streamingRegion: regionFilter.streamingRegion,
+                      isStreamingRegionFiltered: provider.isStreamingRegionFiltered,
                     );
 
                     if (shouldFetchData) {

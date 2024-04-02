@@ -11,7 +11,6 @@ import 'package:watchlistfy/widgets/main/settings/consume_later_switch.dart';
 import 'package:watchlistfy/widgets/main/settings/content_switch.dart';
 import 'package:watchlistfy/widgets/main/settings/profile_stats_switch.dart';
 import 'package:watchlistfy/widgets/main/settings/settings_content_selection.dart';
-import 'package:watchlistfy/widgets/main/settings/user_list_switch.dart';
 
 class SettingsApplicationPage extends StatelessWidget {
   const SettingsApplicationPage({super.key});
@@ -50,7 +49,7 @@ class SettingsApplicationPage extends StatelessWidget {
                   tiles: [
                     const CustomSettingsTile(child: ContentSwitch()),
                     const CustomSettingsTile(child: ConsumeLaterSwitch()),
-                    const CustomSettingsTile(child: UserListSwitch()),
+                    // const CustomSettingsTile(child: UserListSwitch()),
                     const CustomSettingsTile(child: ProfileStatsSwitch()),
                     CustomSettingsTile(
                       child: SettingsTile(

@@ -15,19 +15,24 @@ class ProfileChart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: SfCartesianChart(
+        margin: const EdgeInsets.all(3),
         primaryXAxis: CategoryAxis(
-          majorGridLines: const MajorGridLines(width: 0.5),
-          labelPlacement: LabelPlacement.onTicks,
+          majorGridLines: const MajorGridLines(width: 0),
+          majorTickLines: const MajorTickLines(size: 0),
+          labelPlacement: MediaQuery.of(context).orientation == Orientation.portrait
+          ? LabelPlacement.betweenTicks
+          : LabelPlacement.onTicks,
           labelStyle: TextStyle(
-            color: CupertinoTheme.of(context).bgTextColor
+            color: CupertinoTheme.of(context).bgTextColor,
           ),
           labelRotation: -30,
           labelIntersectAction: AxisLabelIntersectAction.rotate45,
         ),
         primaryYAxis: const NumericAxis(
           axisLine: AxisLine(width: 0),
-          edgeLabelPlacement: EdgeLabelPlacement.shift,
+          majorGridLines: MajorGridLines(width: 0.5),
           majorTickLines: MajorTickLines(size: 0),
+          edgeLabelPlacement: EdgeLabelPlacement.shift,
           isVisible: true,
         ),
         tooltipBehavior: TooltipBehavior(
@@ -37,16 +42,27 @@ class ProfileChart extends StatelessWidget {
           duration: 1000,
         ),
         series: <CartesianSeries>[
-          LineSeries<Logs, String>(
-            markerSettings: MarkerSettings(isVisible: true, color: CupertinoTheme.of(context).bgTextColor),
-            color: AppColors().primaryColor,
+          SplineAreaSeries<Logs, String>(
+            markerSettings: MarkerSettings(
+              isVisible: true,
+              color: CupertinoTheme.of(context).bgTextColor,
+            ),
             dataSource: logs.reversed.toList(),
             xValueMapper: (Logs logs, _) => DateTime.tryParse(logs.createdAt)!.dateToHumanDate(),
             yValueMapper: (Logs logs, _) => logs.count,
             dataLabelMapper: (data, index) => data.count.toString(),
             dataLabelSettings: DataLabelSettings(
               isVisible: true,
-              color: CupertinoTheme.of(context).bgTextColor
+              borderRadius: 6,
+              textStyle: TextStyle(color: CupertinoTheme.of(context).bgTextColor, fontWeight: FontWeight.bold),
+              labelAlignment: ChartDataLabelAlignment.top,
+              useSeriesColor: true,
+              showZeroValue: false,
+            ),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [AppColors().primaryColor, AppColors().primaryColor.withOpacity(0.5)],
             ),
           ),
         ],

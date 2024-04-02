@@ -121,7 +121,7 @@ class Constants {
     BackendRequestMapper("Reverse Alphabetical", "unalphabetical"),
   ];
 
-  static final UserListUIModes = ["Expanded", "Compact",];
+  static final UserListUIModes = ["Expanded", "Compact", "Grid View"];
 
   static final ProfileStatisticsUIModes = ["Expanded", "Collapsed",];
 

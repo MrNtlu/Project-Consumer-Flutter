@@ -57,6 +57,8 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
     int? from,
     int? to,
     String? streaming,
+    String streamingRegion = "",
+    bool isStreamingRegionFiltered = false,
   }) {
     if (page == 1) {
       pitems.clear();
@@ -77,6 +79,12 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
         streaming != null ? '&streaming_platforms=$streaming' : ''
       }${
         from != null && to != null ? '&from=$from&to=$to' : ''
+      }${
+        streaming != null
+          ? isStreamingRegionFiltered
+            ? '&is_region_filtered=true&region=$streamingRegion'
+            : '&is_region_filtered=false'
+          : ''
       }"
     );
   }

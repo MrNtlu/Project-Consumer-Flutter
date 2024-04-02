@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 enum ContentType {
   movie,
   tv,
@@ -29,6 +32,19 @@ extension ContentTypeExtension on ContentType {
         return "tv";
       case ContentType.game:
         return "game";
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case ContentType.anime:
+        return FontAwesomeIcons.userNinja;
+      case ContentType.movie:
+        return FontAwesomeIcons.ticket;
+      case ContentType.tv:
+        return FontAwesomeIcons.tv;
+      case ContentType.game:
+        return FontAwesomeIcons.gamepad;
     }
   }
 

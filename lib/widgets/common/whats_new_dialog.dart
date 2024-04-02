@@ -10,20 +10,14 @@ class WhatsNewDialog extends StatelessWidget {
   final String patchNotes = """
 QoL Improvements 🎉
 
-- Watch Later, streaming filter added.
-- Anime genre images improved.
-- No internet error added.
-- User list automatic mark as finished added.
-- User list design improved.
+-
 Previously,
-- Profile design changed.
-- Settings design changed.
+- Watch Later, streaming filter added.
 - Notification settings added.
 - AI Recommendations moved to Profile.
-- UI bug fixes.
   """;
 
-  final String version = "1.6.2";
+  final String version = "1.6.3";
 
   @override
   Widget build(BuildContext context) {
