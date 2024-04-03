@@ -64,7 +64,7 @@ class _DiscoverSheetRegionSelectionState extends State<DiscoverSheetRegionSelect
                     children: [
                       SizedBox(
                         height: 45,
-                        width: 180,
+                        width: 200,
                         child: CupertinoChip(
                           isSelected: isStreamingRegionFiltered,
                           onSelected: (value) {
