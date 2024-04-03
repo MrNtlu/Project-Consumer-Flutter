@@ -992,9 +992,7 @@ class TypeConverter<T> {
         topResponse: response["top"],
         extraResponse: response["extra"],
         actorsResponse: response["actors"],
-        streamingResponse: response["streaming_platforms"],
         productionResponse: response["production_companies"],
-        animeStreamingResponse: response["anime_streaming_platforms"],
         studiosResponse: response["studios"],
       ) as T;
     } else {

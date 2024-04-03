@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -135,15 +136,16 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                   ),
                   CupertinoButton(
                     onPressed: () {
-                      showCupertinoModalPopup(
+                      showCupertinoModalBottomSheet(
                         context: context,
+                        expand: true,
                         builder: (context) {
                           return ConsumeLaterSortFilterSheet(_fetchData, sortFilterProvider);
                         }
                       );
                     },
                     padding: EdgeInsets.zero,
-                    child: const Icon(CupertinoIcons.sort_down, size: 28)
+                    child: const Icon(Icons.filter_alt_rounded, size: 28)
                   )
                 ],
               ),

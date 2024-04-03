@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -80,7 +81,10 @@ class TVDiscoverSheet extends StatelessWidget {
                 child: Column(
                   children: [
                     DiscoverSheetFilterBody("Sort", sortList),
-                    DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    ChangeNotifierProvider(
+                      create: (_) => StreamingPlatformStateProvider(),
+                      child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+                    ),
                     regionFilter,
                     DiscoverSheetFilterBody("Genre", genreList),
                     DiscoverSheetFilterBody("Status", statusList),
@@ -92,6 +96,7 @@ class TVDiscoverSheet extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 6),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -149,7 +154,7 @@ class TVDiscoverSheet extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 3)
+            const SizedBox(height: 6)
           ],
         ),
       ),

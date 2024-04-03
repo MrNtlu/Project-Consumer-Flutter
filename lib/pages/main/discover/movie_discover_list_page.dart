@@ -250,6 +250,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                       size: 28
                     )
                   ),
+
                   GestureDetector(
                     child: const Icon(Icons.filter_alt_rounded),
                     onTap: () {

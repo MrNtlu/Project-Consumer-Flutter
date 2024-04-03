@@ -8,13 +8,15 @@ class WhatsNewDialog extends StatelessWidget {
   const WhatsNewDialog({super.key});
 
   final String patchNotes = """
-QoL Improvements 🎉
+Discover Improvements & QoL Improvements 🎉
 
+- Consume later discover improvements.
 - Discover improvements.
 - Discover by streaming platform region added.
 - User List, grid view design added.
 - User List, content selection design changed.
 - Statistics chart improvements.
+- UI improvements.
 Previously,
 - Watch Later, streaming filter added.
 - Notification settings added.
@@ -34,10 +36,18 @@ Previously,
       ),
       content: Padding(
         padding: const EdgeInsets.only(top: 12),
-        child: Flexible(
-          child: Text(
-            patchNotes,
-            style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * 0.4
+          ),
+          child: SingleChildScrollView(
+            child: UnconstrainedBox(
+              constrainedAxis: Axis.horizontal,
+              child: Text(
+                patchNotes,
+                style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+            ),
+          ),
         ),
       ),
       actions: [

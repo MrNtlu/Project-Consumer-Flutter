@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_anime_provider.dart';
+import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
@@ -75,7 +77,10 @@ class AnimeDiscoverSheet extends StatelessWidget {
                 child: Column(
                   children: [
                     DiscoverSheetFilterBody("Sort", sortList),
-                    DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
+                    ChangeNotifierProvider(
+                      create: (_) => StreamingPlatformStateProvider(),
+                      child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+                    ),
                     DiscoverSheetFilterBody("Genre", genreList),
                     DiscoverSheetFilterBody("Demographics", demographicList),
                     DiscoverSheetFilterBody("Themes", themeList),
@@ -86,6 +91,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 6),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -119,7 +125,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 3)
+            const SizedBox(height: 6)
           ],
         ),
       ),

@@ -2,15 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
-import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/constants.dart';
 
 class PreviewStreamingPlatformsList extends StatelessWidget {
   final String region;
@@ -19,26 +17,24 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PreviewProvider previewProvider = Provider.of<PreviewProvider>(context);
     final ContentProvider contentProvider = Provider.of<ContentProvider>(context);
 
     return SizedBox(
       height: 65,
-      child: previewProvider.networkState == NetworkState.success
-      ? ListView.builder(
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: contentProvider.selectedContent == ContentType.movie
-          ? (previewProvider.moviePreview.streamingPlatforms?.length ?? 1)
+          ? Constants.MovieStreamingPlatformList.length
           : (
             contentProvider.selectedContent == ContentType.tv
-            ? (previewProvider.tvPreview.streamingPlatforms?.length ?? 1)
-            : previewProvider.animePreview.animeStreamingPlatforms?.length
+            ? Constants.TVStreamingPlatformList.length
+            : Constants.AnimeStreamingPlatformList.length
           ),
         itemBuilder: (context, index) {
           final isMovie = contentProvider.selectedContent == ContentType.movie;
           final isTV = contentProvider.selectedContent == ContentType.tv;
 
-          if ((isMovie && previewProvider.moviePreview.streamingPlatforms == null) || (isTV && previewProvider.tvPreview.streamingPlatforms == null)) {
+          if ((isMovie && Constants.MovieStreamingPlatformList.isEmpty) || (isTV && Constants.TVStreamingPlatformList.isEmpty)) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               child: const Center(child: Text("Not available in your region."))
@@ -46,11 +42,13 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
           }
 
           final streamingPlatform = isMovie
-            ? previewProvider.moviePreview.streamingPlatforms![index]
-            : isTV ? previewProvider.tvPreview.streamingPlatforms![index] : null;
+            ? Constants.MovieStreamingPlatformList[index]
+            : isTV
+              ? Constants.TVStreamingPlatformList[index]
+              : null;
 
           final animeStreamingPlatform = !(isMovie || isTV)
-            ? previewProvider.animePreview.animeStreamingPlatforms![index]
+            ? Constants.AnimeStreamingPlatformList[index]
             : null;
 
           return GestureDetector(
@@ -60,19 +58,19 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                 if (isMovie) {
                   return MovieDiscoverListPage(
                     streaming: streamingPlatform?.name,
-                    streamingLogo: streamingPlatform?.logo,
+                    streamingLogo: streamingPlatform?.image,
                     region: region,
                   );
                 } else if (isTV) {
                   return TVDiscoverListPage(
                     streaming: streamingPlatform?.name,
-                    streamingLogo: streamingPlatform?.logo,
+                    streamingLogo: streamingPlatform?.image,
                     region: region,
                   );
                 } else {
                   return AnimeDiscoverListPage(
-                    streaming: animeStreamingPlatform!.name,
-                    streamingLogo: 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
+                    streaming: animeStreamingPlatform?.name,
+                    streamingLogo: animeStreamingPlatform?.image,
                   );
                 }
               }));
@@ -88,8 +86,8 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: streamingPlatform?.logo ?? 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
-                        cacheKey: streamingPlatform?.logo ?? 'https://logo.clearbit.com/${animeStreamingPlatform?.url}',
+                        imageUrl: streamingPlatform?.image ?? animeStreamingPlatform!.image,
+                        cacheKey: streamingPlatform?.image ?? animeStreamingPlatform!.image,
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
                         maxHeightDiskCache: 250,
@@ -148,32 +146,6 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
           );
         }
       )
-      : ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(
-          20,
-          (index) => Padding(
-            padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
-            child: Shimmer.fromColors(
-              baseColor: CupertinoColors.systemGrey,
-              highlightColor: CupertinoColors.systemGrey3,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 75,
-                    width: 75,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: const ColoredBox(color: CupertinoColors.systemGrey),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        )
-      ),
     );
   }
 }

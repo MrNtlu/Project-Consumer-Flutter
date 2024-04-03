@@ -57,7 +57,7 @@ class _DiscoverSheetRegionSelectionState extends State<DiscoverSheetRegionSelect
                 child: DetailsTitle("Streaming Platform Region"),
               ),
               SizedBox(
-                width: MediaQuery.sizeOf(context).width,
+                width: MediaQuery.sizeOf(context).width - (MediaQuery.orientationOf(context) == Orientation.landscape ? 42 : 0),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Row(

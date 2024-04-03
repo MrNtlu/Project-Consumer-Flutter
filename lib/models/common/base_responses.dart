@@ -147,9 +147,7 @@ class BasePreviewResponse<T> {
   late List<T> top = [];
   late List<T>? extra = [];
   late List<ActorDetails>? actors = [];
-  late List<StreamingPlatform>? streamingPlatforms = [];
   late List<StreamingPlatform>? productionCompanies = [];
-  late List<AnimeNameUrl>? animeStreamingPlatforms = [];
   late List<AnimeNameUrl>? studios = [];
 
   BasePreviewResponse({
@@ -158,9 +156,7 @@ class BasePreviewResponse<T> {
     List<dynamic>? topResponse,
     List<dynamic>? extraResponse,
     List<dynamic>? actorsResponse,
-    List<dynamic>? streamingResponse,
     List<dynamic>? productionResponse,
-    List<dynamic>? animeStreamingResponse,
     List<dynamic>? studiosResponse,
   }) {
     if (upcomingResponse != null) {
@@ -215,16 +211,6 @@ class BasePreviewResponse<T> {
       actors = null;
     }
 
-    if (streamingResponse != null) {
-      streamingResponse.map((e){
-        return e as Map<String, dynamic>;
-      }).forEach((element) {
-        streamingPlatforms!.add(TypeConverter<StreamingPlatform>().convertToObject(element));
-      });
-    } else {
-      streamingPlatforms = null;
-    }
-
     if (productionResponse != null) {
       productionResponse.map((e){
         return e as Map<String, dynamic>;
@@ -233,16 +219,6 @@ class BasePreviewResponse<T> {
       });
     } else {
       productionCompanies = null;
-    }
-
-    if (animeStreamingResponse != null) {
-      animeStreamingResponse.map((e){
-        return e as Map<String, dynamic>;
-      }).forEach((element) {
-        animeStreamingPlatforms!.add(TypeConverter<AnimeNameUrl>().convertToObject(element));
-      });
-    } else {
-      animeStreamingPlatforms = null;
     }
 
     if (studiosResponse != null) {

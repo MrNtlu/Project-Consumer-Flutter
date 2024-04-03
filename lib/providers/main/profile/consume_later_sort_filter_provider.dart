@@ -46,4 +46,11 @@ class ConsumeLaterSortFilterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void reset() {
+    _sort = Constants.SortConsumeLaterRequests.first.request;
+    _filterContent = null;
+    _genre = null;
+    _streaming = null;
+  }
 }

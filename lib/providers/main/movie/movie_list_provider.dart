@@ -73,7 +73,7 @@ class MovieListProvider extends BasePaginationProvider<BaseContent> {
       }${
         genres != null ? '&genres=$genres' : ''
       }${
-        streaming != null ? '&streaming_platforms=$streaming' : ''
+        streaming != null ? '&streaming_platforms=${Uri.encodeComponent(streaming)}' : ''
       }${
         from != null && to != null ? '&from=$from&to=$to' : ''
       }${

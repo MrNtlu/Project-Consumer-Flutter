@@ -72,7 +72,7 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
       }${
         themes != null ? '&themes=$themes' : ''
       }${
-        streaming != null ? '&streaming_platforms=$streaming' : ''
+        streaming != null ? '&streaming_platforms=${Uri.encodeComponent(streaming)}' : ''
       }${
         studios != null ? '&studios=$studios' : ''
       }${

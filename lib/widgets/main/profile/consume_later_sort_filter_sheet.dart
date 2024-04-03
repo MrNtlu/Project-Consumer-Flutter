@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
@@ -65,48 +67,71 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
     );
 
     return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: CupertinoTheme.of(context).bgColor,
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-        ),
+      child: ColoredBox(
+        color: CupertinoTheme.of(context).bgColor,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            DiscoverSheetFilterBody("Sort", sortList),
-            DiscoverSheetFilterBody("Type", filterList),
-            DiscoverSheetFilterBody("Genre", genreList),
-            DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList),
-            const SizedBox(height: 16),
-            CupertinoButton(
-              onPressed: () {
-                Navigator.pop(context);
-                final newSort = Constants.SortConsumeLaterRequests.where((element) => element.name == sortList.selectedValue!).first.request;
-                final newFilter = ContentType.values.where((element) => element.value == filterList.selectedValue).firstOrNull;
-                final newGenre = combinedGenres.where((element) => element == genreList.selectedValue).firstOrNull;
-                final newStreaming = Constants.StreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
-
-                final shouldFetchData = _provider.sort != newSort
-                  || _provider.filterContent != newFilter
-                  || _provider.genre != newGenre
-                  || _provider.streaming != newStreaming;
-
-                _provider.setSort(newSort);
-                _provider.setContentType(newFilter);
-                _provider.setGenre(newGenre);
-                _provider.setStreamingPlatform(newStreaming);
-
-                if (shouldFetchData) {
-                  _fetchData();
-                }
-              },
-              child: const Text(
-                "Done",
-                style: TextStyle(color: CupertinoColors.systemBlue, fontWeight: FontWeight.bold, fontSize: 16)
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DiscoverSheetFilterBody("Sort", sortList),
+                    DiscoverSheetFilterBody("Type", filterList),
+                    DiscoverSheetFilterBody("Genre", genreList),
+                    ChangeNotifierProvider(
+                      create: (_) => StreamingPlatformStateProvider(),
+                      child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
-            )
+            ),
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CupertinoButton(
+                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                    _provider.reset();
+                    _fetchData();
+                  }
+                ),
+                CupertinoButton.filled(
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                    final newSort = Constants.SortConsumeLaterRequests.where((element) => element.name == sortList.selectedValue!).first.request;
+                    final newFilter = ContentType.values.where((element) => element.value == filterList.selectedValue).firstOrNull;
+                    final newGenre = combinedGenres.where((element) => element == genreList.selectedValue).firstOrNull;
+                    final newStreaming = Constants.StreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
+
+                    final shouldFetchData = _provider.sort != newSort
+                      || _provider.filterContent != newFilter
+                      || _provider.genre != newGenre
+                      || _provider.streaming != newStreaming;
+
+                    _provider.setSort(newSort);
+                    _provider.setContentType(newFilter);
+                    _provider.setGenre(newGenre);
+                    _provider.setStreamingPlatform(newStreaming);
+
+                    if (shouldFetchData) {
+                      _fetchData();
+                    }
+                  },
+                  child: const Text(
+                    "Done",
+                    style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 6)
           ],
         ),
       )
