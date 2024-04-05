@@ -18,16 +18,16 @@ class BasePaginationProvider<T> with ChangeNotifier {
         Uri.parse(url),
         headers: UserToken().getBearerToken()
       );
-      
+
       final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
-      
+
       var basePaginationResponse = decodedResponse.getBasePaginationResponse<T>();
       pitems.addAll(basePaginationResponse.data);
       notifyListeners();
 
       return basePaginationResponse;
     } catch(error) {
-      return BasePaginationResponse(error: error.toString(), canNextPage: false);
+      return BasePaginationResponse(error: error.toString(), canNextPage: false, totalResults: 0);
     }
   }
 }

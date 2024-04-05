@@ -119,6 +119,7 @@ extension DynamicMapExt on Map<String, dynamic> {
   BasePaginationResponse<T> getBasePaginationResponse<T>() => BasePaginationResponse(
     response: this["data"],
     canNextPage: (this["pagination"]?["next"] ?? 0) > 0,
+    totalResults: (this["pagination"]?["total"] ?? 0),
     error: this["error"],
   );
 
@@ -181,6 +182,7 @@ extension ResponseExt on Response {
   BasePaginationResponse<T> getBasePaginationResponse<T>() => BasePaginationResponse(
     response: json.decode(body)["data"],
     canNextPage: (json.decode(body)["pagination"]?["next"] ?? 0) > 0,
+    totalResults: (json.decode(body)["pagination"]?["total"] ?? 0),
     error: json.decode(body)["error"],
   );
 

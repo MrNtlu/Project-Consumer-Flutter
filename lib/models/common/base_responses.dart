@@ -57,11 +57,13 @@ class BaseListResponse<T> {
 class BasePaginationResponse<T> {
   late List<T> data = [];
   late bool canNextPage;
+  late int totalResults;
   final String? error;
 
   BasePaginationResponse({
     List<dynamic>? response,
     required this.canNextPage,
+    required this.totalResults,
     this.error
   }){
     if (response != null) {

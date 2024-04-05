@@ -71,6 +71,8 @@ class TypeConverter<T> {
         response["image"],
         response["username"],
         response["streak"] ?? 0,
+        response["user_list_count"] ?? 0,
+        response["consume_later_count"] ?? 0,
         response["created_at"],
       ) as T;
     } else if (T == UserInfo) {

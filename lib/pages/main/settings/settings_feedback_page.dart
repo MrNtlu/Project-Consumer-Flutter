@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_survey/flutter_survey.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchlistfy/static/routes.dart';
 import 'package:watchlistfy/static/token.dart';
@@ -45,11 +46,15 @@ class SettingsFeedbackPage extends StatelessWidget {
 
         final message = response.getBaseMessageResponse();
         if (message.error == null) {
+          Navigator.pop(context);
+
           showCupertinoDialog(
             context: context,
             builder: (_) => const MessageDialog("Thank you for helping us with your valuable feedback 🙏")
           );
         } else {
+          Navigator.pop(context);
+
           showCupertinoDialog(
             context: context,
             builder: (_) => ErrorDialog(message.error.toString())
@@ -130,12 +135,21 @@ class SettingsFeedbackPage extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               CupertinoButton.filled(
-                child: const Text(
-                  "Save",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: CupertinoColors.white,
-                  ),
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FaIcon(FontAwesomeIcons.solidPaperPlane, color: CupertinoColors.white, size: 16),
+                    SizedBox(width: 6),
+                    Text(
+                      "Send",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: CupertinoColors.white,
+                      ),
+                    ),
+                  ],
                 ),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {

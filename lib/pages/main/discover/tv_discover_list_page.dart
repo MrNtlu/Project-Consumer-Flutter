@@ -57,6 +57,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
   int _page = 1;
   bool _canPaginate = false;
   bool _isPaginating = false;
+  int _totalResults = 0;
   String? _error;
 
   void _fetchData(bool isResetting) {
@@ -65,6 +66,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
     }
 
     if (_page == 1) {
+      _totalResults = 0;
       setState(() {
         _state = ListState.loading;
       });
@@ -101,6 +103,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
     futureResponse.then((response) {
       _error = response.error;
       _canPaginate = response.canNextPage;
+      _totalResults = response.totalResults;
       _isPaginating = false;
 
       if (_state != ListState.disposed) {
@@ -225,10 +228,24 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
                   Text(widget.streaming!),
                 ],
               )
-              : Text(
-                widget.productionCompanies != null
-                ? Uri.decodeQueryComponent(widget.productionCompanies!)
-                : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+              : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.productionCompanies != null
+                    ? Uri.decodeQueryComponent(widget.productionCompanies!)
+                    : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+                  ),
+                  if (_totalResults > 0 && _state == ListState.done)
+                  Text(
+                    "$_totalResults Results",
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: CupertinoColors.systemGrey2
+                    ),
+                  )
+                ],
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,

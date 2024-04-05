@@ -48,6 +48,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
   int _page = 1;
   bool _canPaginate = false;
   bool _isPaginating = false;
+  int _totalResults = 0;
   String? _error;
 
   void _fetchData(bool isResetting) {
@@ -56,6 +57,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
     }
 
     if (_page == 1) {
+      _totalResults = 0;
       setState(() {
         _state = ListState.loading;
       });
@@ -76,6 +78,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
     futureResponse.then((response) {
       _error = response.error;
       _canPaginate = response.canNextPage;
+      _totalResults = response.totalResults;
       _isPaginating = false;
 
       if (_state != ListState.disposed) {
@@ -145,10 +148,24 @@ void didChangeDependencies() {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(
-                provider.publisher != null
-                ? Uri.decodeQueryComponent(provider.publisher!)
-                : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+              middle: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    provider.publisher != null
+                    ? Uri.decodeQueryComponent(provider.publisher!)
+                    : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+                  ),
+                  if (_totalResults > 0 && _state == ListState.done)
+                  Text(
+                    "$_totalResults Results",
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: CupertinoColors.systemGrey2
+                    ),
+                  )
+                ],
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,

@@ -37,6 +37,7 @@ import 'package:watchlistfy/widgets/main/settings/settings_profile.dart';
 import 'package:watchlistfy/widgets/main/settings/theme_switch.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:watchlistfy/widgets/main/settings/user_count_sheet.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -351,6 +352,18 @@ class _SettingsPageState extends State<SettingsPage> {
                           context: context,
                           barrierColor: CupertinoColors.black.withOpacity(0.75),
                           builder: (_) => const ChangeUsernameSheet()
+                        );
+                      },
+                    ),
+                    if (authProvider?.isAuthenticated == true && _userInfo != null)
+                    SettingsTile.navigation(
+                      leading: const Icon(FontAwesomeIcons.chartPie),
+                      title: const Text('Usages and Limits'),
+                      onPressed: (ctx) {
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          barrierColor: CupertinoColors.black.withOpacity(0.75),
+                          builder: (_) => UserCountSheet(_userInfo!)
                         );
                       },
                     ),
