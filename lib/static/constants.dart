@@ -204,6 +204,7 @@ class Constants {
   ];
 
   static final StreamingPlatformList = [
+    // Watch Later
     // Most Popular Ones
     BackendRequestMapperWithImage("Netflix", "Netflix", image: "https://image.tmdb.org/t/p/w154/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"),
     BackendRequestMapperWithImage("Amazon Prime Video", "Amazon Prime Video", image: "https://image.tmdb.org/t/p/w154/dQeAar5H991VYporEjUspolDarG.jpg"),
@@ -224,6 +225,89 @@ class Constants {
     BackendRequestMapperWithImage("blutv", "blutv", image: "https://image.tmdb.org/t/p/w154/dqRpKX6vcos334v9huMpNPKHlD8.jpg"),
     BackendRequestMapperWithImage("Hoopla", "Hoopla", image: "https://image.tmdb.org/t/p/w154/j7D006Uy3UWwZ6G0xH6BMgIWTzH.jpg"),
   ];
+
+  // Popular Studios List
+  static final MoviePopularStudiosList = [ // 25 in total
+    BackendRequestMapperWithImage("Warner Bros. Pictures", "Warner Bros. Pictures", image: "https://image.tmdb.org/t/p/w342/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png"),
+    BackendRequestMapperWithImage("Universal Pictures", "Universal Pictures", image: "https://image.tmdb.org/t/p/w342/8lvHyhjr8oUKOOy2dKXoALWKdp0.png"),
+    BackendRequestMapperWithImage("Marvel Studios", "Marvel Studios", image: "https://image.tmdb.org/t/p/w342/hUzeosd33nzE5MCNsZxCGEKTXaQ.png"),
+    BackendRequestMapperWithImage("Paramount", "Paramount", image: "https://image.tmdb.org/t/p/w342/gz66EfNoYPqHTYI4q9UEN4CbHRc.png"),
+    BackendRequestMapperWithImage("Columbia Pictures", "Columbia Pictures", image: "https://image.tmdb.org/t/p/w342/71BqEFAF4V3qjjMPCpLuyJFB9A.png"),
+    BackendRequestMapperWithImage("20th Century Fox", "20th Century Fox", image: "https://image.tmdb.org/t/p/w342/qZCc1lty5FzX30aOCVRBLzaVmcp.png"),
+    BackendRequestMapperWithImage("Metro-Goldwyn-Mayer", "Metro-Goldwyn-Mayer", image: "https://image.tmdb.org/t/p/w342/usUnaYV6hQnlVAXP6r4HwrlLFPG.png"),
+    BackendRequestMapperWithImage("Canal+", "Canal+", image: "https://image.tmdb.org/t/p/w342/9aotxauvc9685tq9pTcRJszuT06.png"),
+    BackendRequestMapperWithImage("Walt Disney Pictures", "Walt Disney Pictures", image: "https://image.tmdb.org/t/p/w342/wdrCwmRnLFJhEoH8GSfymY85KHT.png"),
+    BackendRequestMapperWithImage("Lionsgate", "Lionsgate", image: "https://image.tmdb.org/t/p/w342/cisLn1YAUuptXVBa0xjq7ST9cH0.png"),
+    BackendRequestMapperWithImage("Legendary Pictures", "Legendary Pictures", image: "https://image.tmdb.org/t/p/w342/8M99Dkt23MjQMTTWukq4m5XsEuo.png"),
+    BackendRequestMapperWithImage("New Line Cinema", "New Line Cinema", image: "https://image.tmdb.org/t/p/w342/iaYpEp3LQmb8AfAtmTvpqd4149c.png"),
+    BackendRequestMapperWithImage("Pixar", "Pixar", image: "https://image.tmdb.org/t/p/w342/1TjvGVDMYsj6JBxOAkUHpPEwLf7.png"),
+    BackendRequestMapperWithImage("DreamWorks Animation", "DreamWorks Animation", image: "https://image.tmdb.org/t/p/w342/kP7t6RwGz2AvvTkvnI1uteEwHet.png"),
+    BackendRequestMapperWithImage("Warner Bros. Animation", "Warner Bros. Animation", image: "https://image.tmdb.org/t/p/w342/l5zW8jjmQOCx2dFmvnmbYmqoBmL.png"),
+    BackendRequestMapperWithImage("TOHO", "TOHO", image: "https://image.tmdb.org/t/p/w342/iDw9Xxok1d9WAM2zFicI8p3khTH.png"),
+    BackendRequestMapperWithImage("Ingenious Media", "Ingenious Media", image: "https://image.tmdb.org/t/p/w342/jrgCuaQsY9ouP5ILZf4Dq4ZOkIX.png"),
+    BackendRequestMapperWithImage("United Artists", "United Artists", image: "https://image.tmdb.org/t/p/w342/1SEj4nyG3JPBSKBbFhtdcHRaIF9.png"),
+    BackendRequestMapperWithImage("StudioCanal", "StudioCanal", image: "https://image.tmdb.org/t/p/w342/5LEHONGkZBIoWvp1ygHOF8iyi1M.png"),
+    BackendRequestMapperWithImage("Miramax", "Miramax", image: "https://image.tmdb.org/t/p/w342/m6AHu84oZQxvq7n1rsvMNJIAsMu.png"),
+    BackendRequestMapperWithImage("Touchstone Pictures", "Touchstone Pictures", image: "https://image.tmdb.org/t/p/w342/ou5BUbtulr6tIt699q6xJiEQTR9.png"),
+    BackendRequestMapperWithImage("Film4 Productions", "Film4 Productions", image: "https://image.tmdb.org/t/p/w342/e8EXNSfwr5E9d3TR8dHKbQnQK4W.png"),
+    BackendRequestMapperWithImage("TriStar Pictures", "TriStar Pictures", image: "https://image.tmdb.org/t/p/w342/eC0bWHVjnjUducyA6YFoEFqnPMC.png"),
+    BackendRequestMapperWithImage("BBC Film", "BBC Film", image: "https://image.tmdb.org/t/p/w342/aW0IpM9d4Zjj978EqgDVSxXXhTj.png"),
+    BackendRequestMapperWithImage("Village Roadshow Pictures", "Village Roadshow Pictures", image: "https://image.tmdb.org/t/p/w342/at4uYdwAAgNRKhZuuFX8ShKSybw.png"),
+  ];
+
+  static final TVPopularStudiosList = [ // 25 in total
+    BackendRequestMapperWithImage("TVB", "TVB", image: "https://image.tmdb.org/t/p/w342/4OKzkasr0IV8CSqejjgRfKw7e0m.png"),
+    BackendRequestMapperWithImage("Sony Pictures Television Studios", "Sony Pictures Television Studios", image: "https://image.tmdb.org/t/p/w342/aCbASRcI1MI7DXjPbSW9Fcv9uGR.png"),
+    BackendRequestMapperWithImage("Warner Bros. Television", "Warner Bros. Television", image: "https://image.tmdb.org/t/p/w342/pJJw98MtNFC9cHn3o15G7vaUnnX.png"),
+    BackendRequestMapperWithImage("20th Century Fox Television", "20th Century Fox Television", image: "https://image.tmdb.org/t/p/w342/31h94rG9hzjprXoYNy3L1ErUya2.png"),
+    BackendRequestMapperWithImage("Paramount Television Studios", "Paramount Television Studios", image: "https://image.tmdb.org/t/p/w342/of4mmVt6egYaO9oERJbuUxMOTkj.png"),
+    BackendRequestMapperWithImage("Disney Television Animation", "Disney Television Animation", image: "https://image.tmdb.org/t/p/w342/jTPNzDEn7eHmp3nEXEEtkHm6jLg.png"),
+    BackendRequestMapperWithImage("TBS", "TBS", image: "https://image.tmdb.org/t/p/w342/lUACMATs6jcscXIrzNCQzbvNVN5.png"),
+    BackendRequestMapperWithImage("Universal Television", "Universal Television", image: "https://image.tmdb.org/t/p/w342/jeTxdjXhzgKZyLr3l9MllkTn3fy.png"),
+    BackendRequestMapperWithImage("CBS Studios", "CBS Studios", image: "https://image.tmdb.org/t/p/w342/19kn4jVvpc3sAL3YpZNb3elhSMl.png"),
+    BackendRequestMapperWithImage("ABC Studios", "ABC Studios", image: "https://image.tmdb.org/t/p/w342/vOH8dyQhLK01pg5fYkgiS31jlFm.png"),
+    BackendRequestMapperWithImage("BBC", "BBC", image: "https://image.tmdb.org/t/p/w342/dqT3yOTlfJRmtvk52Ccd1O6dZ0A.png"),
+    BackendRequestMapperWithImage("HBO", "HBO", image: "https://image.tmdb.org/t/p/w342/tuomPhY2UtuPTqqFnKMVHvSb724.png"),
+    BackendRequestMapperWithImage("Cartoon Network Studios", "Cartoon Network Studios", image: "https://image.tmdb.org/t/p/w342/uYMD8NPD7Eph0cFd1WJZJrot1Fb.png"),
+    BackendRequestMapperWithImage("Warner Bros. Animation", "Warner Bros. Animation", image: "https://image.tmdb.org/t/p/w342/l5zW8jjmQOCx2dFmvnmbYmqoBmL.png"),
+    BackendRequestMapperWithImage("Nickelodeon Productions", "Nickelodeon Productions", image: "https://image.tmdb.org/t/p/w342/2GFJ3jJ7dhjqcOGj41aTwd3OhQT.png"),
+    BackendRequestMapperWithImage("20th Television Animation", "20th Television Animation", image: "https://image.tmdb.org/t/p/w342/wLFPu95hIMmyLR5hdtvYaMuK0tG.png"),
+    BackendRequestMapperWithImage("Amazon Studios", "Amazon Studios", image: "https://image.tmdb.org/t/p/w342/oRR9EXVoKP9szDkVKlze5HVJS7g.png"),
+    BackendRequestMapperWithImage("Touchstone Television", "Touchstone Television", image: "https://image.tmdb.org/t/p/w342/wwaKUcOENHix2jxLfFBfNkCtOEQ.png"),
+    BackendRequestMapperWithImage("FX Productions", "FX Productions", image: "https://image.tmdb.org/t/p/w342/5cT4zwHA66uNAr2p3CcBDLddXu2.png"),
+    BackendRequestMapperWithImage("DC Entertainment", "DC Entertainment", image: "https://image.tmdb.org/t/p/w342/2Tc1P3Ac8M479naPp1kYT3izLS5.png"),
+    BackendRequestMapperWithImage("NHK", "NHK", image: "https://image.tmdb.org/t/p/w342/3MuBcEqLa5QRkZTpXBLzyk9zOmO.png"),
+    BackendRequestMapperWithImage("Marvel Television", "Marvel Television", image: "https://image.tmdb.org/t/p/w342/v2y3LuLxYtW36hvLa8IDGQk3Oql.png"),
+    BackendRequestMapperWithImage("Studio Dragon", "Studio Dragon", image: "https://image.tmdb.org/t/p/w342/vzzqRwqTin3iAAMw2JlrmVPNnPa.png"),
+    BackendRequestMapperWithImage("SLL", "SLL", image: "https://image.tmdb.org/t/p/w342/8FwCT7KohE031xFLBeRMZlbuzSr.png"),
+    BackendRequestMapperWithImage("MBC", "MBC", image: "https://image.tmdb.org/t/p/w342/muK9W0KLV8KfEnR7MYu0YpfpdnO.png"),
+  ];
+
+  static final AnimePopularStudiosList = [ // 20 in total
+    BackendRequestMapperWithImage("A-1 Pictures", "A-1 Pictures", image: "https://cdn.myanimelist.net/s/common/company_logos/4713c58b-833f-4c92-bf4a-0e2f7af8a461_600x600_i?s=925a453653da58d385adb82b5d423a69"),
+    BackendRequestMapperWithImage("Madhouse", "Madhouse", image: "https://cdn.myanimelist.net/s/common/company_logos/e68488ab-f0a0-411f-850a-18fb3e21b96c_600x600_i?s=21618c9c3183ffded748d303a253b637"),
+    BackendRequestMapperWithImage("J.C.Staff", "J.C.Staff", image: "https://cdn.myanimelist.net/s/common/company_logos/076ec06c-a090-41b5-971e-2fc2ae446f5e_600x600_i?s=5872ea7d2c75469d2d296574a5c8c1fb"),
+    BackendRequestMapperWithImage("Bones", "Bones", image: "https://cdn.myanimelist.net/s/common/company_logos/969047f0-a8ec-475e-ad0d-6e0d5cd8e17f_600x600_i?s=4145bdb95a29f3fe1447baa8045a7420"),
+    BackendRequestMapperWithImage("Production I.G", "Production I.G", image: "https://cdn.myanimelist.net/s/common/company_logos/5b86997d-226e-4870-ae60-e353a78178a0_600x600_i?s=0db04e298454b4278acfb8a2c60c7001"),
+    BackendRequestMapperWithImage("Kyoto Animation", "Kyoto Animation", image: "https://cdn.myanimelist.net/s/common/company_logos/b066ff17-81d3-40db-b1f2-2927de70c0e3_600x600_i?s=edb149cf051e2d7984975063a1b3b3a7"),
+    BackendRequestMapperWithImage("MAPPA", "MAPPA", image: "https://cdn.myanimelist.net/s/common/company_logos/e3a5163d-3b09-4e98-922b-79180a75539f_600x600_i?s=3289c478fd611569ebccd7ff076151df"),
+    BackendRequestMapperWithImage("ufotable", "ufotable", image: "https://cdn.myanimelist.net/s/common/company_logos/03171393-4a85-451d-a025-4a3f05d1aede_600x600_i?s=48ebfd25c277dd148d41f88568f60aa6"),
+    BackendRequestMapperWithImage("Wit Studio", "Wit Studio", image: "https://cdn.myanimelist.net/s/common/company_logos/e7e64f9e-23f6-4c74-9813-cb4fcdb600cf_600x600_i?s=37f6a1b3342db61d87d4e50803fd6fd6"),
+    BackendRequestMapperWithImage("Studio Ghibli", "Studio Ghibli", image: "https://cdn.myanimelist.net/s/common/company_logos/e6d02dfe-71e9-49d2-bef1-68e585c2605e_600x600_i?s=f8bba4a0f7ae97f80c95e463c7529bd6"),
+    BackendRequestMapperWithImage("Shaft", "Shaft", image: "https://cdn.myanimelist.net/s/common/company_logos/6abfb420-5815-4a62-b978-cbbf9b868fa0_600x600_i?s=5fe7fdaf8e4e09c14c58d7ac6fc29f80"),
+    BackendRequestMapperWithImage("CloverWorks", "CloverWorks", image: "https://cdn.myanimelist.net/s/common/company_logos/75875b81-17bb-4f7e-a06f-bb149d54687e_600x600_i?s=b90a570d03511f70dbac7e04869f4835"),
+    BackendRequestMapperWithImage("Trigger", "Trigger", image: "https://cdn.myanimelist.net/s/common/company_logos/bc3f892a-8581-45b1-8a95-81b6ac518f3d_600x600_i?s=d2a2e7f05478dbb999b17d35c44445db"),
+    BackendRequestMapperWithImage("Toei Animation", "Toei Animation", image: "https://cdn.myanimelist.net/s/common/company_logos/33d49515-685a-4133-8ad3-41b09197e88d_600x600_i?s=cd6405cb06051286ce2bfbd4ce645443"),
+    BackendRequestMapperWithImage("Aniplex", "Aniplex", image: "https://cdn.myanimelist.net/s/common/company_logos/ba2241ea-7f83-45b6-9360-1f1d4de0d65a_600x600_i?s=369f1423117062ab3c7f4c7a90b2005a"),
+    BackendRequestMapperWithImage("Gainax", "Gainax", image: "https://cdn.myanimelist.net/s/common/company_logos/7bba2118-127e-47a3-855f-0b284689f3da_600x600_i?s=c62c0bef4c82c81b750746955a423f64"),
+    BackendRequestMapperWithImage("White Fox", "White Fox", image: "https://cdn.myanimelist.net/s/common/company_logos/40ba3310-9602-47fc-beb2-cc346adada09_600x600_i?s=6e3600896f107186d1a8dad0a3222d43"),
+    BackendRequestMapperWithImage("Sunrise", "Sunrise", image: "https://cdn.myanimelist.net/s/common/company_logos/6a9279a7-1aeb-4a2b-bceb-4e7f24fae7b1_600x600_i?s=3550689bfb655805cd6d4d3b3987cc91"),
+    BackendRequestMapperWithImage("Crunchyroll", "Crunchyroll", image: "https://cdn.myanimelist.net/s/common/company_logos/73f4abea-0377-4362-8bb2-6d6577e9d303_600x600_i?s=30e237ce4c86b2874096c79521c492d2"),
+    BackendRequestMapperWithImage("Kadokawa", "Kadokawa", image: "https://cdn.myanimelist.net/s/common/company_logos/8a7cb4eb-caa6-46e1-8997-cb1e1ea5ffd2_600x600_i?s=c040c830a2425bb0a280e1f751c43b09"),
+  ];
+
+  //TODO: Add like EA, Bethesta etc.
+  static final GamePopularPublishersList = [];
 
   //Genre List
   static final MovieGenreList = [

@@ -22,7 +22,7 @@ class UserCountSheet extends StatelessWidget {
             Row(
               children: [
                 const Text(
-                  "User List Usage",
+                  "📋 User List Usage",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -57,7 +57,7 @@ class UserCountSheet extends StatelessWidget {
             Row(
               children: [
                 const Text(
-                  "Watch Later Usage",
+                  "🕒 Watch Later Usage",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

@@ -217,7 +217,7 @@ class _TabsPageState extends State<TabsPage> {
               );
             } catch(_) {}
           }
-        } else if (authProvider.isAuthenticated && canShowFeedbackDialog) {
+        } else if (authProvider.isAuthenticated && canShowFeedbackDialog && authProvider.basicUserInfo != null && authProvider.basicUserInfo!.userListCount > 9) {
           await Future.delayed(const Duration(milliseconds: 300));
           if (context.mounted) {
             try {
