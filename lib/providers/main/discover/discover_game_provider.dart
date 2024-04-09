@@ -26,6 +26,7 @@ class DiscoverGameProvider with ChangeNotifier {
     this.sort = sort;
     this.genre = genre;
     this.tba = tba;
+    this.publisher = publisher;
     this.platform = platform;
   }
 }

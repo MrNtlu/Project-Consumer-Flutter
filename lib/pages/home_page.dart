@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/content_list_page.dart';
-import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/search_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -12,7 +11,6 @@ import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_selection.dart';
-import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/home/anonymous_header.dart';
 import 'package:watchlistfy/widgets/main/home/genre_list.dart';
@@ -74,6 +72,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final isMovieOrTVSeries = contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv;
+    final isGame = contentProvider.selectedContent == ContentType.game;
 
     return CupertinoPageScaffold(
       child: SingleChildScrollView(
@@ -162,7 +161,7 @@ class _HomePageState extends State<HomePage> {
               child: PreviewList(Constants.ContentTags[2])
             ),
             const SizedBox(height: 12),
-            if (contentProvider.selectedContent != ContentType.game)
+            if (!isGame)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
@@ -180,10 +179,11 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            if (contentProvider.selectedContent != ContentType.game)
+            if (!isGame)
             PreviewStreamingPlatformsList(globalProvider.selectedCountryCode),
+            if (!isGame)
             const SizedBox(height: 12),
-            if (contentProvider.selectedContent != ContentType.game)
+            if (!isGame)
             SeeAllTitle(
               contentProvider.selectedContent == ContentType.movie
                   ? "🎭 In Theaters"
@@ -194,47 +194,19 @@ class _HomePageState extends State<HomePage> {
               },
               shouldHideSeeAllButton: contentProvider.selectedContent !=ContentType.movie
             ),
-            if (contentProvider.selectedContent != ContentType.game)
+            if (!isGame)
             SizedBox(
               height: 200,
               child: PreviewList(Constants.ContentTags[3])
             ),
-            if (isMovieOrTVSeries)
+            if (!isGame)
             const SizedBox(height: 12),
-            if (isMovieOrTVSeries)
-            SeeAllTitle("🎙️ Popular Studios", (){}, shouldHideSeeAllButton: true),
-            if (isMovieOrTVSeries)
-            PreviewCompanyList(isMovie: contentProvider.selectedContent == ContentType.movie),
-            if (contentProvider.selectedContent == ContentType.anime)
-            const SizedBox(height: 12),
-            if (contentProvider.selectedContent == ContentType.anime)
-            SeeAllTitle("🎙️ Popular Studios", (){}, shouldHideSeeAllButton: true),
-            if (contentProvider.selectedContent == ContentType.anime)
-            SizedBox(
-              height: 40,
-              child: ListView.builder(
-                itemCount: previewProvider?.animePreview.studios?.length ?? 0,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  final studio = previewProvider?.animePreview.studios?[index];
-
-                  return Padding(
-                    padding: index == 0 ? const EdgeInsets.only(left: 8) : EdgeInsets.zero,
-                    child: CupertinoChip(
-                      isSelected: false,
-                      onSelected: (_) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return AnimeDiscoverListPage(studios: Uri.encodeQueryComponent(studio.name));
-                          })
-                        );
-                      },
-                      label: studio!.name,
-                    ),
-                  );
-                }
-              ),
+            SeeAllTitle(
+              "${contentProvider.selectedContent == ContentType.game ? '🎮' : '🎙️'} Popular ${contentProvider.selectedContent == ContentType.game ? 'Publishers' : 'Studios'}",
+              (){},
+              shouldHideSeeAllButton: true
             ),
+            const PreviewCompanyList(),
             const SizedBox(height: 16),
           ],
         ),

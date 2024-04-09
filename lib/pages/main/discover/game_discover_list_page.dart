@@ -154,8 +154,8 @@ void didChangeDependencies() {
                 children: [
                   Text(
                     provider.publisher != null
-                    ? Uri.decodeQueryComponent(provider.publisher!)
-                    : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+                    ? provider.publisher!
+                    : provider.genre != null ? provider.genre! : 'Discover'
                   ),
                   if (_totalResults > 0 && _state == ListState.done)
                   Text(

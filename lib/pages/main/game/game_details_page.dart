@@ -305,7 +305,7 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
                         onSelected: (_) {
                           Navigator.of(context, rootNavigator: true).push(
                             CupertinoPageRoute(builder: (_) {
-                              return GameDiscoverListPage(publisher: Uri.encodeQueryComponent(publisher));
+                              return GameDiscoverListPage(publisher: publisher);
                             })
                           );
                         },

@@ -58,11 +58,11 @@ class GameListProvider extends BasePaginationProvider<BaseContent> {
       url: "${APIRoutes().gameRoutes.gameBySortFilter}?page=$page&sort=$sort${
         tba != null ? '&tba=$tba' : ''
       }${
-        platform != null ? '&platform=$platform' : ''
+        platform != null ? '&platform=${Uri.encodeQueryComponent(platform)}' : ''
       }${
-        publisher != null ? '&publisher=$publisher' : ''
+        publisher != null ? '&publisher=${Uri.encodeQueryComponent(publisher)}' : ''
       }${
-        genres != null ? '&genres=$genres' : ''
+        genres != null ? '&genres=${Uri.encodeQueryComponent(genres)}' : ''
       }"
     );
   }

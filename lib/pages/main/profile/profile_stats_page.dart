@@ -151,15 +151,15 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                           CupertinoPageRoute(builder: (_) {
                             switch (ContentType.values.where((element) => element.request == genre.type).first) {
                               case ContentType.movie:
-                                return MovieDiscoverListPage(genre: Uri.encodeQueryComponent(genre.genre));
+                                return MovieDiscoverListPage(genre: genre.genre);
                               case ContentType.tv:
-                                return TVDiscoverListPage(genre: Uri.encodeQueryComponent(genre.genre));
+                                return TVDiscoverListPage(genre: genre.genre);
                               case ContentType.anime:
-                                return AnimeDiscoverListPage(genre: Uri.encodeQueryComponent(genre.genre));
+                                return AnimeDiscoverListPage(genre: genre.genre);
                               case ContentType.game:
-                                return GameDiscoverListPage(genre: Uri.encodeQueryComponent(genre.genre));
+                                return GameDiscoverListPage(genre: genre.genre);
                               default:
-                              return MovieDiscoverListPage(genre: Uri.encodeQueryComponent(genre.genre));
+                              return MovieDiscoverListPage(genre: genre.genre);
                             }
                           })
                         );
@@ -218,7 +218,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                               case ContentType.tv:
                                 return TVDiscoverListPage(country: country.country);
                               case ContentType.anime:
-                                return AnimeDiscoverListPage(demographic: Uri.encodeQueryComponent(country.country));
+                                return AnimeDiscoverListPage(demographic: country.country);
                               default:
                               return MovieDiscoverListPage(country: country.country);
                             }
@@ -354,9 +354,9 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                                       Navigator.of(context, rootNavigator: true).push(
                                         CupertinoPageRoute(builder: (_) {
                                           if (studio.type == "game") {
-                                            return GameDiscoverListPage(publisher: Uri.encodeQueryComponent(studioName));
+                                            return GameDiscoverListPage(publisher: studioName);
                                           } else {
-                                            return AnimeDiscoverListPage(studios: Uri.encodeQueryComponent(studioName));
+                                            return AnimeDiscoverListPage(studios: studioName);
                                           }
                                         })
                                       );

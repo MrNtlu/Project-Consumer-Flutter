@@ -219,8 +219,8 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                 children: [
                   Text(
                     provider.studios != null
-                    ? Uri.decodeQueryComponent(provider.studios!)
-                    : provider.genre != null ? Uri.decodeQueryComponent(provider.genre!) : 'Discover'
+                    ? provider.studios!
+                    : provider.genre != null ? provider.genre! : 'Discover'
                   ),
                   if (_totalResults > 0 && _state == ListState.done)
                   Text(

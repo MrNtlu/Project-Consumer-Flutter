@@ -66,15 +66,15 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
       url: "${APIRoutes().animeRoutes.animeBySortFilter}?page=$page&sort=$sort${
         status != null ? '&status=$status' : ''
       }${
-        genres != null ? '&genres=$genres' : ''
+        genres != null ? '&genres=${Uri.encodeQueryComponent(genres)}' : ''
       }${
-        demographics != null ? '&demographics=$demographics' : ''
+        demographics != null ? '&demographics=${Uri.encodeQueryComponent(demographics)}' : ''
       }${
-        themes != null ? '&themes=$themes' : ''
+        themes != null ? '&themes=${Uri.encodeQueryComponent(themes)}' : ''
       }${
-        streaming != null ? '&streaming_platforms=${Uri.encodeComponent(streaming)}' : ''
+        streaming != null ? '&streaming_platforms=${Uri.encodeQueryComponent(streaming)}' : ''
       }${
-        studios != null ? '&studios=$studios' : ''
+        studios != null ? '&studios=${Uri.encodeQueryComponent(studios)}' : ''
       }${
         season != null ? '&season=$season' : ''
       }${

@@ -136,8 +136,7 @@ class _PreviewListState extends State<PreviewList> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              Navigator.of(context, rootNavigator: true)
-                  .push(CupertinoPageRoute(builder: (_) {
+              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 switch (_contentProvider.selectedContent) {
                   case ContentType.movie:
                     return MovieDetailsPage(data.id);

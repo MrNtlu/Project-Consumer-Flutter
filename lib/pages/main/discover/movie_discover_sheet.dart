@@ -60,10 +60,15 @@ class MovieDiscoverSheet extends StatelessWidget {
       provider.streamingRegion.isEmpty
       ? Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode
       : provider.streamingRegion,
-      isStreamingRegionFiltered: provider.isStreamingRegionFiltered,
-      onStreamingRegionFilteredChanged: (bool newValue) {
-        provider.isStreamingRegionFiltered = newValue;
-      },
+    );
+
+    final studiosList = DiscoverSheetImageList(
+      Constants.MoviePopularStudiosList.where(
+        (element) => element.request == provider.productionCompanies
+      ).firstOrNull?.name,
+      Constants.MoviePopularStudiosList.map((e) => e.name).toList(),
+      Constants.MoviePopularStudiosList.map((e) => e.image).toList(),
+      isBiggerAndWideImage: true,
     );
 
     return SafeArea(
@@ -72,77 +77,106 @@ class MovieDiscoverSheet extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    DiscoverSheetFilterBody("Sort", sortList),
-                    ChangeNotifierProvider(
-                      create: (_) => StreamingPlatformStateProvider(),
-                      child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        DiscoverSheetFilterBody("Sort", sortList),
+                        ChangeNotifierProvider(
+                          create: (_) => StreamingPlatformStateProvider(),
+                          child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+                        ),
+                        regionFilter,
+                        ChangeNotifierProvider(
+                          create: (_) => StreamingPlatformStateProvider(),
+                          child: DiscoverSheetImageFilterBody("Studios", studiosList)
+                        ),
+                        DiscoverSheetFilterBody("Genre", genreList),
+                        DiscoverSheetFilterBody("Status", statusList),
+                        DiscoverSheetFilterBody("Release Date", decadeList),
+                        DiscoverSheetCountryFilterBody("Country", countryList),
+                        const SizedBox(height: 76),
+                      ],
                     ),
-                    regionFilter,
-                    DiscoverSheetFilterBody("Genre", genreList),
-                    DiscoverSheetFilterBody("Status", statusList),
-                    DiscoverSheetFilterBody("Release Date", decadeList),
-                    DiscoverSheetCountryFilterBody("Country", countryList),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    provider.reset();
-                    fetchData(true);
-                  }
-                ),
-                CupertinoButton.filled(
-                  onPressed: () {
-                    Navigator.pop(context);
-
-                    final newSort = Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request;
-                    final newGenre = Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name;
-                    final newStatus = Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request;
-                    final newDecade = Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request;
-                    final newCountry = Constants.MoviePopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request;
-                    final newStreaming = Constants.MovieStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
-
-                    final shouldFetchData = provider.sort != newSort
-                      || provider.genre != newGenre
-                      || provider.status != newStatus
-                      || provider.streaming != newStreaming
-                      || provider.decade != newDecade
-                      || provider.country != newCountry
-                      || regionFilter.isStreamingRegionFiltered != provider.isStreamingRegionFiltered
-                      || regionFilter.streamingRegion != provider.streamingRegion;
-
-                    provider.setDiscover(
-                      sort: newSort,
-                      genre: newGenre,
-                      status: newStatus,
-                      decade: newDecade,
-                      country: newCountry,
-                      streaming: newStreaming,
-                      streamingRegion: regionFilter.streamingRegion,
-                      isStreamingRegionFiltered: provider.isStreamingRegionFiltered,
-                    );
-
-                    if (shouldFetchData) {
-                      fetchData(true);
-                    }
-                  },
-                  child: const Text(
-                    "Done",
-                    style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
                   ),
-                ),
-              ],
+                  Positioned(
+                    bottom: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width - (12 + MediaQuery.paddingOf(context).horizontal),
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          color: CupertinoTheme.of(context).onBgColor.withOpacity(0.75)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            CupertinoButton(
+                              child: const Text(
+                                "Reset",
+                                style: TextStyle(
+                                  color: CupertinoColors.destructiveRed,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                provider.reset();
+                                fetchData(true);
+                              }
+                            ),
+                            CupertinoButton.filled(
+                              onPressed: () {
+                                Navigator.pop(context);
+
+                                final newSort = Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request;
+                                final newGenre = Constants.MovieGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name;
+                                final newStatus = Constants.MovieStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request;
+                                final newDecade = Constants.DecadeList.where((element) => element.name == decadeList.selectedValue).firstOrNull?.request;
+                                final newCountry = Constants.MoviePopularCountries.where((element) => element.name == countryList.selectedValue).firstOrNull?.request;
+                                final newStreaming = Constants.MovieStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
+                                final newStudio = Constants.MoviePopularStudiosList.where((element) => element.name == studiosList.selectedValue).firstOrNull?.request;
+
+                                final shouldFetchData = provider.sort != newSort
+                                  || provider.genre != newGenre
+                                  || provider.status != newStatus
+                                  || provider.streaming != newStreaming
+                                  || provider.decade != newDecade
+                                  || provider.country != newCountry
+                                  || provider.productionCompanies != newStudio
+                                  || regionFilter.streamingRegion != provider.streamingRegion;
+
+                                provider.setDiscover(
+                                  sort: newSort,
+                                  genre: newGenre,
+                                  status: newStatus,
+                                  decade: newDecade,
+                                  country: newCountry,
+                                  productionCompanies: newStudio,
+                                  streaming: newStreaming,
+                                  streamingRegion: regionFilter.streamingRegion,
+                                );
+
+                                if (shouldFetchData) {
+                                  fetchData(true);
+                                }
+                              },
+                              child: const Text(
+                                "Done",
+                                style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  )
+                ],
+              ),
             ),
             const SizedBox(height: 6)
           ],

@@ -298,16 +298,41 @@ class Constants {
     BackendRequestMapperWithImage("CloverWorks", "CloverWorks", image: "https://cdn.myanimelist.net/s/common/company_logos/75875b81-17bb-4f7e-a06f-bb149d54687e_600x600_i?s=b90a570d03511f70dbac7e04869f4835"),
     BackendRequestMapperWithImage("Trigger", "Trigger", image: "https://cdn.myanimelist.net/s/common/company_logos/bc3f892a-8581-45b1-8a95-81b6ac518f3d_600x600_i?s=d2a2e7f05478dbb999b17d35c44445db"),
     BackendRequestMapperWithImage("Toei Animation", "Toei Animation", image: "https://cdn.myanimelist.net/s/common/company_logos/33d49515-685a-4133-8ad3-41b09197e88d_600x600_i?s=cd6405cb06051286ce2bfbd4ce645443"),
-    BackendRequestMapperWithImage("Aniplex", "Aniplex", image: "https://cdn.myanimelist.net/s/common/company_logos/ba2241ea-7f83-45b6-9360-1f1d4de0d65a_600x600_i?s=369f1423117062ab3c7f4c7a90b2005a"),
     BackendRequestMapperWithImage("Gainax", "Gainax", image: "https://cdn.myanimelist.net/s/common/company_logos/7bba2118-127e-47a3-855f-0b284689f3da_600x600_i?s=c62c0bef4c82c81b750746955a423f64"),
     BackendRequestMapperWithImage("White Fox", "White Fox", image: "https://cdn.myanimelist.net/s/common/company_logos/40ba3310-9602-47fc-beb2-cc346adada09_600x600_i?s=6e3600896f107186d1a8dad0a3222d43"),
     BackendRequestMapperWithImage("Sunrise", "Sunrise", image: "https://cdn.myanimelist.net/s/common/company_logos/6a9279a7-1aeb-4a2b-bceb-4e7f24fae7b1_600x600_i?s=3550689bfb655805cd6d4d3b3987cc91"),
-    BackendRequestMapperWithImage("Crunchyroll", "Crunchyroll", image: "https://cdn.myanimelist.net/s/common/company_logos/73f4abea-0377-4362-8bb2-6d6577e9d303_600x600_i?s=30e237ce4c86b2874096c79521c492d2"),
-    BackendRequestMapperWithImage("Kadokawa", "Kadokawa", image: "https://cdn.myanimelist.net/s/common/company_logos/8a7cb4eb-caa6-46e1-8997-cb1e1ea5ffd2_600x600_i?s=c040c830a2425bb0a280e1f751c43b09"),
+    BackendRequestMapperWithImage("Studio Deen", "Studio Deen", image: "https://cdn.myanimelist.net/s/common/company_logos/77ec0b0b-f27d-4c2a-9952-ebfa895638e1_600x600_i?s=7b5fafdf451ebd4fdb5ddee23c118634"),
+    BackendRequestMapperWithImage("TMS Entertainment", "TMS Entertainment", image: "https://cdn.myanimelist.net/s/common/company_logos/be6fb172-8033-4f5c-a904-4ad4de90dbdd_600x600_i?s=9cf1899ebb8c743af6c1c54678909b9b"),
+    BackendRequestMapperWithImage("OLM", "OLM", image: "https://cdn.myanimelist.net/s/common/company_logos/4b41f888-3ec1-478e-aadd-882b78b4e3af_600x600_i?s=f2cd42bd452b467ee5deed362ca179d6"),
   ];
 
-  //TODO: Add like EA, Bethesta etc.
-  static final GamePopularPublishersList = [];
+  static final GamePopularPublishersList = [ // 25 total
+    BackendRequestMapperWithImage("Electronic Arts", "Electronic Arts", image: "https://logo.clearbit.com/ea.com"),
+    BackendRequestMapperWithImage("Nintendo", "Nintendo", image: "https://logo.clearbit.com/nintendo.com"),
+    BackendRequestMapperWithImage("Ubisoft Entertainment", "Ubisoft Entertainment", image: "https://logo.clearbit.com/ubisoft.com"),
+    BackendRequestMapperWithImage("SEGA", "SEGA", image: "https://logo.clearbit.com/sega.com"),
+    BackendRequestMapperWithImage("Square Enix", "Square Enix", image: "https://i0.wp.com/www.thexboxhub.com/wp-content/uploads/2015/07/square-enix-logo.jpg?resize=500"),
+    BackendRequestMapperWithImage("Capcom", "Capcom", image: "https://logo.clearbit.com/capcom.com"),
+    BackendRequestMapperWithImage("Bandai Namco Entertainment", "Bandai Namco Entertainment", image: "https://logo.clearbit.com/bandainamcoent.com"),
+    BackendRequestMapperWithImage("Sony Computer Entertainment", "Sony Computer Entertainment", image: "https://logo.clearbit.com/sonyinteractive.com"),
+    BackendRequestMapperWithImage("Microsoft Studios", "Microsoft Studios", image: "https://assets.xboxservices.com/assets/ce/76/ce767c31-8dfd-4f5d-83bd-449181ec096b.jpg?n=14702985_Content-Placement-0_XGSP_740x417.jpg"),
+    BackendRequestMapperWithImage("Bethesda Softworks", "Bethesda Softworks", image: "https://logo.clearbit.com/Bethesda.net"),
+    BackendRequestMapperWithImage("THQ Nordic", "THQ Nordic", image: "https://logo.clearbit.com/thqnordic.com"),
+    BackendRequestMapperWithImage("Konami", "Konami", image: "https://logo.clearbit.com/konami.com"),
+    BackendRequestMapperWithImage("2K Games", "2K Games", image: "https://logo.clearbit.com/2k.com"),
+    BackendRequestMapperWithImage("Warner Bros. Interactive", "Warner Bros. Interactive", image: "https://logo.clearbit.com/warnerbrosgames.com"),
+    BackendRequestMapperWithImage("Devolver Digital", "Devolver Digital", image: "https://logo.clearbit.com/devolverdigital.com"),
+    BackendRequestMapperWithImage("Focus Home Interactive", "Focus Home Interactive", image: "https://logo.clearbit.com/focus-entmt.com"),
+    BackendRequestMapperWithImage("Feral Interactive", "Feral Interactive", image: "https://logo.clearbit.com/feralinteractive.com"),
+    BackendRequestMapperWithImage("Valve", "Valve", image: "https://logo.clearbit.com/valvesoftware.com"),
+    BackendRequestMapperWithImage("Rockstar Games", "Rockstar Games", image: "https://logo.clearbit.com/rockstargames.com"),
+    BackendRequestMapperWithImage("CD PROJEKT RED", "CD PROJEKT RED", image: "https://logo.clearbit.com/cdprojektred.com"),
+    BackendRequestMapperWithImage("Paradox Interactive", "Paradox Interactive", image: "https://yt3.googleusercontent.com/7Pc0RMas2jkKvkFhgJLCbhMXbGOyk_-s7EROB-664ZZRNQFuqcTaT87dvgyup-Ntngp_bUUWNA=s900-c-k-c0x00ffffff-no-rj"),
+    BackendRequestMapperWithImage("Atlus", "Atlus", image: "https://logo.clearbit.com/atlus.com"),
+    BackendRequestMapperWithImage("Aspyr", "Aspyr", image: "https://logo.clearbit.com/aspyr.com"),
+    BackendRequestMapperWithImage("Sony Interactive Entertainment", "Sony Interactive Entertainment", image: "https://logo.clearbit.com/sonyinteractive.com"),
+    BackendRequestMapperWithImage("THQ", "THQ", image: "https://logo.clearbit.com/thqnordic.com"),
+  ];
 
   //Genre List
   static final MovieGenreList = [
@@ -498,7 +523,7 @@ class Constants {
   ];
 
   static final MoviePopularCountries = [
-    BackendRequestMapper("U.S.A.", "US"),
+    BackendRequestMapper("USA", "US"),
     BackendRequestMapper("Japan", "JP"),
     BackendRequestMapper("France", "FR"),
     BackendRequestMapper("Great Britain", "GB"),
@@ -516,7 +541,7 @@ class Constants {
   ];
 
   static final TVPopularCountries = [
-    BackendRequestMapper("U.S.A.", "US"),
+    BackendRequestMapper("USA", "US"),
     BackendRequestMapper("Korea", "KR"),
     BackendRequestMapper("Great Britain", "GB"),
     BackendRequestMapper("Japan", "JP"),

@@ -2,8 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_name_url.dart';
-import 'package:watchlistfy/pages/main/streaming/streaming_content_page.dart';
+import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/navigation_provider.dart';
 
 class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
   final List<AnimeNameUrl> data;
@@ -24,14 +25,11 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             onTap: () async {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                return StreamingContentPage(
-                  "",
-                  item.name,
-                  'https://logo.clearbit.com/${item.url}',
-                  isMovie: false,
-                  isAnime: true,
+                return AnimeDiscoverListPage(
+                  streaming: item.name,
+                  streamingLogo: 'https://logo.clearbit.com/${item.url}',
                 );
-              }));
+              }, maintainState: NavigationTracker().shouldMaintainState()));
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 8),

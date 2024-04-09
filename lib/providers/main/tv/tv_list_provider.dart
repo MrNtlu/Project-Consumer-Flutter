@@ -58,11 +58,12 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
     int? to,
     String? streaming,
     String streamingRegion = "",
-    bool isStreamingRegionFiltered = false,
   }) {
     if (page == 1) {
       pitems.clear();
     }
+
+    final bool isStreamingRegionFiltered = streamingRegion != "WW";
 
     return getList(
       url: "${APIRoutes().tvRoutes.tvBySortFilter}?page=$page&sort=$sort${
@@ -70,19 +71,19 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
       }${
         numOfSeason != null ? '&season=$numOfSeason' : ''
       }${
-        productionCompany != null ? '&production_companies=$productionCompany' : ''
+        productionCompany != null ? '&production_companies=${Uri.encodeQueryComponent(productionCompany)}' : ''
       }${
-        productionCountry != null ? '&production_country=$productionCountry' : ''
+        productionCountry != null ? '&production_country=${Uri.encodeQueryComponent(productionCountry)}' : ''
       }${
-        genres != null ? '&genres=$genres' : ''
+        genres != null ? '&genres=${Uri.encodeQueryComponent(genres)}' : ''
       }${
-        streaming != null ? '&streaming_platforms=${Uri.encodeComponent(streaming)}' : ''
+        streaming != null ? '&streaming_platforms=${Uri.encodeQueryComponent(streaming)}' : ''
       }${
         from != null && to != null ? '&from=$from&to=$to' : ''
       }${
         streaming != null
           ? isStreamingRegionFiltered
-            ? '&is_region_filtered=true&region=$streamingRegion'
+            ? '&is_region_filtered=true&region=${Uri.encodeQueryComponent(streamingRegion)}'
             : '&is_region_filtered=false'
           : ''
       }"

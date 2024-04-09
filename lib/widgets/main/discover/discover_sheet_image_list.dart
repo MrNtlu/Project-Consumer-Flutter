@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/cupertino_streaming_chip.dart';
 
@@ -11,6 +12,7 @@ class DiscoverSheetImageList extends StatefulWidget {
   String? selectedValue;
   final List<String> list;
   final List<String> imageList;
+  final bool isBiggerAndWideImage;
   StreamingPlatformStateProvider? provider;
 
   DiscoverSheetImageList(
@@ -19,6 +21,7 @@ class DiscoverSheetImageList extends StatefulWidget {
     this.imageList,
     {
       this.provider,
+      this.isBiggerAndWideImage = false,
       super.key
     }
   );
@@ -62,25 +65,28 @@ class _DiscoverSheetImageListState extends State<DiscoverSheetImageList> {
                 child: CupertinoStreamingChip(
                   isSelected: data == widget.selectedValue,
                   leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(13),
-                    child: CachedNetworkImage(
-                      imageUrl: image,
-                      key: ValueKey<String>(image),
-                      cacheKey: image,
-                      height: 25,
-                      width: 25,
-                      fit: BoxFit.cover,
-                      maxHeightDiskCache: 75,
-                      maxWidthDiskCache: 75,
-                      progressIndicatorBuilder: (_, __, ___) => ClipRRect(
-                        borderRadius: BorderRadius.circular(13),
-                        child: Shimmer.fromColors(
-                          baseColor: CupertinoColors.systemGrey,
-                          highlightColor: CupertinoColors.systemGrey3,
-                          child: const ColoredBox(color: CupertinoColors.systemGrey)
-                        )
+                    borderRadius: BorderRadius.circular(widget.isBiggerAndWideImage ? 8 : 13),
+                    child: ColoredBox(
+                      color: widget.isBiggerAndWideImage ? CupertinoColors.white : CupertinoTheme.of(context).bgColor,
+                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        key: ValueKey<String>(image),
+                        cacheKey: image,
+                        height: 25,
+                        width: widget.isBiggerAndWideImage ? 35 : 25,
+                        fit: widget.isBiggerAndWideImage ? BoxFit.contain : BoxFit.cover,
+                        maxHeightDiskCache: 75,
+                        maxWidthDiskCache: widget.isBiggerAndWideImage ? 105 : 75,
+                        progressIndicatorBuilder: (_, __, ___) => ClipRRect(
+                          borderRadius: BorderRadius.circular(widget.isBiggerAndWideImage ? 8 : 13),
+                          child: Shimmer.fromColors(
+                            baseColor: CupertinoColors.systemGrey,
+                            highlightColor: CupertinoColors.systemGrey3,
+                            child: const ColoredBox(color: CupertinoColors.systemGrey)
+                          )
+                        ),
+                        errorListener: (_) {},
                       ),
-                      errorListener: (_) {},
                     ),
                   ),
                   label: data,
@@ -115,24 +121,27 @@ class _DiscoverSheetImageListState extends State<DiscoverSheetImageList> {
               isSelected: data == widget.selectedValue,
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(13),
-                child: CachedNetworkImage(
-                  imageUrl: image,
-                  key: ValueKey<String>(image),
-                  cacheKey: image,
-                  height: 25,
-                  width: 25,
-                  fit: BoxFit.cover,
-                  maxHeightDiskCache: 75,
-                  maxWidthDiskCache: 75,
-                  progressIndicatorBuilder: (_, __, ___) => ClipRRect(
-                    borderRadius: BorderRadius.circular(13),
-                    child: Shimmer.fromColors(
-                      baseColor: CupertinoColors.systemGrey,
-                      highlightColor: CupertinoColors.systemGrey3,
-                      child: const ColoredBox(color: CupertinoColors.systemGrey)
-                    )
+                child: ColoredBox(
+                  color: widget.isBiggerAndWideImage ? CupertinoColors.white : CupertinoTheme.of(context).bgColor,
+                  child: CachedNetworkImage(
+                    imageUrl: image,
+                    key: ValueKey<String>(image),
+                    cacheKey: image,
+                    height: 25,
+                    width: 25,
+                    fit: widget.isBiggerAndWideImage ? BoxFit.contain : BoxFit.cover,
+                    maxHeightDiskCache: 75,
+                    maxWidthDiskCache: 75,
+                    progressIndicatorBuilder: (_, __, ___) => ClipRRect(
+                      borderRadius: BorderRadius.circular(13),
+                      child: Shimmer.fromColors(
+                        baseColor: CupertinoColors.systemGrey,
+                        highlightColor: CupertinoColors.systemGrey3,
+                        child: const ColoredBox(color: CupertinoColors.systemGrey)
+                      )
+                    ),
+                    errorListener: (_) {},
                   ),
-                  errorListener: (_) {},
                 ),
               ),
               label: data,

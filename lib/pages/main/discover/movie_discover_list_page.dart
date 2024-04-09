@@ -95,7 +95,6 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
       from: from,
       to: to,
       streaming: _discoverProvider.streaming,
-      isStreamingRegionFiltered: _discoverProvider.isStreamingRegionFiltered,
       streamingRegion: _discoverProvider.streamingRegion
     );
 
@@ -141,7 +140,6 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
     if (widget.streaming != null && widget.region != null) {
       _discoverProvider.streaming = widget.streaming;
       _discoverProvider.streamingRegion = widget.region!;
-      _discoverProvider.isStreamingRegionFiltered = true;
     }
   }
 
@@ -232,10 +230,10 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.productionCompanies != null
-                    ? Uri.decodeQueryComponent(widget.productionCompanies!)
+                    provider.productionCompanies != null
+                    ? provider.productionCompanies!
                     : provider.genre != null
-                      ? Uri.decodeQueryComponent(provider.genre!)
+                      ? provider.genre!
                       : 'Discover'
                   ),
                   if (_totalResults > 0 && _state == ListState.done)

@@ -11,7 +11,6 @@ class DiscoverTVProvider with ChangeNotifier {
   String? country;
   String? streaming;
   String streamingRegion = "";
-  bool isStreamingRegionFiltered = false;
 
   void reset() {
     sort = Constants.SortRequests[0].request;
@@ -22,7 +21,6 @@ class DiscoverTVProvider with ChangeNotifier {
     decade = null;
     country = null;
     streaming = null;
-    isStreamingRegionFiltered = false;
   }
 
   void setDiscover({
@@ -35,7 +33,6 @@ class DiscoverTVProvider with ChangeNotifier {
     String? country,
     String? streaming,
     String streamingRegion = "",
-    required bool isStreamingRegionFiltered,
   }) {
     this.sort = sort;
     this.genre = genre;
@@ -46,6 +43,5 @@ class DiscoverTVProvider with ChangeNotifier {
     this.country = country;
     this.streaming = streaming;
     this.streamingRegion = streamingRegion;
-    this.isStreamingRegionFiltered = isStreamingRegionFiltered;
   }
 }

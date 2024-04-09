@@ -67,63 +67,125 @@ class AnimeDiscoverSheet extends StatelessWidget {
       Constants.AnimeStreamingPlatformList.map((e) => e.image).toList(),
     );
 
+    final studiosList = DiscoverSheetImageList(
+      Constants.AnimePopularStudiosList.where(
+        (element) => element.request == provider.studios
+      ).firstOrNull?.name,
+      Constants.AnimePopularStudiosList.map((e) => e.name).toList(),
+      Constants.AnimePopularStudiosList.map((e) => e.image).toList(),
+    );
+
     return SafeArea(
       child: ColoredBox(
         color: CupertinoTheme.of(context).bgColor,
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    DiscoverSheetFilterBody("Sort", sortList),
-                    ChangeNotifierProvider(
-                      create: (_) => StreamingPlatformStateProvider(),
-                      child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        DiscoverSheetFilterBody("Sort", sortList),
+                        ChangeNotifierProvider(
+                          create: (_) => StreamingPlatformStateProvider(),
+                          child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
+                        ),
+                        ChangeNotifierProvider(
+                          create: (_) => StreamingPlatformStateProvider(),
+                          child: DiscoverSheetImageFilterBody("Studios", studiosList)
+                        ),
+                        DiscoverSheetFilterBody("Genre", genreList),
+                        DiscoverSheetFilterBody("Demographics", demographicList),
+                        DiscoverSheetFilterBody("Themes", themeList),
+                        DiscoverSheetFilterBody("Status", statusList),
+                        DiscoverSheetFilterBody("Season", seasonList),
+                        DiscoverSheetFilterBody("Year", yearDiscoverList),
+                        const SizedBox(height: 76),
+                      ],
                     ),
-                    DiscoverSheetFilterBody("Genre", genreList),
-                    DiscoverSheetFilterBody("Demographics", demographicList),
-                    DiscoverSheetFilterBody("Themes", themeList),
-                    DiscoverSheetFilterBody("Status", statusList),
-                    DiscoverSheetFilterBody("Season", seasonList),
-                    DiscoverSheetFilterBody("Year", yearDiscoverList),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    provider.reset();
-                    fetchData(true);
-                  }
-                ),
-                CupertinoButton.filled(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    provider.setDiscover(
-                      sort: Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request,
-                      genre: Constants.AnimeGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name,
-                      demographics: Constants.AnimeDemographicsList.where((element) => element.name == demographicList.selectedValue).firstOrNull?.name,
-                      themes: Constants.AnimeThemeList.where((element) => element.name == themeList.selectedValue).firstOrNull?.name,
-                      status: Constants.AnimeStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request,
-                      season: Constants.AnimeSeasonList.where((element) => element.name == seasonList.selectedValue).firstOrNull?.request,
-                      year: yearList.where((element) => element.toString() == yearDiscoverList.selectedValue?.toString()).firstOrNull,
-                      streaming: Constants.AnimeStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request,
-                    );
-                    fetchData(true);
-                  },
-                  child: const Text(
-                    "Done",
-                    style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
                   ),
-                )
-              ],
+                  Positioned(
+                    bottom: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width - (12 + MediaQuery.paddingOf(context).horizontal),
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          color: CupertinoTheme.of(context).onBgColor.withOpacity(0.75)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            CupertinoButton(
+                              child: const Text(
+                                "Reset",
+                                style: TextStyle(
+                                  color: CupertinoColors.destructiveRed,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                )
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                provider.reset();
+                                fetchData(true);
+                              }
+                            ),
+                            CupertinoButton.filled(
+                              onPressed: () {
+                                Navigator.pop(context);
+
+                                final newSort = Constants.SortRequests.where((element) => element.name == sortList.selectedValue!).first.request;
+                                final newGenre = Constants.AnimeGenreList.where((element) => element.name == genreList.selectedValue).firstOrNull?.name;
+                                final newDemographics = Constants.AnimeDemographicsList.where((element) => element.name == demographicList.selectedValue).firstOrNull?.name;
+                                final newThemes = Constants.AnimeThemeList.where((element) => element.name == themeList.selectedValue).firstOrNull?.name;
+                                final newStatus = Constants.AnimeStatusRequests.where((element) => element.name == statusList.selectedValue).firstOrNull?.request;
+                                final newSeason = Constants.AnimeSeasonList.where((element) => element.name == seasonList.selectedValue).firstOrNull?.request;
+                                final newYear = yearList.where((element) => element.toString() == yearDiscoverList.selectedValue?.toString()).firstOrNull;
+                                final newStreaming = Constants.AnimeStreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
+                                final newStudio = Constants.AnimePopularStudiosList.where((element) => element.name == studiosList.selectedValue).firstOrNull?.request;
+
+                                final shouldFetchData = provider.sort != newSort
+                                  || provider.genre != newGenre
+                                  || provider.demographics != newDemographics
+                                  || provider.themes != newThemes
+                                  || provider.status != newStatus
+                                  || provider.season != newSeason
+                                  || provider.year != newYear
+                                  || provider.streaming != newStreaming
+                                  || provider.studios != newStudio;
+
+                                provider.setDiscover(
+                                  sort: newSort,
+                                  genre: newGenre,
+                                  demographics: newDemographics,
+                                  themes: newThemes,
+                                  status: newStatus,
+                                  season: newSeason,
+                                  year: newYear,
+                                  streaming: newStreaming,
+                                  studios: newStudio,
+                                );
+
+                                if (shouldFetchData) {
+                                  fetchData(true);
+                                }
+                              },
+                              child: const Text(
+                                "Done",
+                                style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 6)
           ],

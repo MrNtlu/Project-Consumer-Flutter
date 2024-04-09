@@ -57,20 +57,20 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 if (isMovie) {
                   return MovieDiscoverListPage(
-                    streaming: streamingPlatform?.name,
-                    streamingLogo: streamingPlatform?.image,
+                    streaming: streamingPlatform!.name,
+                    streamingLogo: streamingPlatform.image,
                     region: region,
                   );
                 } else if (isTV) {
                   return TVDiscoverListPage(
-                    streaming: streamingPlatform?.name,
-                    streamingLogo: streamingPlatform?.image,
+                    streaming: streamingPlatform!.name,
+                    streamingLogo: streamingPlatform.image,
                     region: region,
                   );
                 } else {
                   return AnimeDiscoverListPage(
-                    streaming: animeStreamingPlatform?.name,
-                    streamingLogo: animeStreamingPlatform?.image,
+                    streaming: animeStreamingPlatform!.name,
+                    streamingLogo: animeStreamingPlatform.image,
                   );
                 }
               }));

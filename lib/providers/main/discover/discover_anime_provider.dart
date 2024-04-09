@@ -43,5 +43,6 @@ class DiscoverAnimeProvider with ChangeNotifier {
     this.season = season;
     this.year = year;
     this.streaming = streaming;
+    this.studios = studios;
   }
 }
