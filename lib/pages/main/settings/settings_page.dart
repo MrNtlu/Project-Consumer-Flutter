@@ -273,14 +273,16 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (_userInfo != null)
-            const SizedBox(height: 16),
-            if (_userInfo != null)
-            SettingsProfile(_userInfo!, _changeImage),
-            if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
-            const SizedBox(height: 16),
-            if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
-            const SettingsPremiumPromo(),
+            ...[
+              const SizedBox(height: 16),
+              SettingsProfile(_userInfo!, _changeImage),
 
+            ],
+            if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
+            ...[
+              const SizedBox(height: 16),
+              const SettingsPremiumPromo(),
+            ],
             SettingsList(
               shrinkWrap: true,
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
@@ -320,29 +322,30 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     ),
                     if (_userInfo != null)
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.mark_email_unread_rounded),
-                      title: const Text('Mail Notification Settings'),
-                      onPressed: (ctx) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return SettingsNotificationPage(_userInfo!);
-                          })
-                        );
-                      },
-                    ),
-                    if (_userInfo != null)
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.notifications_on_rounded),
-                      title: const Text('In-App Notification Settings'),
-                      onPressed: (ctx) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return SettingsNotificationPage(_userInfo!, isMail: false);
-                          })
-                        );
-                      },
-                    ),
+                    ...[
+                      SettingsTile.navigation(
+                        leading: const Icon(Icons.mark_email_unread_rounded),
+                        title: const Text('Mail Notification Settings'),
+                        onPressed: (ctx) {
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(builder: (_) {
+                              return SettingsNotificationPage(_userInfo!);
+                            })
+                          );
+                        },
+                      ),
+                      SettingsTile.navigation(
+                        leading: const Icon(Icons.notifications_on_rounded),
+                        title: const Text('In-App Notification Settings'),
+                        onPressed: (ctx) {
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(builder: (_) {
+                              return SettingsNotificationPage(_userInfo!, isMail: false);
+                            })
+                          );
+                        },
+                      ),
+                    ],
                     if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
                     SettingsTile.navigation(
                       leading: const Icon(CupertinoIcons.person_2_fill),
@@ -368,32 +371,33 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     ),
                     if (authProvider?.isAuthenticated == true)
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.password_rounded),
-                      title: const Text('Change Password'),
-                      onPressed: (ctx) {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          barrierColor: CupertinoColors.black.withOpacity(0.75),
-                          builder: (_) => const ChangePasswordSheet()
-                        );
-                      },
-                    ),
-                    if (authProvider?.isAuthenticated == true)
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.logout_rounded),
-                      title: const Text('Logout'),
-                      onPressed: (ctx) {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) {
-                            return SureDialog("Do you want to logout?", () {
-                              _logOut();
-                            });
-                          }
-                        );
-                      },
-                    ),
+                    ...[
+                      SettingsTile.navigation(
+                        leading: const Icon(Icons.password_rounded),
+                        title: const Text('Change Password'),
+                        onPressed: (ctx) {
+                          showCupertinoModalBottomSheet(
+                            context: context,
+                            barrierColor: CupertinoColors.black.withOpacity(0.75),
+                            builder: (_) => const ChangePasswordSheet()
+                          );
+                        },
+                      ),
+                      SettingsTile.navigation(
+                        leading: const Icon(Icons.logout_rounded),
+                        title: const Text('Logout'),
+                        onPressed: (ctx) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) {
+                              return SureDialog("Do you want to logout?", () {
+                                _logOut();
+                              });
+                            }
+                          );
+                        },
+                      ),
+                    ],
                     if (authProvider?.isAuthenticated == false)
                     SettingsTile.navigation(
                       leading: const Icon(Icons.login_rounded),

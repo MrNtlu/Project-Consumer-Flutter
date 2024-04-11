@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -208,142 +209,148 @@ class LoginPage extends StatelessWidget {
               middle: const Text("Welcome Back 👋", style: TextStyle(fontSize: 18)),
               alwaysShowMiddle: false,
             ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset("assets/images/logo.png", cacheHeight: 105),
-                      const SizedBox(height: 24),
-                      EmailField(_emailTextController),
-                      const SizedBox(height: 24),
-                      PasswordField(_passwordTextController),
-                      const SizedBox(height: 32),
-                      SizedBox(
-                        width: 250,
-                        child: CupertinoButton(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                          color: AppColors().primaryColor,
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 15),
-                          ),
-                          onPressed: () {
-                            _onLoginPressed(context);
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      if (Platform.isIOS || Platform.isMacOS)
-                      SizedBox(
-                        width: 250,
-                        child: CupertinoButton(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                          color: CupertinoTheme.of(context).bgTextColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(const IconData(0xf04be, fontFamily: 'MaterialIcons'), color: CupertinoTheme.of(context).bgColor),
-                              Text(
-                                "Sign in with Apple",
-                                style: TextStyle(color: CupertinoTheme.of(context).bgColor, fontWeight: FontWeight.bold, fontSize: 15)
-                              )
-                            ],
-                          ),
-                          onPressed: () async {
-                            showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
-
-                            try {
-                              final credential = await SignInWithApple.getAppleIDCredential(
-                                scopes: [
-                                  AppleIDAuthorizationScopes.email,
-                                ],
-                              );
-
-                              if (context.mounted) {
-                                _onOAuth2AppleLogin(context, credential.authorizationCode);
-                              }
-                            } catch (_) {
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                              }
-                            }
-                          },
-                        ),
-                      ),
-                      if (Platform.isIOS || Platform.isMacOS)
-                      const SizedBox(height: 16),
-                      if (Platform.isAndroid)
-                      SizedBox(
-                        width: 250,
-                        child: CupertinoButton(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                          color: Colors.white,
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FaIcon(FontAwesomeIcons.google, color: Colors.black,),
-                              Text(
-                                "Sign in with Google",
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)
-                              )
-                            ],
-                          ),
-                          onPressed: () async {
-                            showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
-
-                            try {
-                              if (context.mounted) {
-                                _onGoogleSignInPressed(context);
-                              }
-                            } catch (_) {
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                              }
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.8,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text("Don't have an Account?", style: TextStyle(fontSize: 12)),
-                          const SizedBox(width: 6),
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: const Text(
-                              "Register",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          const SizedBox(height: 32),
+                          Image.asset("assets/images/logo.png", height: MediaQuery.sizeOf(context).height > 400 ? MediaQuery.sizeOf(context).height * 0.15 : 125),
+                          const SizedBox(height: 24),
+                          EmailField(_emailTextController),
+                          const SizedBox(height: 24),
+                          PasswordField(_passwordTextController),
+                          const SizedBox(height: 32),
+                          SizedBox(
+                            width: 250,
+                            child: CupertinoButton(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+                              color: AppColors().primaryColor,
+                              child: const Text(
+                                "Login",
+                                style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              onPressed: () {
+                                _onLoginPressed(context);
+                              },
                             ),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                CupertinoPageRoute(builder: (_) {
-                                  return const RegisterPage();
-                                })
+                          ),
+                          const SizedBox(height: 16),
+                          if (Platform.isIOS || Platform.isMacOS)
+                          ...[
+                            SizedBox(
+                              width: 250,
+                              child: CupertinoButton(
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+                                color: CupertinoTheme.of(context).bgTextColor,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(const IconData(0xf04be, fontFamily: 'MaterialIcons'), color: CupertinoTheme.of(context).bgColor),
+                                    Text(
+                                      "Sign in with Apple",
+                                      style: TextStyle(color: CupertinoTheme.of(context).bgColor, fontWeight: FontWeight.bold, fontSize: 15)
+                                    )
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
+
+                                  try {
+                                    final credential = await SignInWithApple.getAppleIDCredential(
+                                      scopes: [
+                                        AppleIDAuthorizationScopes.email,
+                                      ],
+                                    );
+
+                                    if (context.mounted) {
+                                      _onOAuth2AppleLogin(context, credential.authorizationCode);
+                                    }
+                                  } catch (_) {
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          if (Platform.isAndroid)
+                          SizedBox(
+                            width: 250,
+                            child: CupertinoButton(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+                              color: Colors.white,
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  FaIcon(FontAwesomeIcons.google, color: Colors.black),
+                                  Text(
+                                    "Sign in with Google",
+                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)
+                                  )
+                                ],
+                              ),
+                              onPressed: () async {
+                                showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
+
+                                try {
+                                  if (context.mounted) {
+                                    _onGoogleSignInPressed(context);
+                                  }
+                                } catch (_) {
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Don't have an Account?", style: TextStyle(fontSize: 12)),
+                              const SizedBox(width: 6),
+                              CupertinoButton(
+                                padding: EdgeInsets.zero,
+                                child: const Text(
+                                  "Register",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    CupertinoPageRoute(builder: (_) {
+                                      return const RegisterPage();
+                                    })
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          CupertinoButton(
+                            minSize: 0,
+                            padding: const EdgeInsets.all(3),
+                            child: const Text("Forgot Password?", style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey)),
+                            onPressed: (){
+                              showCupertinoModalBottomSheet(
+                                context: context,
+                                barrierColor: CupertinoColors.black.withOpacity(0.75),
+                                builder: (_) => const ForgotPasswordSheet()
                               );
-                            },
+                            }
                           ),
                         ],
                       ),
-                      CupertinoButton(
-                        minSize: 0,
-                        padding: const EdgeInsets.all(3),
-                        child: const Text("Forgot Password?", style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey)),
-                        onPressed: (){
-                          showCupertinoModalBottomSheet(
-                            context: context,
-                            barrierColor: CupertinoColors.black.withOpacity(0.75),
-                            builder: (_) => const ForgotPasswordSheet()
-                          );
-                        }
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

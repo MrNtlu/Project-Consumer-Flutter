@@ -127,7 +127,6 @@ class _UserListPageState extends State<UserListPage> {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: const Text("My List"),
-              //UserListContentSelection(userListContentSelectionProvider),
               trailing: CupertinoButton(
                 onPressed: () {
                   setState(() {
@@ -227,7 +226,6 @@ class _UserListPageState extends State<UserListPage> {
                           return Padding(
                             padding: EdgeInsets.only(left: index == 0 ? 9 : 3, right: 3),
                             child: CupertinoChip(
-                              // key: [index],
                               isSelected: ContentType.values[index] == userListContentSelectionProvider.selectedContent,
                               size: 16,
                               leading: FaIcon(
@@ -238,10 +236,6 @@ class _UserListPageState extends State<UserListPage> {
                               ),
                               onSelected: (_) {
                                 userListContentSelectionProvider.setContentType(ContentType.values[index]);
-                                // tabProvider.setNewIndex(index);
-                                // if (_scrollController.hasClients && socialTabKeys[index].currentContext != null) {
-                                //   Scrollable.ensureVisible(socialTabKeys[index].currentContext!);
-                                // }
                               },
                               label: ContentType.values[index].value,
                             ),

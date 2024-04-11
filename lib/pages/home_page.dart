@@ -124,9 +124,10 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20),
             if (!authenticationProvider.isAuthenticated)
-            const InfoCard(),
-            if (!authenticationProvider.isAuthenticated)
-            const SizedBox(height: 20),
+            ...[
+              const InfoCard(),
+              const SizedBox(height: 20),
+            ],
             if (!Platform.isAndroid)
             const SizedBox(height: 20),
             const GenreList(),
@@ -141,15 +142,13 @@ class _HomePageState extends State<HomePage> {
               child: PreviewList(Constants.ContentTags[1])
             ),
             if (isMovieOrTVSeries)
-            const SizedBox(height: 8),
-            if (isMovieOrTVSeries)
-            SeeAllTitle("🌎 Countries", (){}, shouldHideSeeAllButton: true),
-            if (isMovieOrTVSeries)
-            PreviewCountryList(isMovie: contentProvider.selectedContent == ContentType.movie),
-            if (isMovieOrTVSeries)
-            SeeAllTitle("🧛‍♂️ Popular Actors", (){}, shouldHideSeeAllButton: true),
-            if (isMovieOrTVSeries)
-            const PreviewActorList(),
+            ...[
+              const SizedBox(height: 8),
+              SeeAllTitle("🌎 Countries", (){}, shouldHideSeeAllButton: true),
+              PreviewCountryList(isMovie: contentProvider.selectedContent == ContentType.movie),
+              SeeAllTitle("🧛‍♂️ Popular Actors", (){}, shouldHideSeeAllButton: true),
+              const PreviewActorList(),
+            ],
             const SizedBox(height: 12),
             SeeAllTitle("🍿 Top Rated", () {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
@@ -162,45 +161,42 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 12),
             if (!isGame)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("📺 Streaming Platforms", style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-                  if (contentProvider.selectedContent != ContentType.anime)
-                  Text(globalProvider.selectedCountryCode, style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-                ],
+            ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("📺 Streaming Platforms", style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+                    if (contentProvider.selectedContent != ContentType.anime)
+                    Text(globalProvider.selectedCountryCode, style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+                  ],
+                ),
               ),
-            ),
-            if (!isGame)
-            PreviewStreamingPlatformsList(globalProvider.selectedCountryCode),
-            if (!isGame)
-            const SizedBox(height: 12),
-            if (!isGame)
-            SeeAllTitle(
-              contentProvider.selectedContent == ContentType.movie
-                  ? "🎭 In Theaters"
-                  : "📺 Airing Today", () {
-                Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                  return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[3], "🎭 In Theaters");
-                }));
-              },
-              shouldHideSeeAllButton: contentProvider.selectedContent !=ContentType.movie
-            ),
-            if (!isGame)
-            SizedBox(
-              height: 200,
-              child: PreviewList(Constants.ContentTags[3])
-            ),
-            if (!isGame)
-            const SizedBox(height: 12),
+              PreviewStreamingPlatformsList(globalProvider.selectedCountryCode),
+              const SizedBox(height: 12),
+              SeeAllTitle(
+                contentProvider.selectedContent == ContentType.movie
+                    ? "🎭 In Theaters"
+                    : "📺 Airing Today", () {
+                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                    return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[3], "🎭 In Theaters");
+                  }));
+                },
+                shouldHideSeeAllButton: contentProvider.selectedContent !=ContentType.movie
+              ),
+              SizedBox(
+                height: 200,
+                child: PreviewList(Constants.ContentTags[3])
+              ),
+              const SizedBox(height: 12),
+            ],
             SeeAllTitle(
               "${contentProvider.selectedContent == ContentType.game ? '🎮' : '🎙️'} Popular ${contentProvider.selectedContent == ContentType.game ? 'Publishers' : 'Studios'}",
               (){},

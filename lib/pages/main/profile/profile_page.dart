@@ -247,35 +247,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              // const SizedBox(height: 16),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 12),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.max,
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       ProfileButton("Custom Lists", () {
-                      // Navigator.of(context, rootNavigator: true).push(
-                      //   CupertinoPageRoute(builder: (_) {
-                      //     return const CustomListPage();
-                      //   })
-                      // );
-              //       }, CupertinoIcons.folder_fill),
-              //       const SizedBox(width: 12),
-              //       ProfileButton("User List", () {
-                      // Navigator.of(context, rootNavigator: true).push(
-                      //   CupertinoPageRoute(builder: (_) {
-                      //     return const UserListPage();
-                      //   })
-                      // ).then((value) => _fetchData());
-              //       }, CupertinoIcons.list_bullet),
-              //     ],
-              //   ),
-              // ),
               const SizedBox(height: 16),
               ProfileStats(item),
-              // const SizedBox(height: 16),
-              // const ProfileFullWidthButton(),
               SeeAllTitle("🕒 Watch Later", () {
                 Navigator.of(context, rootNavigator: true).push(
                   CupertinoPageRoute(builder: (_) {
@@ -426,40 +399,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              // SeeAllTitle("💬 Reviews", () {
-              //   Navigator.of(context, rootNavigator: true).push(
-              //     CupertinoPageRoute(builder: (_) {
-              //       return ReviewProfileListPage(_fetchData);
-              //     })
-              //   );
-              // }),
-              // SizedBox(
-              //   height: 200,
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 8),
-              //     child: ListView.builder(
-              //       scrollDirection: item.reviews.isEmpty ? Axis.vertical : Axis.horizontal,
-              //       physics: item.reviews.isEmpty ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-              //       itemCount: item.reviews.isEmpty ? 1 : item.reviews.length,
-              //       itemExtent: 300,
-              //       itemBuilder: (context, index) {
-              //         if (item.reviews.isEmpty) {
-              //           return const Align(
-              //             alignment: Alignment.topCenter,
-              //             child: Padding(
-              //               padding: EdgeInsets.only(top: 64),
-              //               child: Text("Nothing here."),
-              //             ),
-              //           );
-              //         } else {
-              //           final data = item.reviews[index];
-
-              //           return ProfileReviewCell(data, _fetchData);
-              //         }
-              //       },
-              //     ),
-              //   ),
-              // ),
               const SizedBox(height: 32),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
