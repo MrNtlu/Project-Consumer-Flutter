@@ -7,6 +7,7 @@ class AnonymousHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
+      padding: EdgeInsets.zero,
       child: const Text(
         "Login",
         style: TextStyle(

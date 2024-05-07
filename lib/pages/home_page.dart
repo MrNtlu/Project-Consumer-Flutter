@@ -102,24 +102,6 @@ class _HomePageState extends State<HomePage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // if (Platform.isAndroid)
-            // const SizedBox(height: 8),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: Align(
-            //         alignment: Alignment.centerLeft,
-            //         child: Padding(
-            //           padding: const EdgeInsets.only(left: 16, right: 8),
-            //           child: authenticationProvider.isAuthenticated
-            //           ? const LoggedinHeader()
-            //           : const AnonymousHeader()
-            //         ),
-            //       ),
-            //     ),
-            //     const ContentSelection(),
-            //   ],
-            // ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
