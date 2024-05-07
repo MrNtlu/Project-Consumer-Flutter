@@ -127,7 +127,8 @@ class _UserListPageState extends State<UserListPage> {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: const Text("My List"),
-              trailing: CupertinoButton(
+              trailing: (_state != DetailState.loading && _state != DetailState.error)
+              ? CupertinoButton(
                 onPressed: () {
                   setState(() {
                     toggleSearch = !toggleSearch;
@@ -135,7 +136,8 @@ class _UserListPageState extends State<UserListPage> {
                 },
                 padding: EdgeInsets.zero,
                 child: FaIcon(toggleSearch ? FontAwesomeIcons.barsStaggered : FontAwesomeIcons.bars, size: 24)
-              ),
+              )
+              : null,
             ),
             child: RefreshIndicator(
               backgroundColor: CupertinoTheme.of(context).bgTextColor,
@@ -217,34 +219,6 @@ class _UserListPageState extends State<UserListPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: List.generate(
-                        ContentType.values.length, (index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: index == 0 ? 9 : 3, right: 3),
-                            child: CupertinoChip(
-                              isSelected: ContentType.values[index] == userListContentSelectionProvider.selectedContent,
-                              size: 16,
-                              leading: FaIcon(
-                                ContentType.values.map((e) => e.icon).toList()[index],
-                                color: ContentType.values[index] == userListContentSelectionProvider.selectedContent
-                                ? CupertinoColors.white
-                                : AppColors().primaryColor
-                              ),
-                              onSelected: (_) {
-                                userListContentSelectionProvider.setContentType(ContentType.values[index]);
-                              },
-                              label: ContentType.values[index].value,
-                            ),
-                          );
-                        }
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Row(
@@ -320,6 +294,35 @@ class _UserListPageState extends State<UserListPage> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    height: 45,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(
+                        ContentType.values.length, (index) {
+                          return Padding(
+                            padding: EdgeInsets.only(left: index == 0 ? 9 : 3, right: 3),
+                            child: SizedBox(
+                              width: 100,
+                              child: CupertinoChip(
+                                isSelected: ContentType.values[index] == userListContentSelectionProvider.selectedContent,
+                                size: 14,
+                                cornerRadius: 8,
+                                selectedBGColor: CupertinoTheme.of(context).profileButton,
+                                selectedTextColor: AppColors().primaryColor,
+                                onSelected: (_) {
+                                  userListContentSelectionProvider.setContentType(ContentType.values[index]);
+                                },
+                                label: ContentType.values[index].value,
+                              ),
+                            ),
+                          );
+                        }
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             ),

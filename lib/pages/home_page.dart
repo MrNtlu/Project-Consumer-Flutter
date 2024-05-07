@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -9,6 +10,7 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_selection.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
@@ -75,28 +77,50 @@ class _HomePageState extends State<HomePage> {
     final isGame = contentProvider.selectedContent == ContentType.game;
 
     return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        leading: null,
+        automaticallyImplyLeading: true,
+        middle: Row(
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 8),
+                  child: authenticationProvider.isAuthenticated
+                  ? const LoggedinHeader()
+                  : const AnonymousHeader()
+                ),
+              ),
+            ),
+            const ContentSelection(),
+          ],
+        ),
+        backgroundColor: CupertinoTheme.of(context).bgColor,
+        brightness: CupertinoTheme.of(context).brightness,
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            if (Platform.isAndroid)
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 8),
-                      child: authenticationProvider.isAuthenticated
-                      ? const LoggedinHeader()
-                      : const AnonymousHeader()
-                    ),
-                  ),
-                ),
-                const ContentSelection(),
-              ],
-            ),
-            const SizedBox(height: 24),
+            // if (Platform.isAndroid)
+            // const SizedBox(height: 8),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: Align(
+            //         alignment: Alignment.centerLeft,
+            //         child: Padding(
+            //           padding: const EdgeInsets.only(left: 16, right: 8),
+            //           child: authenticationProvider.isAuthenticated
+            //           ? const LoggedinHeader()
+            //           : const AnonymousHeader()
+            //         ),
+            //       ),
+            //     ),
+            //     const ContentSelection(),
+            //   ],
+            // ),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: CupertinoSearchTextField(

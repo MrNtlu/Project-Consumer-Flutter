@@ -8,22 +8,22 @@ class WhatsNewDialog extends StatelessWidget {
   const WhatsNewDialog({super.key});
 
   final String patchNotes = """
-Discover Improvements & QoL Improvements 🎉
+Major Improvements & QoL Improvements 🎉
 
-- Consume later discover improvements.
-- Discover improvements.
-- Discover by streaming platform region added.
-- User List, grid view design added.
-- User List, content selection design changed.
-- Statistics chart improvements.
-- UI improvements.
-Previously,
-- Watch Later, streaming filter added.
-- Notification settings added.
-- AI Recommendations moved to Profile.
+- Discover new filter added.
+  - Popular Studios and Publishers added to filters.
+- Popular Studios QoL improvements.
+- Login page design improved.
+- Popular Publishers added.
+- Discover, result count added.
+- Settings, usage and limit info added.
+- Survey page bug fixed.
+- Survey page improvements.
+- Home page header improved.
+- User list improvements.
   """;
 
-  final String version = "1.6.3";
+  final String version = "1.6.4";
 
   @override
   Widget build(BuildContext context) {

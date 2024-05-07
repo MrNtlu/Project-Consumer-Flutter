@@ -152,7 +152,7 @@ class LoggedinHeader extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 12, right: 8),
+          padding: const EdgeInsets.only(left: 8, right: 6),
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
@@ -165,14 +165,14 @@ class LoggedinHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const FaIcon(FontAwesomeIcons.fire, size: 16),
-                const SizedBox(width: 5),
+                const FaIcon(FontAwesomeIcons.fire, size: 14),
+                const SizedBox(width: 4),
                 ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 75),
+                  constraints: const BoxConstraints(maxWidth: 65),
                   child: AutoSizeText(
                     streak.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
-                    minFontSize: 12,
+                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                    minFontSize: 11,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

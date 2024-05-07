@@ -8,10 +8,17 @@ class CupertinoChip extends StatelessWidget {
   final EdgeInsets padding;
   final Widget? leading;
   final double size;
+  final double cornerRadius;
+  final Color selectedBGColor;
+  final Color selectedTextColor;
 
   const CupertinoChip({
     required this.isSelected, required this.onSelected,
-    required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    required this.label,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    this.cornerRadius = 8,
+    this.selectedBGColor = const Color(0xFF2196F3), // Primary Color
+    this.selectedTextColor = CupertinoColors.white,
     this.size = 14,
     this.leading, super.key,
   });
@@ -30,8 +37,8 @@ class CupertinoChip extends StatelessWidget {
         padding: padding,
         margin: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors().primaryColor : CupertinoTheme.of(context).onBgColor,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          color: isSelected ? selectedBGColor : CupertinoTheme.of(context).onBgColor,
+          borderRadius: BorderRadius.all(Radius.circular(cornerRadius)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -43,7 +50,7 @@ class CupertinoChip extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
+                color: isSelected ? selectedTextColor : CupertinoTheme.of(context).bgTextColor,
                 fontSize: size,
                 fontWeight: FontWeight.w500,
               ),
