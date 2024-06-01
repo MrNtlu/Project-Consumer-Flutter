@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,6 +23,7 @@ import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
+import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 
 class SearchListPage extends StatefulWidget {
@@ -50,6 +52,7 @@ class _SearchListPageState extends State<SearchListPage> {
   bool _canPaginate = false;
   bool _isPaginating = false;
   String? _error;
+  bool toggleSearch = false;
 
   void _fetchData() {
     if (_page == 1) {
@@ -200,8 +203,54 @@ class _SearchListPageState extends State<SearchListPage> {
                     }
                   },
                 ),
+                trailing: CupertinoButton(
+                  onPressed: () {
+                    setState(() {
+                      toggleSearch = !toggleSearch;
+                    });
+                  },
+                  padding: EdgeInsets.zero,
+                  child: FaIcon(toggleSearch ? FontAwesomeIcons.barsStaggered : FontAwesomeIcons.bars, size: 24)
+                ),
               ),
-              child: _body(data),
+              child: Column(
+                children: [
+                  if (toggleSearch)
+                  ...[
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      height: 45,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: List.generate(
+                          ContentType.values.length, (index) {
+                            return Padding(
+                              padding: EdgeInsets.only(left: index == 0 ? 9 : 3, right: 3),
+                              child: SizedBox(
+                                width: 100,
+                                child: CupertinoChip(
+                                  isSelected: ContentType.values[index] == _contentProvider.selectedContent,
+                                  size: 14,
+                                  cornerRadius: 8,
+                                  selectedBGColor: CupertinoTheme.of(context).profileButton,
+                                  selectedTextColor: AppColors().primaryColor,
+                                  onSelected: (_) {
+                                    _contentProvider.setContentType(ContentType.values[index]);
+                                    _page = 1;
+                                    _fetchData();
+                                  },
+                                  label: ContentType.values[index].value,
+                                ),
+                              ),
+                            );
+                          }
+                        ),
+                      ),
+                    ),
+                  ],
+                  Expanded(child: _body(data)),
+                ],
+              ),
             );
           }
         ),

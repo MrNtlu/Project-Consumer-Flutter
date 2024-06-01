@@ -12,7 +12,6 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
 import 'package:watchlistfy/pages/auth/policy_page.dart';
 import 'package:watchlistfy/pages/main/settings/settings_application_page.dart';
-import 'package:watchlistfy/pages/main/settings/settings_feedback_page.dart';
 import 'package:watchlistfy/pages/main/settings/settings_notification_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
@@ -434,18 +433,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         final InAppReview inAppReview = InAppReview.instance;
 
                         inAppReview.openStoreListing(appStoreId: 'id6476311748');
-                      },
-                    ),
-                    if (authProvider?.isAuthenticated == true)
-                    SettingsTile.navigation(
-                      leading: const Icon(FontAwesomeIcons.clipboardList),
-                      title: const Text('Survey'),
-                      onPressed: (ctx) async {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return const SettingsFeedbackPage();
-                          })
-                        );
                       },
                     ),
                     SettingsTile.navigation(

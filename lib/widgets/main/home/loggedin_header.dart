@@ -124,29 +124,42 @@ class LoggedinHeader extends StatelessWidget {
           child: SizedBox(
             height: 32,
             width: 32,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: isUrlValid
-              ? CachedNetworkImage(
-                imageUrl: authenticationProvider.basicUserInfo!.image!,
-                height: 30,
-                width: 30,
-                cacheKey: authenticationProvider.basicUserInfo!.image!,
-                key: ValueKey<String>(authenticationProvider.basicUserInfo!.image!),
-                fit: BoxFit.cover,
-                progressIndicatorBuilder: (_, __, ___) =>
-                  const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
-                errorListener: (_) {},
-                errorWidget: (context, url, error) => const Icon(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                boxShadow: [
+                  BoxShadow(
+                    color: CupertinoTheme.brightnessOf(context) == Brightness.dark ? CupertinoColors.systemGrey.withOpacity(0.35) : CupertinoColors.black.withOpacity(0.35),
+                    spreadRadius: 1.35,
+                    blurRadius: 3,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: isUrlValid
+                ? CachedNetworkImage(
+                  imageUrl: authenticationProvider.basicUserInfo!.image!,
+                  height: 30,
+                  width: 30,
+                  cacheKey: authenticationProvider.basicUserInfo!.image!,
+                  key: ValueKey<String>(authenticationProvider.basicUserInfo!.image!),
+                  fit: BoxFit.cover,
+                  progressIndicatorBuilder: (_, __, ___) =>
+                    const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
+                  errorListener: (_) {},
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.person,
+                    size: 30,
+                    color: CupertinoColors.activeBlue,
+                  ),
+                )
+                : const Icon(
                   Icons.person,
                   size: 30,
                   color: CupertinoColors.activeBlue,
                 ),
-              )
-              : const Icon(
-                Icons.person,
-                size: 30,
-                color: CupertinoColors.activeBlue,
               ),
             ),
           ),

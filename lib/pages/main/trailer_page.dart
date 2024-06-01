@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -22,29 +23,32 @@ class TrailerPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Colors.transparent,
         middle: Orientation.portrait == MediaQuery.of(context).orientation
         ? const Text("Rotate for Better Experience", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14))
         : null,
       ),
-      child: Center(
-        child: YoutubePlayer(
-          controller: controller,
-          showVideoProgressIndicator: true,
-          aspectRatio: 16/9,
-          bottomActions: [
-            const SizedBox(width: 14.0),
-            CurrentPosition(),
-            const SizedBox(width: 8.0),
-            ProgressBar(
-              isExpanded: true,
-              colors: ProgressBarColors(
-                playedColor: CupertinoColors.systemRed,
-                handleColor: AppColors().primaryColor,
+      child: SafeArea(
+        child: Center(
+          child: YoutubePlayer(
+            controller: controller,
+            showVideoProgressIndicator: true,
+            aspectRatio: 16/9,
+            bottomActions: [
+              const SizedBox(width: 14.0),
+              CurrentPosition(),
+              const SizedBox(width: 8.0),
+              ProgressBar(
+                isExpanded: true,
+                colors: ProgressBarColors(
+                  playedColor: CupertinoColors.systemRed,
+                  handleColor: AppColors().primaryColor,
+                ),
               ),
-            ),
-            RemainingDuration(),
-            const PlaybackSpeedButton(),
-          ],
+              RemainingDuration(),
+              const PlaybackSpeedButton(),
+            ],
+          ),
         ),
       ),
     );

@@ -56,15 +56,20 @@ void main() async {
 Future<void> _trackingTransparencyRequest() async {
   await Future.delayed(const Duration(milliseconds: 1000));
 
-  final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
-  if (status == TrackingStatus.authorized) {
-    analytics.setAnalyticsCollectionEnabled(true);
-    crashlytics.setCrashlyticsCollectionEnabled(true && kReleaseMode);
-  } else if (status == TrackingStatus.notDetermined) {
-    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+  if (Platform.isIOS || Platform.isMacOS) {
+    final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+    if (status == TrackingStatus.authorized) {
+      analytics.setAnalyticsCollectionEnabled(true);
+      crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
+    } else if (status == TrackingStatus.notDetermined) {
+      final status = await AppTrackingTransparency.requestTrackingAuthorization();
 
-    analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
-    crashlytics.setCrashlyticsCollectionEnabled(status == TrackingStatus.authorized && kReleaseMode);
+      analytics.setAnalyticsCollectionEnabled(status == TrackingStatus.authorized);
+      crashlytics.setCrashlyticsCollectionEnabled(status == TrackingStatus.authorized && kReleaseMode);
+    }
+  } else {
+    analytics.setAnalyticsCollectionEnabled(true);
+    crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
   }
 }
 

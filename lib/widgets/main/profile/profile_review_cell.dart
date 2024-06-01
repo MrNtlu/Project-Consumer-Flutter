@@ -86,15 +86,19 @@ class ProfileReviewCell extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: AutoSizeText(
-                  data.review,
+                  !data.isSpoiler
+                  ? data.review
+                  : "This review contains spoiler! Tap to see it.",
                   minFontSize: 14,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 5,
                   textAlign: TextAlign.start,
-                  style: const TextStyle(
+                  style: !data.isSpoiler
+                  ? const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500
-                  ),
+                  )
+                  : const TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
