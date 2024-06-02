@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_game_provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
@@ -9,6 +7,7 @@ import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_slider.dart';
 
 class GameDiscoverSheet extends StatelessWidget {
   final Function(bool) fetchData;
@@ -22,6 +21,13 @@ class GameDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.where((element) => element.request == provider.sort).first.name,
       Constants.SortRequests.map((e) => e.name).toList(),
       allowUnSelect: false,
+    );
+
+    final ratingSlider = DiscoverSheetSlider(
+      max: 4,
+      min: 2,
+      div: 2,
+      value: provider.rating,
     );
 
     final genres = Constants.GameGenreList.map((e) => e.name).toList();
@@ -57,6 +63,7 @@ class GameDiscoverSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         DiscoverSheetFilterBody("Sort", sortList),
+                        ratingSlider,
                         ChangeNotifierProvider(
                           create: (_) => StreamingPlatformStateProvider(),
                           child: DiscoverSheetImageFilterBody("Publishers", publishersList)
@@ -108,13 +115,15 @@ class GameDiscoverSheet extends StatelessWidget {
                                 final shouldFetchData = provider.sort != newSort
                                   || provider.genre != newGenre
                                   || provider.platform != newPlatform
-                                  || provider.publisher != newPublisher;
+                                  || provider.publisher != newPublisher
+                                  || ratingSlider.value != provider.rating;
 
                                 provider.setDiscover(
                                   sort: newSort,
                                   genre: newGenre,
                                   platform: newPlatform,
                                   publisher: newPublisher,
+                                  rating: ratingSlider.value,
                                 );
 
                                 if (shouldFetchData) {

@@ -10,6 +10,7 @@ class WhatsNewDialog extends StatelessWidget {
   final String patchNotes = """
 QoL Improvements 🎉
 
+- Rating filter added.
 - Search page QoL improvements.
 - Survey removed.
 - Android analytics improvements.

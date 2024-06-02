@@ -7,6 +7,7 @@ import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_slider.dart';
 
 class AnimeDiscoverSheet extends StatelessWidget {
   final Function(bool) fetchData;
@@ -21,6 +22,8 @@ class AnimeDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.map((e) => e.name).toList(),
       allowUnSelect: false,
     );
+
+    final ratingSlider = DiscoverSheetSlider(value: provider.rating);
 
     final genres = Constants.AnimeGenreList.map((e) => e.name).toList();
     genres.removeAt(0);
@@ -87,6 +90,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         DiscoverSheetFilterBody("Sort", sortList),
+                        ratingSlider,
                         ChangeNotifierProvider(
                           create: (_) => StreamingPlatformStateProvider(),
                           child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
@@ -156,7 +160,8 @@ class AnimeDiscoverSheet extends StatelessWidget {
                                   || provider.season != newSeason
                                   || provider.year != newYear
                                   || provider.streaming != newStreaming
-                                  || provider.studios != newStudio;
+                                  || provider.studios != newStudio
+                                  || ratingSlider.value != provider.rating;
 
                                 provider.setDiscover(
                                   sort: newSort,
@@ -168,6 +173,7 @@ class AnimeDiscoverSheet extends StatelessWidget {
                                   year: newYear,
                                   streaming: newStreaming,
                                   studios: newStudio,
+                                  rating: ratingSlider.value,
                                 );
 
                                 if (shouldFetchData) {

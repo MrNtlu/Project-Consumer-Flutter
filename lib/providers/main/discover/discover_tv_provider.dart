@@ -9,6 +9,7 @@ class DiscoverTVProvider with ChangeNotifier {
   String? numOfSeason;
   String? decade;
   String? country;
+  int? rating;
   String? streaming;
   String streamingRegion = "";
 
@@ -20,6 +21,7 @@ class DiscoverTVProvider with ChangeNotifier {
     numOfSeason = null;
     decade = null;
     country = null;
+    rating = null;
     streaming = null;
   }
 
@@ -31,6 +33,7 @@ class DiscoverTVProvider with ChangeNotifier {
     String? numOfSeason,
     String? decade,
     String? country,
+    int? rating,
     String? streaming,
     String streamingRegion = "",
   }) {
@@ -41,6 +44,7 @@ class DiscoverTVProvider with ChangeNotifier {
     this.numOfSeason = numOfSeason;
     this.decade = decade;
     this.country = country;
+    this.rating = rating;
     this.streaming = streaming;
     this.streamingRegion = streamingRegion;
   }

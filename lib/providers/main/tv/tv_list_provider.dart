@@ -56,6 +56,7 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
     String? genres,
     int? from,
     int? to,
+    int? rating,
     String? streaming,
     String streamingRegion = "",
   }) {
@@ -80,6 +81,8 @@ class TVListProvider extends BasePaginationProvider<BaseContent> {
         streaming != null ? '&streaming_platforms=${Uri.encodeQueryComponent(streaming)}' : ''
       }${
         from != null && to != null ? '&from=$from&to=$to' : ''
+      }${
+        rating != null ? '&rating=$rating' : ''
       }${
         streaming != null
           ? isStreamingRegionFiltered

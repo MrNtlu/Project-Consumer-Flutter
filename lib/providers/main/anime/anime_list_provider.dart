@@ -57,6 +57,7 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
     String? season,
     int? year,
     String? streaming,
+    int? rating,
   }) {
     if (page == 1) {
       pitems.clear();
@@ -79,6 +80,8 @@ class AnimeListProvider extends BasePaginationProvider<BaseContent> {
         season != null ? '&season=$season' : ''
       }${
         year != null ? '&year=$year' : ''
+      }${
+        rating != null ? '&rating=$rating' : ''
       }"
     );
   }

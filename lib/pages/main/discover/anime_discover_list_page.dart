@@ -85,6 +85,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
       studios: _discoverProvider.studios,
       season: _discoverProvider.season,
       year: _discoverProvider.year,
+      rating: _discoverProvider.rating,
       streaming: _discoverProvider.streaming,
     );
 

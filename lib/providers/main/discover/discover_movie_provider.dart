@@ -8,6 +8,7 @@ class DiscoverMovieProvider with ChangeNotifier {
   String? productionCompanies;
   String? decade;
   String? country;
+  int? rating;
   String? streaming;
   String streamingRegion = "";
 
@@ -18,6 +19,7 @@ class DiscoverMovieProvider with ChangeNotifier {
     productionCompanies = null;
     decade = null;
     country = null;
+    rating = null;
     streaming = null;
   }
 
@@ -28,6 +30,7 @@ class DiscoverMovieProvider with ChangeNotifier {
     String? productionCompanies,
     String? decade,
     String? country,
+    int? rating,
     String? streaming,
     String streamingRegion = "",
   }) {
@@ -37,6 +40,7 @@ class DiscoverMovieProvider with ChangeNotifier {
     this.productionCompanies = productionCompanies;
     this.decade = decade;
     this.country = country;
+    this.rating = rating;
     this.streaming = streaming;
     this.streamingRegion = streamingRegion;
   }

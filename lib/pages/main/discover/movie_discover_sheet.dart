@@ -10,6 +10,7 @@ import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dar
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_region_selection.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_slider.dart';
 
 class MovieDiscoverSheet extends StatelessWidget {
   final Function(bool) fetchData;
@@ -24,6 +25,8 @@ class MovieDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.map((e) => e.name).toList(),
       allowUnSelect: false,
     );
+
+    final ratingSlider = DiscoverSheetSlider(value: provider.rating);
 
     final genres = Constants.MovieGenreList.map((e) => e.name).toList();
     genres.removeAt(0);
@@ -83,6 +86,7 @@ class MovieDiscoverSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         DiscoverSheetFilterBody("Sort", sortList),
+                        ratingSlider,
                         ChangeNotifierProvider(
                           create: (_) => StreamingPlatformStateProvider(),
                           child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
@@ -148,7 +152,8 @@ class MovieDiscoverSheet extends StatelessWidget {
                                   || provider.decade != newDecade
                                   || provider.country != newCountry
                                   || provider.productionCompanies != newStudio
-                                  || regionFilter.streamingRegion != provider.streamingRegion;
+                                  || regionFilter.streamingRegion != provider.streamingRegion
+                                  || ratingSlider.value != provider.rating;
 
                                 provider.setDiscover(
                                   sort: newSort,
@@ -157,6 +162,7 @@ class MovieDiscoverSheet extends StatelessWidget {
                                   decade: newDecade,
                                   country: newCountry,
                                   productionCompanies: newStudio,
+                                  rating: ratingSlider.value,
                                   streaming: newStreaming,
                                   streamingRegion: regionFilter.streamingRegion,
                                 );

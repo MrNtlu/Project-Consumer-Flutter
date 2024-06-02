@@ -49,6 +49,7 @@ class GameListProvider extends BasePaginationProvider<BaseContent> {
     String? genres,
     String? platform,
     String? publisher,
+    int? rating,
   }) {
     if (page == 1) {
       pitems.clear();
@@ -63,6 +64,8 @@ class GameListProvider extends BasePaginationProvider<BaseContent> {
         publisher != null ? '&publisher=${Uri.encodeQueryComponent(publisher)}' : ''
       }${
         genres != null ? '&genres=${Uri.encodeQueryComponent(genres)}' : ''
+      }${
+        rating != null ? '&rating=$rating' : ''
       }"
     );
   }

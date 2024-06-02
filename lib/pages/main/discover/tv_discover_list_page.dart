@@ -95,6 +95,7 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
       numOfSeason: _discoverProvider.numOfSeason,
       from: from,
       to: to,
+      rating: _discoverProvider.rating,
       streaming: _discoverProvider.streaming,
       streamingRegion: _discoverProvider.streamingRegion
     );

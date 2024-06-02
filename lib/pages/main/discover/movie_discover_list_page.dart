@@ -94,6 +94,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
       productionCountry: _discoverProvider.country,
       from: from,
       to: to,
+      rating: _discoverProvider.rating,
       streaming: _discoverProvider.streaming,
       streamingRegion: _discoverProvider.streamingRegion
     );

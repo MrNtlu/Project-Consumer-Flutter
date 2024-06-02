@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
 import 'package:watchlistfy/providers/main/discover/discover_tv_provider.dart';
@@ -11,6 +10,7 @@ import 'package:watchlistfy/widgets/main/discover/discover_sheet_filter_body.dar
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_image_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_list.dart';
 import 'package:watchlistfy/widgets/main/discover/discover_sheet_region_selection.dart';
+import 'package:watchlistfy/widgets/main/discover/discover_sheet_slider.dart';
 
 class TVDiscoverSheet extends StatelessWidget {
   final Function(bool) fetchData;
@@ -25,6 +25,8 @@ class TVDiscoverSheet extends StatelessWidget {
       Constants.SortRequests.map((e) => e.name).toList(),
       allowUnSelect: false,
     );
+
+    final ratingSlider = DiscoverSheetSlider(value: provider.rating);
 
     final genres = Constants.TVGenreList.map((e) => e.name).toList();
     genres.removeAt(0);
@@ -89,6 +91,7 @@ class TVDiscoverSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         DiscoverSheetFilterBody("Sort", sortList),
+                        ratingSlider,
                         ChangeNotifierProvider(
                           create: (_) => StreamingPlatformStateProvider(),
                           child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
@@ -158,7 +161,8 @@ class TVDiscoverSheet extends StatelessWidget {
                                   || provider.country != newCountry
                                   || provider.streaming != newStreaming
                                   || provider.productionCompanies != newStudio
-                                  || regionFilter.streamingRegion != provider.streamingRegion;
+                                  || regionFilter.streamingRegion != provider.streamingRegion
+                                  || ratingSlider.value != provider.rating;
 
                                 provider.setDiscover(
                                   sort: newSort,
@@ -168,6 +172,7 @@ class TVDiscoverSheet extends StatelessWidget {
                                   decade: newDecade,
                                   country: newCountry,
                                   productionCompanies: newStudio,
+                                  rating: ratingSlider.value,
                                   streaming: newStreaming,
                                   streamingRegion: regionFilter.streamingRegion,
                                 );

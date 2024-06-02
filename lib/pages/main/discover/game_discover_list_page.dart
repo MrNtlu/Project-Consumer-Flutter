@@ -73,6 +73,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
       platform: _discoverProvider.platform,
       publisher: _discoverProvider.publisher,
       tba: _discoverProvider.tba,
+      rating: _discoverProvider.rating,
     );
 
     futureResponse.then((response) {
