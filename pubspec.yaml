@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.6.7+66
+version: 1.6.7+67
 
 environment:
   sdk: '>=3.2.1 <4.0.0'
@@ -35,11 +35,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   app_tracking_transparency: ^2.0.4
-  firebase_core: ^2.28.0
-  firebase_analytics: ^10.10.0
-  firebase_crashlytics: ^3.5.0
-  firebase_messaging: ^14.8.0
-  firebase_performance: ^0.9.4
+  firebase_core: ^3.3.0
+  firebase_analytics: ^11.2.1
+  firebase_crashlytics: ^4.0.4
+  firebase_messaging: ^15.0.4
+  firebase_performance: ^0.10.0+4
   flutter_dotenv: ^5.1.0
   shared_preferences: ^2.2.2
   provider: ^6.1.2
@@ -48,21 +48,21 @@ dependencies:
   sign_in_button: ^3.2.0
   shimmer: ^3.0.0
   settings_ui: ^2.0.2
-  lottie: ^2.7.0
-  purchases_flutter: ^6.25.0
+  lottie: ^3.1.2
+  purchases_flutter: ^7.0.1
   in_app_review: ^2.0.9
-  share_plus: ^7.2.1
-  intl: ^0.18.1
+  share_plus: ^10.0.0
+  intl: ^0.19.0
   http: ^1.1.2
-  flutter_local_notifications: ^16.3.3
+  flutter_local_notifications: ^17.2.2
   cached_network_image: ^3.3.1
   auto_size_text: ^3.0.0
   expandable_text: ^2.3.0
   collection: ^1.18.0
   modal_bottom_sheet: ^3.0.0
   flutter_markdown: ^0.7.1
-  carousel_slider: ^4.2.1
-  sign_in_with_apple: ^5.0.0
+  carousel_slider: ^5.0.0
+  sign_in_with_apple: ^6.1.1
   chat_bubbles: ^1.5.0
   flutter_timer_countdown: ^1.0.7
   flutter_rating_bar: ^4.0.1
@@ -75,7 +75,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   back_button_interceptor: ^7.0.3
   quick_actions: ^1.0.7
-  syncfusion_flutter_charts: ^24.2.9
+  # syncfusion_flutter_charts: ^26.2.8
   flutter_survey: '^0.1.4'
   internet_connection_checker: ^1.0.0+1
   google_mobile_ads: ^5.1.0
