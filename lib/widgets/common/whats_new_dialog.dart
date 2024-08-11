@@ -18,7 +18,7 @@ QoL Improvements 🎉
 - Ads added for free users :(
 """;
 
-  final String version = "1.6.7";
+  final String version = "1.6.9";
 
   @override
   Widget build(BuildContext context) {

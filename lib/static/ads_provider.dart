@@ -2,7 +2,7 @@ class AdsTracker {
   int clickCount = 0;
 
   void incrementCount() {
-    if (clickCount == 4) {
+    if (clickCount == 14) {
       clickCount = 0;
     } else {
       clickCount ++;
@@ -10,7 +10,7 @@ class AdsTracker {
   }
 
   bool shouldShowAds() {
-    final shouldShow = clickCount % 5 == 0;
+    final shouldShow = clickCount % 15 == 0;
     incrementCount();
     return shouldShow;
   }
