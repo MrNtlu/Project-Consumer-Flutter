@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -45,9 +44,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    searchController = TextEditingController();
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     if (!isInit) {
-      searchController = TextEditingController();
       authenticationProvider = Provider.of<AuthenticationProvider>(context);
       contentProvider = Provider.of<ContentProvider>(context);
       globalProvider = Provider.of<GlobalProvider>(context);
@@ -67,6 +71,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     contentProvider.removeListener(onContentChange);
     searchController?.dispose();
+    searchController = null;
     previewProvider?.networkState = NetworkState.disposed;
     super.dispose();
   }
@@ -120,6 +125,8 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 12),
             SeeAllTitle("🔥 Popular", () {
+              FocusManager.instance.primaryFocus?.unfocus();
+
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[0], "🔥 Popular");
               }));
@@ -139,6 +146,8 @@ class _HomePageState extends State<HomePage> {
             const GenreList(),
             const SizedBox(height: 12),
             SeeAllTitle("📆 Upcoming", () {
+              FocusManager.instance.primaryFocus?.unfocus();
+
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ContentListPage(contentProvider.selectedContent,Constants.ContentTags[1], "📆 Upcoming");
               }));
@@ -157,6 +166,8 @@ class _HomePageState extends State<HomePage> {
             ],
             const SizedBox(height: 12),
             SeeAllTitle("🍿 Top Rated", () {
+              FocusManager.instance.primaryFocus?.unfocus();
+
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[2], "🍿 Top Rated");
               }));
@@ -191,6 +202,8 @@ class _HomePageState extends State<HomePage> {
                 contentProvider.selectedContent == ContentType.movie
                     ? "🎭 In Theaters"
                     : "📺 Airing Today", () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+
                   Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                     return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[3], "🎭 In Theaters");
                   }));
