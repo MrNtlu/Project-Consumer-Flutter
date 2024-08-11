@@ -13,7 +13,9 @@ import 'package:watchlistfy/pages/main/recommendation/recommendation_content_lis
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
+import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
@@ -80,6 +82,11 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
     if (_state == DetailState.init) {
       _authProvider = Provider.of<AuthenticationProvider>(context);
       _fetchData();
+
+      final shouldShowAds = _authProvider.basicUserInfo == null || _authProvider.basicUserInfo?.isPremium == false;
+      if (AdsTracker().shouldShowAds() && shouldShowAds) {
+        InterstitialAdHandler().showAds();
+      }
     }
     super.didChangeDependencies();
   }
@@ -301,7 +308,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 const DetailsTitle("Actors"),
                 if (item.actors.isNotEmpty)
                 SizedBox(
-                  height: 110,
+                  height: 115,
                   child: DetailsCommonList(
                     true, item.actors.length,
                     (index) {
@@ -357,7 +364,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 const DetailsTitle("Production"),
                 if(item.productionCompanies != null)
                 SizedBox(
-                  height: 130,
+                  height: 135,
                   child: DetailsCommonList(
                     false, item.productionCompanies!.length,
                     null,
@@ -385,7 +392,7 @@ class _TVDetailsPageState extends State<TVDetailsPage> {
                 const DetailsTitle("Networks"),
                 if(item.networks != null)
                 SizedBox(
-                  height: 130,
+                  height: 135,
                   child: DetailsCommonList(
                     false, item.networks!.length,
                     null,

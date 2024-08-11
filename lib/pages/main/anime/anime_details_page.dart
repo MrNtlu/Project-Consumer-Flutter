@@ -11,7 +11,9 @@ import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/pages/main/recommendation/recommendation_content_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_details_provider.dart';
+import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
@@ -76,6 +78,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     if (_state == DetailState.init) {
       _authProvider = Provider.of<AuthenticationProvider>(context);
       _fetchData();
+
+      final shouldShowAds = _authProvider.basicUserInfo == null || _authProvider.basicUserInfo?.isPremium == false;
+      if (AdsTracker().shouldShowAds() && shouldShowAds) {
+        InterstitialAdHandler().showAds();
+      }
     }
     super.didChangeDependencies();
   }
@@ -314,7 +321,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 ),
                 const DetailsTitle("Characters"),
                 SizedBox(
-                  height: 110,
+                  height: 115,
                   child: DetailsCommonList(
                     true, item.characters.length,
                     null,

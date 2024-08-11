@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -9,8 +12,10 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
+import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/widgets/common/content_selection.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/home/anonymous_header.dart';
@@ -32,6 +37,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isInit = false;
+  BannerAd? _bannerAd;
 
   TextEditingController? searchController;
   late final AuthenticationProvider authenticationProvider;
@@ -43,14 +49,34 @@ class _HomePageState extends State<HomePage> {
     searchController?.text = "";
   }
 
+  void _loadAd() {
+    _bannerAd = BannerAd(
+      adUnitId: kDebugMode ? (
+        Platform.isIOS ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-3940256099942544/6300978111"
+      ) : (
+        Platform.isIOS ? dotenv.env['ADMOB_BANNER_IOS_KEY'] ?? '': dotenv.env['ADMOB_BANNER_ANDROID_KEY'] ?? ''
+      ),
+      request: const AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
   @override
   void initState() {
-    searchController = TextEditingController();
+    searchController ??= TextEditingController();
+    _loadAd();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    searchController ??= TextEditingController();
+
     if (!isInit) {
       authenticationProvider = Provider.of<AuthenticationProvider>(context);
       contentProvider = Provider.of<ContentProvider>(context);
@@ -80,6 +106,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final isMovieOrTVSeries = contentProvider.selectedContent == ContentType.movie || contentProvider.selectedContent == ContentType.tv;
     final isGame = contentProvider.selectedContent == ContentType.game;
+    final shouldShowAds = authenticationProvider.basicUserInfo == null || authenticationProvider.basicUserInfo?.isPremium == false;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -128,6 +155,10 @@ class _HomePageState extends State<HomePage> {
               FocusManager.instance.primaryFocus?.unfocus();
 
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                if (AdsTracker().shouldShowAds() && shouldShowAds) {
+                  InterstitialAdHandler().showAds();
+                }
+
                 return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[0], "🔥 Popular");
               }));
             }),
@@ -142,13 +173,26 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 20),
             ],
             if (!Platform.isAndroid)
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             const GenreList(),
+            if (_bannerAd != null && shouldShowAds)
+            ...[
+              const SizedBox(height: 20),
+              SizedBox(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd!)
+              ),
+            ],
             const SizedBox(height: 12),
             SeeAllTitle("📆 Upcoming", () {
               FocusManager.instance.primaryFocus?.unfocus();
 
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                if (AdsTracker().shouldShowAds() && shouldShowAds) {
+                  InterstitialAdHandler().showAds();
+                }
+
                 return ContentListPage(contentProvider.selectedContent,Constants.ContentTags[1], "📆 Upcoming");
               }));
             }),
@@ -169,6 +213,10 @@ class _HomePageState extends State<HomePage> {
               FocusManager.instance.primaryFocus?.unfocus();
 
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                if (AdsTracker().shouldShowAds() && shouldShowAds) {
+                  InterstitialAdHandler().showAds();
+                }
+
                 return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[2], "🍿 Top Rated");
               }));
             }),
@@ -205,6 +253,10 @@ class _HomePageState extends State<HomePage> {
                   FocusManager.instance.primaryFocus?.unfocus();
 
                   Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                    if (AdsTracker().shouldShowAds() && shouldShowAds) {
+                      InterstitialAdHandler().showAds();
+                    }
+                    
                     return ContentListPage(contentProvider.selectedContent, Constants.ContentTags[3], "🎭 In Theaters");
                   }));
                 },

@@ -62,8 +62,8 @@ class SharedPref {
     return _sharedPreference.getBool(Constants.WHATSNEW_PREF) ?? true;
   }
 
-  final newVersion = "1_6_5";
-  final oldVersion = "1_6_4";
+  final newVersion = "1_6_7";
+  final oldVersion = "1_6_6";
 
   void setDidShowVersionPatch(bool didShow) {
     sharedPref?.setBool(newVersion, didShow);

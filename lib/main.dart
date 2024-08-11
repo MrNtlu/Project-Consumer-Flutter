@@ -17,6 +17,7 @@ import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/providers/theme_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -27,12 +28,14 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) { _trackingTransparencyRequest(); });
+  MobileAds.instance.initialize();
   await dotenv.load(fileName: ".env");
   await PurchaseApi().init();
   await SharedPref().init();
@@ -49,6 +52,7 @@ void main() async {
       return true;
     };
   }
+  InterstitialAdHandler().loadAds();
 
   runApp(MyApp());
 }

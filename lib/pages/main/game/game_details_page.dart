@@ -10,7 +10,9 @@ import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/pages/main/recommendation/recommendation_content_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_details_provider.dart';
+import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
@@ -74,6 +76,11 @@ class _GameDetailsPageState extends State<GameDetailsPage> {
     if (_state == DetailState.init) {
       _authProvider = Provider.of<AuthenticationProvider>(context);
       _fetchData();
+
+      final shouldShowAds = _authProvider.basicUserInfo == null || _authProvider.basicUserInfo?.isPremium == false;
+      if (AdsTracker().shouldShowAds() && shouldShowAds) {
+        InterstitialAdHandler().showAds();
+      }
     }
     super.didChangeDependencies();
   }

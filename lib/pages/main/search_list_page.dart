@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -11,6 +16,7 @@ import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
 import 'package:watchlistfy/pages/main/game/game_details_page.dart';
 import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
 import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_list_provider.dart';
@@ -37,8 +43,10 @@ class SearchListPage extends StatefulWidget {
 
 class _SearchListPageState extends State<SearchListPage> {
   ListState _state = ListState.init;
+  BannerAd? _bannerAd;
 
   late final SearchProvider provider;
+  late final AuthenticationProvider _authenticationProvider;
   late final ContentProvider _contentProvider;
   late final MovieListProvider _movieListProvider;
   late final TVListProvider _tvListProvider;
@@ -113,9 +121,27 @@ class _SearchListPageState extends State<SearchListPage> {
     }
   }
 
+  void _loadAd() {
+    _bannerAd = BannerAd(
+      adUnitId: kDebugMode ? (
+        Platform.isIOS ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-3940256099942544/6300978111"
+      ) : (
+        Platform.isIOS ? dotenv.env['ADMOB_BANNER_IOS_KEY'] ?? '': dotenv.env['ADMOB_BANNER_ANDROID_KEY'] ?? ''
+      ),
+      request: const AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
   @override
   void initState() {
     super.initState();
+    _loadAd();
     provider = SearchProvider();
     _movieListProvider = MovieListProvider();
     _tvListProvider = TVListProvider();
@@ -126,6 +152,7 @@ class _SearchListPageState extends State<SearchListPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      _authenticationProvider = Provider.of<AuthenticationProvider>(context);
       _contentProvider = Provider.of<ContentProvider>(context, listen: false);
       _globalProvider = Provider.of<GlobalProvider>(context);
       provider.setSearch(widget.initialSearch);
@@ -177,6 +204,8 @@ class _SearchListPageState extends State<SearchListPage> {
         create: (_) => provider,
         child: Consumer<SearchProvider>(
           builder: (context, provider, child) {
+            final shouldShowBannerAds = _bannerAd != null && (_authenticationProvider.basicUserInfo == null || _authenticationProvider.basicUserInfo?.isPremium == false);
+            
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: CupertinoTextField(
@@ -249,6 +278,14 @@ class _SearchListPageState extends State<SearchListPage> {
                     ),
                   ],
                   Expanded(child: _body(data)),
+                  if (shouldShowBannerAds)
+                  SafeArea(
+                    child: SizedBox(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!)
+                    ),
+                  )
                 ],
               ),
             );

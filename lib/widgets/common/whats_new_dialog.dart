@@ -10,14 +10,15 @@ class WhatsNewDialog extends StatelessWidget {
   final String patchNotes = """
 QoL Improvements 🎉
 
-- Rating filter added.
+- Search bar bug fixed.
 - Search page QoL improvements.
 - Survey removed.
 - Android analytics improvements.
 - UI improvements.
+- Ads added for free users :(
 """;
 
-  final String version = "1.6.5";
+  final String version = "1.6.7";
 
   @override
   Widget build(BuildContext context) {
