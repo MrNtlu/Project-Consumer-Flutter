@@ -70,7 +70,7 @@ dependencies:
   go_router: ^13.2.2
   country_picker: ^2.0.25
   country_flags: ^2.2.0
-  youtube_player_flutter: ^8.1.2
+  youtube_player_flutter: ^9.1.1
   extended_image: ^8.2.0
   font_awesome_flutter: ^10.7.0
   back_button_interceptor: ^7.0.3
