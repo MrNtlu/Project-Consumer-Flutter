@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
@@ -84,6 +85,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                   cacheKey: widget.item.author.image,
                                   height: 40,
                                   width: 40,
+                                  cacheManager: CustomCacheManager.instance,
                                   maxHeightDiskCache: 175,
                                   maxWidthDiskCache: 175,
                                   fit: BoxFit.cover,

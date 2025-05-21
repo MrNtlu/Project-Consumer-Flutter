@@ -5,6 +5,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 
 class ContentCell extends StatelessWidget {
   final String url;
@@ -60,6 +61,7 @@ class ContentCell extends StatelessWidget {
       imageUrl: url,
       key: ValueKey<String>(url + title),
       cacheKey: url + title,
+      cacheManager: CustomCacheManager.instance,
       maxWidthDiskCache: cacheWidth,
       maxHeightDiskCache: cacheHeight,
       filterQuality: FilterQuality.low,

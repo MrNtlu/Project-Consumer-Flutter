@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -182,6 +183,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                       fit: BoxFit.cover,
                       height: 32,
                       width: 32,
+                      cacheManager: CustomCacheManager.instance,
                       maxHeightDiskCache: 100,
                       maxWidthDiskCache: 100,
                       errorWidget: (context, _, __) {

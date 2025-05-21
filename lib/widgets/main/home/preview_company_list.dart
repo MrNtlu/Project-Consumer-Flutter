@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/backend_request_mapper.dart';
@@ -77,6 +78,7 @@ class PreviewCompanyList extends StatelessWidget {
                       imageUrl: company.image,
                       cacheKey: company.image,
                       key: ValueKey<String>(company.image),
+                      cacheManager: CustomCacheManager.instance,
                       maxHeightDiskCache: 175,
                       maxWidthDiskCache: isMovieOrTVSeries ? 300 : 150,
                       errorWidget: (context, _, __) {

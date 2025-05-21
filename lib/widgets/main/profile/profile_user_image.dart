@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
 
@@ -30,6 +31,7 @@ class ProfileUserImage extends StatelessWidget {
                 cacheKey: image,
                 height: 75,
                 width: 75,
+                cacheManager: CustomCacheManager.instance,
                 maxHeightDiskCache: 225,
                 maxWidthDiskCache: 225,
                 fit: BoxFit.cover,

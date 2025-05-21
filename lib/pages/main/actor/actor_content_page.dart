@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -138,6 +139,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
                   fit: BoxFit.cover,
                   height: 36,
                   width: 36,
+                  cacheManager: CustomCacheManager.instance,
                   maxHeightDiskCache: 100,
                   maxWidthDiskCache: 100,
                 )

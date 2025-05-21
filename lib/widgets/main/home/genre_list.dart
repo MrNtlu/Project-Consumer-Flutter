@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/common/name_url.dart';
@@ -87,6 +88,7 @@ class GenreList extends StatelessWidget {
                         imageUrl: data.url,
                         cacheKey: data.url,
                         key: ValueKey<String>(data.url),
+                        cacheManager: CustomCacheManager.instance,
                         maxHeightDiskCache: 250,
                         maxWidthDiskCache: contentProvider.selectedContent == ContentType.game ? 300 : 200,
                         errorListener: (_) {},

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_flags/country_flags.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
@@ -286,6 +287,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                                         fit: BoxFit.cover,
                                         height: 24,
                                         width: 24,
+                                        cacheManager: CustomCacheManager.instance,
                                         maxHeightDiskCache: 100,
                                         maxWidthDiskCache: 100,
                                       )

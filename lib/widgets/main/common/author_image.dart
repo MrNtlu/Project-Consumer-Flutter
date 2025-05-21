@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 
 class AuthorImage extends StatelessWidget {
   final String image;
@@ -22,6 +23,7 @@ class AuthorImage extends StatelessWidget {
           width: size,
           key: ValueKey<String>(image),
           cacheKey: image,
+          cacheManager: CustomCacheManager.instance,
           maxHeightDiskCache: 300,
           maxWidthDiskCache: 300,
           fit: BoxFit.cover,

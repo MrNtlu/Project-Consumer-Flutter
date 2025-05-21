@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -57,6 +58,7 @@ class PreviewActorList extends StatelessWidget {
                         cacheKey: actor.image,
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
+                        cacheManager: CustomCacheManager.instance,
                         maxHeightDiskCache: 350,
                         maxWidthDiskCache: 350,
                         errorListener: (_){},
