@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -9,6 +8,7 @@ import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/main/actor/actor_content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
@@ -139,7 +139,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
                   fit: BoxFit.cover,
                   height: 36,
                   width: 36,
-                  cacheManager: CustomCacheManager.instance,
+                  cacheManager: CustomCacheManager(),
                   maxHeightDiskCache: 100,
                   maxWidthDiskCache: 100,
                 )

@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/pages/main/actor/actor_content_page.dart';
@@ -76,7 +76,7 @@ class DetailsCommonList extends StatelessWidget {
                             cacheKey: image,
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
-                            cacheManager: CustomCacheManager.instance,
+                            cacheManager: CustomCacheManager(),
                             maxHeightDiskCache: 200,
                             maxWidthDiskCache: 200,
                             errorListener: (_) {},
@@ -107,7 +107,7 @@ class DetailsCommonList extends StatelessWidget {
                         key: ValueKey<String>(image),
                         cacheKey: image,
                         height: 64,
-                        cacheManager: CustomCacheManager.instance,
+                        cacheManager: CustomCacheManager(),
                         maxHeightDiskCache: 200,
                         maxWidthDiskCache: 200,
                         errorListener: (_) {},

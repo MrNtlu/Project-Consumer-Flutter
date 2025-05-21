@@ -86,9 +86,6 @@ class _SearchListPageState extends State<SearchListPage> {
       case ContentType.game:
         futureResponse = _gameListProvider.searchGame(page: _page, search: provider.search);
         break;
-      default:
-        futureResponse = _movieListProvider.searchMovie(page: _page, search: provider.search);
-        break;
     }
 
     futureResponse.then((response) {
@@ -188,9 +185,6 @@ class _SearchListPageState extends State<SearchListPage> {
       case ContentType.game:
         data = _gameListProvider.items;
         break;
-      default:
-        data = _movieListProvider.items;
-        break;
     }
 
     return MultiProvider(
@@ -205,7 +199,7 @@ class _SearchListPageState extends State<SearchListPage> {
         child: Consumer<SearchProvider>(
           builder: (context, provider, child) {
             final shouldShowBannerAds = _bannerAd != null && (_authenticationProvider.basicUserInfo == null || _authenticationProvider.basicUserInfo?.isPremium == false);
-            
+
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: CupertinoTextField(
@@ -342,8 +336,6 @@ class _SearchListPageState extends State<SearchListPage> {
                           return AnimeDetailsPage(content.id);
                         case ContentType.game:
                           return GameDetailsPage(content.id);
-                        default:
-                          return MovieDetailsPage(content.id);
                       }
                     })
                   );
@@ -382,7 +374,7 @@ class _SearchListPageState extends State<SearchListPage> {
               Lottie.asset(
                 "assets/lottie/empty.json",
                 height: MediaQuery.of(context).size.height * 0.5,
-                frameRate: FrameRate(60)
+                frameRate: const FrameRate(60)
               ),
               const Text("Couldn't find anything.", style: TextStyle(fontWeight: FontWeight.w500)),
             ],

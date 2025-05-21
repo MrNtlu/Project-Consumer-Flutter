@@ -94,7 +94,7 @@ class SettingsProfile extends StatelessWidget {
                 "assets/lottie/premium.json",
                 height: 36,
                 width: 36,
-                frameRate: FrameRate(60)
+                frameRate: const FrameRate(60)
               ),
             ],
           ),

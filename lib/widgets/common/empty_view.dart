@@ -20,7 +20,7 @@ class EmptyView extends StatelessWidget {
                 asset,
                 height: 250,
                 width: 250,
-                frameRate: FrameRate(60)
+                frameRate: const FrameRate(60)
               ),
               const SizedBox(height: 12),
               Text(emptyText, style: const TextStyle(fontWeight: FontWeight.w500)),

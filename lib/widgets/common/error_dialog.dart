@@ -7,7 +7,7 @@ import 'package:watchlistfy/static/colors.dart';
 class ErrorDialog extends StatelessWidget {
   final String _error;
 
-  const ErrorDialog(this._error, {Key? key}) : super(key: key);
+  const ErrorDialog(this._error, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -12,9 +12,9 @@ class ProfileChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Text("Disabled until mid-September due to library issues.")
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Text("Work in progress")
       // SfCartesianChart(
       //   margin: const EdgeInsets.all(3),
       //   primaryXAxis: CategoryAxis(

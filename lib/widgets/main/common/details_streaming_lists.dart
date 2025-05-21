@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
@@ -103,7 +103,7 @@ class DetailsStreamingLists extends StatelessWidget {
               cacheKey: item.logo,
               height: 64,
               width: 64,
-              cacheManager: CustomCacheManager.instance,
+              cacheManager: CustomCacheManager(),
               maxHeightDiskCache: 190,
               maxWidthDiskCache: 190,
               errorListener: (_) {},

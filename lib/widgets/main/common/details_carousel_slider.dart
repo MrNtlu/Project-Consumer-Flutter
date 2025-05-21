@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 
 class DetailsCarouselSlider extends StatelessWidget {
@@ -33,7 +33,7 @@ class DetailsCarouselSlider extends StatelessWidget {
                     key: ValueKey<String>(i),
                     cacheKey: i,
                     fit: BoxFit.cover,
-                    cacheManager: CustomCacheManager.instance,
+                    cacheManager: CustomCacheManager(),
                     maxHeightDiskCache: 300,
                     maxWidthDiskCache: 400, // Added
                   )
@@ -42,7 +42,7 @@ class DetailsCarouselSlider extends StatelessWidget {
             );
           },
         );
-      }).toList(), 
+      }).toList(),
       options: CarouselOptions(
         height: 250,
         aspectRatio: 16/9,

@@ -8,7 +8,7 @@ class LoadingView extends StatelessWidget {
   final String _text;
   final Color textColor;
 
-  const LoadingView(this._text, {this.textColor = Colors.black, Key? key}) : super(key: key);
+  const LoadingView(this._text, {this.textColor = Colors.black, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class LoadingView extends StatelessWidget {
         alignment: Alignment.center,
         child: Lottie.asset(
           "assets/lottie/loading.json",
-          frameRate: FrameRate(60),
+          frameRate: const FrameRate(60),
         ),
       ),
       Align(

@@ -82,9 +82,6 @@ class _ContentListPageState extends State<ContentListPage> {
       case ContentType.game:
         futureResponse = _gameListProvider.getGames(page: _page, contentTag: widget.contentTag);
         break;
-      default:
-        futureResponse = _movieListProvider.getMovies(page: _page, contentTag: widget.contentTag);
-        break;
     }
 
     futureResponse.then((response) {
@@ -180,9 +177,6 @@ class _ContentListPageState extends State<ContentListPage> {
         break;
       case ContentType.game:
         data = _gameListProvider.items;
-        break;
-      default:
-        data = _movieListProvider.items;
         break;
     }
 
@@ -288,9 +282,9 @@ class _ContentListPageState extends State<ContentListPage> {
           ),
         );
       }
-  
+
       final content = data[index];
-  
+
       return GestureDetector(
         onTap: () {
           Navigator.of(context, rootNavigator: true).push(
@@ -304,8 +298,6 @@ class _ContentListPageState extends State<ContentListPage> {
                   return AnimeDetailsPage(content.id);
                 case ContentType.game:
                   return GameDetailsPage(content.id);
-                default:
-                  return MovieDetailsPage(content.id);
               }
             }, maintainState: NavigationTracker().shouldMaintainState())
           );
@@ -325,9 +317,9 @@ class _ContentListPageState extends State<ContentListPage> {
       if ((_canPaginate || _isPaginating) && index >= data.length) {
         return ContentListShimmerCell(_contentProvider.selectedContent);
       }
-  
+
       final content = data[index];
-  
+
       return ContentListCell(_contentProvider.selectedContent, content: content);
     },
   );

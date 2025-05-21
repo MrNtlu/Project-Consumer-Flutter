@@ -8,5 +8,5 @@ class BackendRequestMapper {
 class BackendRequestMapperWithImage extends BackendRequestMapper {
   final String image;
 
-  BackendRequestMapperWithImage(String name, String request, {required this.image}) : super(name, request);
+  BackendRequestMapperWithImage(super.name, super.request, {required this.image});
 }

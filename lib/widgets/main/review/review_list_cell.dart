@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
@@ -59,7 +59,7 @@ class ReviewListCell extends StatelessWidget {
                               cacheKey: item.author.image,
                               key: ValueKey<String>(item.author.image),
                               fit: BoxFit.cover,
-                              cacheManager: CustomCacheManager.instance,
+                              cacheManager: CustomCacheManager(),
                               maxWidthDiskCache: 400,
                               maxHeightDiskCache: 400,
                               progressIndicatorBuilder: (_, __, ___) => const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
@@ -85,7 +85,7 @@ class ReviewListCell extends StatelessWidget {
                             "assets/lottie/premium.json",
                             height: 30,
                             width: 30,
-                            frameRate: FrameRate(60)
+                            frameRate: const FrameRate(60)
                           ),
                         ),
                       ],

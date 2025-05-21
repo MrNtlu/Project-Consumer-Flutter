@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
@@ -91,7 +91,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                         cacheKey: streamingPlatform?.image ?? animeStreamingPlatform!.image,
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
-                        cacheManager: CustomCacheManager.instance,
+                        cacheManager: CustomCacheManager(),
                         maxHeightDiskCache: 250,
                         maxWidthDiskCache: 250,
                         errorListener: (_){},

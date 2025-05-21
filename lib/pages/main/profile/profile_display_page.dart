@@ -143,7 +143,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                             "assets/lottie/premium.json",
                             height: 45,
                             width: 45,
-                            frameRate: FrameRate(60)
+                            frameRate: const FrameRate(60)
                           ),
                         ),
                       ],
@@ -311,8 +311,6 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                                       return AnimeDetailsPage(data.id);
                                     case ContentType.game:
                                       return GameDetailsPage(data.id);
-                                    default:
-                                      return MovieDetailsPage(data.id);
                                   }
                                 }, maintainState: NavigationTracker().shouldMaintainState())
                               );

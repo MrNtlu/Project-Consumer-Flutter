@@ -51,7 +51,7 @@ class UserListListView extends StatelessWidget {
                   Lottie.asset(
                     "assets/lottie/empty.json",
                     height: MediaQuery.of(context).size.height * 0.5,
-                    frameRate: FrameRate(60)
+                    frameRate: const FrameRate(60)
                   ),
                   const Text("Nothing here.", style: TextStyle(fontWeight: FontWeight.w500)),
                 ],
@@ -87,8 +87,6 @@ class UserListListView extends StatelessWidget {
                       return AnimeDetailsPage(data.contentID);
                     case ContentType.game:
                       return GameDetailsPage(data.contentID);
-                    default:
-                      return MovieDetailsPage(data.contentID);
                   }
                 })
               ).then((value) => updateData(data));

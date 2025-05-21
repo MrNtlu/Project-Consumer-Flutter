@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/providers/main/discover/discover_streaming_provider.dart';
@@ -76,7 +76,7 @@ class _DiscoverSheetImageListState extends State<DiscoverSheetImageList> {
                         height: 25,
                         width: widget.isBiggerAndWideImage ? 35 : 25,
                         fit: widget.isBiggerAndWideImage ? BoxFit.contain : BoxFit.cover,
-                        cacheManager: CustomCacheManager.instance,
+                        cacheManager: CustomCacheManager(),
                         maxHeightDiskCache: 75,
                         maxWidthDiskCache: widget.isBiggerAndWideImage ? 105 : 75,
                         progressIndicatorBuilder: (_, __, ___) => ClipRRect(
@@ -132,7 +132,7 @@ class _DiscoverSheetImageListState extends State<DiscoverSheetImageList> {
                     height: 25,
                     width: 25,
                     fit: widget.isBiggerAndWideImage ? BoxFit.contain : BoxFit.cover,
-                    cacheManager: CustomCacheManager.instance,
+                    cacheManager: CustomCacheManager(),
                     maxHeightDiskCache: 75,
                     maxWidthDiskCache: 75,
                     progressIndicatorBuilder: (_, __, ___) => ClipRRect(

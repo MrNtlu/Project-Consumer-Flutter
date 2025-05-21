@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -147,7 +147,7 @@ class LoggedinHeader extends StatelessWidget {
                   cacheKey: authenticationProvider.basicUserInfo!.image!,
                   key: ValueKey<String>(authenticationProvider.basicUserInfo!.image!),
                   fit: BoxFit.cover,
-                  cacheManager: CustomCacheManager.instance,
+                  cacheManager: CustomCacheManager(),
                   maxWidthDiskCache: 400,
                   maxHeightDiskCache: 400,
                   progressIndicatorBuilder: (_, __, ___) =>

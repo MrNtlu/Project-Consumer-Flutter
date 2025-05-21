@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -55,19 +54,21 @@ class LoginPage extends StatelessWidget {
     loginModel.password = _passwordTextController.text;
 
     loginModel.login().then((value) {
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.pop(context);
 
-      if (value.message == null) {
-        SharedPref().setTokenCredentials(value.token ?? '');
+        if (value.message == null) {
+          SharedPref().setTokenCredentials(value.token ?? '');
 
-        context.pushReplacement("/");
-      } else {
-        showCupertinoDialog(context: context, builder: (_) => ErrorDialog(value.message ?? "Unknown error."));
+          context.pushReplacement("/");
+        } else {
+          showCupertinoDialog(context: context, builder: (_) => ErrorDialog(value.message ?? "Unknown error."));
 
-        if (value.code != null && value.code == 401) {
-          loginModel.emailAddress = '';
-          loginModel.password = '';
-          SharedPref().deleteTokenCredentials();
+          if (value.code != null && value.code == 401) {
+            loginModel.emailAddress = '';
+            loginModel.password = '';
+            SharedPref().deleteTokenCredentials();
+          }
         }
       }
     });
@@ -343,7 +344,7 @@ class LoginPage extends StatelessWidget {
                             onPressed: (){
                               showCupertinoModalBottomSheet(
                                 context: context,
-                                barrierColor: CupertinoColors.black.withOpacity(0.75),
+                                barrierColor: CupertinoColors.black.withValues(alpha: 0.75),
                                 builder: (_) => const ForgotPasswordSheet()
                               );
                             }

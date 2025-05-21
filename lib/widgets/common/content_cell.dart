@@ -5,7 +5,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:watchlistfy/static/colors.dart';
-import 'package:myanilist/services/cache_manager_service.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 
 class ContentCell extends StatelessWidget {
   final String url;
@@ -61,7 +61,7 @@ class ContentCell extends StatelessWidget {
       imageUrl: url,
       key: ValueKey<String>(url + title),
       cacheKey: url + title,
-      cacheManager: CustomCacheManager.instance,
+      cacheManager: CustomCacheManager(),
       maxWidthDiskCache: cacheWidth,
       maxHeightDiskCache: cacheHeight,
       filterQuality: FilterQuality.low,
@@ -73,14 +73,16 @@ class ContentCell extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Shimmer.fromColors(
-            baseColor: CupertinoColors.systemGrey, 
+            baseColor: CupertinoColors.systemGrey,
             highlightColor: CupertinoColors.systemGrey3,
             child: const ColoredBox(color: CupertinoColors.systemGrey,)
           )
         ),
       ),
       errorListener: (_) {},
-      errorWidget: (context, url, error) => ColoredBox(
+      errorWidget: (context, url, error) {
+        print("Image error for $url --> $error");
+        return ColoredBox(
         color: CupertinoTheme.of(context).bgTextColor,
         child: AspectRatio(
           aspectRatio: selectedContent != ContentType.game ? 2/3 : 16/9,
@@ -99,7 +101,8 @@ class ContentCell extends StatelessWidget {
             )
           ),
         ),
-      ),
+      );
+      }
     );
   }
 }
