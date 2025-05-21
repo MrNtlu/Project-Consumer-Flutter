@@ -31,17 +31,17 @@ class _RegisterPageState extends State<RegisterPage> {
   late final TextEditingController _passwordTextController;
   late final ProfileImageList _profileImageList;
 
-  void _onRegisterPressed() async {  
+  void _onRegisterPressed() async {
     if (_termsConditionsCheck.getValue() && _privacyPolicyCheck.getValue()) {
       if (_emailTextController.text.isEmpty || _passwordTextController.text.isEmpty || _usernameTextController.text.isEmpty) {
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => const ErrorDialog("Please don't leave anything empty.")
         );
         return;
       } else if (!_emailTextController.text.isEmailValid()) {
         showCupertinoDialog(
-          context: context, 
+          context: context,
           builder: (ctx) => const ErrorDialog("Invalid email address.")
         );
         return;
@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _registerModel.password = _passwordTextController.text;
       _registerModel.username = _usernameTextController.text;
       _registerModel.image = Constants.ProfileImageList[_profileImageList.selectedIndex];
-      
+
       String? token = await FirebaseMessaging.instance.getToken();
       _registerModel.fcmToken = token ?? '';
 
@@ -73,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } else {
       showCupertinoDialog(
-        context: context, 
+        context: context,
         builder: (ctx) => const ErrorDialog("Please accept Terms & Conditions and Privacy Policy")
       );
     }

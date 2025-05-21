@@ -39,7 +39,7 @@ class _DiscoverSheetPremiumListState extends State<DiscoverSheetPremiumList> {
               "assets/lottie/premium.json",
               height: 24,
               width: 24,
-              frameRate: FrameRate(60)
+              frameRate: const FrameRate(60)
             )
             : null,
             onSelected: (value) {

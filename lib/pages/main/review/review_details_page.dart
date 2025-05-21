@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
@@ -84,6 +85,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                   cacheKey: widget.item.author.image,
                                   height: 40,
                                   width: 40,
+                                  cacheManager: CustomCacheManager(),
                                   maxHeightDiskCache: 175,
                                   maxWidthDiskCache: 175,
                                   fit: BoxFit.cover,
@@ -110,7 +112,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                 "assets/lottie/premium.json",
                                 height: 30,
                                 width: 30,
-                                frameRate: FrameRate(60)
+                                frameRate: const FrameRate(60)
                               ),
                             ),
                           ],
@@ -172,11 +174,11 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                             return const LoadingDialog();
                           }
                         );
-          
+
                         widget.likeReview(widget.item.id).then((value) {
                           if (context.mounted) {
                             Navigator.pop(context);
-          
+
                             if (value.error != null) {
                               showCupertinoDialog(
                                 context: context,
@@ -187,14 +189,14 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                             } else {
                               setState(() {
                                 widget.item.isLiked = !widget.item.isLiked;
-                                widget.item.popularity = widget.item.popularity + (widget.item.isLiked ? 1 : -1); 
+                                widget.item.popularity = widget.item.popularity + (widget.item.isLiked ? 1 : -1);
                               });
                             }
                           }
-                        }); 
+                        });
                       } else {
                         showCupertinoDialog(
-                          context: context, 
+                          context: context,
                           builder: (_) => const ErrorDialog("You need to login to do this action.")
                         );
                       }
@@ -216,7 +218,7 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                 return TVDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalID ?? '');
                               case ContentType.anime:
                                 return AnimeDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalIntID?.toString() ?? '');
-                              case ContentType.game: 
+                              case ContentType.game:
                                 return GameDetailsPage(widget.item.contentID.isNotEmpty ? widget.item.contentID : widget.item.contentExternalIntID?.toString() ?? '');
                             }
                           })

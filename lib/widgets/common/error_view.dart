@@ -8,7 +8,7 @@ class ErrorView extends StatelessWidget {
   final VoidCallback _onPressed;
   final bool isPremiumError;
 
-  const ErrorView(this._text, this._onPressed, {this.isPremiumError = false, Key? key}) : super(key: key);
+  const ErrorView(this._text, this._onPressed, {this.isPremiumError = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ErrorView extends StatelessWidget {
             isPremiumError ? "assets/lottie/premium.json" : "assets/lottie/error.json",
             height: 125,
             width: 125,
-            frameRate: FrameRate(60)
+            frameRate: const FrameRate(60)
           ),
         ),
         Container(

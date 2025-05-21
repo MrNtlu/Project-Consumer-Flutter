@@ -6,7 +6,7 @@ import 'package:watchlistfy/providers/theme_provider.dart';
 class ThemeSwitch extends StatelessWidget {
   final VoidCallback onToggle;
 
-  const ThemeSwitch(this.onToggle, {Key? key}) : super(key: key);
+  const ThemeSwitch(this.onToggle, {super.key});
 
   @override
   Widget build(BuildContext context) {

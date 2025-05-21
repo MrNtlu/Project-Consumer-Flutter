@@ -26,7 +26,7 @@ class AuthorInfoRow extends StatelessWidget {
                 "assets/lottie/premium.json",
                 height: size * 0.8,
                 width: size * 0.8,
-                frameRate: FrameRate(60)
+                frameRate: const FrameRate(60)
               ),
             ),
           ],

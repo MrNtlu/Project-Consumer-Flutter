@@ -259,8 +259,6 @@ Spot-On Recommendations: Recommendations based on your user list. \n
                                   return AnimeDetailsPage(content.id);
                                 case ContentType.game:
                                   return GameDetailsPage(content.id);
-                                default:
-                                  return MovieDetailsPage(content.id);
                               }
                             })
                           );

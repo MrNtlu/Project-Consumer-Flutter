@@ -63,8 +63,6 @@ class SocialRecommendationCell extends StatelessWidget {
                                 return AnimeDetailsPage(item.contentID);
                               case ContentType.game:
                                 return GameDetailsPage(item.contentID);
-                              default:
-                                return MovieDetailsPage(item.contentID);
                             }
                           })
                         );
@@ -113,8 +111,6 @@ class SocialRecommendationCell extends StatelessWidget {
                                       return AnimeDetailsPage(item.recommendationID);
                                     case ContentType.game:
                                       return GameDetailsPage(item.recommendationID);
-                                    default:
-                                      return MovieDetailsPage(item.recommendationID);
                                   }
                                 })
                               );

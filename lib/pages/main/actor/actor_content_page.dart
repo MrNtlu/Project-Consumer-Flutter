@@ -8,6 +8,7 @@ import 'package:watchlistfy/models/main/base_content.dart';
 import 'package:watchlistfy/pages/main/image_page.dart';
 import 'package:watchlistfy/providers/main/actor/actor_content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
@@ -138,6 +139,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
                   fit: BoxFit.cover,
                   height: 36,
                   width: 36,
+                  cacheManager: CustomCacheManager(),
                   maxHeightDiskCache: 100,
                   maxWidthDiskCache: 100,
                 )

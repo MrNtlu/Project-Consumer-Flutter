@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/main/review/review.dart';
@@ -196,6 +197,7 @@ class ReviewInteractionListPageState extends State<ReviewInteractionListPage> {
                                   cacheKey: item.author.image,
                                   height: 40,
                                   width: 40,
+                                  cacheManager: CustomCacheManager(),
                                   maxHeightDiskCache: 175,
                                   maxWidthDiskCache: 175,
                                   fit: BoxFit.cover,

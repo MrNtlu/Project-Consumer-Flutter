@@ -260,7 +260,7 @@ class _SocialPageState extends State<SocialPage> {
                             "assets/lottie/premium.json",
                             height: 30,
                             width: 30,
-                            frameRate: FrameRate(60)
+                            frameRate: const FrameRate(60)
                           ),
                         ),
                       ],

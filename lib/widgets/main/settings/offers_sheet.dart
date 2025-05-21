@@ -91,7 +91,7 @@ class _OffersSheetState extends State<OffersSheet> {
                           "assets/lottie/premium.json",
                           height: 128,
                           width: 128,
-                          frameRate: FrameRate(60)
+                          frameRate: const FrameRate(60)
                         ),
                       ),
                       const Row(

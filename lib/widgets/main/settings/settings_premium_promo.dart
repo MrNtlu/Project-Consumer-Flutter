@@ -37,7 +37,7 @@ class SettingsPremiumPromo extends StatelessWidget {
                   "assets/lottie/premium.json",
                   height: 52,
                   width: 52,
-                  frameRate: FrameRate(60)
+                  frameRate: const FrameRate(60)
                 ),
                 const SizedBox(width: 4),
                 Expanded(

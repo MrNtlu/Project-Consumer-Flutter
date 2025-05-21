@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:watchlistfy/models/main/anime/anime_details_name_url.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -49,6 +50,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                         cacheKey: item.name,
                         height: 64,
                         width: 64,
+                        cacheManager: CustomCacheManager(),
                         maxHeightDiskCache: 190,
                         maxWidthDiskCache: 190,
                         errorWidget: (context, _, __) {
