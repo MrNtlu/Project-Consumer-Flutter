@@ -28,7 +28,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
               Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
                 return AnimeDiscoverListPage(
                   streaming: item.name,
-                  streamingLogo: 'https://logo.clearbit.com/${item.url}',
+                  streamingLogo: 'https://img.logo.dev/${item.url}?token=pk_C1fcC0OuSJS-HB9jCN0LIg',
                 );
               }, maintainState: NavigationTracker().shouldMaintainState()));
             },
@@ -44,7 +44,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
-                        imageUrl: 'https://logo.clearbit.com/${item.url}',
+                        imageUrl: 'https://img.logo.dev/${item.url}?token=pk_C1fcC0OuSJS-HB9jCN0LIg',
                         fit: BoxFit.cover,
                         key: ValueKey<String>(item.name),
                         cacheKey: item.name,

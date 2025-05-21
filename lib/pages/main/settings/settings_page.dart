@@ -474,6 +474,33 @@ class _SettingsPageState extends State<SettingsPage> {
                 )
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, bottom: 0), // Adjust padding
+              child: CupertinoButton(
+                child: Text(
+                  "Logos provided by Logo.dev",
+                  style: TextStyle(
+                    fontSize: 12, // Discreet font size
+                    color: CupertinoTheme.of(context).textTheme.tabLabelTextStyle.color?.withOpacity(0.7), // Discreet color
+                    decoration: TextDecoration.underline, // Indicate it's a link
+                  ),
+                ),
+                onPressed: () async {
+                  final url = Uri.parse('https://logo.dev');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  } else {
+                    // Optional: show an error message if the URL can't be launched
+                    if (mounted) { // Ensure context is still valid if in a StatefulWidget
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (ctx) => const MessageDialog("Could not launch https://logo.dev", title: "Error")
+                      );
+                    }
+                  }
+                },
+              ),
+            ),
             if (authProvider?.isAuthenticated == true)
             CupertinoButton(
               child: const Text('Delete Account', style: TextStyle(color: CupertinoColors.systemRed)),
