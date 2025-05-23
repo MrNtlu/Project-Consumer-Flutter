@@ -191,7 +191,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     }
                   }
                 ),
-                _body(provider)
+                _body(provider),
               ],
             ),
           );
@@ -290,7 +290,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   collapseText: "Read Less",
                   linkColor: CupertinoColors.systemBlue,
                   style: const TextStyle(fontSize: 16),
-                  linkStyle: const TextStyle(fontSize: 14),
+                  linkStyle: const TextStyle(fontSize: 14, color: CupertinoColors.systemBlue),
                 ),
                 const DetailsTitle("Actors"),
                 SizedBox(
@@ -309,7 +309,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     (index) {
                       return item.actors[index].character;
                     },
-                    true,
+                    true, // isDarkTheme should ideally be passed here if applicable
                   )
                 ),
                 if(item.recommendations.isNotEmpty)
@@ -365,7 +365,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       return item.productionCompanies![index].originCountry;
                     },
                     placeHolderIcon: Icons.business_rounded,
-                    true,
+                    isDarkTheme: CupertinoTheme.of(context).brightness == Brightness.dark,
                   )
                 ),
                 Row(
@@ -373,7 +373,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   children: [
                     const DetailsTitle("Platforms"),
                     CupertinoButton(
-                      child: const Icon(CupertinoIcons.info_circle),
+                      child: const Icon(CupertinoIcons.info_circle, color: CupertinoColors.systemGrey),
                       onPressed: () {
                         final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
 

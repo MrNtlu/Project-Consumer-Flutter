@@ -180,32 +180,47 @@ class _ContentListPageState extends State<ContentListPage> {
         break;
     }
 
+    final List<ChangeNotifierProvider<ChangeNotifier>> providers = [];
+    switch (widget.contentType) {
+      case ContentType.movie:
+        providers.add(ChangeNotifierProvider(create: (_) => _movieListProvider));
+        break;
+      case ContentType.tv:
+        providers.add(ChangeNotifierProvider(create: (_) => _tvListProvider));
+        break;
+      case ContentType.anime:
+        providers.add(ChangeNotifierProvider(create: (_) => _animeListProvider));
+        break;
+      case ContentType.game:
+        providers.add(ChangeNotifierProvider(create: (_) => _gameListProvider));
+        break;
+    }
+
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => _movieListProvider),
-        ChangeNotifierProvider(create: (context) => _tvListProvider),
-        ChangeNotifierProvider(create: (context) => _animeListProvider),
-        ChangeNotifierProvider(create: (context) => _gameListProvider),
-      ],
+      providers: providers,
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: "Home",
           middle: Text(widget.title),
-          trailing: CupertinoButton(
-            onPressed: () {
-              _globalProvider.setContentMode(
-                _globalProvider.contentMode == Constants.ContentUIModes.first
-                ? Constants.ContentUIModes.last
-                : Constants.ContentUIModes.first
+          trailing: Consumer<GlobalProvider>(
+            builder: (context, globalProvider, child) {
+              return CupertinoButton(
+                onPressed: () {
+                  globalProvider.setContentMode(
+                    globalProvider.contentMode == Constants.ContentUIModes.first
+                    ? Constants.ContentUIModes.last
+                    : Constants.ContentUIModes.first
+                  );
+                },
+                padding: EdgeInsets.zero,
+                child: Icon(
+                  globalProvider.contentMode == Constants.ContentUIModes.first
+                  ? Icons.grid_view_rounded
+                  : CupertinoIcons.list_bullet,
+                  size: 28
+                )
               );
-            },
-            padding: EdgeInsets.zero,
-            child: Icon(
-              _globalProvider.contentMode == Constants.ContentUIModes.first
-              ? Icons.grid_view_rounded
-              : CupertinoIcons.list_bullet,
-              size: 28
-            )
+            }
           ),
         ),
         child: _body(data)
@@ -216,11 +231,52 @@ class _ContentListPageState extends State<ContentListPage> {
   Widget _body(List<BaseContent> data) {
     switch (_state) {
       case ListState.done:
-        final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
-        final shouldShowBannerAds = _bannerAd != null && (_authenticationProvider.basicUserInfo == null || _authenticationProvider.basicUserInfo?.isPremium == false);
+        return Consumer<GlobalProvider>(
+          builder: (context, globalProvider, child) {
+            final isGridView = globalProvider.contentMode == Constants.ContentUIModes.first;
+            final shouldShowBannerAds = _bannerAd != null && (_authenticationProvider.basicUserInfo == null || _authenticationProvider.basicUserInfo?.isPremium == false);
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: shouldShowBannerAds
+              ? Column(
+                children: [
+                  Expanded(
+                    child: isGridView
+                    ? _gridList(data)
+                    : _listView(data)
+                  ),
+                  _bannerAds(),
+                ],
+              )
+              : (
+                isGridView
+                ? _gridList(data)
+                : _listView(data)
+              ),
+            );
+          }
+        );
+      case ListState.empty:
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Text("Couldn't find anything."),
+          ),
+        );
+      case ListState.error:
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(_error ?? "Unknown error!"),
+          ),
+        );
+      case ListState.loading:
+        return const LoadingView("Loading");
+      default:
+       return const LoadingView("Loading");
+    }
+  }
           child: shouldShowBannerAds
           ? Column(
             children: [
@@ -262,9 +318,9 @@ class _ContentListPageState extends State<ContentListPage> {
   Widget _gridList(List<BaseContent> data) => GridView.builder(
     itemCount: _canPaginate ? data.length + 2 : data.length,
     controller: _scrollController,
-    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
       maxCrossAxisExtent: 350,
-      childAspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
+      childAspectRatio: 2/3, // This will be overridden by AspectRatio below for game
       crossAxisSpacing: 6,
       mainAxisSpacing: 6
     ),
@@ -277,7 +333,7 @@ class _ContentListPageState extends State<ContentListPage> {
             child: Shimmer.fromColors(
               baseColor: CupertinoColors.systemGrey,
               highlightColor: CupertinoColors.systemGrey3,
-              child: const ColoredBox(color: CupertinoColors.systemGrey,)
+              child: const ColoredBox(color: CupertinoColors.systemGrey)
             )
           ),
         );
@@ -304,7 +360,7 @@ class _ContentListPageState extends State<ContentListPage> {
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
-          child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 500, cacheHeight: 700),
+          child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 500, cacheHeight: 700, forceRatio: _contentProvider.selectedContent != ContentType.game, ratio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9),
         )
       );
     }
