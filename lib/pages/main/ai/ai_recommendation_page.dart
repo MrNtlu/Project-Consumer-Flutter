@@ -44,34 +44,8 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
       if (_state != ListState.disposed) {
         setState(() {
           _state = response.error != null
-            ? ListState.error
-            : (
-              response.data.isEmpty
-                ? ListState.empty
-                : ListState.done
-            );
-        });
-      }
-    });
-  }
-
-  void _generateData() {
-    setState(() {
-      _state = ListState.loading;
-    });
-
-    _recommendationsProvider.generateRecommendations().then((response) {
-      _error = response.error;
-
-      if (_state != ListState.disposed) {
-        setState(() {
-          _state = response.error != null
-            ? ListState.error
-            : (
-              response.data.isEmpty
-                ? ListState.empty
-                : ListState.done
-            );
+              ? ListState.error
+              : (response.data.isEmpty ? ListState.empty : ListState.done);
         });
       }
     });
@@ -109,7 +83,8 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
       child: Consumer<AIRecommendationsProvider>(
         builder: (context, provider, child) {
           final startDate = DateTime.tryParse(createdAt ?? '');
-          final deadlineDayRange = authProvider.basicUserInfo?.isPremium == true ? 7 : 30;
+          final deadlineDayRange =
+              authProvider.basicUserInfo?.isPremium == true ? 7 : 30;
           final endDate = startDate?.add(Duration(days: deadlineDayRange));
 
           return CupertinoPageScaffold(
@@ -120,7 +95,10 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 8,
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -128,7 +106,10 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                         maxRadius: 32,
                         backgroundColor: CupertinoTheme.of(context).onBgColor,
                         foregroundColor: CupertinoTheme.of(context).onBgColor,
-                        child: const Text("🤖", style: TextStyle(fontSize: 32),),
+                        child: const Text(
+                          "🤖",
+                          style: TextStyle(fontSize: 32),
+                        ),
                       ),
                       Flexible(
                         child: Column(
@@ -136,42 +117,51 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                           children: [
                             BubbleSpecialOne(
                               text: _state == ListState.done
-                              ? (
-                                authProvider.isAuthenticated
-                                ? "This is what I recommend based on your activity."
-                                : "You need to be logged in to get recommendations."
-                              )
-                              : (_state == ListState.error
-                                ? _error!
-                                : (
-                                  _state == ListState.empty
-                                  ? "You can generate your recommendations now!"
-                                  : "Please wait..."
-                                )
-                              ),
+                                  ? (authProvider.isAuthenticated
+                                      ? "This is what I recommend based on your activity."
+                                      : "You need to be logged in to get recommendations.")
+                                  : (_state == ListState.error
+                                      ? _error!
+                                      : (_state == ListState.empty
+                                          ? "Cannot generate recommendations. Please try again later."
+                                          : "This action can take a while to complete. Please wait...")),
                               color: CupertinoTheme.of(context).bgTextColor,
                               tail: true,
                               isSender: false,
-                              textStyle: TextStyle(color: CupertinoTheme.of(context).bgColor, fontSize: 15),
+                              textStyle: TextStyle(
+                                color: CupertinoTheme.of(context).bgColor,
+                                fontSize: 15,
+                              ),
                             ),
                             if (endDate != null && authProvider.isAuthenticated)
-                            const SizedBox(height: 6),
+                              const SizedBox(height: 6),
                             if (endDate != null && authProvider.isAuthenticated)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text("Until refresh ", style: TextStyle(fontSize: 13)),
-                                TimerCountdown(
-                                  spacerWidth: 3,
-                                  enableDescriptions: false,
-                                  format: CountDownTimerFormat.daysHoursMinutesSeconds,
-                                  endTime: endDate,
-                                  descriptionTextStyle: const TextStyle(fontSize: 10),
-                                  colonsTextStyle: const TextStyle(fontSize: 10),
-                                  timeTextStyle: const TextStyle(fontSize: 13),
-                                ),
-                              ],
-                            ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  const Text(
+                                    "Until refresh ",
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                  TimerCountdown(
+                                    spacerWidth: 3,
+                                    enableDescriptions: false,
+                                    format: CountDownTimerFormat
+                                        .daysHoursMinutesSeconds,
+                                    endTime: endDate,
+                                    descriptionTextStyle: const TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                    colonsTextStyle: const TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                    timeTextStyle: const TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
                           ],
                         ),
                       ),
@@ -183,116 +173,129 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                             builder: (_) {
                               return SafeArea(
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                    horizontal: 16,
+                                  ),
                                   child: const Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
                                         "🤖 AI Assistant",
-                                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                       SizedBox(height: 16),
-                                      Text("""Premium users can get recommendations every week. Free users can get recommendations every month.
+                                      Text(
+                                        """Premium users can get recommendations every week. Free users can get recommendations every month.
 
-Spot-On Recommendations: Recommendations based on your user list. \n
-✨ Summaries: Get summary of a content and decide yourself. \n
-✨ User Reviews Summary: Brief overview of the content based on other people. \n"""),
-                                      Text("✨: Premium Features Only", style: TextStyle(fontSize: 11),)
+✨ Spot-On Recommendations: Recommendations based on your user list. \n""",
+                                      ),
                                     ],
                                   ),
                                 ),
                               );
-                            }
+                            },
                           );
-                        }
+                        },
                       )
                     ],
                   ),
                 ),
-                if (_state == ListState.empty)
-                Expanded(
-                  child: Center(
-                    child: CupertinoButton.filled(
-                      child: const Text("Generate Now!", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
-                      onPressed: () {
-                        _generateData();
-                      }
-                    ),
-                  ),
-                ),
                 if (_state == ListState.error)
-                Expanded(
-                  child: Center(
-                    child: CupertinoButton.filled(
-                      child: const Text("Refresh", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
-                      onPressed: () {
-                        _fetchData();
-                      }
-                    ),
-                  ),
-                ),
-                if (_state == ListState.done && authProvider.isAuthenticated)
-                Expanded(
-                  child: GridView.builder(
-                    itemCount: provider.items.length,
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 250,
-                      childAspectRatio: 2/3,
-                      crossAxisSpacing: 6,
-                      mainAxisSpacing: 6
-                    ),
-                    itemBuilder: (context, index) {
-                      final content = provider.items[index];
-                      final contentType = ContentType.values.where((element) => content.contentType == element.request).first;
-
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(builder: (_) {
-                              switch (contentType) {
-                                case ContentType.movie:
-                                  return MovieDetailsPage(content.id);
-                                case ContentType.tv:
-                                  return TVDetailsPage(content.id);
-                                case ContentType.anime:
-                                  return AnimeDetailsPage(content.id);
-                                case ContentType.game:
-                                  return GameDetailsPage(content.id);
-                              }
-                            })
-                          );
+                  Expanded(
+                    child: Center(
+                      child: CupertinoButton.filled(
+                        child: const Text(
+                          "Refresh",
+                          style: TextStyle(
+                            color: CupertinoColors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          _fetchData();
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                          child: ContentCell(content.imageUrl, content.titleEn),
-                        )
-                      );
-                    }
-                  ),
-                ),
-                if (!authProvider.isAuthenticated)
-                Expanded(
-                  child: Center(
-                    child: CupertinoButton.filled(
-                      child: const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)),
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return LoginPage();
-                          })
-                        );
-                      }
+                      ),
                     ),
                   ),
-                ),
+                if (_state == ListState.done && authProvider.isAuthenticated)
+                  Expanded(
+                    child: GridView.builder(
+                      itemCount: provider.items.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 250,
+                        childAspectRatio: 2 / 3,
+                        crossAxisSpacing: 6,
+                        mainAxisSpacing: 6,
+                      ),
+                      itemBuilder: (context, index) {
+                        final content = provider.items[index];
+                        final contentType = ContentType.values
+                            .where(
+                              (element) =>
+                                  content.contentType == element.request,
+                            )
+                            .first;
+
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(CupertinoPageRoute(builder: (_) {
+                                switch (contentType) {
+                                  case ContentType.movie:
+                                    return MovieDetailsPage(content.id);
+                                  case ContentType.tv:
+                                    return TVDetailsPage(content.id);
+                                  case ContentType.anime:
+                                    return AnimeDetailsPage(content.id);
+                                  case ContentType.game:
+                                    return GameDetailsPage(content.id);
+                                }
+                              }));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 2,
+                              ),
+                              child: ContentCell(
+                                content.imageUrl,
+                                content.titleEn,
+                              ),
+                            ));
+                      },
+                    ),
+                  ),
+                if (!authProvider.isAuthenticated)
+                  Expanded(
+                    child: Center(
+                      child: CupertinoButton.filled(
+                          child: const Text("Login",
+                              style: TextStyle(
+                                  color: CupertinoColors.white,
+                                  fontWeight: FontWeight.bold)),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(
+                                builder: (_) {
+                                  return LoginPage();
+                                },
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
               ],
-            )
+            ),
           );
-        }
+        },
       ),
     );
   }
-
-
 }

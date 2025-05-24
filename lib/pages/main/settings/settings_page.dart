@@ -58,18 +58,18 @@ class _SettingsPageState extends State<SettingsPage> {
       _state = DetailState.loading;
     });
     try {
-      http.delete(
-        Uri.parse(APIRoutes().userRoutes.deleteUser),
-        headers: UserToken().getBearerToken()
-      ).then((response){
+      http
+          .delete(Uri.parse(APIRoutes().userRoutes.deleteUser),
+              headers: UserToken().getBearerToken())
+          .then((response) {
         if (response.getBaseMessageResponse().error != null) {
           setState(() {
             _state = DetailState.view;
           });
           showCupertinoDialog(
-            context: context,
-            builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          );
+              context: context,
+              builder: (ctx) =>
+                  ErrorDialog(response.getBaseMessageResponse().error!));
         } else {
           authProvider?.setAuthentication(false);
           authProvider?.setBasicUserInfo(null);
@@ -85,9 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _state = DetailState.view;
       });
       showCupertinoDialog(
-        context: context,
-        builder: (ctx) => ErrorDialog(error.toString())
-      );
+          context: context, builder: (ctx) => ErrorDialog(error.toString()));
     }
   }
 
@@ -96,24 +94,25 @@ class _SettingsPageState extends State<SettingsPage> {
       _state = DetailState.loading;
     });
     try {
-      http.post(
-        Uri.parse(APIRoutes().authRoutes.logout),
-        headers: UserToken().getBearerToken()
-      ).then((response) async {
+      http
+          .post(Uri.parse(APIRoutes().authRoutes.logout),
+              headers: UserToken().getBearerToken())
+          .then((response) async {
         if (response.getBaseMessageResponse().error != null) {
           setState(() {
             _state = DetailState.view;
           });
           showCupertinoDialog(
-            context: context,
-            builder: (_) => ErrorDialog(response.getBaseMessageResponse().error!)
-          );
+              context: context,
+              builder: (_) =>
+                  ErrorDialog(response.getBaseMessageResponse().error!));
         } else {
           try {
             await Purchases.logOut();
             SharedPref().deleteTokenCredentials();
 
-            if (PurchaseApi().userInfo != null && PurchaseApi().userInfo!.isOAuth) {
+            if (PurchaseApi().userInfo != null &&
+                PurchaseApi().userInfo!.isOAuth) {
               switch (PurchaseApi().userInfo!.oAuthType) {
                 case 0:
                   await GoogleSignInApi().signOut();
@@ -135,9 +134,8 @@ class _SettingsPageState extends State<SettingsPage> {
             });
             if (context.mounted) {
               showCupertinoDialog(
-                context: context,
-                builder: (_) => ErrorDialog(error.toString())
-              );
+                  context: context,
+                  builder: (_) => ErrorDialog(error.toString()));
             }
           }
         }
@@ -147,9 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _state = DetailState.view;
       });
       showCupertinoDialog(
-        context: context,
-        builder: (ctx) => ErrorDialog(error.toString())
-      );
+          context: context, builder: (ctx) => ErrorDialog(error.toString()));
     }
   }
 
@@ -159,13 +155,15 @@ class _SettingsPageState extends State<SettingsPage> {
     });
 
     try {
-      http.get(
-        Uri.parse(APIRoutes().userRoutes.basic),
-        headers: UserToken().getBearerToken()
-      ).then((response){
+      http
+          .get(Uri.parse(APIRoutes().userRoutes.basic),
+              headers: UserToken().getBearerToken())
+          .then((response) {
         if (_state != DetailState.disposed) {
           _userInfo = response.getBaseItemResponse<BasicUserInfo>().data;
-          error = _userInfo == null ? response.getBaseItemResponse<UserInfo>().message : null;
+          error = _userInfo == null
+              ? response.getBaseItemResponse<UserInfo>().message
+              : null;
 
           if (_userInfo != null && PurchaseApi().userInfo == null) {
             PurchaseApi().userInfo = _userInfo;
@@ -181,7 +179,7 @@ class _SettingsPageState extends State<SettingsPage> {
           _state = DetailState.error;
         });
       });
-    } catch(error) {
+    } catch (error) {
       this.error = error.toString();
       setState(() {
         _state = DetailState.error;
@@ -199,13 +197,15 @@ class _SettingsPageState extends State<SettingsPage> {
     });
 
     try {
-      http.patch(
+      http
+          .patch(
         Uri.parse(APIRoutes().userRoutes.changeImage),
         headers: UserToken().getBearerToken(),
         body: json.encode({
           "image": newImage,
         }),
-      ).then((response){
+      )
+          .then((response) {
         if (_state != DetailState.disposed) {
           error = response.getBaseItemResponse<UserInfo>().error;
 
@@ -225,7 +225,7 @@ class _SettingsPageState extends State<SettingsPage> {
           _state = DetailState.error;
         });
       });
-    } catch(error) {
+    } catch (error) {
       this.error = error.toString();
       setState(() {
         _state = DetailState.error;
@@ -266,258 +266,265 @@ class _SettingsPageState extends State<SettingsPage> {
         brightness: cupertinoTheme.brightness,
       ),
       child: _state == DetailState.loading
-      ? const LoadingView("Loading")
-      : SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_userInfo != null)
-            ...[
-              const SizedBox(height: 16),
-              SettingsProfile(_userInfo!, _changeImage),
+          ? const LoadingView("Loading")
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (_userInfo != null) ...[
+                    const SizedBox(height: 16),
+                    SettingsProfile(_userInfo!, _changeImage),
+                  ],
+                  if (_userInfo != null &&
+                      authProvider?.isAuthenticated == true &&
+                      !_userInfo!.isPremium) ...[
+                    const SizedBox(height: 16),
+                    const SettingsPremiumPromo(),
+                  ],
+                  SettingsList(
+                    shrinkWrap: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 6),
+                    physics: const NeverScrollableScrollPhysics(),
+                    darkTheme: SettingsThemeData(
+                      settingsListBackground: cupertinoTheme.bgColor,
+                      settingsSectionBackground: cupertinoTheme.onBgColor,
+                      titleTextColor: cupertinoTheme.bgTextColor,
+                      settingsTileTextColor: cupertinoTheme.bgTextColor,
+                    ),
+                    lightTheme: SettingsThemeData(
+                      settingsListBackground: cupertinoTheme.bgColor,
+                      settingsSectionBackground: cupertinoTheme.onBgColor,
+                      titleTextColor: cupertinoTheme.bgTextColor,
+                      settingsTileTextColor: cupertinoTheme.bgTextColor,
+                    ),
+                    brightness: cupertinoTheme.brightness,
+                    platform: DevicePlatform.iOS,
+                    applicationType: ApplicationType.cupertino,
+                    sections: [
+                      SettingsSection(tiles: [
+                        CustomSettingsTile(child: ThemeSwitch(() {
+                          setState(() {
+                            _state = DetailState.view;
+                          });
+                        })),
+                        SettingsTile.navigation(
+                          leading: const Icon(Icons.settings),
+                          title: const Text('Application Settings'),
+                          onPressed: (ctx) {
+                            showCupertinoModalBottomSheet(
+                                context: context,
+                                barrierColor:
+                                    CupertinoColors.black.withOpacity(0.65),
+                                builder: (context) =>
+                                    const SettingsApplicationPage());
+                          },
+                        ),
+                        if (_userInfo != null) ...[
+                          SettingsTile.navigation(
+                            leading:
+                                const Icon(Icons.mark_email_unread_rounded),
+                            title: const Text('Mail Notification Settings'),
+                            onPressed: (ctx) {
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(CupertinoPageRoute(builder: (_) {
+                                return SettingsNotificationPage(_userInfo!);
+                              }));
+                            },
+                          ),
+                          SettingsTile.navigation(
+                            leading: const Icon(Icons.notifications_on_rounded),
+                            title: const Text('In-App Notification Settings'),
+                            onPressed: (ctx) {
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(CupertinoPageRoute(builder: (_) {
+                                return SettingsNotificationPage(_userInfo!,
+                                    isMail: false);
+                              }));
+                            },
+                          ),
+                        ],
+                        if (authProvider?.isAuthenticated == true &&
+                            _userInfo?.canChangeUsername == true)
+                          SettingsTile.navigation(
+                            leading: const Icon(CupertinoIcons.person_2_fill),
+                            title: const Text('Change Username'),
+                            onPressed: (ctx) {
+                              showCupertinoModalBottomSheet(
+                                  context: context,
+                                  barrierColor:
+                                      CupertinoColors.black.withOpacity(0.75),
+                                  builder: (_) => const ChangeUsernameSheet());
+                            },
+                          ),
+                        if (authProvider?.isAuthenticated == true &&
+                            _userInfo != null)
+                          SettingsTile.navigation(
+                            leading: const Icon(FontAwesomeIcons.chartPie),
+                            title: const Text('Usages and Limits'),
+                            onPressed: (ctx) {
+                              showCupertinoModalBottomSheet(
+                                  context: context,
+                                  barrierColor:
+                                      CupertinoColors.black.withOpacity(0.75),
+                                  builder: (_) => UserCountSheet(_userInfo!));
+                            },
+                          ),
+                        if (authProvider?.isAuthenticated == true) ...[
+                          SettingsTile.navigation(
+                            leading: const Icon(Icons.password_rounded),
+                            title: const Text('Change Password'),
+                            onPressed: (ctx) {
+                              showCupertinoModalBottomSheet(
+                                  context: context,
+                                  barrierColor:
+                                      CupertinoColors.black.withOpacity(0.75),
+                                  builder: (_) => const ChangePasswordSheet());
+                            },
+                          ),
+                          SettingsTile.navigation(
+                            leading: const Icon(Icons.logout_rounded),
+                            title: const Text('Logout'),
+                            onPressed: (ctx) {
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return SureDialog("Do you want to logout?",
+                                        () {
+                                      _logOut();
+                                    });
+                                  });
+                            },
+                          ),
+                        ],
+                        if (authProvider?.isAuthenticated == false)
+                          SettingsTile.navigation(
+                            leading: const Icon(Icons.login_rounded),
+                            title: const Text('Login'),
+                            onPressed: (ctx) {
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(CupertinoPageRoute(builder: (_) {
+                                return LoginPage();
+                              }));
+                            },
+                          ),
+                      ]),
+                      SettingsSection(
+                        tiles: [
+                          SettingsTile.navigation(
+                            leading: const Icon(CupertinoIcons.mail_solid),
+                            title: const Text('Contact Us'),
+                            onPressed: (ctx) async {
+                              final url = Uri.parse('mailto:mrntlu@gmail.com');
+                              if (!await launchUrl(url) && context.mounted) {
+                                showCupertinoDialog(
+                                    context: context,
+                                    builder: (_) => const MessageDialog(
+                                        "You can send email to, mrntlu@gmail.com",
+                                        title: "Contact Us"));
+                              }
+                            },
+                          ),
+                          SettingsTile.navigation(
+                            leading: const Icon(Icons.rate_review_rounded),
+                            title: const Text('Support Us'),
+                            onPressed: (ctx) async {
+                              final InAppReview inAppReview =
+                                  InAppReview.instance;
 
-            ],
-            if (_userInfo != null && authProvider?.isAuthenticated == true && !_userInfo!.isPremium)
-            ...[
-              const SizedBox(height: 16),
-              const SettingsPremiumPromo(),
-            ],
-            SettingsList(
-              shrinkWrap: true,
-              contentPadding: const EdgeInsets.symmetric(vertical: 6),
-              physics: const NeverScrollableScrollPhysics(),
-              darkTheme: SettingsThemeData(
-                settingsListBackground: cupertinoTheme.bgColor,
-                settingsSectionBackground: cupertinoTheme.onBgColor,
-                titleTextColor: cupertinoTheme.bgTextColor,
-                settingsTileTextColor: cupertinoTheme.bgTextColor,
-              ),
-              lightTheme: SettingsThemeData(
-                settingsListBackground: cupertinoTheme.bgColor,
-                settingsSectionBackground: cupertinoTheme.onBgColor,
-                titleTextColor: cupertinoTheme.bgTextColor,
-                settingsTileTextColor: cupertinoTheme.bgTextColor,
-              ),
-              brightness: cupertinoTheme.brightness,
-              platform: DevicePlatform.iOS,
-              applicationType: ApplicationType.cupertino,
-              sections: [
-                SettingsSection(
-                  tiles: [
-                    CustomSettingsTile(child: ThemeSwitch(() {
-                      setState(() {
-                        _state = DetailState.view;
-                      });
-                    })),
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.settings),
-                      title: const Text('Application Settings'),
-                      onPressed: (ctx) {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          barrierColor: CupertinoColors.black.withOpacity(0.65),
-                          builder: (context) => const SettingsApplicationPage()
-                        );
-                      },
-                    ),
-                    if (_userInfo != null)
-                    ...[
-                      SettingsTile.navigation(
-                        leading: const Icon(Icons.mark_email_unread_rounded),
-                        title: const Text('Mail Notification Settings'),
-                        onPressed: (ctx) {
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(builder: (_) {
-                              return SettingsNotificationPage(_userInfo!);
-                            })
-                          );
-                        },
-                      ),
-                      SettingsTile.navigation(
-                        leading: const Icon(Icons.notifications_on_rounded),
-                        title: const Text('In-App Notification Settings'),
-                        onPressed: (ctx) {
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(builder: (_) {
-                              return SettingsNotificationPage(_userInfo!, isMail: false);
-                            })
-                          );
-                        },
-                      ),
+                              inAppReview.openStoreListing(
+                                  appStoreId: 'id6476311748');
+                            },
+                          ),
+                          SettingsTile.navigation(
+                            leading: const Icon(CupertinoIcons.sparkles),
+                            title: const Text("What's New"),
+                            onPressed: (ctx) {
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (_) => const WhatsNewDialog());
+                            },
+                          ),
+                        ],
+                      )
                     ],
-                    if (authProvider?.isAuthenticated == true && _userInfo?.canChangeUsername == true)
-                    SettingsTile.navigation(
-                      leading: const Icon(CupertinoIcons.person_2_fill),
-                      title: const Text('Change Username'),
-                      onPressed: (ctx) {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          barrierColor: CupertinoColors.black.withOpacity(0.75),
-                          builder: (_) => const ChangeUsernameSheet()
-                        );
-                      },
-                    ),
-                    if (authProvider?.isAuthenticated == true && _userInfo != null)
-                    SettingsTile.navigation(
-                      leading: const Icon(FontAwesomeIcons.chartPie),
-                      title: const Text('Usages and Limits'),
-                      onPressed: (ctx) {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          barrierColor: CupertinoColors.black.withOpacity(0.75),
-                          builder: (_) => UserCountSheet(_userInfo!)
-                        );
-                      },
-                    ),
-                    if (authProvider?.isAuthenticated == true)
-                    ...[
-                      SettingsTile.navigation(
-                        leading: const Icon(Icons.password_rounded),
-                        title: const Text('Change Password'),
-                        onPressed: (ctx) {
-                          showCupertinoModalBottomSheet(
-                            context: context,
-                            barrierColor: CupertinoColors.black.withOpacity(0.75),
-                            builder: (_) => const ChangePasswordSheet()
-                          );
-                        },
-                      ),
-                      SettingsTile.navigation(
-                        leading: const Icon(Icons.logout_rounded),
-                        title: const Text('Logout'),
-                        onPressed: (ctx) {
-                          showCupertinoDialog(
-                            context: context,
-                            builder: (_) {
-                              return SureDialog("Do you want to logout?", () {
-                                _logOut();
-                              });
-                            }
-                          );
-                        },
-                      ),
-                    ],
-                    if (authProvider?.isAuthenticated == false)
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.login_rounded),
-                      title: const Text('Login'),
-                      onPressed: (ctx) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(builder: (_) {
-                            return LoginPage();
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CupertinoButton(
+                          child: const Text("Terms & Conditions"),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .push(CupertinoPageRoute(builder: (_) {
+                              return const PolicyPage(false);
+                            }));
+                          }),
+                      CupertinoButton(
+                          child: const Text("Privacy Policy"),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .push(CupertinoPageRoute(builder: (_) {
+                              return const PolicyPage(true);
+                            }));
                           })
-                        );
-                      },
-                    ),
-                  ]
-                ),
-                SettingsSection(
-                  tiles: [
-                    SettingsTile.navigation(
-                      leading: const Icon(CupertinoIcons.mail_solid),
-                      title: const Text('Contact Us'),
-                      onPressed: (ctx) async {
-                        final url = Uri.parse('mailto:mrntlu@gmail.com');
-                        if (!await  launchUrl(url) && context.mounted) {
-                          showCupertinoDialog(
-                            context: context,
-                            builder: (_) => const MessageDialog("You can send email to, mrntlu@gmail.com", title: "Contact Us")
-                          );
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 0, bottom: 0), // Adjust padding
+                    child: CupertinoButton(
+                      child: Text(
+                        "Logos provided by Logo.dev",
+                        style: TextStyle(
+                          fontSize: 12, // Discreet font size
+                          color: CupertinoTheme.of(context)
+                              .textTheme
+                              .tabLabelTextStyle
+                              .color
+                              ?.withOpacity(0.7), // Discreet color
+                          decoration:
+                              TextDecoration.underline, // Indicate it's a link
+                        ),
+                      ),
+                      onPressed: () async {
+                        final url = Uri.parse('https://logo.dev');
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url,
+                              mode: LaunchMode.externalApplication);
+                        } else {
+                          // Optional: show an error message if the URL can't be launched
+                          if (mounted) {
+                            // Ensure context is still valid if in a StatefulWidget
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (ctx) => const MessageDialog(
+                                  "Could not launch https://logo.dev",
+                                  title: "Error"),
+                            );
+                          }
                         }
                       },
                     ),
-                    SettingsTile.navigation(
-                      leading: const Icon(Icons.rate_review_rounded),
-                      title: const Text('Support Us'),
-                      onPressed: (ctx) async {
-                        final InAppReview inAppReview = InAppReview.instance;
-
-                        inAppReview.openStoreListing(appStoreId: 'id6476311748');
-                      },
-                    ),
-                    SettingsTile.navigation(
-                      leading: const Icon(CupertinoIcons.sparkles),
-                      title: const Text("What's New"),
-                      onPressed: (ctx) {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) => const WhatsNewDialog()
-                        );
-                      },
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CupertinoButton(
-                  child: const Text("Terms & Conditions"),
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return const PolicyPage(false);
-                      })
-                    );
-                  }
-                ),
-                CupertinoButton(
-                  child: const Text("Privacy Policy"),
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return const PolicyPage(true);
-                      })
-                    );
-                  }
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 0), // Adjust padding
-              child: CupertinoButton(
-                child: Text(
-                  "Logos provided by Logo.dev",
-                  style: TextStyle(
-                    fontSize: 12, // Discreet font size
-                    color: CupertinoTheme.of(context).textTheme.tabLabelTextStyle.color?.withOpacity(0.7), // Discreet color
-                    decoration: TextDecoration.underline, // Indicate it's a link
                   ),
-                ),
-                onPressed: () async {
-                  final url = Uri.parse('https://logo.dev');
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url, mode: LaunchMode.externalApplication);
-                  } else {
-                    // Optional: show an error message if the URL can't be launched
-                    if (mounted) { // Ensure context is still valid if in a StatefulWidget
-                      showCupertinoDialog(
-                        context: context,
-                        builder: (ctx) => const MessageDialog("Could not launch https://logo.dev", title: "Error")
-                      );
-                    }
-                  }
-                },
+                  if (authProvider?.isAuthenticated == true)
+                    CupertinoButton(
+                      child: const Text('Delete Account',
+                          style: TextStyle(color: CupertinoColors.systemRed)),
+                      onPressed: () {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) {
+                              return SureDialog(
+                                  "Do you want to delete your account? This action cannot be reversed!",
+                                  () {
+                                _deleteUserAccount();
+                              });
+                            });
+                      },
+                    ),
+                ],
               ),
             ),
-            if (authProvider?.isAuthenticated == true)
-            CupertinoButton(
-              child: const Text('Delete Account', style: TextStyle(color: CupertinoColors.systemRed)),
-              onPressed: () {
-                showCupertinoDialog(
-                  context: context,
-                  builder: (_) {
-                    return SureDialog("Do you want to delete your account? This action cannot be reversed!", () {
-                      _deleteUserAccount();
-                    });
-                  }
-                );
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

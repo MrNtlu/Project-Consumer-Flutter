@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:watchlistfy/static/colors.dart';
 
 class EmailField extends StatelessWidget {
   final TextEditingController _controller;
+  final IconData prefixIcon;
   final String label;
 
-  const EmailField(this._controller, {
+  const EmailField(
+    this._controller, {
     this.label = "Email",
-    super.key
+    this.prefixIcon = Icons.email_rounded,
+    super.key,
   });
 
   @override
@@ -20,22 +24,21 @@ class EmailField extends StatelessWidget {
       },
       maxLines: 1,
       prefix: Padding(
-        padding: const EdgeInsets.only(left: 12, top: 16, bottom: 16),
-        child: SizedBox(
-          width: 90,
-          child: Text(
-            label,
-            style: TextStyle(
-              color: CupertinoTheme.of(context).bgTextColor,
-              fontSize: 16
-            ),
-          ),
+        padding: const EdgeInsets.only(
+          left: 12,
+          top: 16,
+          bottom: 16,
+          right: 12,
+        ),
+        child: Icon(
+          prefixIcon,
+          color: CupertinoTheme.of(context).bgTextColor,
         ),
       ),
       placeholder: "Enter $label",
       decoration: BoxDecoration(
         color: CupertinoTheme.of(context).onBgColor,
-        borderRadius: BorderRadius.circular(8)
+        borderRadius: BorderRadius.circular(8),
       ),
       style: const TextStyle(fontSize: 16),
       padding: const EdgeInsets.all(8),

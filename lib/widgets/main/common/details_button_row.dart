@@ -5,12 +5,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/common/trailer.dart';
-import 'package:watchlistfy/pages/main/ai/ai_assistant_page.dart';
 import 'package:watchlistfy/pages/main/trailer_page.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/trailer_sheet.dart';
-import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/main/common/details_avatar_button.dart';
 
 class DetailsButtonRow extends StatelessWidget {
@@ -22,15 +20,9 @@ class DetailsButtonRow extends StatelessWidget {
   final String id;
   final VoidCallback onRecommendationsPressed;
 
-  const DetailsButtonRow(
-    this.title,
-    this.isAuthenticated,
-    this.trailers,
-    this.contentType,
-    this.id,
-    this.onRecommendationsPressed,
-    {this.trailer, super.key}
-  );
+  const DetailsButtonRow(this.title, this.isAuthenticated, this.trailers,
+      this.contentType, this.id, this.onRecommendationsPressed,
+      {this.trailer, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,69 +38,47 @@ class DetailsButtonRow extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             DetailsAvatarButton(
-              "Share",
-              FontAwesomeIcons.share,
-              CupertinoColors.activeBlue,
-              () async {
-                final url = '${Constants.BASE_DOMAIN_URL}/$contentType/$id';
-                try {
-                  final box = context.findRenderObject() as RenderBox?;
+                "Share", FontAwesomeIcons.share, CupertinoColors.activeBlue,
+                () async {
+              final url = '${Constants.BASE_DOMAIN_URL}/$contentType/$id';
+              try {
+                final box = context.findRenderObject() as RenderBox?;
 
-                  if (box != null) {
-                    Share.share(
-                      url,
-                      subject: 'Share ${ContentType.values.where((element) => contentType == element.request).first.value}',
-                      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                    );
-                  }
-                } catch (_) {
-                  await Clipboard.setData(ClipboardData(text: url));
-                  if (context.mounted) {
-                    showCupertinoDialog(context: context, builder: (_) => const MessageDialog("Copied to clipboard."));
-                  }
+                if (box != null) {
+                  Share.share(url,
+                      subject:
+                          'Share ${ContentType.values.where((element) => contentType == element.request).first.value}',
+                      sharePositionOrigin:
+                          box.localToGlobal(Offset.zero) & box.size);
+                }
+              } catch (_) {
+                await Clipboard.setData(ClipboardData(text: url));
+                if (context.mounted) {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (_) =>
+                          const MessageDialog("Copied to clipboard."));
                 }
               }
-            ),
-            if ((trailers != null && trailers!.isNotEmpty) || (trailer != null && trailer!.isNotEmpty))
-            DetailsAvatarButton(
-              "Trailers",
-              FontAwesomeIcons.youtube,
-              CupertinoColors.systemRed,
-              () {
+            }),
+            if ((trailers != null && trailers!.isNotEmpty) ||
+                (trailer != null && trailer!.isNotEmpty))
+              DetailsAvatarButton("Trailers", FontAwesomeIcons.youtube,
+                  CupertinoColors.systemRed, () {
                 HapticFeedback.lightImpact();
 
                 if (trailers != null && trailers!.isNotEmpty) {
                   showCupertinoModalBottomSheet(
-                    context: context,
-                    barrierColor: CupertinoColors.black.withOpacity(0.75),
-                    builder: (_) => TrailerSheet(trailers!)
-                  );
+                      context: context,
+                      barrierColor: CupertinoColors.black.withOpacity(0.75),
+                      builder: (_) => TrailerSheet(trailers!));
                 } else {
-                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
+                  Navigator.of(context, rootNavigator: true)
+                      .push(CupertinoPageRoute(builder: (_) {
                     return TrailerPage(trailerURL: trailer!);
                   }));
                 }
-              }
-            ),
-            DetailsAvatarButton(
-              "Assistant",
-              FontAwesomeIcons.robot,
-              CupertinoColors.systemGrey,
-              () {
-                HapticFeedback.lightImpact();
-
-                if (isAuthenticated) {
-                  Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                    return AIAssistantPage(title, contentType);
-                  }));
-                } else {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (BuildContext context) => const UnauthorizedDialog()
-                  );
-                }
-              }
-            ),
+              }),
             DetailsAvatarButton(
               "Recommends",
               FontAwesomeIcons.solidLightbulb,

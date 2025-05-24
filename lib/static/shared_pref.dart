@@ -62,8 +62,8 @@ class SharedPref {
     return _sharedPreference.getBool(Constants.WHATSNEW_PREF) ?? true;
   }
 
-  final newVersion = "1_6_9";
-  final oldVersion = "1_6_7";
+  final newVersion = "1_7_0";
+  final oldVersion = "1_6_9";
 
   void setDidShowVersionPatch(bool didShow) {
     sharedPref?.setBool(newVersion, didShow);
@@ -83,7 +83,7 @@ class SharedPref {
     return _sharedPreference.getString(Constants.TOKEN_PREF);
   }
 
-  void deleteTokenCredentials(){
+  void deleteTokenCredentials() {
     sharedPref?.remove(Constants.TOKEN_PREF);
   }
 
@@ -93,7 +93,8 @@ class SharedPref {
   }
 
   String getDefaultContent() {
-    return _sharedPreference.getString("default_content") ?? ContentType.movie.request;
+    return _sharedPreference.getString("default_content") ??
+        ContentType.movie.request;
   }
 
   //User List Mode
@@ -102,7 +103,8 @@ class SharedPref {
   }
 
   String getContentUIMode() {
-    return _sharedPreference.getString("content_ui_mode") ?? Constants.ContentUIModes.first;
+    return _sharedPreference.getString("content_ui_mode") ??
+        Constants.ContentUIModes.first;
   }
 
   //User List Mode
@@ -111,7 +113,8 @@ class SharedPref {
   }
 
   String getUserListUIMode() {
-    return _sharedPreference.getString("user_list_ui_mode") ?? Constants.UserListUIModes.first;
+    return _sharedPreference.getString("user_list_ui_mode") ??
+        Constants.UserListUIModes.first;
   }
 
   //Consume Later Mode
@@ -120,7 +123,8 @@ class SharedPref {
   }
 
   String getConsumeLaterUIMode() {
-    return _sharedPreference.getString("consume_later_ui_mode") ?? Constants.ConsumeLaterUIModes.first;
+    return _sharedPreference.getString("consume_later_ui_mode") ??
+        Constants.ConsumeLaterUIModes.first;
   }
 
   //Profile Stats Mode
@@ -129,7 +133,8 @@ class SharedPref {
   }
 
   String getProfileStatisticsUIMode() {
-    return _sharedPreference.getString("profile_statistics_ui_mode") ?? Constants.ProfileStatisticsUIModes.last;
+    return _sharedPreference.getString("profile_statistics_ui_mode") ??
+        Constants.ProfileStatisticsUIModes.last;
   }
 
   //Country Selection
@@ -138,7 +143,9 @@ class SharedPref {
   }
 
   String getSelectedCountry() {
-    return _sharedPreference.getString("selected_country") ?? WidgetsBinding.instance.platformDispatcher.locale.countryCode ?? 'US';
+    return _sharedPreference.getString("selected_country") ??
+        WidgetsBinding.instance.platformDispatcher.locale.countryCode ??
+        'US';
   }
 
   //Ask for Review

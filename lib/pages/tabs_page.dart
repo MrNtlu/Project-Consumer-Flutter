@@ -9,6 +9,7 @@ import 'package:quick_actions/quick_actions.dart';
 import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
+import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
@@ -44,8 +45,8 @@ class _TabsPageState extends State<TabsPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const SocialPage(),
-    // const AIRecommendationPage(),
+    // const SocialPage(),
+    const AIRecommendationPage(),
     const SettingsPage(),
   ];
 
@@ -70,14 +71,14 @@ class _TabsPageState extends State<TabsPage> {
               child: const Text('No'),
             ),
             TextButton(
-              onPressed: ()  {
+              onPressed: () {
                 Navigator.pop(context);
                 SystemNavigator.pop();
               },
               child: const Text('Yes'),
             ),
           ],
-        )
+        ),
       );
     }
     return false;
@@ -88,29 +89,25 @@ class _TabsPageState extends State<TabsPage> {
       await Future.delayed(const Duration(milliseconds: 1010));
       if (context.mounted) {
         if (shortcutType == 'action_user_list') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              return const UserListPage();
-            })
-          );
+          Navigator.of(context, rootNavigator: true)
+              .push(CupertinoPageRoute(builder: (_) {
+            return const UserListPage();
+          }));
         } else if (shortcutType == 'action_consume_later') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              return const ConsumeLaterPage();
-            }
-          ));
+          Navigator.of(context, rootNavigator: true)
+              .push(CupertinoPageRoute(builder: (_) {
+            return const ConsumeLaterPage();
+          }));
         } else if (shortcutType == 'action_profile') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              return const ProfilePage();
-            }
-          ));
+          Navigator.of(context, rootNavigator: true)
+              .push(CupertinoPageRoute(builder: (_) {
+            return const ProfilePage();
+          }));
         } else if (shortcutType == 'action_stats') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              return const ProfileStatsPage();
-            }
-          ));
+          Navigator.of(context, rootNavigator: true)
+              .push(CupertinoPageRoute(builder: (_) {
+            return const ProfileStatsPage();
+          }));
         }
       }
     });
@@ -118,7 +115,8 @@ class _TabsPageState extends State<TabsPage> {
     quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(type: 'action_profile', localizedTitle: 'Profile'),
       const ShortcutItem(type: 'action_user_list', localizedTitle: 'User List'),
-      const ShortcutItem(type: 'action_consume_later', localizedTitle: 'Watch Later'),
+      const ShortcutItem(
+          type: 'action_consume_later', localizedTitle: 'Watch Later'),
       const ShortcutItem(type: 'action_stats', localizedTitle: 'Statistics')
     ]);
   }
@@ -150,13 +148,17 @@ class _TabsPageState extends State<TabsPage> {
 
       await SharedPref().init().then((_) async {
         final token = SharedPref().getTokenCredentials();
-        final isIntroductionPresented = SharedPref().getIsIntroductionPresented();
-        final canShowWhatsNewDialog = SharedPref().getShouldShowWhatsNewDialog();
+        final isIntroductionPresented =
+            SharedPref().getIsIntroductionPresented();
+        final canShowWhatsNewDialog =
+            SharedPref().getShouldShowWhatsNewDialog();
         final didShowVersionPatch = SharedPref().getDidShowVersionPatch();
-        final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+        final authProvider =
+            Provider.of<AuthenticationProvider>(context, listen: false);
         UserToken().setToken(token);
 
-        bool isInternetAvailable = await InternetConnectionChecker().hasConnection;
+        bool isInternetAvailable =
+            await InternetConnectionChecker().hasConnection;
 
         if (token == null) {
           authProvider.initAuthentication(false, null);
@@ -164,7 +166,8 @@ class _TabsPageState extends State<TabsPage> {
           await RefreshToken(token).refresh().then((value) async {
             if (value.token != null) {
               await PurchaseApi().userInit();
-              if (PurchaseApi().userInfo != null && PurchaseApi().userInfo?.email.isNotEmpty == true) {
+              if (PurchaseApi().userInfo != null &&
+                  PurchaseApi().userInfo?.email.isNotEmpty == true) {
                 authProvider.initAuthentication(true, PurchaseApi().userInfo);
                 state = BaseState.view;
               } else {
@@ -184,9 +187,9 @@ class _TabsPageState extends State<TabsPage> {
         } else {
           if (context.mounted) {
             showCupertinoDialog(
-              context: context,
-              builder: (_) => const ErrorDialog("No internet connection! You need internet access to use the app.")
-            );
+                context: context,
+                builder: (_) => const ErrorDialog(
+                    "No internet connection! You need internet access to use the app."));
           }
         }
 
@@ -197,23 +200,22 @@ class _TabsPageState extends State<TabsPage> {
         if (!isIntroductionPresented) {
           await Future.delayed(const Duration(milliseconds: 300));
           if (context.mounted) {
-            Navigator.of(context, rootNavigator: true).push(
-              CupertinoPageRoute(builder: (_) {
-                return const OnboardingPage();
-              })
-            );
+            Navigator.of(context, rootNavigator: true)
+                .push(CupertinoPageRoute(builder: (_) {
+              return const OnboardingPage();
+            }));
           }
         }
 
-        if (isIntroductionPresented && canShowWhatsNewDialog && !didShowVersionPatch) {
+        if (isIntroductionPresented &&
+            canShowWhatsNewDialog &&
+            !didShowVersionPatch) {
           await Future.delayed(const Duration(milliseconds: 300));
           if (context.mounted) {
             try {
               showCupertinoDialog(
-                context: context,
-                builder: (_) => const WhatsNewDialog()
-              );
-            } catch(_) {}
+                  context: context, builder: (_) => const WhatsNewDialog());
+            } catch (_) {}
           }
         }
       });
@@ -236,14 +238,14 @@ class _TabsPageState extends State<TabsPage> {
               icon: FaIcon(FontAwesomeIcons.house, size: 24),
               label: "Home",
             ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person_2_fill),
-              label: "Socials",
-            ),
             // BottomNavigationBarItem(
-            //   icon: FaIcon(FontAwesomeIcons.robot, size: 24),
-            //   label: "Assistant",
+            //   icon: Icon(CupertinoIcons.person_2_fill),
+            //   label: "Socials",
             // ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.robot, size: 24),
+              label: "Recommendations",
+            ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.gear, size: 24),
               label: "Settings",
