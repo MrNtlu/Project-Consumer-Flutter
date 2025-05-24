@@ -18,7 +18,7 @@ class SettingsPremiumPromo extends StatelessWidget {
               Navigator.of(context, rootNavigator: true)
                   .push(CupertinoPageRoute(builder: (_) {
                 return const OffersSheet();
-              }));
+              },),);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -33,7 +33,7 @@ class SettingsPremiumPromo extends StatelessWidget {
               child: Row(
                 children: [
                   Lottie.asset("assets/lottie/premium.json",
-                      height: 52, width: 52, frameRate: const FrameRate(60)),
+                      height: 52, width: 52, frameRate: const FrameRate(60),),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Column(
@@ -65,7 +65,7 @@ class SettingsPremiumPromo extends StatelessWidget {
                                 color: CupertinoTheme.brightnessOf(context) ==
                                         Brightness.dark
                                     ? CupertinoColors.systemGrey2
-                                    : CupertinoColors.systemGrey),
+                                    : CupertinoColors.systemGrey,),
                           ),
                         )
                       ],
@@ -73,7 +73,7 @@ class SettingsPremiumPromo extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Icon(CupertinoIcons.chevron_right,
-                      color: AppColors().primaryColor)
+                      color: AppColors().primaryColor,)
                 ],
               ),
             ),

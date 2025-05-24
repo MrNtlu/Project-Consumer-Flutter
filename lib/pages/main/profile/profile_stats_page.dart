@@ -381,12 +381,12 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
               // Stats Chart
               Row(
                 children: [
-                  SeeAllTitle("📈 Your ${provider.interval.name} Activity", () {}, shouldHideSeeAllButton: true),
+                  SeeAllTitle("📈 Your ${provider.interval.name} Activity", () {}, shouldHideSeeAllButton: true,),
                   if (MediaQuery.of(context).orientation == Orientation.portrait)
                   const Text("(Landscape recommended)", style: TextStyle(
                     color: CupertinoColors.systemGrey2,
                     fontSize: 13,
-                  ))
+                  ),)
                 ],
               ),
               if (data.logs.isNotEmpty)

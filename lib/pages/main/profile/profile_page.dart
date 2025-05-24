@@ -168,29 +168,29 @@ class _ProfilePageState extends State<ProfilePage> {
                       alignment: Alignment.center,
                       child: ProfileUserImage(image),
                     ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) => const MessageDialog(
-                            title: "Streak",
-                            "Streaks are counted based on your activity. When you add or make changes on your user list, watch later, recommendations or reviews."
-                          )
-                        );
-                      },
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const FaIcon(FontAwesomeIcons.fire, size: 22),
-                            const SizedBox(width: 6),
-                            Text(item.streak.toString(), style: const TextStyle(fontWeight: FontWeight.w500)),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   behavior: HitTestBehavior.opaque,
+                    //   onTap: () {
+                    //     showCupertinoDialog(
+                    //       context: context,
+                    //       builder: (_) => const MessageDialog(
+                    //         title: "Streak",
+                    //         "Streaks are counted based on your activity. When you add or make changes on your user list, watch later, recommendations or reviews."
+                    //       )
+                    //     );
+                    //   },
+                    //   child: Align(
+                    //     alignment: Alignment.bottomRight,
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         const FaIcon(FontAwesomeIcons.fire, size: 22),
+                    //         const SizedBox(width: 6),
+                    //         Text(item.streak.toString(), style: const TextStyle(fontWeight: FontWeight.w500)),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

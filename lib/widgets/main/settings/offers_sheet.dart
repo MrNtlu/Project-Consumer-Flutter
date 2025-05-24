@@ -120,25 +120,13 @@ class _OffersSheetState extends State<OffersSheet> {
                       const SizedBox(height: 6),
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.stars_rounded, color: CupertinoColors.white),
-                          ),
-                          Text("Full Access to AI Assistant", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
                             child: Icon(Icons.stars_rounded, color: CupertinoColors.white),
                           ),
-                          Text("AI Suggestions once every week", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text("AI Suggestions better and more frequent", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
                         ],
                       ),
                       const SizedBox(height: 6),

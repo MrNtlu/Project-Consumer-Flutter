@@ -346,10 +346,10 @@ packages:
     dependency: transitive
     description:
       name: equatable
-      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.5"
+    version: "2.0.7"
   expandable_text:
     dependency: "direct main"
     description:
@@ -1178,10 +1178,10 @@ packages:
     dependency: "direct main"
     description:
       name: purchases_flutter
-      sha256: d3710abb6415a665067149c15a7cdb407f67fcdc8c4703d8f9332e8bfdb203ff
+      sha256: "1a591f132393d49eec88edfccc1f4958a377ed3903c365e34428ef88f7589cc2"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.1"
+    version: "8.8.1"
   quick_actions:
     dependency: "direct main"
     description:
