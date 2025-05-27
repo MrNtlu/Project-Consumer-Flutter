@@ -18,66 +18,74 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ContentProvider contentProvider = Provider.of<ContentProvider>(context);
+    final ContentProvider contentProvider =
+        Provider.of<ContentProvider>(context);
 
     return SizedBox(
       height: 65,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: contentProvider.selectedContent == ContentType.movie
-          ? Constants.MovieStreamingPlatformList.length
-          : (
-            contentProvider.selectedContent == ContentType.tv
-            ? Constants.TVStreamingPlatformList.length
-            : Constants.AnimeStreamingPlatformList.length
-          ),
+            ? Constants.MovieStreamingPlatformList.length
+            : (contentProvider.selectedContent == ContentType.tv
+                ? Constants.TVStreamingPlatformList.length
+                : Constants.AnimeStreamingPlatformList.length),
         itemBuilder: (context, index) {
           final isMovie = contentProvider.selectedContent == ContentType.movie;
           final isTV = contentProvider.selectedContent == ContentType.tv;
 
-          if ((isMovie && Constants.MovieStreamingPlatformList.isEmpty) || (isTV && Constants.TVStreamingPlatformList.isEmpty)) {
+          if ((isMovie && Constants.MovieStreamingPlatformList.isEmpty) ||
+              (isTV && Constants.TVStreamingPlatformList.isEmpty)) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: const Center(child: Text("Not available in your region."))
+              child: const Center(
+                child: Text("Not available in your region."),
+              ),
             );
           }
 
           final streamingPlatform = isMovie
-            ? Constants.MovieStreamingPlatformList[index]
-            : isTV
-              ? Constants.TVStreamingPlatformList[index]
-              : null;
+              ? Constants.MovieStreamingPlatformList[index]
+              : isTV
+                  ? Constants.TVStreamingPlatformList[index]
+                  : null;
 
           final animeStreamingPlatform = !(isMovie || isTV)
-            ? Constants.AnimeStreamingPlatformList[index]
-            : null;
+              ? Constants.AnimeStreamingPlatformList[index]
+              : null;
 
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                if (isMovie) {
-                  return MovieDiscoverListPage(
-                    streaming: streamingPlatform!.name,
-                    streamingLogo: streamingPlatform.image,
-                    region: region,
-                  );
-                } else if (isTV) {
-                  return TVDiscoverListPage(
-                    streaming: streamingPlatform!.name,
-                    streamingLogo: streamingPlatform.image,
-                    region: region,
-                  );
-                } else {
-                  return AnimeDiscoverListPage(
-                    streaming: animeStreamingPlatform!.name,
-                    streamingLogo: animeStreamingPlatform.image,
-                  );
-                }
-              }));
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (_) {
+                    if (isMovie) {
+                      return MovieDiscoverListPage(
+                        streaming: streamingPlatform!.name,
+                        streamingLogo: streamingPlatform.image,
+                        region: region,
+                      );
+                    } else if (isTV) {
+                      return TVDiscoverListPage(
+                        streaming: streamingPlatform!.name,
+                        streamingLogo: streamingPlatform.image,
+                        region: region,
+                      );
+                    } else {
+                      return AnimeDiscoverListPage(
+                        streaming: animeStreamingPlatform!.name,
+                        streamingLogo: animeStreamingPlatform.image,
+                      );
+                    }
+                  },
+                ),
+              );
             },
             child: Padding(
-              padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
+              padding: index == 0
+                  ? const EdgeInsets.only(left: 8, right: 4)
+                  : const EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -87,14 +95,16 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: streamingPlatform?.image ?? animeStreamingPlatform!.image,
-                        cacheKey: streamingPlatform?.image ?? animeStreamingPlatform!.image,
+                        imageUrl: streamingPlatform?.image ??
+                            animeStreamingPlatform!.image,
+                        cacheKey: streamingPlatform?.image ??
+                            animeStreamingPlatform!.image,
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
                         cacheManager: CustomCacheManager(),
                         maxHeightDiskCache: 250,
                         maxWidthDiskCache: 250,
-                        errorListener: (_){},
+                        errorListener: (_) {},
                         placeholder: (context, _) {
                           return ColoredBox(
                             color: CupertinoTheme.of(context).bgTextColor,
@@ -105,12 +115,18 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                                 child: Center(
                                   child: AutoSizeText(
-                                    streamingPlatform?.name ?? animeStreamingPlatform!.name,
+                                    streamingPlatform?.name ??
+                                        animeStreamingPlatform!.name,
                                     minFontSize: 13,
-                                    style: TextStyle(color: CupertinoTheme.of(context).bgColor, fontSize: 16),
+                                    style: TextStyle(
+                                      color: CupertinoTheme.of(
+                                        context,
+                                      ).bgColor,
+                                      fontSize: 16,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
-                                )
+                                ),
                               ),
                             ),
                           );
@@ -125,16 +141,17 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                                 child: Center(
                                   child: AutoSizeText(
-                                    streamingPlatform?.name ?? animeStreamingPlatform!.name,
+                                    streamingPlatform?.name ??
+                                        animeStreamingPlatform!.name,
                                     minFontSize: 13,
                                     style: TextStyle(
                                       color: CupertinoTheme.of(context).bgColor,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w500
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                )
+                                ),
                               ),
                             ),
                           );
@@ -146,8 +163,8 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
               ),
             ),
           );
-        }
-      )
+        },
+      ),
     );
   }
 }

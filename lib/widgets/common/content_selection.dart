@@ -36,37 +36,36 @@ class _ContentSelectionState extends State<ContentSelection> {
           },
           minSize: 0,
           padding: const EdgeInsets.all(3),
-          child: const FaIcon(FontAwesomeIcons.chevronLeft , size: 20),
+          child: const FaIcon(FontAwesomeIcons.chevronLeft, size: 20),
         ),
         const SizedBox(width: 3),
         CupertinoButton(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            width: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  contentProvider.selectedContent.value,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: CupertinoTheme.of(context).primaryColor,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    contentProvider.selectedContent.value,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: CupertinoTheme.of(context).primaryColor,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 6),
-                Icon(
-                  FontAwesomeIcons.solidHandPointer,
-                  size: 12,
-                  color: CupertinoTheme.of(context).primaryColor,
-                )
-              ],
+                  const SizedBox(width: 6),
+                  Icon(
+                    FontAwesomeIcons.solidHandPointer,
+                    size: 12,
+                    color: CupertinoTheme.of(context).primaryColor,
+                  )
+                ],
+              ),
             ),
-          ),
-          onPressed: () {
-            _showPickerDialog();
-          }
-        ),
+            onPressed: () {
+              _showPickerDialog();
+            }),
         const SizedBox(width: 3),
         CupertinoButton(
           onPressed: () {
@@ -108,29 +107,37 @@ class _ContentSelectionState extends State<ContentSelection> {
               const SizedBox(height: 32),
               Expanded(
                 child: ListView.builder(
-                  itemCount: ContentType.values.length,
-                  itemExtent: 50,
-                  itemBuilder: (context, index) {
-                    var isSelected = ContentType.values.indexOf(contentProvider.selectedContent) == index;
+                    itemCount: ContentType.values.length,
+                    itemExtent: 50,
+                    itemBuilder: (context, index) {
+                      var isSelected = ContentType.values
+                              .indexOf(contentProvider.selectedContent) ==
+                          index;
 
-                    return CupertinoButton(
-                      color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).onBgColor,
-                      onPressed: (){
-                        if (!isSelected) {
-                          contentProvider.setContentType(ContentType.values[index]);
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        ContentType.values[index].value,
-                        style: TextStyle(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
+                      return CupertinoButton(
+                        color: isSelected
+                            ? CupertinoTheme.of(context).primaryColor
+                            : CupertinoTheme.of(context).onBgColor,
+                        onPressed: () {
+                          if (!isSelected) {
+                            contentProvider
+                                .setContentType(ContentType.values[index]);
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          ContentType.values[index].value,
+                          style: TextStyle(
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: isSelected
+                                ? CupertinoColors.white
+                                : CupertinoTheme.of(context).bgTextColor,
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                ),
+                      );
+                    }),
               ),
             ],
           ),

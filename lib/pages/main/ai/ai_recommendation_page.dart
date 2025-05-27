@@ -89,7 +89,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
 
           return CupertinoPageScaffold(
             navigationBar: const CupertinoNavigationBar(
-              middle: Text("AI Recommendations"),
+              middle: Text("Smart Recommendations"),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -119,7 +119,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                               text: _state == ListState.done
                                   ? (authProvider.isAuthenticated
                                       ? "This is what I recommend based on your activity."
-                                      : "You need to be logged in to get recommendations.")
+                                      : "Sorry, I cannot help you right now. You need to be logged in to get recommendations.")
                                   : (_state == ListState.error
                                       ? _error!
                                       : (_state == ListState.empty
@@ -244,31 +244,32 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                             .first;
 
                         return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(CupertinoPageRoute(builder: (_) {
-                                switch (contentType) {
-                                  case ContentType.movie:
-                                    return MovieDetailsPage(content.id);
-                                  case ContentType.tv:
-                                    return TVDetailsPage(content.id);
-                                  case ContentType.anime:
-                                    return AnimeDetailsPage(content.id);
-                                  case ContentType.game:
-                                    return GameDetailsPage(content.id);
-                                }
-                              }));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 4,
-                                horizontal: 2,
-                              ),
-                              child: ContentCell(
-                                content.imageUrl,
-                                content.titleEn,
-                              ),
-                            ));
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .push(CupertinoPageRoute(builder: (_) {
+                              switch (contentType) {
+                                case ContentType.movie:
+                                  return MovieDetailsPage(content.id);
+                                case ContentType.tv:
+                                  return TVDetailsPage(content.id);
+                                case ContentType.anime:
+                                  return AnimeDetailsPage(content.id);
+                                case ContentType.game:
+                                  return GameDetailsPage(content.id);
+                              }
+                            }));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 2,
+                            ),
+                            child: ContentCell(
+                              content.imageUrl,
+                              content.titleEn,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -276,19 +277,23 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                   Expanded(
                     child: Center(
                       child: CupertinoButton.filled(
-                          child: const Text("Login",
-                              style: TextStyle(
-                                  color: CupertinoColors.white,
-                                  fontWeight: FontWeight.bold)),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(
-                                builder: (_) {
-                                  return LoginPage();
-                                },
-                              ),
-                            );
-                          }),
+                        child: const Text(
+                          "Login Now!",
+                          style: TextStyle(
+                            color: CupertinoColors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(
+                              builder: (_) {
+                                return LoginPage();
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
               ],

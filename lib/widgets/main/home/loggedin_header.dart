@@ -34,92 +34,133 @@ class LoggedinHeader extends StatelessWidget {
             PopupMenuItem(
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return const CustomListPage();
-                  })
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      return const CustomListPage();
+                    },
+                  ),
                 );
               },
               child: Row(
                 children: [
-                  Text("Custom Lists", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  Text(
+                    "Custom Lists",
+                    style: TextStyle(
+                        color: CupertinoTheme.of(context).bgTextColor),
+                  ),
                   const Spacer(),
-                  Icon(CupertinoIcons.folder_fill, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                  Icon(
+                    CupertinoIcons.folder_fill,
+                    color: CupertinoTheme.of(context).bgTextColor,
+                    size: 18,
+                  ),
                 ],
-              )
+              ),
             ),
             PopupMenuItem(
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return const UserListPage();
-                  })
-                );
+                Navigator.of(context, rootNavigator: true)
+                    .push(CupertinoPageRoute(builder: (_) {
+                  return const UserListPage();
+                }));
               },
               child: Row(
                 children: [
-                  Text("User List", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  Text(
+                    "User List",
+                    style: TextStyle(
+                        color: CupertinoTheme.of(context).bgTextColor),
+                  ),
                   const Spacer(),
-                  Icon(CupertinoIcons.list_bullet_below_rectangle, color: CupertinoTheme.of(context).bgTextColor, size: 18),
-                ],
-              )
-            ),
-            PopupMenuItem(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return const ConsumeLaterPage();
-                  })
-                );
-              },
-              child: Row(
-                children: [
-                  Text("Watch Later", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-                  const Spacer(),
-                  Icon(CupertinoIcons.time, color: CupertinoTheme.of(context).bgTextColor, size: 18),
-                ],
-              )
-            ),
-            PopupMenuItem(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return const ProfileStatsPage();
-                  }
-                ));
-              },
-              child: Row(
-                children: [
-                  Text("Statistics", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-                  const Spacer(),
-                  Icon(CupertinoIcons.chart_bar_alt_fill, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                  Icon(
+                    CupertinoIcons.list_bullet_below_rectangle,
+                    color: CupertinoTheme.of(context).bgTextColor,
+                    size: 18,
+                  ),
                 ],
               ),
             ),
             PopupMenuItem(
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return const AIRecommendationPage();
-                  })
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      return const ConsumeLaterPage();
+                    },
+                  ),
                 );
               },
               child: Row(
                 children: [
-                  Text("AI Recommendations", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
+                  Text("Watch Later",
+                      style: TextStyle(
+                          color: CupertinoTheme.of(context).bgTextColor)),
                   const Spacer(),
-                  Icon(FontAwesomeIcons.robot, color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                  Icon(CupertinoIcons.time,
+                      color: CupertinoTheme.of(context).bgTextColor, size: 18),
                 ],
-              )
+              ),
             ),
-          ]
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      return const ProfileStatsPage();
+                    },
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "Statistics",
+                    style: TextStyle(
+                        color: CupertinoTheme.of(context).bgTextColor),
+                  ),
+                  const Spacer(),
+                  Icon(
+                    CupertinoIcons.chart_bar_alt_fill,
+                    color: CupertinoTheme.of(context).bgTextColor,
+                    size: 18,
+                  ),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      return const AIRecommendationPage();
+                    },
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "AI Recommendations",
+                    style: TextStyle(
+                        color: CupertinoTheme.of(context).bgTextColor),
+                  ),
+                  const Spacer(),
+                  Icon(FontAwesomeIcons.robot,
+                      color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                ],
+              ),
+            ),
+          ],
         ),
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
             Navigator.of(context, rootNavigator: true).push(
-              CupertinoPageRoute(builder: (_) {
-                return const ProfilePage();
-              })
+              CupertinoPageRoute(
+                builder: (_) {
+                  return const ProfilePage();
+                },
+              ),
             );
           },
           child: SizedBox(
@@ -130,7 +171,12 @@ class LoggedinHeader extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
-                    color: CupertinoTheme.brightnessOf(context) == Brightness.dark ? CupertinoColors.systemGrey.withOpacity(0.35) : CupertinoColors.black.withOpacity(0.35),
+                    color:
+                        CupertinoTheme.brightnessOf(context) == Brightness.dark
+                            ? CupertinoColors.systemGrey.withOpacity(0.35)
+                            : CupertinoColors.black.withValues(
+                                alpha: 0.35,
+                              ),
                     spreadRadius: 1.35,
                     blurRadius: 3,
                     offset: const Offset(0, 0),
@@ -140,30 +186,32 @@ class LoggedinHeader extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: isUrlValid
-                ? CachedNetworkImage(
-                  imageUrl: authenticationProvider.basicUserInfo!.image!,
-                  height: 30,
-                  width: 30,
-                  cacheKey: authenticationProvider.basicUserInfo!.image!,
-                  key: ValueKey<String>(authenticationProvider.basicUserInfo!.image!),
-                  fit: BoxFit.cover,
-                  cacheManager: CustomCacheManager(),
-                  maxWidthDiskCache: 400,
-                  maxHeightDiskCache: 400,
-                  progressIndicatorBuilder: (_, __, ___) =>
-                    const Padding(padding: EdgeInsets.all(3), child: CupertinoActivityIndicator()),
-                  errorListener: (_) {},
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.person,
-                    size: 30,
-                    color: CupertinoColors.activeBlue,
-                  ),
-                )
-                : const Icon(
-                  Icons.person,
-                  size: 30,
-                  color: CupertinoColors.activeBlue,
-                ),
+                    ? CachedNetworkImage(
+                        imageUrl: authenticationProvider.basicUserInfo!.image!,
+                        height: 30,
+                        width: 30,
+                        cacheKey: authenticationProvider.basicUserInfo!.image!,
+                        key: ValueKey<String>(
+                            authenticationProvider.basicUserInfo!.image!),
+                        fit: BoxFit.cover,
+                        cacheManager: CustomCacheManager(),
+                        maxWidthDiskCache: 400,
+                        maxHeightDiskCache: 400,
+                        progressIndicatorBuilder: (_, __, ___) => const Padding(
+                            padding: EdgeInsets.all(3),
+                            child: CupertinoActivityIndicator()),
+                        errorListener: (_) {},
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.person,
+                          size: 30,
+                          color: CupertinoColors.activeBlue,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 30,
+                        color: CupertinoColors.activeBlue,
+                      ),
               ),
             ),
           ),
@@ -173,11 +221,10 @@ class LoggedinHeader extends StatelessWidget {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(builder: (_) {
-                  return const ProfilePage();
-                })
-              );
+              Navigator.of(context, rootNavigator: true)
+                  .push(CupertinoPageRoute(builder: (_) {
+                return const ProfilePage();
+              }));
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -188,7 +235,8 @@ class LoggedinHeader extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 65),
                   child: AutoSizeText(
                     streak.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 12),
                     minFontSize: 11,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

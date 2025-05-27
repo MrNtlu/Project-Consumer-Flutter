@@ -19,10 +19,12 @@ class PreviewCompanyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ContentProvider contentProvider = Provider.of<ContentProvider>(context);
+    final ContentProvider contentProvider =
+        Provider.of<ContentProvider>(context);
 
-    final isMovieOrTVSeries = contentProvider.selectedContent == ContentType.movie
-      || contentProvider.selectedContent == ContentType.tv;
+    final isMovieOrTVSeries =
+        contentProvider.selectedContent == ContentType.movie ||
+            contentProvider.selectedContent == ContentType.tv;
 
     final List<BackendRequestMapperWithImage> list;
 
@@ -42,90 +44,99 @@ class PreviewCompanyList extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 75,
-      child: ListView.builder(
-        itemCount: list.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          final company = list[index];
+        height: 75,
+        child: ListView.builder(
+            itemCount: list.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final company = list[index];
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(builder: (_) {
-                  switch (contentProvider.selectedContent) {
-                    case ContentType.movie:
-                      return MovieDiscoverListPage(productionCompanies: company.name);
-                    case ContentType.tv:
-                      return TVDiscoverListPage(productionCompanies: company.name);
-                    case ContentType.anime:
-                      return AnimeDiscoverListPage(studios: company.name);
-                    case ContentType.game:
-                      return GameDiscoverListPage(publisher: company.name);
-                  }
-                })
-              );
-            },
-            child: Padding(
-              padding: index == 0 ? const EdgeInsets.only(left: 8, right: 4) : const EdgeInsets.symmetric(horizontal: 4),
-              child: SizedBox(
-                width: isMovieOrTVSeries ? 150 : 75,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: ColoredBox(
-                    color: CupertinoColors.white,
-                    child: CachedNetworkImage(
-                      imageUrl: company.image,
-                      cacheKey: company.image,
-                      key: ValueKey<String>(company.image),
-                      cacheManager: CustomCacheManager(),
-                      maxHeightDiskCache: 175,
-                      maxWidthDiskCache: isMovieOrTVSeries ? 300 : 150,
-                      errorWidget: (context, _, __) {
-                        return ColoredBox(
-                          color: CupertinoTheme.of(context).bgTextColor,
-                          child: SizedBox(
-                            height: 65,
-                            width: 65,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Center(
-                                child: AutoSizeText(
-                                  company.name,
-                                  minFontSize: 13,
-                                  style: TextStyle(
-                                    color: CupertinoTheme.of(context).bgColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .push(CupertinoPageRoute(
+                    builder: (_) {
+                      switch (contentProvider.selectedContent) {
+                        case ContentType.movie:
+                          return MovieDiscoverListPage(
+                            productionCompanies: company.name,
+                          );
+                        case ContentType.tv:
+                          return TVDiscoverListPage(
+                            productionCompanies: company.name,
+                          );
+                        case ContentType.anime:
+                          return AnimeDiscoverListPage(studios: company.name);
+                        case ContentType.game:
+                          return GameDiscoverListPage(publisher: company.name);
+                      }
+                    },
+                  ));
+                },
+                child: Padding(
+                  padding: index == 0
+                      ? const EdgeInsets.only(
+                          left: 8,
+                          right: 4,
+                        )
+                      : const EdgeInsets.symmetric(
+                          horizontal: 4,
+                        ),
+                  child: SizedBox(
+                    width: isMovieOrTVSeries ? 150 : 75,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: ColoredBox(
+                        color: CupertinoColors.white,
+                        child: CachedNetworkImage(
+                          imageUrl: company.image,
+                          cacheKey: company.image,
+                          key: ValueKey<String>(company.image),
+                          cacheManager: CustomCacheManager(),
+                          maxHeightDiskCache: 175,
+                          maxWidthDiskCache: isMovieOrTVSeries ? 300 : 150,
+                          errorWidget: (context, _, __) {
+                            return ColoredBox(
+                              color: CupertinoTheme.of(context).bgTextColor,
+                              child: SizedBox(
+                                height: 65,
+                                width: 65,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Center(
+                                    child: AutoSizeText(
+                                      company.name,
+                                      minFontSize: 13,
+                                      style: TextStyle(
+                                          color: CupertinoTheme.of(context)
+                                              .bgColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
-                              )
+                              ),
+                            );
+                          },
+                          progressIndicatorBuilder: (_, __, ___) => SizedBox(
+                            height: 75,
+                            width: isMovieOrTVSeries ? 150 : 75,
+                            child: Shimmer.fromColors(
+                              baseColor: CupertinoColors.systemGrey,
+                              highlightColor: CupertinoColors.systemGrey3,
+                              child: const ColoredBox(
+                                  color: CupertinoColors.systemGrey2),
                             ),
                           ),
-                        );
-                      },
-                      progressIndicatorBuilder: (_, __, ___) => SizedBox(
-                        height: 75,
-                        width: isMovieOrTVSeries ? 150 : 75,
-                        child: Shimmer.fromColors(
-                          baseColor: CupertinoColors.systemGrey,
-                          highlightColor: CupertinoColors.systemGrey3,
-                          child: const ColoredBox(
-                            color: CupertinoColors.systemGrey2
-                          ),
+                          fadeInDuration: const Duration(milliseconds: 0),
+                          fadeOutDuration: const Duration(milliseconds: 0),
                         ),
                       ),
-                      fadeInDuration: const Duration(milliseconds: 0),
-                      fadeOutDuration: const Duration(milliseconds: 0),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        }
-      )
-    );
+              );
+            }));
   }
 }

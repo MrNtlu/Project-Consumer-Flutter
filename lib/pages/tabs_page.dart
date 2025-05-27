@@ -39,7 +39,7 @@ class TabsPage extends StatefulWidget {
 
 class _TabsPageState extends State<TabsPage> {
   BaseState state = BaseState.init;
-  int _selectedPageIndex = 0;
+  final ValueNotifier<int> _selectedPageIndexNotifier = ValueNotifier(0);
 
   final QuickActions quickActions = const QuickActions();
 
@@ -52,9 +52,7 @@ class _TabsPageState extends State<TabsPage> {
 
   void _selectPage(int index) {
     if (state != BaseState.disposed && state != BaseState.init) {
-      setState(() {
-        _selectedPageIndex = index;
-      });
+      _selectedPageIndexNotifier.value = index;
     }
   }
 
@@ -89,25 +87,37 @@ class _TabsPageState extends State<TabsPage> {
       await Future.delayed(const Duration(milliseconds: 1010));
       if (context.mounted) {
         if (shortcutType == 'action_user_list') {
-          Navigator.of(context, rootNavigator: true)
-              .push(CupertinoPageRoute(builder: (_) {
-            return const UserListPage();
-          }));
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(
+              builder: (_) {
+                return const UserListPage();
+              },
+            ),
+          );
         } else if (shortcutType == 'action_consume_later') {
-          Navigator.of(context, rootNavigator: true)
-              .push(CupertinoPageRoute(builder: (_) {
-            return const ConsumeLaterPage();
-          }));
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(
+              builder: (_) {
+                return const ConsumeLaterPage();
+              },
+            ),
+          );
         } else if (shortcutType == 'action_profile') {
-          Navigator.of(context, rootNavigator: true)
-              .push(CupertinoPageRoute(builder: (_) {
-            return const ProfilePage();
-          }));
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(
+              builder: (_) {
+                return const ProfilePage();
+              },
+            ),
+          );
         } else if (shortcutType == 'action_stats') {
-          Navigator.of(context, rootNavigator: true)
-              .push(CupertinoPageRoute(builder: (_) {
-            return const ProfileStatsPage();
-          }));
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute(
+              builder: (_) {
+                return const ProfileStatsPage();
+              },
+            ),
+          );
         }
       }
     });
@@ -146,79 +156,92 @@ class _TabsPageState extends State<TabsPage> {
     if (state == BaseState.init) {
       Provider.of<GlobalProvider>(context, listen: false).initValues();
 
-      await SharedPref().init().then((_) async {
-        final token = SharedPref().getTokenCredentials();
-        final isIntroductionPresented =
-            SharedPref().getIsIntroductionPresented();
-        final canShowWhatsNewDialog =
-            SharedPref().getShouldShowWhatsNewDialog();
-        final didShowVersionPatch = SharedPref().getDidShowVersionPatch();
-        final authProvider =
-            Provider.of<AuthenticationProvider>(context, listen: false);
-        UserToken().setToken(token);
+      await SharedPref().init().then(
+        (_) async {
+          final token = SharedPref().getTokenCredentials();
+          final isIntroductionPresented =
+              SharedPref().getIsIntroductionPresented();
+          final canShowWhatsNewDialog =
+              SharedPref().getShouldShowWhatsNewDialog();
+          final didShowVersionPatch = SharedPref().getDidShowVersionPatch();
+          final authProvider = Provider.of<AuthenticationProvider>(
+            context,
+            listen: false,
+          );
+          UserToken().setToken(token);
 
-        bool isInternetAvailable =
-            await InternetConnectionChecker().hasConnection;
+          bool isInternetAvailable =
+              await InternetConnectionChecker().hasConnection;
 
-        if (token == null) {
-          authProvider.initAuthentication(false, null);
-        } else if (isInternetAvailable) {
-          await RefreshToken(token).refresh().then((value) async {
-            if (value.token != null) {
-              await PurchaseApi().userInit();
-              if (PurchaseApi().userInfo != null &&
-                  PurchaseApi().userInfo?.email.isNotEmpty == true) {
-                authProvider.initAuthentication(true, PurchaseApi().userInfo);
-                state = BaseState.view;
+          if (token == null) {
+            authProvider.initAuthentication(false, null);
+          } else if (isInternetAvailable) {
+            await RefreshToken(token).refresh().then((value) async {
+              if (value.token != null) {
+                await PurchaseApi().userInit();
+                if (PurchaseApi().userInfo != null &&
+                    PurchaseApi().userInfo?.email.isNotEmpty == true) {
+                  authProvider.initAuthentication(true, PurchaseApi().userInfo);
+                  state = BaseState.view;
+                } else {
+                  PurchaseApi().userInfo = null;
+                  UserToken().setToken(null);
+                  SharedPref().deleteTokenCredentials();
+                  authProvider.initAuthentication(false, null);
+                }
               } else {
+                //Failed to login
                 PurchaseApi().userInfo = null;
                 UserToken().setToken(null);
                 SharedPref().deleteTokenCredentials();
                 authProvider.initAuthentication(false, null);
               }
-            } else {
-              //Failed to login
-              PurchaseApi().userInfo = null;
-              UserToken().setToken(null);
-              SharedPref().deleteTokenCredentials();
-              authProvider.initAuthentication(false, null);
-            }
-          });
-        } else {
-          if (context.mounted) {
-            showCupertinoDialog(
+            });
+          } else {
+            if (context.mounted) {
+              showCupertinoDialog(
                 context: context,
                 builder: (_) => const ErrorDialog(
-                    "No internet connection! You need internet access to use the app."));
+                  "No internet connection! You need internet access to use the app.",
+                ),
+              );
+            }
           }
-        }
 
-        setState(() {
-          state = BaseState.view;
-        });
+          setState(() {
+            state = BaseState.view;
+          });
 
-        if (!isIntroductionPresented) {
-          await Future.delayed(const Duration(milliseconds: 300));
-          if (context.mounted) {
-            Navigator.of(context, rootNavigator: true)
-                .push(CupertinoPageRoute(builder: (_) {
-              return const OnboardingPage();
-            }));
+          if (!isIntroductionPresented) {
+            await Future.delayed(const Duration(milliseconds: 300));
+            if (context.mounted) {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (_) {
+                    return const OnboardingPage();
+                  },
+                ),
+              );
+            }
           }
-        }
 
-        if (isIntroductionPresented &&
-            canShowWhatsNewDialog &&
-            !didShowVersionPatch) {
-          await Future.delayed(const Duration(milliseconds: 300));
-          if (context.mounted) {
-            try {
-              showCupertinoDialog(
-                  context: context, builder: (_) => const WhatsNewDialog());
-            } catch (_) {}
+          if (isIntroductionPresented &&
+              canShowWhatsNewDialog &&
+              !didShowVersionPatch) {
+            await Future.delayed(
+              const Duration(milliseconds: 300),
+            );
+            if (context.mounted) {
+              try {
+                showCupertinoDialog(
+                  context: context,
+                  builder: (_) => const WhatsNewDialog(),
+                );
+              } catch (_) {}
+            }
           }
-        }
-      });
+        },
+      );
     }
   }
 
@@ -226,39 +249,44 @@ class _TabsPageState extends State<TabsPage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => PreviewProvider(),
-      child: CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(
-          onTap: _selectPage,
-          currentIndex: _selectedPageIndex,
-          backgroundColor: CupertinoTheme.of(context).barBackgroundColor,
-          activeColor: CupertinoTheme.of(context).primaryColor,
-          inactiveColor: CupertinoColors.systemGrey,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.house, size: 24),
-              label: "Home",
+      child: ValueListenableBuilder(
+        valueListenable: _selectedPageIndexNotifier,
+        builder: (context, selectedPageIndex, child) {
+          return CupertinoTabScaffold(
+            tabBar: CupertinoTabBar(
+              onTap: _selectPage,
+              currentIndex: selectedPageIndex,
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor,
+              activeColor: CupertinoTheme.of(context).primaryColor,
+              inactiveColor: CupertinoColors.systemGrey,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.house, size: 24),
+                  label: "Home",
+                ),
+                // BottomNavigationBarItem(
+                //   icon: Icon(CupertinoIcons.person_2_fill),
+                //   label: "Socials",
+                // ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.robot, size: 24),
+                  label: "Recommendations",
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.gear, size: 24),
+                  label: "Settings",
+                ),
+              ],
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(CupertinoIcons.person_2_fill),
-            //   label: "Socials",
-            // ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.robot, size: 24),
-              label: "Recommendations",
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.gear, size: 24),
-              label: "Settings",
-            ),
-          ],
-        ),
-        tabBuilder: (context, index) {
-          return CupertinoTabView(
-            builder: (context) {
-              if (state == BaseState.loading || state == BaseState.init) {
-                return const LoadingView("Loading");
-              }
-              return SafeArea(child: _pages[index]);
+            tabBuilder: (context, index) {
+              return CupertinoTabView(
+                builder: (context) {
+                  if (state == BaseState.loading || state == BaseState.init) {
+                    return const LoadingView("Loading");
+                  }
+                  return SafeArea(child: _pages[index]);
+                },
+              );
             },
           );
         },
