@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -15,6 +16,7 @@ import 'package:watchlistfy/static/colors.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:watchlistfy/widgets/common/loading_view.dart';
 
 class AIRecommendationPage extends StatefulWidget {
   const AIRecommendationPage({super.key});
@@ -28,6 +30,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
 
   late final AIRecommendationsProvider _recommendationsProvider;
   late final AuthenticationProvider authProvider;
+  late final CupertinoThemeData cupertinoTheme;
 
   String? createdAt;
   String? _error;
@@ -66,6 +69,8 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   @override
   void didChangeDependencies() {
     if (_state == ListState.init) {
+      cupertinoTheme = CupertinoTheme.of(context);
+
       authProvider = Provider.of<AuthenticationProvider>(context);
       if (authProvider.isAuthenticated) {
         _fetchData();
@@ -88,8 +93,10 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
           final endDate = startDate?.add(Duration(days: deadlineDayRange));
 
           return CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(
-              middle: Text("Smart Recommendations"),
+            navigationBar: CupertinoNavigationBar(
+              middle: const Text("Smart Recommendations"),
+              backgroundColor: cupertinoTheme.bgColor,
+              brightness: cupertinoTheme.brightness,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -102,110 +109,108 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        maxRadius: 32,
-                        backgroundColor: CupertinoTheme.of(context).onBgColor,
-                        foregroundColor: CupertinoTheme.of(context).onBgColor,
-                        child: const Text(
-                          "🤖",
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ),
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            BubbleSpecialOne(
-                              text: _state == ListState.done
-                                  ? (authProvider.isAuthenticated
-                                      ? "This is what I recommend based on your activity."
-                                      : "Sorry, I cannot help you right now. You need to be logged in to get recommendations.")
-                                  : (_state == ListState.error
-                                      ? _error!
-                                      : (_state == ListState.empty
-                                          ? "Cannot generate recommendations. Please try again later."
-                                          : "This action can take a while to complete. Please wait...")),
-                              color: CupertinoTheme.of(context).bgTextColor,
-                              tail: true,
-                              isSender: false,
-                              textStyle: TextStyle(
-                                color: CupertinoTheme.of(context).bgColor,
-                                fontSize: 15,
+                      if (authProvider.isAuthenticated) ...[
+                        _robotCircleAvatar(context),
+                        Flexible(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              BubbleSpecialOne(
+                                text: _state == ListState.done
+                                    ? (authProvider.isAuthenticated
+                                        ? "This is what I recommend based on your activity."
+                                        : "Sorry, I cannot help you right now. You need to be logged in to get recommendations.")
+                                    : (_state == ListState.error
+                                        ? _error!
+                                        : (_state == ListState.empty
+                                            ? "Cannot generate recommendations. Please try again later."
+                                            : "This action can take a while to complete. Please wait...")),
+                                color: cupertinoTheme.onBgColor,
+                                tail: true,
+                                isSender: false,
+                                textStyle: TextStyle(
+                                  color: cupertinoTheme.bgTextColor,
+                                  fontSize: 15,
+                                ),
                               ),
-                            ),
-                            if (endDate != null && authProvider.isAuthenticated)
-                              const SizedBox(height: 6),
-                            if (endDate != null && authProvider.isAuthenticated)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  const Text(
-                                    "Until refresh ",
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                  TimerCountdown(
-                                    spacerWidth: 3,
-                                    enableDescriptions: false,
-                                    format: CountDownTimerFormat
-                                        .daysHoursMinutesSeconds,
-                                    endTime: endDate,
-                                    descriptionTextStyle: const TextStyle(
-                                      fontSize: 10,
+                              if (endDate != null) ...[
+                                const SizedBox(height: 6),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    const Text(
+                                      "Until refresh ",
+                                      style: TextStyle(fontSize: 13),
                                     ),
-                                    colonsTextStyle: const TextStyle(
-                                      fontSize: 10,
-                                    ),
-                                    timeTextStyle: const TextStyle(
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ),
-                      CupertinoButton(
-                        child: const Icon(CupertinoIcons.info_circle),
-                        onPressed: () {
-                          showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (_) {
-                              return SafeArea(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                    horizontal: 16,
-                                  ),
-                                  child: const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "🤖 AI Assistant",
-                                        style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    TimerCountdown(
+                                      spacerWidth: 3,
+                                      enableDescriptions: false,
+                                      format: CountDownTimerFormat
+                                          .daysHoursMinutesSeconds,
+                                      endTime: endDate,
+                                      descriptionTextStyle: const TextStyle(
+                                        fontSize: 10,
                                       ),
-                                      SizedBox(height: 16),
-                                      Text(
-                                        """Premium users can get recommendations every week. Free users can get recommendations every month.
+                                      colonsTextStyle: const TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                      timeTextStyle: const TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        CupertinoButton(
+                          child: const Icon(CupertinoIcons.info_circle),
+                          onPressed: () {
+                            showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (_) {
+                                return SafeArea(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                      horizontal: 16,
+                                    ),
+                                    child: const Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "🤖 AI Assistant",
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        Text(
+                                          """Premium users can get recommendations every week. Free users can get recommendations every month.
 
 ✨ Spot-On Recommendations: Recommendations based on your user list. \n""",
-                                      ),
-                                    ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      )
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),
+                if (_state == ListState.loading)
+                  const Expanded(
+                    child: LoadingView("Loading"),
+                  ),
                 if (_state == ListState.error)
                   Expanded(
                     child: Center(
@@ -276,23 +281,49 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                 if (!authProvider.isAuthenticated)
                   Expanded(
                     child: Center(
-                      child: CupertinoButton.filled(
-                        child: const Text(
-                          "Login Now!",
-                          style: TextStyle(
-                            color: CupertinoColors.white,
-                            fontWeight: FontWeight.bold,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _robotCircleAvatar(
+                            context,
+                            size: 40,
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(
-                              builder: (_) {
-                                return LoginPage();
-                              },
+                          const SizedBox(height: 12),
+                          const Text(
+                            "Sorry, I cannot help you right now.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            "You need to be logged in to get recommendations.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: CupertinoColors.systemGrey,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          CupertinoButton.filled(
+                            child: const Text(
+                              "Login Now!",
+                              style: TextStyle(
+                                color: CupertinoColors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(
+                                  builder: (_) {
+                                    return LoginPage();
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -300,6 +331,19 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _robotCircleAvatar(BuildContext context, {int size = 26}) {
+    return CircleAvatar(
+      maxRadius: size.toDouble() + 2,
+      backgroundColor: cupertinoTheme.onBgColor,
+      foregroundColor: cupertinoTheme.onBgColor,
+      child: FaIcon(
+        FontAwesomeIcons.robot,
+        color: AppColors().primaryColor,
+        size: size.toDouble(),
       ),
     );
   }

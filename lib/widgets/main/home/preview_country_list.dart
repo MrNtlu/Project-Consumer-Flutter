@@ -66,9 +66,9 @@ class PreviewCountryList extends StatelessWidget {
                     alignment: Alignment.center,
                     child: CountryFlag.fromCountryCode(
                       country.request,
-                      width: 30,
-                      height: 24,
-                      borderRadius: 4,
+                      width: 26,
+                      height: 20,
+                      borderRadius: 2,
                     ),
                   ),
                   const SizedBox(height: 6),
