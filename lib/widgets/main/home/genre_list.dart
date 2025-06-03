@@ -59,9 +59,7 @@ class GenreList extends StatelessWidget {
                 _buildGenreChip(
                   context,
                   first,
-                  genreList
-                      .firstWhere((element) => element.name == first.name)
-                      .icon,
+                  first.icon,
                   contentProvider,
                 ),
                 const SizedBox(height: 12),
@@ -69,9 +67,7 @@ class GenreList extends StatelessWidget {
                   _buildGenreChip(
                     context,
                     second,
-                    genreList
-                        .firstWhere((element) => element.name == second.name)
-                        .icon,
+                    second.icon,
                     contentProvider,
                   ),
               ],

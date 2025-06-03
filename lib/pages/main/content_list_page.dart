@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_responses.dart';
@@ -24,6 +19,7 @@ import 'package:watchlistfy/providers/main/movie/movie_list_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_list_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
+import 'package:watchlistfy/widgets/common/banner_ad_widget.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
@@ -34,7 +30,12 @@ class ContentListPage extends StatefulWidget {
   final String contentTag;
   final String title;
 
-  const ContentListPage(this.contentType, this.contentTag, this.title, {super.key});
+  const ContentListPage(
+    this.contentType,
+    this.contentTag,
+    this.title, {
+    super.key,
+  });
 
   @override
   State<ContentListPage> createState() => _ContentListPageState();
@@ -42,7 +43,6 @@ class ContentListPage extends StatefulWidget {
 
 class _ContentListPageState extends State<ContentListPage> {
   ListState _state = ListState.init;
-  BannerAd? _bannerAd;
 
   late final ContentProvider _contentProvider;
   late final AuthenticationProvider _authenticationProvider;
@@ -71,16 +71,28 @@ class _ContentListPageState extends State<ContentListPage> {
     Future<BasePaginationResponse<BaseContent>> futureResponse;
     switch (widget.contentType) {
       case ContentType.movie:
-        futureResponse = _movieListProvider.getMovies(page: _page, contentTag: widget.contentTag);
+        futureResponse = _movieListProvider.getMovies(
+          page: _page,
+          contentTag: widget.contentTag,
+        );
         break;
       case ContentType.tv:
-        futureResponse = _tvListProvider.getTVSeries(page: _page, contentTag: widget.contentTag);
+        futureResponse = _tvListProvider.getTVSeries(
+          page: _page,
+          contentTag: widget.contentTag,
+        );
         break;
       case ContentType.anime:
-        futureResponse = _animeListProvider.getAnime(page: _page, contentTag: widget.contentTag);
+        futureResponse = _animeListProvider.getAnime(
+          page: _page,
+          contentTag: widget.contentTag,
+        );
         break;
       case ContentType.game:
-        futureResponse = _gameListProvider.getGames(page: _page, contentTag: widget.contentTag);
+        futureResponse = _gameListProvider.getGames(
+          page: _page,
+          contentTag: widget.contentTag,
+        );
         break;
     }
 
@@ -92,49 +104,28 @@ class _ContentListPageState extends State<ContentListPage> {
       if (_state != ListState.disposed) {
         setState(() {
           _state = response.error != null && _page <= 1
-            ? ListState.error
-            : (
-              response.data.isEmpty && _page == 1
-                ? ListState.empty
-                : ListState.done
-            );
+              ? ListState.error
+              : (response.data.isEmpty && _page == 1
+                  ? ListState.empty
+                  : ListState.done);
         });
       }
     });
   }
 
   void _scrollHandler() {
-    if (
-      _canPaginate
-      && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
-      && !_scrollController.position.outOfRange
-    ) {
-      _page ++;
+    if (_canPaginate &&
+        _scrollController.offset >=
+            _scrollController.position.maxScrollExtent / 2 &&
+        !_scrollController.position.outOfRange) {
+      _page++;
       _fetchData();
     }
-  }
-
-  void _loadAd() {
-    _bannerAd = BannerAd(
-      adUnitId: kDebugMode ? (
-        Platform.isIOS ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-3940256099942544/6300978111"
-      ) : (
-        Platform.isIOS ? dotenv.env['ADMOB_BANNER_IOS_KEY'] ?? '': dotenv.env['ADMOB_BANNER_ANDROID_KEY'] ?? ''
-      ),
-      request: const AdRequest(),
-      size: AdSize.fullBanner,
-      listener: BannerAdListener(
-        onAdFailedToLoad: (ad, err) {
-          ad.dispose();
-        },
-      ),
-    )..load();
   }
 
   @override
   void initState() {
     super.initState();
-    _loadAd();
     _movieListProvider = MovieListProvider();
     _tvListProvider = TVListProvider();
     _animeListProvider = AnimeListProvider();
@@ -195,20 +186,20 @@ class _ContentListPageState extends State<ContentListPage> {
             onPressed: () {
               _globalProvider.setContentMode(
                 _globalProvider.contentMode == Constants.ContentUIModes.first
-                ? Constants.ContentUIModes.last
-                : Constants.ContentUIModes.first
+                    ? Constants.ContentUIModes.last
+                    : Constants.ContentUIModes.first,
               );
             },
             padding: EdgeInsets.zero,
             child: Icon(
               _globalProvider.contentMode == Constants.ContentUIModes.first
-              ? Icons.grid_view_rounded
-              : CupertinoIcons.list_bullet,
-              size: 28
-            )
+                  ? Icons.grid_view_rounded
+                  : CupertinoIcons.list_bullet,
+              size: 28,
+            ),
           ),
         ),
-        child: _body(data)
+        child: _body(data),
       ),
     );
   }
@@ -216,27 +207,25 @@ class _ContentListPageState extends State<ContentListPage> {
   Widget _body(List<BaseContent> data) {
     switch (_state) {
       case ListState.done:
-        final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
-        final shouldShowBannerAds = _bannerAd != null && (_authenticationProvider.basicUserInfo == null || _authenticationProvider.basicUserInfo?.isPremium == false);
+        final isGridView =
+            _globalProvider.contentMode == Constants.ContentUIModes.first;
+        final shouldShowBannerAds =
+            (_authenticationProvider.basicUserInfo == null ||
+                _authenticationProvider.basicUserInfo?.isPremium == false);
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 3),
           child: shouldShowBannerAds
-          ? Column(
-            children: [
-              Expanded(
-                child: isGridView
-                ? _gridList(data)
-                : _listView(data)
-              ),
-              _bannerAds(),
-            ],
-          )
-          : (
-            isGridView
-            ? _gridList(data)
-            : _listView(data)
-          ),
+              ? Column(
+                  children: [
+                    Expanded(
+                        child: isGridView ? _gridList(data) : _listView(data)),
+                    const SafeArea(
+                      child: BannerAdWidget(),
+                    ),
+                  ],
+                )
+              : (isGridView ? _gridList(data) : _listView(data)),
         );
       case ListState.empty:
         return const Center(
@@ -255,80 +244,87 @@ class _ContentListPageState extends State<ContentListPage> {
       case ListState.loading:
         return const LoadingView("Loading");
       default:
-       return const LoadingView("Loading");
+        return const LoadingView("Loading");
     }
   }
 
   Widget _gridList(List<BaseContent> data) => GridView.builder(
-    itemCount: _canPaginate ? data.length + 2 : data.length,
-    controller: _scrollController,
-    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-      maxCrossAxisExtent: 350,
-      childAspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
-      crossAxisSpacing: 6,
-      mainAxisSpacing: 6
-    ),
-    itemBuilder: (context, index) {
-      if ((_canPaginate || _isPaginating) && index >= data.length) {
-        return AspectRatio(
-          aspectRatio: _contentProvider.selectedContent != ContentType.game ? 2/3 : 16/9,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Shimmer.fromColors(
-              baseColor: CupertinoColors.systemGrey,
-              highlightColor: CupertinoColors.systemGrey3,
-              child: const ColoredBox(color: CupertinoColors.systemGrey,)
-            )
-          ),
-        );
-      }
+        itemCount: _canPaginate ? data.length + 2 : data.length,
+        controller: _scrollController,
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 350,
+          childAspectRatio: _contentProvider.selectedContent != ContentType.game
+              ? 2 / 3
+              : 16 / 9,
+          crossAxisSpacing: 6,
+          mainAxisSpacing: 6,
+        ),
+        itemBuilder: (context, index) {
+          if ((_canPaginate || _isPaginating) && index >= data.length) {
+            return AspectRatio(
+              aspectRatio: _contentProvider.selectedContent != ContentType.game
+                  ? 2 / 3
+                  : 16 / 9,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Shimmer.fromColors(
+                  baseColor: CupertinoColors.systemGrey,
+                  highlightColor: CupertinoColors.systemGrey3,
+                  child: const ColoredBox(
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ),
+              ),
+            );
+          }
 
-      final content = data[index];
+          final content = data[index];
 
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              switch (_contentProvider.selectedContent) {
-                case ContentType.movie:
-                  return MovieDetailsPage(content.id);
-                case ContentType.tv:
-                  return TVDetailsPage(content.id);
-                case ContentType.anime:
-                  return AnimeDetailsPage(content.id);
-                case ContentType.game:
-                  return GameDetailsPage(content.id);
-              }
-            }, maintainState: NavigationTracker().shouldMaintainState())
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (_) {
+                    switch (_contentProvider.selectedContent) {
+                      case ContentType.movie:
+                        return MovieDetailsPage(content.id);
+                      case ContentType.tv:
+                        return TVDetailsPage(content.id);
+                      case ContentType.anime:
+                        return AnimeDetailsPage(content.id);
+                      case ContentType.game:
+                        return GameDetailsPage(content.id);
+                    }
+                  },
+                  maintainState: NavigationTracker().shouldMaintainState(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+              child: ContentCell(
+                content.imageUrl,
+                content.titleEn,
+                cacheWidth: 500,
+                cacheHeight: 700,
+              ),
+            ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
-          child: ContentCell(content.imageUrl, content.titleEn, cacheWidth: 500, cacheHeight: 700),
-        )
       );
-    }
-  );
 
   Widget _listView(List<BaseContent> data) => ListView.builder(
-    itemCount: _canPaginate ? data.length + 1 : data.length,
-    controller: _scrollController,
-    itemBuilder: (context, index) {
-      if ((_canPaginate || _isPaginating) && index >= data.length) {
-        return ContentListShimmerCell(_contentProvider.selectedContent);
-      }
+        itemCount: _canPaginate ? data.length + 1 : data.length,
+        controller: _scrollController,
+        itemBuilder: (context, index) {
+          if ((_canPaginate || _isPaginating) && index >= data.length) {
+            return ContentListShimmerCell(_contentProvider.selectedContent);
+          }
 
-      final content = data[index];
+          final content = data[index];
 
-      return ContentListCell(_contentProvider.selectedContent, content: content);
-    },
-  );
-
-  Widget _bannerAds() => SafeArea(
-    child: SizedBox(
-      width: _bannerAd!.size.width.toDouble(),
-      height: _bannerAd!.size.height.toDouble(),
-      child: AdWidget(ad: _bannerAd!)
-    ),
-  );
+          return ContentListCell(_contentProvider.selectedContent,
+              content: content);
+        },
+      );
 }

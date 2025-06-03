@@ -65,12 +65,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       if (_state != DetailState.disposed) {
         setState(() {
           _state = response.error != null
-            ? DetailState.error
-            : (
-              response.data != null
-                ? DetailState.view
-                : DetailState.error
-            );
+              ? DetailState.error
+              : (response.data != null ? DetailState.view : DetailState.error);
         });
       }
     });
@@ -82,7 +78,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       _authProvider = Provider.of<AuthenticationProvider>(context);
       _fetchData();
 
-      final shouldShowAds = _authProvider.basicUserInfo == null || _authProvider.basicUserInfo?.isPremium == false;
+      final shouldShowAds = _authProvider.basicUserInfo == null ||
+          _authProvider.basicUserInfo?.isPremium == false;
       if (AdsTracker().shouldShowAds() && shouldShowAds) {
         InterstitialAdHandler().showAds();
       }
@@ -105,62 +102,77 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => _provider,
-      child: Consumer<MovieDetailsProvider>(
-        builder: (context, provider, child) {
+        create: (_) => _provider,
+        child: Consumer<MovieDetailsProvider>(builder: (
+          context,
+          provider,
+          child,
+        ) {
           return CupertinoPageScaffold(
             child: CustomScrollView(
               slivers: [
                 DetailsNavigationBar(
-                  _provider.item?.title.isNotEmpty == true ? _provider.item!.title : _provider.item?.titleOriginal ?? '',
-                  "movie",
-                  _provider.item == null,
-                  _provider.item?.userList == null,
-                  _provider.item?.consumeLater == null,
-                  provider.isUserListLoading,
-                  provider.isLoading,
-                  onBookmarkTap: () {
-                    if (!provider.isLoading && _authProvider.isAuthenticated) {
-                      final item = provider.item;
+                    _provider.item?.title.isNotEmpty == true
+                        ? _provider.item!.title
+                        : _provider.item?.titleOriginal ?? '',
+                    "movie",
+                    _provider.item == null,
+                    _provider.item?.userList == null,
+                    _provider.item?.consumeLater == null,
+                    provider.isUserListLoading,
+                    provider.isLoading, onBookmarkTap: () {
+                  if (!provider.isLoading && _authProvider.isAuthenticated) {
+                    final item = provider.item;
 
-                      if (item != null && item.consumeLater != null) {
-                        provider.deleteConsumeLaterObject(IDBody(item.consumeLater!.id)).then((response) {
+                    if (item != null && item.consumeLater != null) {
+                      provider
+                          .deleteConsumeLaterObject(IDBody(
+                        item.consumeLater!.id,
+                      ))
+                          .then(
+                        (
+                          response,
+                        ) {
                           if (response.error != null) {
                             showCupertinoDialog(
                               context: context,
                               builder: (_) => ErrorDialog(response.error!),
                             );
                           }
-                        });
-                      } else if (item != null) {
-                        provider.createConsumeLaterObject(
-                          ConsumeLaterBody(item.id, item.tmdbID, "movie")
-                        ).then((response) {
-                          if (response.error != null) {
-                            showCupertinoDialog(
-                              context: context,
-                              builder: (_) => ErrorDialog(response.error!),
-                            );
-                          }
-                        });
-                      }
-                    } else if (!_authProvider.isAuthenticated) {
-                      showCupertinoDialog(
-                        context: context,
-                        builder: (BuildContext context) => const UnauthorizedDialog()
+                        },
                       );
+                    } else if (item != null) {
+                      provider
+                          .createConsumeLaterObject(
+                              ConsumeLaterBody(item.id, item.tmdbID, "movie"))
+                          .then((response) {
+                        if (response.error != null) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (_) => ErrorDialog(response.error!),
+                          );
+                        }
+                      });
                     }
-                  },
-                  onListTap: () {
-                    if (!provider.isUserListLoading && _authProvider.isAuthenticated) {
-                      final item = provider.item;
+                  } else if (!_authProvider.isAuthenticated) {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            const UnauthorizedDialog());
+                  }
+                }, onListTap: () {
+                  if (!provider.isUserListLoading &&
+                      _authProvider.isAuthenticated) {
+                    final item = provider.item;
 
-                      if (item != null && item.userList != null) {
-                        final status = Constants.UserListStatus.firstWhere((element) => element.request == item.userList!.status).name;
-                        final score = item.userList!.score ?? 'Not Scored';
-                        final timesFinished = item.userList!.timesFinished;
+                    if (item != null && item.userList != null) {
+                      final status = Constants.UserListStatus.firstWhere(
+                          (element) =>
+                              element.request == item.userList!.status).name;
+                      final score = item.userList!.score ?? 'Not Scored';
+                      final timesFinished = item.userList!.timesFinished;
 
-                        showCupertinoModalPopup(
+                      showCupertinoModalPopup(
                           context: context,
                           builder: (context) {
                             return UserListViewSheet(
@@ -172,32 +184,28 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               contentType: ContentType.movie,
                               movieProvider: provider,
                             );
-                          }
-                        );
-                      } else if (item != null) {
-                        showCupertinoModalPopup(
+                          });
+                    } else if (item != null) {
+                      showCupertinoModalPopup(
                           context: context,
                           barrierDismissible: false,
                           builder: (context) {
-                            return MovieWatchListSheet(_provider, _provider.item!.id, _provider.item!.tmdbID);
-                          }
-                        );
-                      }
-                    } else if (!_authProvider.isAuthenticated) {
-                      showCupertinoDialog(
-                        context: context,
-                        builder: (BuildContext context) => const UnauthorizedDialog()
-                      );
+                            return MovieWatchListSheet(_provider,
+                                _provider.item!.id, _provider.item!.tmdbID);
+                          });
                     }
+                  } else if (!_authProvider.isAuthenticated) {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            const UnauthorizedDialog());
                   }
-                ),
+                }),
                 _body(provider)
               ],
             ),
           );
-        }
-      )
-    );
+        }));
   }
 
   Widget _body(MovieDetailsProvider provider) {
@@ -229,11 +237,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             DetailsInfoColumn(
                               item.title != item.titleOriginal,
                               item.titleOriginal,
-                              item.length < 5
-                              ? "?"
-                              : item.length.toLength(),
-                              DateTime.parse(item.releaseDate).dateToHumanDate(),
-                              null, null,
+                              item.length < 5 ? "?" : item.length.toLength(),
+                              DateTime.parse(item.releaseDate)
+                                  .dateToHumanDate(),
+                              null,
+                              null,
                             )
                           ],
                         ),
@@ -243,16 +251,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(builder: (_) {
-                                return ImagePage(item.imageUrl);
-                              })
-                            );
+                            Navigator.of(context, rootNavigator: true)
+                                .push(CupertinoPageRoute(builder: (_) {
+                              return ImagePage(item.imageUrl);
+                            }));
                           },
                           child: SizedBox(
-                            height: 125,
-                            child: ContentCell(item.imageUrl, item.title, forceRatio: true, cacheWidth: 300, cacheHeight: 400)
-                          ),
+                              height: 125,
+                              child: ContentCell(item.imageUrl, item.title,
+                                  forceRatio: true,
+                                  cacheWidth: 300,
+                                  cacheHeight: 400)),
                         ),
                       ],
                     ),
@@ -260,23 +269,22 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 ),
                 const SizedBox(height: 12),
                 DetailsButtonRow(
-                  _provider.item?.title.isNotEmpty == true ? _provider.item!.title : _provider.item?.titleOriginal ?? '',
-                  _authProvider.isAuthenticated,
-                  item.trailers,
-                  "movie",
-                  item.id,
-                  () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(builder: (_) {
-                        return RecommendationContentList(
-                          item.title.isNotEmpty ? item.title : item.titleOriginal,
-                          item.id,
-                          ContentType.movie.request,
-                        );
-                      })
+                    _provider.item?.title.isNotEmpty == true
+                        ? _provider.item!.title
+                        : _provider.item?.titleOriginal ?? '',
+                    _authProvider.isAuthenticated,
+                    item.trailers,
+                    "movie",
+                    item.id, () {
+                  Navigator.of(context, rootNavigator: true)
+                      .push(CupertinoPageRoute(builder: (_) {
+                    return RecommendationContentList(
+                      item.title.isNotEmpty ? item.title : item.titleOriginal,
+                      item.id,
+                      ContentType.movie.request,
                     );
-                  }
-                ),
+                  }));
+                }),
                 const CustomDivider(height: 0.75, opacity: 0.35),
                 const DetailsTitle("Genres"),
                 DetailsGenreList(item.genres, (genre) {
@@ -294,108 +302,110 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 ),
                 const DetailsTitle("Actors"),
                 SizedBox(
-                  height: 115,
-                  child: DetailsCommonList(
-                    true, item.actors.length,
-                    (index) {
-                      return item.actors[index].tmdbID;
-                    },
-                    (index) {
-                      return item.actors[index].image;
-                    },
-                    (index) {
-                      return item.actors[index].name;
-                    },
-                    (index) {
-                      return item.actors[index].character;
-                    },
-                    true,
-                  )
-                ),
-                if(item.recommendations.isNotEmpty)
-                const DetailsTitle("Recommendations"),
-                if(item.recommendations.isNotEmpty)
-                SizedBox(
-                  height: 150,
-                  child: DetailsRecommendationList(
-                    item.recommendations.length,
-                    (index) {
+                    height: 115,
+                    child: DetailsCommonList(
+                      true,
+                      item.actors.length,
+                      (index) {
+                        return item.actors[index].tmdbID;
+                      },
+                      (index) {
+                        return item.actors[index].image;
+                      },
+                      (index) {
+                        return item.actors[index].name;
+                      },
+                      (index) {
+                        return item.actors[index].character;
+                      },
+                      true,
+                    )),
+                if (item.recommendations.isNotEmpty)
+                  const DetailsTitle("Recommendations"),
+                if (item.recommendations.isNotEmpty)
+                  SizedBox(
+                    height: 150,
+                    child: DetailsRecommendationList(
+                        item.recommendations.length, (index) {
                       return item.recommendations[index].imageURL;
-                    },
-                    (index) {
+                    }, (index) {
                       return item.recommendations[index].title;
-                    },
-                    (index) {
-                      return MovieDetailsPage(item.recommendations[index].tmdbID);
-                    }
+                    }, (index) {
+                      return MovieDetailsPage(
+                          item.recommendations[index].tmdbID);
+                    }),
                   ),
-                ),
                 DetailsReviewSummary(
                   item.title.isNotEmpty ? item.title : item.titleOriginal,
-                  item.reviewSummary, item.id, item.tmdbID,
-                  null, ContentType.movie.request, _fetchData,
+                  item.reviewSummary,
+                  item.id,
+                  item.tmdbID,
+                  null,
+                  ContentType.movie.request,
+                  _fetchData,
                 ),
-                if (item.images.isNotEmpty)
-                const DetailsTitle("Images"),
-                if (item.images.isNotEmpty)
-                DetailsCarouselSlider(item.images),
-                if(item.productionCompanies != null)
-                const DetailsTitle("Production"),
-                if(item.productionCompanies != null)
-                SizedBox(
-                  height: 135,
-                  child: DetailsCommonList(
-                    false,
-                    item.productionCompanies!.length,
-                    null,
-                    onClick: (index) {
-                      Navigator.of(context, rootNavigator: true).push(
-                        CupertinoPageRoute(builder: (_) {
-                          return MovieDiscoverListPage(productionCompanies: item.productionCompanies![index].name);
-                        })
-                      );
-                    },
-                    (index) {
-                      return item.productionCompanies![index].logo;
-                    },
-                    (index) {
-                      return item.productionCompanies![index].name;
-                    },
-                    (index) {
-                      return item.productionCompanies![index].originCountry;
-                    },
-                    placeHolderIcon: Icons.business_rounded,
-                    true,
-                  )
-                ),
+                if (item.images.isNotEmpty) const DetailsTitle("Images"),
+                if (item.images.isNotEmpty) DetailsCarouselSlider(item.images),
+                if (item.productionCompanies != null)
+                  const DetailsTitle("Production"),
+                if (item.productionCompanies != null)
+                  SizedBox(
+                      height: 135,
+                      child: DetailsCommonList(
+                        false,
+                        item.productionCompanies!.length,
+                        null,
+                        onClick: (index) {
+                          Navigator.of(context, rootNavigator: true)
+                              .push(CupertinoPageRoute(builder: (_) {
+                            return MovieDiscoverListPage(
+                                productionCompanies:
+                                    item.productionCompanies![index].name);
+                          }));
+                        },
+                        (index) {
+                          return item.productionCompanies![index].logo;
+                        },
+                        (index) {
+                          return item.productionCompanies![index].name;
+                        },
+                        (index) {
+                          return item.productionCompanies![index].originCountry;
+                        },
+                        placeHolderIcon: Icons.business_rounded,
+                        true,
+                      )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const DetailsTitle("Platforms"),
                     CupertinoButton(
-                      child: const Icon(CupertinoIcons.info_circle),
-                      onPressed: () {
-                        final countryCode = Provider.of<GlobalProvider>(context, listen: false).selectedCountryCode;
+                        child: const Icon(CupertinoIcons.info_circle),
+                        onPressed: () {
+                          final countryCode = Provider.of<GlobalProvider>(
+                                  context,
+                                  listen: false)
+                              .selectedCountryCode;
 
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (_) => MessageDialog(
-                            title: "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
-                            "You can change your region from Settings."
-                          )
-                        );
-                      }
-                    )
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (_) => MessageDialog(
+                                  title:
+                                      "Your Region is ${Country.tryParse(countryCode)?.name ?? countryCode}",
+                                  "You can change your region from Settings."));
+                        })
                   ],
                 ),
-                DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
+                DetailsStreamingLists(
+                    item.streaming ?? [], item.tmdbID, "movie"),
                 const SizedBox(height: 32)
               ],
             ),
           ),
         );
       case DetailState.error:
-        return SliverFillRemaining(child: ErrorView(_error ?? "Unknown error", _fetchData));
+        return SliverFillRemaining(
+            child: ErrorView(_error ?? "Unknown error", _fetchData));
       case DetailState.loading:
         return const SliverFillRemaining(child: LoadingView("Loading"));
       default:

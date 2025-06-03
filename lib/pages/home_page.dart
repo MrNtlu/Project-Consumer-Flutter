@@ -1,9 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -17,6 +14,7 @@ import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/interstitial_ad_handler.dart';
+import 'package:watchlistfy/widgets/common/banner_ad_widget.dart';
 import 'package:watchlistfy/widgets/common/content_selection_chips.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/main/home/anonymous_header.dart';
@@ -38,37 +36,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isInit = false;
-  BannerAd? _bannerAd;
 
   late final AuthenticationProvider authenticationProvider;
   late final ContentProvider contentProvider;
   late final GlobalProvider globalProvider;
   PreviewProvider? previewProvider;
-
-  void _loadAd() {
-    _bannerAd = BannerAd(
-      adUnitId: kDebugMode
-          ? (Platform.isIOS
-              ? "ca-app-pub-3940256099942544/2934735716"
-              : "ca-app-pub-3940256099942544/6300978111")
-          : (Platform.isIOS
-              ? dotenv.env['ADMOB_BANNER_IOS_KEY'] ?? ''
-              : dotenv.env['ADMOB_BANNER_ANDROID_KEY'] ?? ''),
-      request: const AdRequest(),
-      size: AdSize.fullBanner,
-      listener: BannerAdListener(
-        onAdFailedToLoad: (ad, err) {
-          ad.dispose();
-        },
-      ),
-    )..load();
-  }
-
-  @override
-  void initState() {
-    _loadAd();
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -176,13 +148,9 @@ class _HomePageState extends State<HomePage> {
             ],
             if (!Platform.isAndroid) const SizedBox(height: 16),
             const GenreList(),
-            if (_bannerAd != null && shouldShowAds) ...[
+            if (shouldShowAds) ...[
               const SizedBox(height: 20),
-              SizedBox(
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd!),
-              ),
+              const BannerAdWidget(),
             ],
             const SizedBox(height: 12),
             SeeAllTitle(

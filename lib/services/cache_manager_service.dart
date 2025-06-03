@@ -13,14 +13,12 @@ class _DebugHttpOverrides extends HttpOverrides {
 
 /// A singleton cache manager that supports on-disk resizing
 /// (via ImageCacheManager) and ignores self-signed cert errors
-class CustomCacheManager extends CacheManager
-    with ImageCacheManager {
+class CustomCacheManager extends CacheManager with ImageCacheManager {
   static const key = 'customImageKey';
   static CustomCacheManager? _instance;
 
   /// Returns the single instance
-  factory CustomCacheManager() =>
-      _instance ??= CustomCacheManager._internal();
+  factory CustomCacheManager() => _instance ??= CustomCacheManager._internal();
 
   CustomCacheManager._internal()
       : super(
