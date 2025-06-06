@@ -13,10 +13,11 @@
 ## Tabs Page
 
 Authenticated
-Home, Later, Activity, Profile
+Home, Later, Activity, Profile, Game
 
 Not Authenticated
-Home, Settings
+Home, Game, Settings
+
 
 ## Home Page
 
