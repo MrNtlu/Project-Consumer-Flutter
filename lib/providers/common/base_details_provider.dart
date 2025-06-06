@@ -8,14 +8,18 @@ import 'package:watchlistfy/models/main/base_details.dart';
 import 'package:watchlistfy/models/main/common/consume_later.dart';
 import 'package:watchlistfy/models/main/common/request/delete_user_list_body.dart';
 import 'package:watchlistfy/models/main/common/request/id_Body.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
+import 'package:watchlistfy/static/ads_provider.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 
-class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
+abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
   bool isLoading = false;
   bool isUserListLoading = false;
   DetailState state = DetailState.init;
   String? error;
+  String? _currentId;
 
   @protected
   T? _item;
@@ -24,6 +28,30 @@ class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
 
   set setItem(T item) {
     _item = item;
+  }
+
+  /// Initialize and fetch data with ads handling
+  void initializeAndFetch(String id, AuthenticationProvider authProvider) {
+    // Only fetch if we don't have data for this ID or if state is init
+    if (_currentId != id || state == DetailState.init) {
+      _currentId = id;
+      fetchData(id);
+
+      final shouldShowAds = authProvider.basicUserInfo == null ||
+          authProvider.basicUserInfo?.isPremium == false;
+      if (AdsTracker().shouldShowAds() && shouldShowAds) {
+        InterstitialAdHandler().showAds();
+      }
+    }
+  }
+
+  /// Abstract method to be implemented by specific providers
+  Future<void> fetchData(String id);
+
+  /// Public method to trigger data refresh
+  void refreshData(String id) {
+    _currentId = id;
+    fetchData(id);
   }
 
   @protected

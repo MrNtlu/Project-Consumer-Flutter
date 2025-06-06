@@ -6,10 +6,7 @@ import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
@@ -285,16 +282,10 @@ class _ContentListPageState extends State<ContentListPage> {
               Navigator.of(context, rootNavigator: true).push(
                 CupertinoPageRoute(
                   builder: (_) {
-                    switch (_contentProvider.selectedContent) {
-                      case ContentType.movie:
-                        return MovieDetailsPage(content.id);
-                      case ContentType.tv:
-                        return TVDetailsPage(content.id);
-                      case ContentType.anime:
-                        return AnimeDetailsPage(content.id);
-                      case ContentType.game:
-                        return GameDetailsPage(content.id);
-                    }
+                    return DetailsPage(
+                      id: content.id,
+                      contentType: widget.contentType,
+                    );
                   },
                   maintainState: NavigationTracker().shouldMaintainState(),
                 ),

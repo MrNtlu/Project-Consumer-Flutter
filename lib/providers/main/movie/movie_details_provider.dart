@@ -11,6 +11,11 @@ import 'package:watchlistfy/providers/common/base_details_provider.dart';
 import 'package:watchlistfy/static/routes.dart';
 
 class MovieDetailsProvider extends BaseDetailsProvider<MovieDetails> {
+  @override
+  Future<void> fetchData(String id) async {
+    await getMovieDetails(id);
+  }
+
   Future<BaseNullableResponse<MovieDetails>> getMovieDetails(
     String id,
   ) async =>

@@ -6,10 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/auth/login_page.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/ai/ai_recommendations_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
@@ -250,19 +247,16 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
 
                         return GestureDetector(
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .push(CupertinoPageRoute(builder: (_) {
-                              switch (contentType) {
-                                case ContentType.movie:
-                                  return MovieDetailsPage(content.id);
-                                case ContentType.tv:
-                                  return TVDetailsPage(content.id);
-                                case ContentType.anime:
-                                  return AnimeDetailsPage(content.id);
-                                case ContentType.game:
-                                  return GameDetailsPage(content.id);
-                              }
-                            }));
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(
+                                builder: (_) {
+                                  return DetailsPage(
+                                    id: content.id,
+                                    contentType: contentType,
+                                  );
+                                },
+                              ),
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(

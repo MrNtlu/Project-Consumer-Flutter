@@ -22,15 +22,27 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = data[index];
 
+          final logoBaseUrl = item.url
+              .replaceAll(RegExp(r'^(?:https?:\/\/)?(?:www\.)?'), '')
+              .split('/')[0];
+
+          final streamingLogoUrl =
+              'https://img.logo.dev/$logoBaseUrl?token=pk_C1fcC0OuSJS-HB9jCN0LIg';
+
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (_) {
-                return AnimeDiscoverListPage(
-                  streaming: item.name,
-                  streamingLogo: 'https://img.logo.dev/${item.url}?token=pk_C1fcC0OuSJS-HB9jCN0LIg',
-                );
-              }, maintainState: NavigationTracker().shouldMaintainState()));
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (_) {
+                    return AnimeDiscoverListPage(
+                      streaming: item.name,
+                      streamingLogo: streamingLogoUrl,
+                    );
+                  },
+                  maintainState: NavigationTracker().shouldMaintainState(),
+                ),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -44,7 +56,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
-                        imageUrl: 'https://img.logo.dev/${item.url}?token=pk_C1fcC0OuSJS-HB9jCN0LIg',
+                        imageUrl: streamingLogoUrl,
                         fit: BoxFit.cover,
                         key: ValueKey<String>(item.name),
                         cacheKey: item.name,
@@ -60,20 +72,19 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                               height: 64,
                               width: 64,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Center(
-                                  child: AutoSizeText(
-                                    item.name,
-                                    minFontSize: 13,
-                                    style: TextStyle(
-                                      color: CupertinoTheme.of(context).bgColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Center(
+                                    child: AutoSizeText(
+                                      item.name,
+                                      minFontSize: 13,
+                                      style: TextStyle(
+                                          color: CupertinoTheme.of(context)
+                                              .bgColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ),
+                                  )),
                             ),
                           );
                         },
@@ -84,16 +95,18 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                               height: 64,
                               width: 64,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Center(
-                                  child: AutoSizeText(
-                                    item.name,
-                                    minFontSize: 13,
-                                    style: TextStyle(color: CupertinoTheme.of(context).bgColor, fontSize: 16),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Center(
+                                    child: AutoSizeText(
+                                      item.name,
+                                      minFontSize: 13,
+                                      style: TextStyle(
+                                          color: CupertinoTheme.of(context)
+                                              .bgColor,
+                                          fontSize: 16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )),
                             ),
                           );
                         },

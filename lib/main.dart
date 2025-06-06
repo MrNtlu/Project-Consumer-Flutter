@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/models/common/content_type.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/pages/main/onboarding_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_share_details_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
@@ -88,50 +86,59 @@ Future<void> _trackingTransparencyRequest() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final GoRouter _goRouter = GoRouter(observers: [
-    MyNavigatorObserver()
-  ], routes: [
-    GoRoute(
-      path: TabsPage.routeName,
-      builder: (context, state) => const TabsPage(),
-      routes: [
-        GoRoute(
-          path: 'movie/:id',
-          builder: (context, state) =>
-              MovieDetailsPage(state.pathParameters['id']!),
-        ),
-        GoRoute(
-          path: 'tv/:id',
-          builder: (context, state) =>
-              TVDetailsPage(state.pathParameters['id']!),
-        ),
-        GoRoute(
-          path: 'anime/:id',
-          builder: (context, state) =>
-              AnimeDetailsPage(state.pathParameters['id']!),
-        ),
-        GoRoute(
-          path: 'game/:id',
-          builder: (context, state) =>
-              GameDetailsPage(state.pathParameters['id']!),
-        ),
-        GoRoute(
-          path: 'profile/:username',
-          builder: (context, state) =>
-              ProfileDisplayPage(state.pathParameters['username']!),
-        ),
-        GoRoute(
-          path: 'custom-list/:id',
-          builder: (context, state) =>
-              CustomListShareDetailsPage(state.pathParameters['id']!),
-        ),
-        GoRoute(
-          path: OnboardingPage.routeName,
-          builder: (context, state) => const OnboardingPage(),
-        )
-      ],
-    )
-  ]);
+  final GoRouter _goRouter = GoRouter(
+    observers: [MyNavigatorObserver()],
+    routes: [
+      GoRoute(
+        path: TabsPage.routeName,
+        builder: (context, state) => const TabsPage(),
+        routes: [
+          GoRoute(
+            path: 'movie/:id',
+            builder: (context, state) => DetailsPage(
+              id: state.pathParameters['id']!,
+              contentType: ContentType.movie,
+            ),
+          ),
+          GoRoute(
+            path: 'tv/:id',
+            builder: (context, state) => DetailsPage(
+              id: state.pathParameters['id']!,
+              contentType: ContentType.tv,
+            ),
+          ),
+          GoRoute(
+            path: 'anime/:id',
+            builder: (context, state) => DetailsPage(
+              id: state.pathParameters['id']!,
+              contentType: ContentType.anime,
+            ),
+          ),
+          GoRoute(
+            path: 'game/:id',
+            builder: (context, state) => DetailsPage(
+              id: state.pathParameters['id']!,
+              contentType: ContentType.game,
+            ),
+          ),
+          GoRoute(
+            path: 'profile/:username',
+            builder: (context, state) =>
+                ProfileDisplayPage(state.pathParameters['username']!),
+          ),
+          GoRoute(
+            path: 'custom-list/:id',
+            builder: (context, state) =>
+                CustomListShareDetailsPage(state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: OnboardingPage.routeName,
+            builder: (context, state) => const OnboardingPage(),
+          )
+        ],
+      )
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -145,14 +152,16 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
           if (Platform.isAndroid) {
-            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-              statusBarColor: SharedPref().isDarkTheme()
-                  ? const Color(0xFF121212)
-                  : const Color(0xFFFAFAFA),
-              systemNavigationBarColor: SharedPref().isDarkTheme()
-                  ? const Color(0xFF212121)
-                  : const Color(0xFFFAFAFA),
-            ));
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle(
+                statusBarColor: SharedPref().isDarkTheme()
+                    ? const Color(0xFF121212)
+                    : const Color(0xFFFAFAFA),
+                systemNavigationBarColor: SharedPref().isDarkTheme()
+                    ? const Color(0xFF212121)
+                    : const Color(0xFFFAFAFA),
+              ),
+            );
           }
 
           return CupertinoApp.router(

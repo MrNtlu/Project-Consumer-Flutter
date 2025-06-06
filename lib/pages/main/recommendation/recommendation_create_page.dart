@@ -6,11 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/recommendation/request/recommendation_body.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_selection_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_create_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/routes.dart';
@@ -28,11 +25,8 @@ class RecommendationCreatePage extends StatelessWidget {
   final VoidCallback _fetchData;
 
   const RecommendationCreatePage(
-    this._contentID,
-    this._contentType,
-    this._fetchData,
-    {super.key}
-  );
+      this._contentID, this._contentType, this._fetchData,
+      {super.key});
 
   void createRecommendation(
     BuildContext context,
@@ -40,36 +34,37 @@ class RecommendationCreatePage extends StatelessWidget {
     String? reason,
   ) async {
     if (createProvider.selectedContent.isEmpty) {
-      showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Please make a selection."));
+      showCupertinoDialog(
+          context: context,
+          builder: (_) => const ErrorDialog("Please make a selection."));
       return;
     }
 
-    showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
+    showCupertinoDialog(
+        context: context, builder: (_) => const LoadingDialog());
 
     final RecommendationBody createBody = RecommendationBody(
-      _contentID,
-      createProvider.selectedContent.first.contentID,
-      _contentType.request,
-      reason
-    );
+        _contentID,
+        createProvider.selectedContent.first.contentID,
+        _contentType.request,
+        reason);
 
     try {
       final response = await http.post(
-        Uri.parse(APIRoutes().recommendationRoutes.createRecommendation),
-        body: json.encode(createBody.convertToJson()),
-        headers: UserToken().getBearerToken()
-      );
+          Uri.parse(APIRoutes().recommendationRoutes.createRecommendation),
+          body: json.encode(createBody.convertToJson()),
+          headers: UserToken().getBearerToken());
 
       if (context.mounted) {
         Navigator.pop(context);
 
         var baseMessage = response.getBaseMessageResponse();
 
-        if (baseMessage.error != null && context.mounted){
+        if (baseMessage.error != null && context.mounted) {
           showCupertinoDialog(
-            context: context,
-            builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          );
+              context: context,
+              builder: (ctx) =>
+                  ErrorDialog(response.getBaseMessageResponse().error!));
           return;
         }
 
@@ -77,21 +72,19 @@ class RecommendationCreatePage extends StatelessWidget {
           Navigator.pop(context);
 
           showCupertinoDialog(
-            context: context,
-            builder: (ctx) => MessageDialog(baseMessage.message ?? "Unkwown error!")
-          );
+              context: context,
+              builder: (ctx) =>
+                  MessageDialog(baseMessage.message ?? "Unkwown error!"));
 
           _fetchData();
         }
       }
-    } catch(error) {
+    } catch (error) {
       if (context.mounted) {
         Navigator.pop(context);
 
         showCupertinoDialog(
-          context: context,
-          builder: (ctx) => ErrorDialog(error.toString())
-        );
+            context: context, builder: (ctx) => ErrorDialog(error.toString()));
         return;
       }
     }
@@ -99,147 +92,153 @@ class RecommendationCreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CustomListCreateProvider customListCreateProvider = CustomListCreateProvider();
+    final CustomListCreateProvider customListCreateProvider =
+        CustomListCreateProvider();
 
     final TextEditingController reasonController = TextEditingController();
 
     return ChangeNotifierProvider(
       create: (_) => customListCreateProvider,
       lazy: false,
-      child: Consumer<CustomListCreateProvider>(
-        builder: (context, provider, _) {
-          return CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(
-              middle: Text("Make a Recommendation"),
-            ),
-            child: SafeArea(
+      child:
+          Consumer<CustomListCreateProvider>(builder: (context, provider, _) {
+        return CupertinoPageScaffold(
+          navigationBar: const CupertinoNavigationBar(
+            middle: Text("Make a Recommendation"),
+          ),
+          child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Reason (Optional)",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        )
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Reason (Optional)",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                const SizedBox(height: 16),
+                CupertinoTextField(
+                  maxLength: 250,
+                  maxLines: 5,
+                  controller: reasonController,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  placeholder: "Why are you recommending? How is it similar?",
+                  onTapOutside: (event) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  onChanged: (value) {
+                    provider.updateTextCount(value.length);
+                  },
+                  decoration: BoxDecoration(
+                    color: CupertinoTheme.of(context).onBgColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Align(
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      provider.reasonTextCount > 0
+                          ? "${provider.reasonTextCount}/250"
+                          : "",
+                      style: TextStyle(
+                        color: (provider.reasonTextCount == 250 ||
+                                provider.reasonTextCount < 6)
+                            ? CupertinoColors.systemRed
+                            : CupertinoColors.systemGrey2,
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    CupertinoTextField(
-                      maxLength: 250,
-                      maxLines: 5,
-                      controller: reasonController,
-                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      placeholder: "Why are you recommending? How is it similar?",
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      onChanged: (value) {
-                        provider.updateTextCount(value.length);
-                      },
-                      decoration: BoxDecoration(
-                        color: CupertinoTheme.of(context).onBgColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        provider.reasonTextCount > 0 ? "${provider.reasonTextCount}/250" : "",
-                        style: TextStyle(
-                          color: (provider.reasonTextCount == 250 || provider.reasonTextCount < 6) ? CupertinoColors.systemRed : CupertinoColors.systemGrey2,
-                        ),
-                      )
-                    ),
-                    const SizedBox(height: 16),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Select ${_contentType.value}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        )
-                      ),
-                    ),
-                    if (provider.selectedContent.isNotEmpty)
-                    const SizedBox(height: 16),
-                    if (provider.selectedContent.isNotEmpty)
-                    SizedBox(
-                      height: 150,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                CupertinoPageRoute(builder: (_) {
-                                  switch (_contentType) {
-                                    case ContentType.movie:
-                                      return MovieDetailsPage(provider.selectedContent.first.contentID);
-                                    case ContentType.tv:
-                                      return TVDetailsPage(provider.selectedContent.first.contentID);
-                                    case ContentType.anime:
-                                      return AnimeDetailsPage(provider.selectedContent.first.contentID);
-                                    case ContentType.game:
-                                      return GameDetailsPage(provider.selectedContent.first.contentID);
-                                    default:
-                                      return MovieDetailsPage(provider.selectedContent.first.contentID);
-                                  }
-                                })
-                              );
-                            },
-                            child: ContentCell(
-                              provider.selectedContent.first.imageURL ?? '',
-                              provider.selectedContent.first.titleOriginal,
-                            ),
+                    )),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Select ${_contentType.value}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                if (provider.selectedContent.isNotEmpty)
+                  const SizedBox(height: 16),
+                if (provider.selectedContent.isNotEmpty)
+                  SizedBox(
+                    height: 150,
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(
+                                builder: (_) {
+                                  final contentType = ContentType.values
+                                      .where(
+                                        (element) =>
+                                            element.request ==
+                                            _contentType.request,
+                                      )
+                                      .first;
+                                  return DetailsPage(
+                                    id: provider
+                                        .selectedContent.first.contentID,
+                                    contentType: contentType,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: ContentCell(
+                            provider.selectedContent.first.imageURL ?? '',
+                            provider.selectedContent.first.titleOriginal,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width - 140,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AutoSizeText(
-                                    provider.selectedContent.first.titleEn.isNotEmpty
-                                    ? provider.selectedContent.first.titleEn
-                                    : provider.selectedContent.first.titleOriginal,
-                                    minFontSize: 16,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    wrapWords: true,
-                                    style: const TextStyle(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width - 140,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AutoSizeText(
+                                  provider.selectedContent.first.titleEn
+                                          .isNotEmpty
+                                      ? provider.selectedContent.first.titleEn
+                                      : provider
+                                          .selectedContent.first.titleOriginal,
+                                  minFontSize: 16,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  wrapWords: true,
+                                  style: const TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                  const SizedBox(height: 3),
-                                  AutoSizeText(
-                                    provider.selectedContent.first.titleOriginal,
-                                    minFontSize: 12,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 3),
+                                AutoSizeText(
+                                  provider.selectedContent.first.titleOriginal,
+                                  minFontSize: 12,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
                                       fontSize: 13,
-                                      color: CupertinoColors.systemGrey2
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: CupertinoButton(
+                                      color: CupertinoColors.systemGrey2),
+                                ),
+                                const Spacer(),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: CupertinoButton(
                                       child: const Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
                                             "Remove",
-                                            style: TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w500),
+                                            style: TextStyle(
+                                                color:
+                                                    CupertinoColors.systemRed,
+                                                fontWeight: FontWeight.w500),
                                           ),
                                           SizedBox(width: 6),
                                           Icon(
@@ -250,57 +249,54 @@ class RecommendationCreatePage extends StatelessWidget {
                                         ],
                                       ),
                                       onPressed: () {
-                                        provider.removeContent(provider.selectedContent.first.contentID);
-                                      }
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                        provider.removeContent(provider
+                                            .selectedContent.first.contentID);
+                                      }),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    if (provider.selectedContent.isEmpty)
-                    CupertinoButton(
-                      child: const Icon(CupertinoIcons.add_circled_solid, size: 32),
+                  ),
+                if (provider.selectedContent.isEmpty)
+                  CupertinoButton(
+                      child: const Icon(CupertinoIcons.add_circled_solid,
+                          size: 32),
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(
-                            builder: (_) => ChangeNotifierProvider<CustomListCreateProvider>.value(
-                              value: provider,
-                              builder: (context, _) => CustomListSelectionPage(
-                                isRecommendation: true,
-                                contentType: _contentType,
-                              ),
-                            )
-                          )
-                        );
-                      }
-                    ),
-                    const SizedBox(height: 32),
-                    const Spacer(),
-                    CupertinoButton.filled(
-                      child: const Text(
-                        "Recommend",
-                        style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)
-                      ),
-                      onPressed: () {
-                        createRecommendation(
-                          context,
-                          provider,
-                          reasonController.text,
-                        );
-                      }
-                    ),
-                    const SizedBox(height: 32)
-                  ],
-                ),
-              )
+                            CupertinoPageRoute(
+                                builder: (_) => ChangeNotifierProvider<
+                                        CustomListCreateProvider>.value(
+                                      value: provider,
+                                      builder: (context, _) =>
+                                          CustomListSelectionPage(
+                                        isRecommendation: true,
+                                        contentType: _contentType,
+                                      ),
+                                    )));
+                      }),
+                const SizedBox(height: 32),
+                const Spacer(),
+                CupertinoButton.filled(
+                    child: const Text("Recommend",
+                        style: TextStyle(
+                            color: CupertinoColors.white,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      createRecommendation(
+                        context,
+                        provider,
+                        reasonController.text,
+                      );
+                    }),
+                const SizedBox(height: 32)
+              ],
             ),
-          );
-        }
-      ),
+          )),
+        );
+      }),
     );
   }
 }

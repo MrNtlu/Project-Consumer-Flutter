@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:watchlistfy/services/cache_manager_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ImagePage extends StatelessWidget {
   final String _image;
@@ -22,10 +22,21 @@ class ImagePage extends StatelessWidget {
             fit: BoxFit.contain,
             key: ValueKey(_image),
             cacheKey: _image,
-            cacheManager: CustomCacheManager(),
             maxWidthDiskCache: 1080,
             maxHeightDiskCache: 1080,
-          )
+            progressIndicatorBuilder: (_, __, ___) {
+              return AspectRatio(
+                aspectRatio: 1,
+                child: Shimmer.fromColors(
+                  baseColor: CupertinoColors.systemGrey,
+                  highlightColor: CupertinoColors.systemGrey3,
+                  child: const ColoredBox(
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

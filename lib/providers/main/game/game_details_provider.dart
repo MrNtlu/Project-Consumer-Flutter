@@ -11,21 +11,34 @@ import 'package:watchlistfy/providers/common/base_details_provider.dart';
 import 'package:watchlistfy/static/routes.dart';
 
 class GameDetailsProvider extends BaseDetailsProvider<GameDetails> {
-  Future<BaseNullableResponse<GameDetails>> getGameDetails(String id) async 
-    => getDetails(url: "${APIRoutes().gameRoutes.gameDetails}?id=$id");
+  @override
+  Future<void> fetchData(String id) async {
+    await getGameDetails(id);
+  }
 
-  Future<BaseNullableResponse<ConsumeLater>> createConsumeLaterObject(ConsumeLaterBody body) async
-    => createConsumeLater(body, url: APIRoutes().userInteractionRoutes.consumeLater);
+  Future<BaseNullableResponse<GameDetails>> getGameDetails(String id) async =>
+      getDetails(url: "${APIRoutes().gameRoutes.gameDetails}?id=$id");
 
-  Future<BaseMessageResponse> deleteConsumeLaterObject(IDBody body) async
-    => deleteConsumeLater(body, url: APIRoutes().userInteractionRoutes.consumeLater);
+  Future<BaseNullableResponse<ConsumeLater>> createConsumeLaterObject(
+          ConsumeLaterBody body) async =>
+      createConsumeLater(body,
+          url: APIRoutes().userInteractionRoutes.consumeLater);
 
-  Future<BaseNullableResponse<GamePlayList>> createGamePlayList(GamePlayListBody body) async
-    => createUserList<GamePlayListBody, GamePlayList>(body, url: APIRoutes().userListRoutes.gameUserList);
+  Future<BaseMessageResponse> deleteConsumeLaterObject(IDBody body) async =>
+      deleteConsumeLater(body,
+          url: APIRoutes().userInteractionRoutes.consumeLater);
 
-  Future<BaseNullableResponse<GamePlayList>> updateGamePlayList(GamePlayListUpdateBody body) async
-    => updateUserList<GamePlayListUpdateBody, GamePlayList>(body, url: APIRoutes().userListRoutes.gameUserList);
+  Future<BaseNullableResponse<GamePlayList>> createGamePlayList(
+          GamePlayListBody body) async =>
+      createUserList<GamePlayListBody, GamePlayList>(body,
+          url: APIRoutes().userListRoutes.gameUserList);
 
-  Future<BaseMessageResponse> deleteGamePlayList(DeleteUserListBody body) async
-    => deleteUserList(body, url: APIRoutes().userListRoutes.deleteUserList);
+  Future<BaseNullableResponse<GamePlayList>> updateGamePlayList(
+          GamePlayListUpdateBody body) async =>
+      updateUserList<GamePlayListUpdateBody, GamePlayList>(body,
+          url: APIRoutes().userListRoutes.gameUserList);
+
+  Future<BaseMessageResponse> deleteGamePlayList(
+          DeleteUserListBody body) async =>
+      deleteUserList(body, url: APIRoutes().userListRoutes.deleteUserList);
 }

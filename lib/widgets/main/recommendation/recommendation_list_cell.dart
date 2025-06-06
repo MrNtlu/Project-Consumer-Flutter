@@ -3,11 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/recommendation/recommendation.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
 import 'package:watchlistfy/providers/main/recommendation/recommendation_list_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -19,11 +16,7 @@ class RecommendationListCell extends StatelessWidget {
   final RecommendationWithContent item;
   final RecommendationListProvider _provider;
 
-  const RecommendationListCell(
-    this.item,
-    this._provider,
-    {super.key}
-  );
+  const RecommendationListCell(this.item, this._provider, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +25,17 @@ class RecommendationListCell extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              switch (ContentType.values.where((element) => item.contentType == element.request).first) {
-                case ContentType.movie:
-                  return MovieDetailsPage(item.recommendationID);
-                case ContentType.tv:
-                  return TVDetailsPage(item.recommendationID);
-                case ContentType.anime:
-                  return AnimeDetailsPage(item.recommendationID);
-                case ContentType.game:
-                  return GameDetailsPage(item.recommendationID);
-                default:
-                  return MovieDetailsPage(item.recommendationID);
-              }
-            })
-          );
+          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
+            builder: (_) {
+              final contentType = ContentType.values
+                  .where((element) => item.contentType == element.request)
+                  .first;
+              return DetailsPage(
+                id: item.recommendationID,
+                contentType: contentType,
+              );
+            },
+          ));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,9 +59,10 @@ class RecommendationListCell extends StatelessWidget {
                     children: [
                       Text(
                         item.recommendationContent.titleEn.isNotEmpty
-                        ? item.recommendationContent.titleEn
-                        : item.recommendationContent.titleOriginal,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ? item.recommendationContent.titleEn
+                            : item.recommendationContent.titleOriginal,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 3),
                       Text(
@@ -88,7 +77,7 @@ class RecommendationListCell extends StatelessWidget {
                       AutoSizeText(
                         item.reason ?? '',
                         minFontSize: 12,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -103,67 +92,89 @@ class RecommendationListCell extends StatelessWidget {
                       context: context,
                       builder: (_) {
                         return const LoadingDialog();
-                      }
+                      },
                     );
 
-                    _provider.likeRecommendation(item.id, item.contentType).then((value) {
-                      if (context.mounted) {
-                        Navigator.pop(context);
+                    _provider
+                        .likeRecommendation(item.id, item.contentType)
+                        .then(
+                      (value) {
+                        if (context.mounted) {
+                          Navigator.pop(context);
 
-                        if (value.error != null) {
-                          showCupertinoDialog(
-                            context: context,
-                            builder: (_) {
-                              return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
-                            }
-                          );
+                          if (value.error != null) {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (_) {
+                                return ErrorDialog(
+                                  value.error ??
+                                      value.message ??
+                                      "Unknown error!",
+                                );
+                              },
+                            );
+                          }
                         }
-                      }
-                    });
+                      },
+                    );
                   },
                   minSize: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                  child: Icon(item.isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart, size: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                  child: Icon(
+                      item.isLiked
+                          ? CupertinoIcons.heart_fill
+                          : CupertinoIcons.heart,
+                      size: 20),
                 ),
                 Text(item.popularity.toString()),
+                if (item.isAuthor) const SizedBox(width: 6),
                 if (item.isAuthor)
-                const SizedBox(width: 6),
-                if (item.isAuthor)
-                CupertinoButton(
-                  onPressed: () async {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (_) {
-                        return SureDialog("Do you want to delete it?", () {
-                          showCupertinoDialog(
-                            context: context,
-                            builder: (_) {
-                              return const LoadingDialog();
-                            }
-                          );
+                  CupertinoButton(
+                    onPressed: () async {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (_) {
+                          return SureDialog(
+                            "Do you want to delete it?",
+                            () {
+                              showCupertinoDialog(
+                                context: context,
+                                builder: (_) {
+                                  return const LoadingDialog();
+                                },
+                              );
 
-                          _provider.deleteRecommendation(item.id, item).then((value) {
-                            if (context.mounted) {
-                              Navigator.pop(context);
+                              _provider
+                                  .deleteRecommendation(item.id, item)
+                                  .then(
+                                (value) {
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
 
-                              if (value.error != null) {
-                                showCupertinoDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return ErrorDialog(value.error ?? value.message ?? "Unknown error!");
+                                    if (value.error != null) {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return ErrorDialog(value.error ??
+                                              value.message ??
+                                              "Unknown error!");
+                                        },
+                                      );
+                                    }
                                   }
-                                );
-                              }
-                            }
-                          });
-                        });
-                      }
-                    );
-                  },
-                  minSize: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                  child: const Icon(Icons.delete, size: 20),
-                ),
+                                },
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    minSize: 0,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                    child: const Icon(Icons.delete, size: 20),
+                  ),
                 const SizedBox(width: 24),
                 Expanded(
                   child: Align(
@@ -175,28 +186,41 @@ class RecommendationListCell extends StatelessWidget {
                       children: [
                         const Text(
                           "Recommended by ",
-                          style: TextStyle(fontSize: 14, color: CupertinoColors.systemGrey2),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: CupertinoColors.systemGrey2,
+                          ),
                         ),
                         const SizedBox(width: 6),
                         Flexible(
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                CupertinoPageRoute(builder: (_) {
-                                  return ProfileDisplayPage(item.author.username);
-                                })
+                              Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).push(
+                                CupertinoPageRoute(
+                                  builder: (_) {
+                                    return ProfileDisplayPage(
+                                      item.author.username,
+                                    );
+                                  },
+                                ),
                               );
                             },
-                            child: AuthorInfoRow(item.author, size: 28)
+                            child: AuthorInfoRow(
+                              item.author,
+                              size: 28,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

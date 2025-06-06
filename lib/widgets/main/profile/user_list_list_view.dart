@@ -2,10 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
@@ -24,22 +21,21 @@ class UserListListView extends StatelessWidget {
   final Function(UserListContent) updateData;
 
   const UserListListView(
-    this.isEmpty,
-    this.length,
-    this.dataList,
-    this.provider,
-    this.userListProvider,
-    this.globalProvider,
-    this.updateData,
-    {super.key}
-  );
+      this.isEmpty,
+      this.length,
+      this.dataList,
+      this.provider,
+      this.userListProvider,
+      this.globalProvider,
+      this.updateData,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: provider.isSearching
-      ? (isEmpty ? 1 : provider.searchList.length)
-      : (isEmpty ? 1 : length),
+          ? (isEmpty ? 1 : provider.searchList.length)
+          : (isEmpty ? 1 : length),
       itemBuilder: (context, index) {
         if (isEmpty) {
           return Center(
@@ -48,12 +44,11 @@ class UserListListView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Lottie.asset(
-                    "assets/lottie/empty.json",
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    frameRate: const FrameRate(60)
-                  ),
-                  const Text("Nothing here.", style: TextStyle(fontWeight: FontWeight.w500)),
+                  Lottie.asset("assets/lottie/empty.json",
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      frameRate: const FrameRate(60)),
+                  const Text("Nothing here.",
+                      style: TextStyle(fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
@@ -63,52 +58,55 @@ class UserListListView extends StatelessWidget {
         final UserListContent data = dataList[index];
 
         return Padding(
-          padding: globalProvider.userListMode == Constants.UserListUIModes.first
-          ? const EdgeInsets.only(left: 6, right: 3, top: 4, bottom: 4)
-          : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
+          padding:
+              globalProvider.userListMode == Constants.UserListUIModes.first
+                  ? const EdgeInsets.only(left: 6, right: 3, top: 4, bottom: 4)
+                  : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
           child: data.isLoading
-          ? UserListShimmerCell(
-            data.title,
-            provider.selectedContent,
-            data.totalSeasons,
-            data.totalEpisodes
-          )
-          : GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(builder: (_) {
-                  switch (ContentType.values.where((element) => element.request == provider.selectedContent.request).first) {
-                    case ContentType.movie:
-                      return MovieDetailsPage(data.contentID);
-                    case ContentType.tv:
-                      return TVDetailsPage(data.contentID);
-                    case ContentType.anime:
-                      return AnimeDetailsPage(data.contentID);
-                    case ContentType.game:
-                      return GameDetailsPage(data.contentID);
-                  }
-                })
-              ).then((value) => updateData(data));
-            },
-            child: globalProvider.userListMode == Constants.UserListUIModes.first
-            ? UserListExpanded(
-              data,
-              provider,
-              userListProvider,
-              index,
-              updateData
-            )
-            : UserListCompact(
-              data,
-              provider,
-              userListProvider,
-              index,
-              updateData
-            ),
-          ),
+              ? UserListShimmerCell(data.title, provider.selectedContent,
+                  data.totalSeasons, data.totalEpisodes)
+              : GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(
+                        builder: (_) {
+                          final contentType = ContentType.values
+                              .where(
+                                (element) =>
+                                    element.request ==
+                                    provider.selectedContent.request,
+                              )
+                              .first;
+                          return DetailsPage(
+                            id: data.contentID,
+                            contentType: contentType,
+                          );
+                        },
+                      ),
+                    ).then(
+                      (value) => updateData(data),
+                    );
+                  },
+                  child: globalProvider.userListMode ==
+                          Constants.UserListUIModes.first
+                      ? UserListExpanded(
+                          data,
+                          provider,
+                          userListProvider,
+                          index,
+                          updateData,
+                        )
+                      : UserListCompact(
+                          data,
+                          provider,
+                          userListProvider,
+                          index,
+                          updateData,
+                        ),
+                ),
         );
-      }
+      },
     );
   }
 }

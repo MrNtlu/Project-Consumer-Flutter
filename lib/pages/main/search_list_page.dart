@@ -12,10 +12,7 @@ import 'package:watchlistfy/models/common/base_responses.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/base_content.dart';
-import 'package:watchlistfy/pages/main/anime/anime_details_page.dart';
-import 'package:watchlistfy/pages/main/game/game_details_page.dart';
-import 'package:watchlistfy/pages/main/movie/movie_details_page.dart';
-import 'package:watchlistfy/pages/main/tv/tv_details_page.dart';
+import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/anime/anime_list_provider.dart';
@@ -232,17 +229,19 @@ class _SearchListPageState extends State<SearchListPage> {
                 },
               ),
               trailing: CupertinoButton(
-                  onPressed: () {
-                    setState(() {
-                      toggleSearch = !toggleSearch;
-                    });
-                  },
-                  padding: EdgeInsets.zero,
-                  child: FaIcon(
-                      toggleSearch
-                          ? FontAwesomeIcons.barsStaggered
-                          : FontAwesomeIcons.bars,
-                      size: 24)),
+                onPressed: () {
+                  setState(() {
+                    toggleSearch = !toggleSearch;
+                  });
+                },
+                padding: EdgeInsets.zero,
+                child: FaIcon(
+                  toggleSearch
+                      ? FontAwesomeIcons.barsStaggered
+                      : FontAwesomeIcons.bars,
+                  size: 24,
+                ),
+              ),
             ),
             child: Column(
               children: [
@@ -252,32 +251,35 @@ class _SearchListPageState extends State<SearchListPage> {
                     height: 45,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children:
-                          List.generate(ContentType.values.length, (index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              left: index == 0 ? 9 : 3, right: 3),
-                          child: SizedBox(
-                            width: 100,
-                            child: CupertinoChip(
-                              isSelected: ContentType.values[index] ==
-                                  _contentProvider.selectedContent,
-                              size: 14,
-                              cornerRadius: 8,
-                              selectedBGColor:
-                                  CupertinoTheme.of(context).profileButton,
-                              selectedTextColor: AppColors().primaryColor,
-                              onSelected: (_) {
-                                _contentProvider
-                                    .setContentType(ContentType.values[index]);
-                                _page = 1;
-                                _fetchData();
-                              },
-                              label: ContentType.values[index].value,
+                      children: List.generate(
+                        ContentType.values.length,
+                        (index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                left: index == 0 ? 9 : 3, right: 3),
+                            child: SizedBox(
+                              width: 100,
+                              child: CupertinoChip(
+                                isSelected: ContentType.values[index] ==
+                                    _contentProvider.selectedContent,
+                                size: 14,
+                                cornerRadius: 8,
+                                selectedBGColor:
+                                    CupertinoTheme.of(context).profileButton,
+                                selectedTextColor: AppColors().primaryColor,
+                                onSelected: (_) {
+                                  _contentProvider.setContentType(
+                                    ContentType.values[index],
+                                  );
+                                  _page = 1;
+                                  _fetchData();
+                                },
+                                label: ContentType.values[index].value,
+                              ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -285,9 +287,10 @@ class _SearchListPageState extends State<SearchListPage> {
                 if (shouldShowBannerAds)
                   SafeArea(
                     child: SizedBox(
-                        width: _bannerAd!.size.width.toDouble(),
-                        height: _bannerAd!.size.height.toDouble(),
-                        child: AdWidget(ad: _bannerAd!)),
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
                   )
               ],
             ),
@@ -307,60 +310,61 @@ class _SearchListPageState extends State<SearchListPage> {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: GridView.builder(
-                    itemCount: _canPaginate ? data.length + 2 : data.length,
-                    controller: _scrollController,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 350,
-                        childAspectRatio:
+                  itemCount: _canPaginate ? data.length + 2 : data.length,
+                  controller: _scrollController,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 350,
+                    childAspectRatio:
+                        _contentProvider.selectedContent != ContentType.game
+                            ? 2 / 3
+                            : 16 / 9,
+                    crossAxisSpacing: 6,
+                    mainAxisSpacing: 6,
+                  ),
+                  itemBuilder: (context, index) {
+                    if ((_canPaginate || _isPaginating) &&
+                        index >= data.length) {
+                      return AspectRatio(
+                        aspectRatio:
                             _contentProvider.selectedContent != ContentType.game
                                 ? 2 / 3
                                 : 16 / 9,
-                        crossAxisSpacing: 6,
-                        mainAxisSpacing: 6),
-                    itemBuilder: (context, index) {
-                      if ((_canPaginate || _isPaginating) &&
-                          index >= data.length) {
-                        return AspectRatio(
-                          aspectRatio: _contentProvider.selectedContent !=
-                                  ContentType.game
-                              ? 2 / 3
-                              : 16 / 9,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Shimmer.fromColors(
-                                  baseColor: CupertinoColors.systemGrey,
-                                  highlightColor: CupertinoColors.systemGrey3,
-                                  child: Container(
-                                    color: CupertinoColors.systemGrey,
-                                  ))),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Shimmer.fromColors(
+                            baseColor: CupertinoColors.systemGrey,
+                            highlightColor: CupertinoColors.systemGrey3,
+                            child: Container(
+                              color: CupertinoColors.systemGrey,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final content = data[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          CupertinoPageRoute(
+                            builder: (_) {
+                              return DetailsPage(
+                                id: content.id,
+                                contentType: _contentProvider.selectedContent,
+                              );
+                            },
+                          ),
                         );
-                      }
-
-                      final content = data[index];
-
-                      return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .push(CupertinoPageRoute(builder: (_) {
-                              switch (_contentProvider.selectedContent) {
-                                case ContentType.movie:
-                                  return MovieDetailsPage(content.id);
-                                case ContentType.tv:
-                                  return TVDetailsPage(content.id);
-                                case ContentType.anime:
-                                  return AnimeDetailsPage(content.id);
-                                case ContentType.game:
-                                  return GameDetailsPage(content.id);
-                              }
-                            }));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 3, horizontal: 2),
-                            child:
-                                ContentCell(content.imageUrl, content.titleEn),
-                          ));
-                    }),
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 3, horizontal: 2),
+                        child: ContentCell(content.imageUrl, content.titleEn),
+                      ),
+                    );
+                  },
+                ),
               )
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
@@ -376,8 +380,10 @@ class _SearchListPageState extends State<SearchListPage> {
 
                     final content = data[index];
 
-                    return ContentListCell(_contentProvider.selectedContent,
-                        content: content);
+                    return ContentListCell(
+                      _contentProvider.selectedContent,
+                      content: content,
+                    );
                   },
                 ),
               );
@@ -388,11 +394,17 @@ class _SearchListPageState extends State<SearchListPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Lottie.asset("assets/lottie/empty.json",
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    frameRate: const FrameRate(60)),
-                const Text("Couldn't find anything.",
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+                Lottie.asset(
+                  "assets/lottie/empty.json",
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  frameRate: const FrameRate(60),
+                ),
+                const Text(
+                  "Couldn't find anything.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ),
