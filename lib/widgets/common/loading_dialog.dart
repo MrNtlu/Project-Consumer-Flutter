@@ -9,33 +9,47 @@ class LoadingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Platform.isAndroid
-    ? AlertDialog(
-      backgroundColor: CupertinoTheme.of(context).onBgColor,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircularProgressIndicator(color: CupertinoTheme.of(context).bgTextColor),
-          const SizedBox(height: 12),
-          Text(
-            "Please wait",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: CupertinoTheme.of(context).bgTextColor),
+        ? AlertDialog(
+            backgroundColor: cupertinoTheme.onBgColor,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(
+                  color: cupertinoTheme.bgTextColor,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Please wait",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: cupertinoTheme.bgTextColor,
+                  ),
+                )
+              ],
+            ),
           )
-        ],
-      ),
-    )
-    : CupertinoAlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CupertinoActivityIndicator(radius: 14, color: CupertinoTheme.of(context).bgTextColor),
-          const SizedBox(height: 12),
-          const Text(
-            "Please wait",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-          )
-        ],
-      ),
-    );
+        : CupertinoAlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoActivityIndicator(
+                  radius: 14,
+                  color: cupertinoTheme.bgTextColor,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Please wait",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 }

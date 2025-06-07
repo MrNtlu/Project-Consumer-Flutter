@@ -9,16 +9,20 @@ class ProfileInfoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final size = (mediaQuery.size.width * 0.85) / 4;
+
     return SizedBox(
-      width: (MediaQuery.of(context).size.width * 0.85) / 4,
+      width: size,
       child: Column(
         children: [
           Text(
             value,
             maxLines: 1,
             style: TextStyle(
-              color: CupertinoTheme.of(context).bgTextColor,
-              fontWeight: FontWeight.w500
+              color: cupertinoTheme.bgTextColor,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 6),
@@ -27,7 +31,7 @@ class ProfileInfoText extends StatelessWidget {
             maxLines: 1,
             style: TextStyle(
               color: AppColors().primaryColor,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
             ),
           )
         ],

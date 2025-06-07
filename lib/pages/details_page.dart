@@ -467,8 +467,10 @@ class _DetailsPageState extends State<DetailsPage> {
         return _buildViewBody(provider, context);
       case DetailState.error:
         return SliverFillRemaining(
-          child: ErrorView(provider.error ?? "Unknown error",
-              () => provider.refreshData(widget.id)),
+          child: ErrorView(
+            provider.error ?? "Unknown error",
+            () => provider.refreshData(widget.id),
+          ),
         );
       case DetailState.loading:
         return const SliverFillRemaining(child: LoadingView("Loading"));

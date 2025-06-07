@@ -21,11 +21,8 @@ class TVWatchListSheet extends StatefulWidget {
   final int? seasonPrefix;
   final BaseUserList? userList;
 
-  const TVWatchListSheet(
-    this.provider, this.tvID, 
-    this.tvTMDBId,
-    {this.userList, this.episodePrefix, this.seasonPrefix, super.key}
-  );
+  const TVWatchListSheet(this.provider, this.tvID, this.tvTMDBId,
+      {this.userList, this.episodePrefix, this.seasonPrefix, super.key});
 
   @override
   State<TVWatchListSheet> createState() => TVWatchListSheetState();
@@ -43,14 +40,18 @@ class TVWatchListSheetState extends State<TVWatchListSheet> {
     super.initState();
     _provider = DetailsSheetProvider();
     if (widget.userList != null) {
-      _provider.initStatus(Constants.UserListStatus.firstWhere((element) => element.request == widget.userList!.status));
+      _provider.initStatus(Constants.UserListStatus.firstWhere(
+          (element) => element.request == widget.userList!.status));
     }
     _scoreDropdown = ScoreDropdown(
       selectedValue: widget.userList?.score,
     );
-    _timesFinishedTextController = TextEditingController(text: widget.userList?.timesFinished.toString() ?? '1');
-    _episodeTextController = TextEditingController(text: widget.userList?.watchedEpisodes.toString() ?? '0');
-    _seasonTextController = TextEditingController(text: widget.userList?.watchedSeasons.toString() ?? '0');
+    _timesFinishedTextController = TextEditingController(
+        text: widget.userList?.timesFinished.toString() ?? '1');
+    _episodeTextController = TextEditingController(
+        text: widget.userList?.watchedEpisodes.toString() ?? '0');
+    _seasonTextController = TextEditingController(
+        text: widget.userList?.watchedSeasons.toString() ?? '0');
   }
 
   @override
@@ -63,110 +64,148 @@ class TVWatchListSheetState extends State<TVWatchListSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return ChangeNotifierProvider(
       create: (_) => _provider,
       child: Consumer<DetailsSheetProvider>(
         builder: (context, provider, child) {
           return SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                padding: const EdgeInsets.all(8),
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: CupertinoTheme.of(context).onBgColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DetailsSheetStatus(provider),
-                    const SizedBox(height: 16),
-                    _scoreDropdown,
+              child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              padding: const EdgeInsets.all(8),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: cupertinoTheme.onBgColor,
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DetailsSheetStatus(provider),
+                  const SizedBox(height: 16),
+                  _scoreDropdown,
+                  const SizedBox(height: 12),
+                  DetailsSheetTextfield(
+                    _seasonTextController,
+                    text: "Seasons",
+                    onPressed: () {
+                      _seasonTextController.text = (int.parse(
+                                  _seasonTextController.text != ""
+                                      ? _seasonTextController.text
+                                      : "0") +
+                              1)
+                          .toString();
+                    },
+                    suffix: widget.seasonPrefix?.toString(),
+                  ),
+                  const SizedBox(height: 12),
+                  DetailsSheetTextfield(
+                    _episodeTextController,
+                    text: "Episodes",
+                    onPressed: () {
+                      _episodeTextController.text = (int.parse(
+                                  _episodeTextController.text != ""
+                                      ? _episodeTextController.text
+                                      : "0") +
+                              1)
+                          .toString();
+                    },
+                    suffix: widget.episodePrefix?.toString(),
+                  ),
+                  if (provider.selectedStatus.request ==
+                      Constants.UserListStatus[1].request)
                     const SizedBox(height: 12),
-                    DetailsSheetTextfield(
-                      _seasonTextController, 
-                      text: "Seasons", 
-                      onPressed: () {
-                        _seasonTextController.text = (
-                          int.parse(_seasonTextController.text != "" ? _seasonTextController.text : "0") + 1
-                        ).toString();
-                      },
-                      suffix: widget.seasonPrefix?.toString(),
-                    ),
-                    const SizedBox(height: 12),
-                    DetailsSheetTextfield(
-                      _episodeTextController, 
-                      text: "Episodes",
-                      onPressed: () {
-                        _episodeTextController.text = (
-                          int.parse(_episodeTextController.text != "" ? _episodeTextController.text : "0") + 1
-                        ).toString();
-                      },
-                      suffix: widget.episodePrefix?.toString(),
-                    ),
-                    if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
-                    const SizedBox(height: 12),
-                    if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
-                    DetailsSheetTextfield(
-                      _timesFinishedTextController, 
-                      text: "Times Finished", 
-                      onPressed: () {
-                        _timesFinishedTextController.text = (
-                          int.parse(_timesFinishedTextController.text != "" ? _timesFinishedTextController.text : "0") + 1
-                        ).toString();
-                      }
-                    ),
-                    const SizedBox(height: 24),
-                    DetailsSheetButtons(
+                  if (provider.selectedStatus.request ==
+                      Constants.UserListStatus[1].request)
+                    DetailsSheetTextfield(_timesFinishedTextController,
+                        text: "Times Finished", onPressed: () {
+                      _timesFinishedTextController.text = (int.parse(
+                                  _timesFinishedTextController.text != ""
+                                      ? _timesFinishedTextController.text
+                                      : "0") +
+                              1)
+                          .toString();
+                    }),
+                  const SizedBox(height: 24),
+                  DetailsSheetButtons(
                       text: widget.userList != null ? "Update" : "Save",
                       onPressed: () {
-                        final isFinished = provider.selectedStatus.request == Constants.UserListStatus[1].request;
-                        final isTimesFinishedEmpty = _timesFinishedTextController.text == "";
-                        final isEpisodesEmpty = _episodeTextController.text == "";
+                        final isFinished = provider.selectedStatus.request ==
+                            Constants.UserListStatus[1].request;
+                        final isTimesFinishedEmpty =
+                            _timesFinishedTextController.text == "";
+                        final isEpisodesEmpty =
+                            _episodeTextController.text == "";
                         final isSeasonsEmpty = _seasonTextController.text == "";
-          
-                        if ((isFinished && isTimesFinishedEmpty) || isEpisodesEmpty || isSeasonsEmpty) {
+
+                        if ((isFinished && isTimesFinishedEmpty) ||
+                            isEpisodesEmpty ||
+                            isSeasonsEmpty) {
                           showCupertinoDialog(
-                            context: context, 
-                            builder: (context) {
-                              return const ErrorDialog("Please fill the empty fields.");
-                            }
-                          );
+                              context: context,
+                              builder: (context) {
+                                return const ErrorDialog(
+                                    "Please fill the empty fields.");
+                              });
                         } else {
                           Navigator.pop(context);
-          
+
                           if (widget.userList != null) {
                             final userList = widget.userList!;
-                            final isUpdatingScore = userList.score != _scoreDropdown.selectedValue;
-          
-                            widget.provider.updateTVWatchList(TVWatchListUpdateBody(
-                              userList.id, isUpdatingScore, 
-                              isUpdatingScore ? _scoreDropdown.selectedValue : null, 
-                              provider.selectedStatus.request,
-                              isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
-                              _episodeTextController.value.text == "" ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text),
-                              _seasonTextController.value.text == "" ? userList.watchedSeasons : int.parse(_seasonTextController.value.text)
-                            ));
+                            final isUpdatingScore =
+                                userList.score != _scoreDropdown.selectedValue;
+
+                            widget.provider
+                                .updateTVWatchList(
+                                    TVWatchListUpdateBody(
+                                        userList.id,
+                                        isUpdatingScore,
+                                        isUpdatingScore
+                                            ? _scoreDropdown.selectedValue
+                                            : null,
+                                        provider.selectedStatus.request,
+                                        isFinished
+                                            ? int.parse(
+                                                _timesFinishedTextController
+                                                    .value.text)
+                                            : null,
+                                        _episodeTextController.value.text == ""
+                                            ? userList.watchedEpisodes
+                                            : int.parse(_episodeTextController
+                                                .value.text),
+                                        _seasonTextController.value.text == ""
+                                            ? userList.watchedSeasons
+                                            : int.parse(_seasonTextController
+                                                .value.text)));
                           } else {
                             widget.provider.createTVWatchList(TVWatchListBody(
-                              widget.tvID, widget.tvTMDBId, 
-                              isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
-                              _scoreDropdown.selectedValue, 
-                              provider.selectedStatus.request,
-                              _episodeTextController.value.text == "" ? null : int.parse(_episodeTextController.value.text),
-                              _seasonTextController.value.text == "" ? null : int.parse(_seasonTextController.value.text)
-                            ));
+                                widget.tvID,
+                                widget.tvTMDBId,
+                                isFinished
+                                    ? int.parse(
+                                        _timesFinishedTextController.value.text)
+                                    : null,
+                                _scoreDropdown.selectedValue,
+                                provider.selectedStatus.request,
+                                _episodeTextController.value.text == ""
+                                    ? null
+                                    : int.parse(
+                                        _episodeTextController.value.text),
+                                _seasonTextController.value.text == ""
+                                    ? null
+                                    : int.parse(
+                                        _seasonTextController.value.text)));
                           }
                         }
-                      }
-                    ),
-                  ],
-                ),
+                      }),
+                ],
               ),
-            )
-          );
+            ),
+          ));
         },
       ),
     );

@@ -12,9 +12,10 @@ class PolicyPage extends StatelessWidget {
     return await DefaultAssetBundle.of(context)
         .loadString("assets/policies/$file.md");
   }
-  
+
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
     loadAsset(context).then((value) => null);
 
     return CupertinoPageScaffold(
@@ -25,10 +26,14 @@ class PolicyPage extends StatelessWidget {
           if (mdSnapshot.connectionState == ConnectionState.done) {
             return SafeArea(
               child: Markdown(
-                styleSheet: MarkdownStyleSheet.fromCupertinoTheme(CupertinoThemeData(
-                  textTheme: CupertinoTextThemeData(textStyle: TextStyle(color: CupertinoTheme.of(context).bgTextColor, fontSize: 14)))
-                ),
-                data: mdSnapshot.data as String
+                styleSheet:
+                    MarkdownStyleSheet.fromCupertinoTheme(CupertinoThemeData(
+                  textTheme: CupertinoTextThemeData(
+                    textStyle: TextStyle(
+                        color: cupertinoTheme.bgTextColor, fontSize: 14),
+                  ),
+                )),
+                data: mdSnapshot.data as String,
               ),
             );
           } else {
@@ -37,7 +42,7 @@ class PolicyPage extends StatelessWidget {
             );
           }
         },
-      )
+      ),
     );
   }
 }

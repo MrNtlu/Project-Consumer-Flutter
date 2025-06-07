@@ -53,6 +53,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
   late final DiscoverAnimeProvider _discoverProvider;
   late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
+  late final CupertinoThemeData _cupertinoTheme;
 
   int _page = 1;
   bool _canPaginate = false;
@@ -142,6 +143,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
   void didChangeDependencies() {
     if (_state == ListState.init) {
       _globalProvider = Provider.of<GlobalProvider>(context);
+      _cupertinoTheme = CupertinoTheme.of(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData(true);
@@ -184,7 +186,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                             maxWidthDiskCache: 100,
                             errorWidget: (context, _, __) {
                               return ColoredBox(
-                                color: CupertinoTheme.of(context).bgTextColor,
+                                color: _cupertinoTheme.bgTextColor,
                                 child: SizedBox(
                                   height: 75,
                                   width: 75,
@@ -195,8 +197,7 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                                         widget.streaming!,
                                         minFontSize: 10,
                                         style: TextStyle(
-                                          color: CupertinoTheme.of(context)
-                                              .bgColor,
+                                          color: _cupertinoTheme.bgColor,
                                           fontSize: 12,
                                         ),
                                         textAlign: TextAlign.center,
@@ -257,10 +258,44 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
                   ),
                 ),
                 GestureDetector(
-                  child: const Icon(Icons.filter_alt_rounded),
+                  child: provider.isFiltering
+                      ? Stack(
+                          children: [
+                            _filterButton(),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: CupertinoColors.systemRed,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    provider.filteringCount.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: CupertinoColors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : _filterButton(),
                   onTap: () {
                     showCupertinoModalBottomSheet(
                       context: context,
+                      barrierColor: _cupertinoTheme.bgTextColor.withValues(
+                        alpha: 0.1,
+                      ),
                       builder: (context) => AnimeDiscoverSheet(
                         _fetchData,
                         provider,
@@ -276,6 +311,15 @@ class _AnimeDiscoverListPageState extends State<AnimeDiscoverListPage> {
       }),
     );
   }
+
+  Widget _filterButton() => CircleAvatar(
+        backgroundColor: _cupertinoTheme.bgColor,
+        child: Icon(
+          Icons.filter_alt_rounded,
+          size: 26,
+          color: _cupertinoTheme.primaryColor,
+        ),
+      );
 
   Widget _body(List<BaseContent> data) {
     switch (_state) {

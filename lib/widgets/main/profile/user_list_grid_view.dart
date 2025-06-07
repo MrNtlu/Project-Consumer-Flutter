@@ -18,6 +18,9 @@ class UserListGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final height = mediaQuery.size.height;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: GridView.builder(
@@ -39,10 +42,13 @@ class UserListGridView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Lottie.asset("assets/lottie/empty.json",
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        frameRate: const FrameRate(60)),
-                    const Text("Nothing here.",
-                        style: TextStyle(fontWeight: FontWeight.w500)),
+                        height: height * 0.5, frameRate: const FrameRate(60)),
+                    const Text(
+                      "Nothing here.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -69,9 +75,12 @@ class UserListGridView extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
-              child: ContentCell(content.imageUrl ?? '',
-                  content.title.isEmpty ? content.titleOriginal : content.title,
-                  cacheWidth: 500, cacheHeight: 700),
+              child: ContentCell(
+                content.imageUrl ?? '',
+                content.title.isEmpty ? content.titleOriginal : content.title,
+                cacheWidth: 500,
+                cacheHeight: 700,
+              ),
             ),
           );
         },

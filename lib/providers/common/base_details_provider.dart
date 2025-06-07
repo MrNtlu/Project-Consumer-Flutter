@@ -60,6 +60,7 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
       state = DetailState.loading;
       notifyListeners();
 
+      print("URL: $url");
       final response = await http.get(
         Uri.parse(url),
         headers: UserToken().getBearerToken(),
@@ -77,6 +78,10 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
         state = DetailState.view;
         _item = data;
 
+        notifyListeners();
+      } else {
+        state = DetailState.error;
+        this.error = baseItemResponse.error ?? "Unknown error";
         notifyListeners();
       }
 
@@ -118,6 +123,8 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
 
       if (data != null && _item != null) {
         _item!.consumeLater = data;
+      } else if (baseItemResponse.error != null) {
+        isLoading = false;
       }
       notifyListeners();
 
@@ -198,6 +205,8 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
 
       if (data != null && _item != null) {
         _item!.userList = data;
+      } else if (baseItemResponse.error != null) {
+        isUserListLoading = false;
       }
       notifyListeners();
 
@@ -239,6 +248,8 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
 
       if (data != null && _item != null) {
         _item!.userList = data;
+      } else if (baseItemResponse.error != null) {
+        isUserListLoading = false;
       }
       notifyListeners();
 
@@ -278,6 +289,8 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
 
       if (messageResponse.error == null) {
         _item!.userList = null;
+      } else if (messageResponse.error != null) {
+        isUserListLoading = false;
       }
       notifyListeners();
 

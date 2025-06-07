@@ -35,6 +35,7 @@ class _UserListPageState extends State<UserListPage> {
   late final UserListProvider _provider;
   late final UserListContentSelectionProvider _userListProvider;
   late final GlobalProvider _globalProvider;
+  late final CupertinoThemeData cupertinoTheme;
 
   void _fetchData() {
     setState(() {
@@ -47,24 +48,26 @@ class _UserListPageState extends State<UserListPage> {
       if (_state != DetailState.disposed) {
         setState(() {
           _state = response.error != null
-            ? DetailState.error
-            : (
-              response.data != null
-                ? DetailState.view
-                : DetailState.error
-            );
+              ? DetailState.error
+              : (response.data != null ? DetailState.view : DetailState.error);
         });
 
         try {
-          if (!SharedPref().getIsAskedForReview() && response.data != null && (response.data!.animeList.length + response.data!.movieList.length + response.data!.tvList.length + response.data!.gameList.length) > 10) {
+          if (!SharedPref().getIsAskedForReview() &&
+              response.data != null &&
+              (response.data!.animeList.length +
+                      response.data!.movieList.length +
+                      response.data!.tvList.length +
+                      response.data!.gameList.length) >
+                  10) {
             final InAppReview inAppReview = InAppReview.instance;
 
             if (await inAppReview.isAvailable()) {
-                inAppReview.requestReview();
-                SharedPref().setIsAskedForReview(true);
+              inAppReview.requestReview();
+              SharedPref().setIsAskedForReview(true);
             }
           }
-        } catch(_) {}
+        } catch (_) {}
       }
     });
   }
@@ -72,7 +75,9 @@ class _UserListPageState extends State<UserListPage> {
   void _updateData(UserListContent content) {
     content.isLoading = true;
 
-    _provider.getUserList(sort: Constants.SortUserListRequests[0].request).then((response) {
+    _provider
+        .getUserList(sort: Constants.SortUserListRequests[0].request)
+        .then((response) {
       _error = response.error;
 
       if (_state != DetailState.disposed) {
@@ -85,8 +90,10 @@ class _UserListPageState extends State<UserListPage> {
   void didChangeDependencies() async {
     if (_state == DetailState.init) {
       searchController = TextEditingController();
+      cupertinoTheme = CupertinoTheme.of(context);
 
-      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+      final authProvider =
+          Provider.of<AuthenticationProvider>(context, listen: false);
       if (!authProvider.isAuthenticated) {
         Navigator.pop(context);
       }
@@ -123,70 +130,72 @@ class _UserListPageState extends State<UserListPage> {
         ChangeNotifierProvider(create: (_) => _userListProvider),
       ],
       child: Consumer2<UserListContentSelectionProvider, UserListProvider>(
-        builder: (context, userListContentSelectionProvider, userListProvider, child) {
-          return CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: const Text("My List"),
-              trailing: (_state != DetailState.loading && _state != DetailState.error)
-              ? CupertinoButton(
-                onPressed: () {
-                  setState(() {
-                    toggleSearch = !toggleSearch;
-                  });
-                },
-                padding: EdgeInsets.zero,
-                child: FaIcon(toggleSearch ? FontAwesomeIcons.barsStaggered : FontAwesomeIcons.bars, size: 24)
-              )
-              : null,
-            ),
-            child: RefreshIndicator(
-              backgroundColor: CupertinoTheme.of(context).bgTextColor,
-              color: CupertinoTheme.of(context).bgColor,
+          builder: (context, userListContentSelectionProvider, userListProvider,
+              child) {
+        return CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            middle: const Text("My List"),
+            trailing:
+                (_state != DetailState.loading && _state != DetailState.error)
+                    ? CupertinoButton(
+                        onPressed: () {
+                          setState(() {
+                            toggleSearch = !toggleSearch;
+                          });
+                        },
+                        padding: EdgeInsets.zero,
+                        child: FaIcon(
+                            toggleSearch
+                                ? FontAwesomeIcons.barsStaggered
+                                : FontAwesomeIcons.bars,
+                            size: 24))
+                    : null,
+          ),
+          child: RefreshIndicator(
+              backgroundColor: cupertinoTheme.bgTextColor,
+              color: cupertinoTheme.bgColor,
               onRefresh: () async {
                 if (_state == DetailState.view || _state == DetailState.error) {
                   _fetchData();
                 }
               },
-              child: _body(userListContentSelectionProvider, userListProvider)
-            ),
-          );
-        }
-      ),
+              child: _body(userListContentSelectionProvider, userListProvider)),
+        );
+      }),
     );
   }
 
-  Widget _body(UserListContentSelectionProvider userListContentSelectionProvider, UserListProvider userListProvider) {
+  Widget _body(
+      UserListContentSelectionProvider userListContentSelectionProvider,
+      UserListProvider userListProvider) {
     switch (_state) {
       case DetailState.view:
         // Is Empty Value
         final bool isEmpty = _userListProvider.isSearching
-        ? _userListProvider.searchList.isEmpty
-        : ((userListContentSelectionProvider.selectedContent == ContentType.movie
-          ? userListProvider.item?.movieList.isEmpty
-          : (
-            userListContentSelectionProvider.selectedContent == ContentType.tv
-            ? userListProvider.item?.tvList.isEmpty
-            : (
-              userListContentSelectionProvider.selectedContent == ContentType.anime
-              ? userListProvider.item?.animeList.isEmpty
-              : userListProvider.item?.gameList.isEmpty
-            )
-          )) ?? true);
+            ? _userListProvider.searchList.isEmpty
+            : ((userListContentSelectionProvider.selectedContent ==
+                        ContentType.movie
+                    ? userListProvider.item?.movieList.isEmpty
+                    : (userListContentSelectionProvider.selectedContent ==
+                            ContentType.tv
+                        ? userListProvider.item?.tvList.isEmpty
+                        : (userListContentSelectionProvider.selectedContent ==
+                                ContentType.anime
+                            ? userListProvider.item?.animeList.isEmpty
+                            : userListProvider.item?.gameList.isEmpty))) ??
+                true);
 
         // List length
-        final length = userListContentSelectionProvider.selectedContent == ContentType.movie
-        ? userListProvider.item?.movieList.length
-        : (
-          userListContentSelectionProvider.selectedContent == ContentType.tv
-          ? userListProvider.item?.tvList.length
-          : (
-            userListContentSelectionProvider.selectedContent == ContentType.anime
-            ? userListProvider.item?.animeList.length
-            : (
-              userListProvider.item?.gameList.length ?? 1
-            )
-          )
-        );
+        final length = userListContentSelectionProvider.selectedContent ==
+                ContentType.movie
+            ? userListProvider.item?.movieList.length
+            : (userListContentSelectionProvider.selectedContent ==
+                    ContentType.tv
+                ? userListProvider.item?.tvList.length
+                : (userListContentSelectionProvider.selectedContent ==
+                        ContentType.anime
+                    ? userListProvider.item?.animeList.length
+                    : (userListProvider.item?.gameList.length ?? 1)));
 
         // User Content List data
         late List<UserListContent> dataList;
@@ -209,139 +218,151 @@ class _UserListPageState extends State<UserListPage> {
           }
         }
 
-        final isGridView = _globalProvider.userListMode == Constants.UserListUIModes.last;
+        final isGridView =
+            _globalProvider.userListMode == Constants.UserListUIModes.last;
 
         return Column(
           children: [
             if (toggleSearch)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CupertinoSearchTextField(
-                            controller: searchController,
-                            onChanged: (value) {
-                              if (_userListProvider.isSearching != value.isNotEmpty) {
-                                _userListProvider.setSearching(value.isNotEmpty);
-                              }
-
-                              if (value.isNotEmpty) {
-                                final List<UserListContent> data;
-                                switch (userListContentSelectionProvider.selectedContent) {
-                                  case ContentType.movie:
-                                    data = userListProvider.item!.movieList;
-                                    break;
-                                  case ContentType.tv:
-                                    data = userListProvider.item!.tvList;
-                                    break;
-                                  case ContentType.anime:
-                                    data = userListProvider.item!.animeList;
-                                    break;
-                                  default:
-                                    data = userListProvider.item!.gameList;
-                                    break;
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CupertinoSearchTextField(
+                              controller: searchController,
+                              onChanged: (value) {
+                                if (_userListProvider.isSearching !=
+                                    value.isNotEmpty) {
+                                  _userListProvider
+                                      .setSearching(value.isNotEmpty);
                                 }
 
-                                _userListProvider.search(value, data);
-                              }
-                            },
-                            onSuffixTap: () {
-                              _userListProvider.setSearching(false);
-                              searchController?.clear();
-                            },
-                            onSubmitted: (value) {
-                              _userListProvider.setSearching(value.isNotEmpty);
+                                if (value.isNotEmpty) {
+                                  final List<UserListContent> data;
+                                  switch (userListContentSelectionProvider
+                                      .selectedContent) {
+                                    case ContentType.movie:
+                                      data = userListProvider.item!.movieList;
+                                      break;
+                                    case ContentType.tv:
+                                      data = userListProvider.item!.tvList;
+                                      break;
+                                    case ContentType.anime:
+                                      data = userListProvider.item!.animeList;
+                                      break;
+                                    default:
+                                      data = userListProvider.item!.gameList;
+                                      break;
+                                  }
 
-                              if (value.isNotEmpty) {
-                                final List<UserListContent> data;
-                                switch (userListContentSelectionProvider.selectedContent) {
-                                  case ContentType.movie:
-                                    data = userListProvider.item!.movieList;
-                                    break;
-                                  case ContentType.tv:
-                                    data = userListProvider.item!.tvList;
-                                    break;
-                                  case ContentType.anime:
-                                    data = userListProvider.item!.animeList;
-                                    break;
-                                  default:
-                                    data = userListProvider.item!.gameList;
-                                    break;
+                                  _userListProvider.search(value, data);
                                 }
+                              },
+                              onSuffixTap: () {
+                                _userListProvider.setSearching(false);
+                                searchController?.clear();
+                              },
+                              onSubmitted: (value) {
+                                _userListProvider
+                                    .setSearching(value.isNotEmpty);
 
-                                _userListProvider.search(value, data);
-                              }
-                            },
+                                if (value.isNotEmpty) {
+                                  final List<UserListContent> data;
+                                  switch (userListContentSelectionProvider
+                                      .selectedContent) {
+                                    case ContentType.movie:
+                                      data = userListProvider.item!.movieList;
+                                      break;
+                                    case ContentType.tv:
+                                      data = userListProvider.item!.tvList;
+                                      break;
+                                    case ContentType.anime:
+                                      data = userListProvider.item!.animeList;
+                                      break;
+                                    default:
+                                      data = userListProvider.item!.gameList;
+                                      break;
+                                  }
+
+                                  _userListProvider.search(value, data);
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                        CupertinoButton(
-                          onPressed: () {
-                            showCupertinoModalPopup(
-                              context: context,
-                              builder: (context) {
-                                return UserListSettingsSheet(_fetchData, userListContentSelectionProvider);
-                              });
-                          },
-                          padding: EdgeInsets.zero,
-                          child: const FaIcon(FontAwesomeIcons.arrowDownAZ, size: 20)
-                        )
-                      ],
+                          CupertinoButton(
+                              onPressed: () {
+                                showCupertinoModalPopup(
+                                    context: context,
+                                    builder: (context) {
+                                      return UserListSettingsSheet(_fetchData,
+                                          userListContentSelectionProvider);
+                                    });
+                              },
+                              padding: EdgeInsets.zero,
+                              child: const FaIcon(FontAwesomeIcons.arrowDownAZ,
+                                  size: 20))
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  SizedBox(
-                    height: 45,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: List.generate(
-                        ContentType.values.length, (index) {
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      height: 45,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children:
+                            List.generate(ContentType.values.length, (index) {
                           return Padding(
-                            padding: EdgeInsets.only(left: index == 0 ? 9 : 3, right: 3),
+                            padding: EdgeInsets.only(
+                                left: index == 0 ? 9 : 3, right: 3),
                             child: SizedBox(
                               width: 100,
                               child: CupertinoChip(
-                                isSelected: ContentType.values[index] == userListContentSelectionProvider.selectedContent,
+                                isSelected: ContentType.values[index] ==
+                                    userListContentSelectionProvider
+                                        .selectedContent,
                                 size: 14,
                                 cornerRadius: 8,
-                                selectedBGColor: CupertinoTheme.of(context).profileButton,
-                                selectedTextColor: AppColors().primaryColor,
+                                selectedBGColor: cupertinoTheme.profileButton,
+                                selectedTextColor: cupertinoTheme.primaryColor,
                                 onSelected: (_) {
-                                  userListContentSelectionProvider.setContentType(ContentType.values[index]);
+                                  userListContentSelectionProvider
+                                      .setContentType(
+                                    ContentType.values[index],
+                                  );
                                 },
                                 label: ContentType.values[index].value,
                               ),
                             ),
                           );
-                        }
+                        }),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
             Expanded(
               child: isGridView
-              ? UserListGridView(
-                isEmpty,
-                length,
-                dataList,
-                userListContentSelectionProvider,
-              )
-              : UserListListView(
-                isEmpty,
-                length,
-                dataList,
-                userListContentSelectionProvider,
-                userListProvider,
-                _globalProvider,
-                _updateData,
-              ),
+                  ? UserListGridView(
+                      isEmpty,
+                      length,
+                      dataList,
+                      userListContentSelectionProvider,
+                    )
+                  : UserListListView(
+                      isEmpty,
+                      length,
+                      dataList,
+                      userListContentSelectionProvider,
+                      userListProvider,
+                      _globalProvider,
+                      _updateData,
+                    ),
             ),
           ],
         );
@@ -355,7 +376,7 @@ class _UserListPageState extends State<UserListPage> {
       case DetailState.loading:
         return const LoadingView("Loading");
       default:
-       return const LoadingView("Loading");
+        return const LoadingView("Loading");
     }
   }
 }

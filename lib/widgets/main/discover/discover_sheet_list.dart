@@ -2,52 +2,63 @@ import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 
-// ignore: must_be_immutable
-class DiscoverSheetList extends StatefulWidget {
-  String? selectedValue;
+class DiscoverSheetList extends StatelessWidget {
+  final ValueNotifier<String?> selectedValueNotifier;
+  final String? initialValue;
   final List<String> list;
   final List<IconData>? iconList;
   final bool allowUnSelect;
 
-  DiscoverSheetList(this.selectedValue, this.list, {this.allowUnSelect = true, this.iconList, super.key});
+  DiscoverSheetList(
+    this.initialValue,
+    this.list, {
+    this.allowUnSelect = true,
+    this.iconList,
+    super.key,
+  }) : selectedValueNotifier = ValueNotifier(initialValue);
 
-  @override
-  State<DiscoverSheetList> createState() => _DiscoverSheetListState();
-}
-
-class _DiscoverSheetListState extends State<DiscoverSheetList> {
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: widget.list.length,
+      itemCount: list.length,
       itemBuilder: (context, index) {
-        final data = widget.list[index];
+        final data = list[index];
 
         return Padding(
-          padding: EdgeInsets.only(left: index == 0 ? 6 : 0),
-          child: CupertinoChip(
-            isSelected: data == widget.selectedValue,
-            leading: widget.iconList != null
-            ? Icon(
-              size: 20,
-              widget.iconList![index],
-              color: data == widget.selectedValue ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor
-            )
-            : null,
-            label: data,
-            onSelected: (value) {
-              setState(() {
-                if (data != widget.selectedValue) {
-                  widget.selectedValue = data;
-                } else if (widget.allowUnSelect) {
-                  widget.selectedValue = null;
-                }
-              });
-            }
+          padding: EdgeInsets.only(
+            left: index == 0 ? 6 : 0,
+          ),
+          child: ValueListenableBuilder(
+            valueListenable: selectedValueNotifier,
+            builder: (context, selectedVal, child) {
+              return CupertinoChip(
+                shouldShowBorder: true,
+                isSelected: data == selectedVal,
+                leading: iconList != null
+                    ? Icon(
+                        size: 20,
+                        iconList![index],
+                        color: data == selectedVal
+                            ? CupertinoColors.white
+                            : cupertinoTheme.bgTextColor,
+                      )
+                    : null,
+                label: data,
+                onSelected: (value) {
+                  if (data != selectedVal) {
+                    selectedValueNotifier.value = data;
+                  } else if (allowUnSelect) {
+                    selectedValueNotifier.value = null;
+                  }
+                },
+              );
+            },
           ),
         );
-      }
+      },
     );
   }
 }

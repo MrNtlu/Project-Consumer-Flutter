@@ -8,16 +8,20 @@ class ProfileFullWidthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: CupertinoButton(
-        color: CupertinoTheme.of(context).profileButton,
+        color: cupertinoTheme.profileButton,
         padding: EdgeInsets.zero,
         onPressed: () {
           Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              return const ProfileStatsPage();
-            })
+            CupertinoPageRoute(
+              builder: (_) {
+                return const ProfileStatsPage();
+              },
+            ),
           );
         },
         child: Padding(
@@ -26,18 +30,21 @@ class ProfileFullWidthButton extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 3),
-                  child: FaIcon(FontAwesomeIcons.chartLine, color: AppColors().primaryColor, size: 20),
-                )
-              ),
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 3),
+                    child: FaIcon(
+                      FontAwesomeIcons.chartLine,
+                      color: AppColors().primaryColor,
+                      size: 20,
+                    ),
+                  )),
               Text(
                 "Detailed Statistics",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors().primaryColor,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

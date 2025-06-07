@@ -14,6 +14,8 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return SizedBox(
       height: 100,
       child: ListView.builder(
@@ -67,7 +69,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                         maxWidthDiskCache: 190,
                         errorWidget: (context, _, __) {
                           return ColoredBox(
-                            color: CupertinoTheme.of(context).bgTextColor,
+                            color: cupertinoTheme.bgTextColor,
                             child: SizedBox(
                               height: 64,
                               width: 64,
@@ -78,10 +80,10 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                                       item.name,
                                       minFontSize: 13,
                                       style: TextStyle(
-                                          color: CupertinoTheme.of(context)
-                                              .bgColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                        color: cupertinoTheme.bgColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                   )),
@@ -90,7 +92,7 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                         },
                         placeholder: (context, _) {
                           return ColoredBox(
-                            color: CupertinoTheme.of(context).bgTextColor,
+                            color: cupertinoTheme.bgTextColor,
                             child: SizedBox(
                               height: 64,
                               width: 64,
@@ -101,9 +103,9 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
                                       item.name,
                                       minFontSize: 13,
                                       style: TextStyle(
-                                          color: CupertinoTheme.of(context)
-                                              .bgColor,
-                                          fontSize: 16),
+                                        color: cupertinoTheme.bgColor,
+                                        fontSize: 16,
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                   )),

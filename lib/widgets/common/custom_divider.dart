@@ -15,7 +15,9 @@ class CustomDivider extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height / 2),
-        color: CupertinoTheme.of(context).bgTextColor.withOpacity(opacity),
+        color: CupertinoTheme.of(context).bgTextColor.withValues(
+              alpha: opacity,
+            ),
       ),
     );
   }

@@ -92,6 +92,10 @@ class RecommendationCreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final width = mediaQuery.size.width;
+
     final CustomListCreateProvider customListCreateProvider =
         CustomListCreateProvider();
 
@@ -134,7 +138,7 @@ class RecommendationCreatePage extends StatelessWidget {
                     provider.updateTextCount(value.length);
                   },
                   decoration: BoxDecoration(
-                    color: CupertinoTheme.of(context).onBgColor,
+                    color: cupertinoTheme.onBgColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -197,7 +201,7 @@ class RecommendationCreatePage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width - 140,
+                            width: width - 140,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,

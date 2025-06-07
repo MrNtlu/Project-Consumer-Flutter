@@ -13,21 +13,24 @@ class ProfileCustomListCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortedContent = data.content.sorted((a, b) => a.order.compareTo(b.order));
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final sortedContent =
+        data.content.sorted((a, b) => a.order.compareTo(b.order));
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-          CupertinoPageRoute(builder: (_) {
-            return CustomListShareDetailsPage(data.id);
-          })
-        );
+        Navigator.of(context, rootNavigator: true)
+            .push(CupertinoPageRoute(builder: (_) {
+          return CustomListShareDetailsPage(data.id);
+        }));
       },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: CupertinoTheme.of(context).brightness == Brightness.dark ? const Color(0xFF212121) : CupertinoColors.systemGrey3,
+            color: cupertinoTheme.brightness == Brightness.dark
+                ? const Color(0xFF212121)
+                : CupertinoColors.systemGrey3,
             width: 1.75,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -39,13 +42,13 @@ class ProfileCustomListCell extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: AutoSizeText(
-                    data.name,
-                    minFontSize: 14,
-                    maxLines: 2,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  )
-                ),
+                    child: AutoSizeText(
+                  data.name,
+                  minFontSize: 14,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                )),
                 Text(
                   DateTime.parse(data.createdAt).dateToHumanDate(),
                 ),
@@ -58,25 +61,24 @@ class ProfileCustomListCell extends StatelessWidget {
                   child: SizedBox(
                     height: 75,
                     child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: sortedContent.length,
-                      itemBuilder: (context, index) {
-                        final listContent = sortedContent[index];
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: sortedContent.length,
+                        itemBuilder: (context, index) {
+                          final listContent = sortedContent[index];
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 3),
-                          child: ContentCell(
-                            listContent.imageURL ?? '',
-                            listContent.titleEn,
-                            cornerRadius: 8,
-                            forceRatio: true,
-                            cacheHeight: 225,
-                            cacheWidth: 175,
-                          ),
-                        );
-                      }
-                    ),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
+                            child: ContentCell(
+                              listContent.imageURL ?? '',
+                              listContent.titleEn,
+                              cornerRadius: 8,
+                              forceRatio: true,
+                              cacheHeight: 225,
+                              cacheWidth: 175,
+                            ),
+                          );
+                        }),
                   ),
                 ),
                 const SizedBox(width: 6),

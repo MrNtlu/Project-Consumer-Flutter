@@ -16,6 +16,8 @@ class EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return CupertinoTextField(
       controller: _controller,
       textInputAction: TextInputAction.next,
@@ -32,12 +34,12 @@ class EmailField extends StatelessWidget {
         ),
         child: Icon(
           prefixIcon,
-          color: CupertinoTheme.of(context).bgTextColor,
+          color: cupertinoTheme.bgTextColor,
         ),
       ),
       placeholder: "Enter $label",
       decoration: BoxDecoration(
-        color: CupertinoTheme.of(context).onBgColor,
+        color: cupertinoTheme.onBgColor,
         borderRadius: BorderRadius.circular(8),
       ),
       style: const TextStyle(fontSize: 16),

@@ -8,12 +8,17 @@ class ProfileExtraInfoText extends StatelessWidget {
   final String extraValue;
   final String label;
 
-  const ProfileExtraInfoText(this.value, this.extraValue, this.label, {super.key});
+  const ProfileExtraInfoText(this.value, this.extraValue, this.label,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final size = (mediaQuery.size.width * 0.85) / 4;
+
     return SizedBox(
-      width: (MediaQuery.of(context).size.width * 0.85) / 4,
+      width: size,
       child: Column(
         children: [
           Row(
@@ -27,23 +32,24 @@ class ProfileExtraInfoText extends StatelessWidget {
                   minFontSize: 10,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: CupertinoTheme.of(context).bgTextColor,
-                    fontWeight: FontWeight.w500
+                    color: cupertinoTheme.bgTextColor,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
               const SizedBox(width: 3),
               extraValue == "⭐"
-              ? Icon(Icons.star_rounded, color: AppColors().primaryColor, size: 12)
-              : Text(
-                extraValue,
-                maxLines: 1,
-                style: TextStyle(
-                  color: CupertinoTheme.of(context).bgTextColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500
-                ),
-              ),
+                  ? Icon(Icons.star_rounded,
+                      color: AppColors().primaryColor, size: 12)
+                  : Text(
+                      extraValue,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: cupertinoTheme.bgTextColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
             ],
           ),
           const SizedBox(height: 6),
@@ -52,7 +58,7 @@ class ProfileExtraInfoText extends StatelessWidget {
             maxLines: 1,
             style: TextStyle(
               color: AppColors().primaryColor,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
             ),
           )
         ],

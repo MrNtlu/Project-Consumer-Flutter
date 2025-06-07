@@ -20,11 +20,8 @@ class AnimeWatchListSheet extends StatefulWidget {
   final int? episodePrefix;
   final BaseUserList? userList;
 
-  const AnimeWatchListSheet(
-    this.provider, this.animeID,
-    this.animeMALId,
-    {this.userList, this.episodePrefix, super.key}
-  );
+  const AnimeWatchListSheet(this.provider, this.animeID, this.animeMALId,
+      {this.userList, this.episodePrefix, super.key});
 
   @override
   State<AnimeWatchListSheet> createState() => _AnimeWatchListSheetState();
@@ -41,13 +38,16 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
     super.initState();
     _provider = DetailsSheetProvider();
     if (widget.userList != null) {
-      _provider.initStatus(Constants.UserListStatus.firstWhere((element) => element.request == widget.userList!.status));
+      _provider.initStatus(Constants.UserListStatus.firstWhere(
+          (element) => element.request == widget.userList!.status));
     }
     _scoreDropdown = ScoreDropdown(
       selectedValue: widget.userList?.score,
     );
-    _timesFinishedTextController = TextEditingController(text: widget.userList?.timesFinished.toString() ?? '1');
-    _episodeTextController = TextEditingController(text: widget.userList?.watchedEpisodes.toString() ?? '0');
+    _timesFinishedTextController = TextEditingController(
+        text: widget.userList?.timesFinished.toString() ?? '1');
+    _episodeTextController = TextEditingController(
+        text: widget.userList?.watchedEpisodes.toString() ?? '0');
   }
 
   @override
@@ -59,19 +59,22 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return ChangeNotifierProvider(
       create: (_) => _provider,
       child: Consumer<DetailsSheetProvider>(
         builder: (context, provider, child) {
           return SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
                 margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 padding: const EdgeInsets.all(8),
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: CupertinoTheme.of(context).onBgColor,
+                  color: cupertinoTheme.onBgColor,
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                 ),
                 child: Column(
@@ -86,68 +89,101 @@ class _AnimeWatchListSheetState extends State<AnimeWatchListSheet> {
                       text: "Episodes",
                       onPressed: () {
                         _episodeTextController.text = (
-                          int.parse(_episodeTextController.text != "" ? _episodeTextController.text : "0") + 1
+                          int.parse(_episodeTextController.text != ""
+                                  ? _episodeTextController.text
+                                  : "0") +
+                              1,
                         ).toString();
                       },
                       suffix: widget.episodePrefix?.toString(),
                     ),
-                    if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
-                    const SizedBox(height: 12),
-                    if (provider.selectedStatus.request == Constants.UserListStatus[1].request)
-                    DetailsSheetTextfield(
-                      _timesFinishedTextController,
-                      text: "Times Finished",
-                      onPressed: () {
-                        _timesFinishedTextController.text = (
-                          int.parse(_timesFinishedTextController.text != "" ? _timesFinishedTextController.text : "0") + 1
-                        ).toString();
-                      }
-                    ),
+                    if (provider.selectedStatus.request ==
+                        Constants.UserListStatus[1].request)
+                      const SizedBox(height: 12),
+                    if (provider.selectedStatus.request ==
+                        Constants.UserListStatus[1].request)
+                      DetailsSheetTextfield(
+                        _timesFinishedTextController,
+                        text: "Times Finished",
+                        onPressed: () {
+                          _timesFinishedTextController.text = (
+                            int.parse(_timesFinishedTextController.text != ""
+                                    ? _timesFinishedTextController.text
+                                    : "0") +
+                                1,
+                          ).toString();
+                        },
+                      ),
                     const SizedBox(height: 24),
                     DetailsSheetButtons(
                       text: widget.userList != null ? "Update" : "Save",
                       onPressed: () {
-                        final isFinished = provider.selectedStatus.request == Constants.UserListStatus[1].request;
-                        final isTimesFinishedEmpty = _timesFinishedTextController.text == "";
-                        final isEpisodesEmpty = _episodeTextController.text == "";
+                        final isFinished = provider.selectedStatus.request ==
+                            Constants.UserListStatus[1].request;
+                        final isTimesFinishedEmpty =
+                            _timesFinishedTextController.text == "";
+                        final isEpisodesEmpty =
+                            _episodeTextController.text == "";
 
-                        if ((isFinished && isTimesFinishedEmpty) || isEpisodesEmpty) {
+                        if ((isFinished && isTimesFinishedEmpty) ||
+                            isEpisodesEmpty) {
                           showCupertinoDialog(
                             context: context,
                             builder: (context) {
-                              return const ErrorDialog("Please fill the empty fields.");
-                            }
+                              return const ErrorDialog(
+                                  "Please fill the empty fields.");
+                            },
                           );
                         } else {
                           Navigator.pop(context);
 
                           if (widget.userList != null) {
                             final userList = widget.userList!;
-                            final isUpdatingScore = userList.score != _scoreDropdown.selectedValue;
+                            final isUpdatingScore =
+                                userList.score != _scoreDropdown.selectedValue;
 
-                            widget.provider.updateAnimeWatchList(AnimeWatchListUpdateBody(
-                              userList.id, isUpdatingScore,
-                              isUpdatingScore ? _scoreDropdown.selectedValue : null,
+                            widget.provider
+                                .updateAnimeWatchList(AnimeWatchListUpdateBody(
+                              userList.id,
+                              isUpdatingScore,
+                              isUpdatingScore
+                                  ? _scoreDropdown.selectedValue
+                                  : null,
                               provider.selectedStatus.request,
-                              isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
-                              _episodeTextController.value.text == "" ? userList.watchedEpisodes : int.parse(_episodeTextController.value.text),
+                              isFinished
+                                  ? int.parse(
+                                      _timesFinishedTextController.value.text)
+                                  : null,
+                              _episodeTextController.value.text == ""
+                                  ? userList.watchedEpisodes
+                                  : int.parse(
+                                      _episodeTextController.value.text),
                             ));
                           } else {
-                            widget.provider.createAnimeWatchList(AnimeWatchListBody(
-                              widget.animeID, widget.animeMALId,
-                              isFinished ? int.parse(_timesFinishedTextController.value.text) : null,
-                              _scoreDropdown.selectedValue,
-                              provider.selectedStatus.request,
-                              _episodeTextController.value.text == "" ? null : int.parse(_episodeTextController.value.text),
-                            ));
+                            widget.provider.createAnimeWatchList(
+                              AnimeWatchListBody(
+                                widget.animeID,
+                                widget.animeMALId,
+                                isFinished
+                                    ? int.parse(
+                                        _timesFinishedTextController.value.text)
+                                    : null,
+                                _scoreDropdown.selectedValue,
+                                provider.selectedStatus.request,
+                                _episodeTextController.value.text == ""
+                                    ? null
+                                    : int.parse(
+                                        _episodeTextController.value.text),
+                              ),
+                            );
                           }
                         }
-                      }
+                      },
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           );
         },
       ),

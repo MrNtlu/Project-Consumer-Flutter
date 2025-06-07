@@ -20,6 +20,8 @@ class PreviewCountryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return SizedBox(
       height: 102,
       child: ListView.builder(
@@ -61,7 +63,7 @@ class PreviewCountryList extends StatelessWidget {
                     height: 64,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: CupertinoTheme.of(context).profileButton,
+                      color: cupertinoTheme.profileButton,
                     ),
                     alignment: Alignment.center,
                     child: CountryFlag.fromCountryCode(
@@ -80,7 +82,7 @@ class PreviewCountryList extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: CupertinoTheme.of(context).bgTextColor,
+                        color: cupertinoTheme.bgTextColor,
                       ),
                     ),
                   ),

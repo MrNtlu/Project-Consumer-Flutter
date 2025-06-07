@@ -7,9 +7,12 @@ import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/game_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
+import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
+import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 
 class GenreList extends StatelessWidget {
   const GenreList({super.key});
@@ -17,6 +20,9 @@ class GenreList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final contentProvider = Provider.of<ContentProvider>(context);
+    final authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    final shouldShowAds = authenticationProvider.basicUserInfo == null ||
+        authenticationProvider.basicUserInfo?.isPremium == false;
 
     List<NameIcon> genreList;
     switch (contentProvider.selectedContent) {
@@ -61,6 +67,7 @@ class GenreList extends StatelessWidget {
                   first,
                   first.icon,
                   contentProvider,
+                  shouldShowAds,
                 ),
                 const SizedBox(height: 12),
                 if (second != null)
@@ -69,6 +76,7 @@ class GenreList extends StatelessWidget {
                     second,
                     second.icon,
                     contentProvider,
+                    shouldShowAds,
                   ),
               ],
             ),
@@ -83,6 +91,7 @@ class GenreList extends StatelessWidget {
     NameIcon data,
     IconData icon,
     ContentProvider contentProvider,
+    bool shouldShowAds,
   ) {
     final theme = CupertinoTheme.of(context);
 
@@ -90,6 +99,10 @@ class GenreList extends StatelessWidget {
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
           builder: (_) {
+            if (AdsTracker().shouldShowAds() && shouldShowAds) {
+              InterstitialAdHandler().showAds();
+            }
+
             switch (contentProvider.selectedContent) {
               case ContentType.movie:
                 return MovieDiscoverListPage(

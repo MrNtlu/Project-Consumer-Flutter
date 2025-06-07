@@ -4,22 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:watchlistfy/static/colors.dart';
 
-class DetailsAvatarButton extends StatelessWidget{
+class DetailsAvatarButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color iconColor;
   final VoidCallback onTap;
 
-  const DetailsAvatarButton(
-    this.label,
-    this.icon,
-    this.iconColor,
-    this.onTap,
-    {super.key}
-  );
+  const DetailsAvatarButton(this.label, this.icon, this.iconColor, this.onTap,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxWidth: 100,
@@ -48,7 +45,7 @@ class DetailsAvatarButton extends StatelessWidget{
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: CupertinoTheme.of(context).bgTextColor,
+                  color: cupertinoTheme.bgTextColor,
                 ),
               ),
             ],

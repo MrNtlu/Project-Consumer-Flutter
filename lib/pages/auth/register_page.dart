@@ -116,6 +116,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final marginBottom = mediaQuery.viewInsets.bottom;
+
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text(
@@ -128,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
+              bottom: marginBottom,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

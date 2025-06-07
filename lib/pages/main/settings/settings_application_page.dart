@@ -44,67 +44,70 @@ class SettingsApplicationPage extends StatelessWidget {
               platform: DevicePlatform.iOS,
               applicationType: ApplicationType.cupertino,
               sections: [
-                SettingsSection(
-                  title: const Text("Application"),
-                  tiles: [
-                    const CustomSettingsTile(child: ContentSwitch()),
-                    const CustomSettingsTile(child: ConsumeLaterSwitch()),
-                    // const CustomSettingsTile(child: UserListSwitch()),
-                    const CustomSettingsTile(child: ProfileStatsSwitch()),
-                    CustomSettingsTile(
-                      child: SettingsTile(
-                        leading: Icon(
-                          globalProvider.contentType == ContentType.movie
+                SettingsSection(title: const Text("Application"), tiles: [
+                  const CustomSettingsTile(child: ContentSwitch()),
+                  const CustomSettingsTile(child: ConsumeLaterSwitch()),
+                  // const CustomSettingsTile(child: UserListSwitch()),
+                  const CustomSettingsTile(child: ProfileStatsSwitch()),
+                  CustomSettingsTile(
+                    child: SettingsTile(
+                      leading: Icon(globalProvider.contentType ==
+                              ContentType.movie
                           ? FontAwesomeIcons.ticket
                           : globalProvider.contentType == ContentType.tv
-                            ? CupertinoIcons.tv_fill
-                            : globalProvider.contentType == ContentType.anime
-                              ? FontAwesomeIcons.userNinja
-                              : FontAwesomeIcons.gamepad
-                        ),
-                        title: const Text('Default Selection'),
-                        trailing: SettingsContentSelection(globalProvider),
-                      ),
+                              ? CupertinoIcons.tv_fill
+                              : globalProvider.contentType == ContentType.anime
+                                  ? FontAwesomeIcons.userNinja
+                                  : FontAwesomeIcons.gamepad),
+                      title: const Text('Default Selection'),
+                      trailing: SettingsContentSelection(globalProvider),
                     ),
-                    SettingsTile.navigation(
-                      leading: const FaIcon(FontAwesomeIcons.globe),
-                      title: Text('Region: ${globalProvider.selectedCountryCode}'),
-                      onPressed: (ctx) {
-                        showCountryPicker(
-                          context: context,
-                          useSafeArea: true,
-                          showPhoneCode: false,
-                          countryListTheme: CountryListThemeData(
-                            flagSize: 35,
-                            backgroundColor: CupertinoTheme.of(context).onBgColor,
-                            searchTextStyle: TextStyle(fontSize: 16, color: CupertinoTheme.of(context).bgTextColor),
-                            textStyle: TextStyle(fontSize: 16, color: CupertinoTheme.of(context).bgTextColor),
-                            bottomSheetHeight: 500,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(24),
-                              topRight: Radius.circular(24),
-                            ),
-                            inputDecoration: InputDecoration(
-                              labelText: 'Search',
-                              hintText: 'Start typing to search',
-                              hintStyle: const TextStyle(color: CupertinoColors.systemGrey2),
-                              prefixIcon: const Icon(CupertinoIcons.search),
-                              prefixIconColor: CupertinoTheme.of(context).bgTextColor,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: CupertinoTheme.of(context).bgTextColor.withOpacity(0.5),
+                  ),
+                  SettingsTile.navigation(
+                    leading: const FaIcon(FontAwesomeIcons.globe),
+                    title:
+                        Text('Region: ${globalProvider.selectedCountryCode}'),
+                    onPressed: (ctx) {
+                      showCountryPicker(
+                        context: context,
+                        useSafeArea: true,
+                        showPhoneCode: false,
+                        countryListTheme: CountryListThemeData(
+                          flagSize: 35,
+                          backgroundColor: cupertinoTheme.onBgColor,
+                          searchTextStyle: TextStyle(
+                              fontSize: 16, color: cupertinoTheme.bgTextColor),
+                          textStyle: TextStyle(
+                              fontSize: 16, color: cupertinoTheme.bgTextColor),
+                          bottomSheetHeight: 500,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
+                          ),
+                          inputDecoration: InputDecoration(
+                            labelText: 'Search',
+                            hintText: 'Start typing to search',
+                            hintStyle: const TextStyle(
+                                color: CupertinoColors.systemGrey2),
+                            prefixIcon: const Icon(CupertinoIcons.search),
+                            prefixIconColor: cupertinoTheme.bgTextColor,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: cupertinoTheme.bgTextColor.withValues(
+                                  alpha: 0.5,
                                 ),
                               ),
                             ),
                           ),
-                          onSelect: (Country country) {
-                            globalProvider.setSelectedCountry(country.countryCode);
-                          },
-                        );
-                      },
-                    ),
-                  ]
-                ),
+                        ),
+                        onSelect: (Country country) {
+                          globalProvider
+                              .setSelectedCountry(country.countryCode);
+                        },
+                      );
+                    },
+                  ),
+                ]),
               ],
             ),
           ],

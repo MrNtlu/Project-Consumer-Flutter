@@ -13,6 +13,31 @@ class DiscoverTVProvider with ChangeNotifier {
   String? streaming;
   String streamingRegion = "";
 
+  bool get isFiltering =>
+      sort != Constants.SortRequests[0].request ||
+      genre != null ||
+      status != null ||
+      productionCompanies != null ||
+      numOfSeason != null ||
+      decade != null ||
+      country != null ||
+      rating != null ||
+      streaming != null;
+
+  int get filteringCount {
+    int count = 0;
+    if (sort != Constants.SortRequests[0].request) count++;
+    if (genre != null) count++;
+    if (status != null) count++;
+    if (productionCompanies != null) count++;
+    if (numOfSeason != null) count++;
+    if (decade != null) count++;
+    if (country != null) count++;
+    if (rating != null) count++;
+    if (streaming != null) count++;
+    return count;
+  }
+
   void reset() {
     sort = Constants.SortRequests[0].request;
     genre = null;

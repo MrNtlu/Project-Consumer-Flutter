@@ -32,15 +32,16 @@ class MovieDiscoverListPage extends StatefulWidget {
   final String? streamingLogo;
   final String? region;
 
-  const MovieDiscoverListPage(
-      {this.genre,
-      this.sort = "popularity",
-      this.productionCompanies,
-      this.country,
-      this.streaming,
-      this.streamingLogo,
-      this.region,
-      super.key});
+  const MovieDiscoverListPage({
+    this.genre,
+    this.sort = "popularity",
+    this.productionCompanies,
+    this.country,
+    this.streaming,
+    this.streamingLogo,
+    this.region,
+    super.key,
+  });
 
   @override
   State<MovieDiscoverListPage> createState() => _MovieDiscoverListPageState();
@@ -53,6 +54,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   late final DiscoverMovieProvider _discoverProvider;
   late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
+  late final CupertinoThemeData _cupertinoTheme;
 
   int _page = 1;
   bool _canPaginate = false;
@@ -87,17 +89,18 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
 
     Future<BasePaginationResponse<BaseContent>> futureResponse =
         _movieListProvider.discoverMovies(
-            page: _page,
-            sort: _discoverProvider.sort,
-            genres: _discoverProvider.genre,
-            status: _discoverProvider.status,
-            productionCompany: _discoverProvider.productionCompanies,
-            productionCountry: _discoverProvider.country,
-            from: from,
-            to: to,
-            rating: _discoverProvider.rating,
-            streaming: _discoverProvider.streaming,
-            streamingRegion: _discoverProvider.streamingRegion);
+      page: _page,
+      sort: _discoverProvider.sort,
+      genres: _discoverProvider.genre,
+      status: _discoverProvider.status,
+      productionCompany: _discoverProvider.productionCompanies,
+      productionCountry: _discoverProvider.country,
+      from: from,
+      to: to,
+      rating: _discoverProvider.rating,
+      streaming: _discoverProvider.streaming,
+      streamingRegion: _discoverProvider.streamingRegion,
+    );
 
     futureResponse.then((response) {
       _error = response.error;
@@ -153,6 +156,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
   void didChangeDependencies() {
     if (_state == ListState.init) {
       _globalProvider = Provider.of<GlobalProvider>(context);
+      _cupertinoTheme = CupertinoTheme.of(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData(true);
@@ -169,19 +173,19 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
         ChangeNotifierProvider(create: (_) => _movieListProvider),
         ChangeNotifierProvider(create: (_) => _discoverProvider),
       ],
-      child:
-          Consumer<DiscoverMovieProvider>(builder: (context, provider, child) {
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            middle: (_discoverProvider.streaming != null &&
-                    widget.streaming != null &&
-                    _discoverProvider.streaming == widget.streaming)
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (widget.streamingLogo != null &&
-                          widget.streamingLogo!.isNotEmpty)
-                        ClipRRect(
+      child: Consumer<DiscoverMovieProvider>(
+        builder: (context, provider, child) {
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: (_discoverProvider.streaming != null &&
+                      widget.streaming != null &&
+                      _discoverProvider.streaming == widget.streaming)
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (widget.streamingLogo != null &&
+                            widget.streamingLogo!.isNotEmpty)
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(16),
                             child: CachedNetworkImage(
                               imageUrl: widget.streamingLogo!,
@@ -195,7 +199,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                               maxWidthDiskCache: 100,
                               errorWidget: (context, _, __) {
                                 return ColoredBox(
-                                  color: CupertinoTheme.of(context).bgTextColor,
+                                  color: _cupertinoTheme.bgTextColor,
                                   child: SizedBox(
                                     height: 75,
                                     width: 75,
@@ -206,8 +210,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                                           widget.streaming!,
                                           minFontSize: 10,
                                           style: TextStyle(
-                                            color: CupertinoTheme.of(context)
-                                                .bgColor,
+                                            color: _cupertinoTheme.bgColor,
                                             fontSize: 12,
                                           ),
                                           textAlign: TextAlign.center,
@@ -217,71 +220,120 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                                   ),
                                 );
                               },
-                            )),
-                      if (widget.streamingLogo != null &&
-                          widget.streamingLogo!.isNotEmpty)
-                        const SizedBox(width: 8),
-                      Text(widget.streaming!),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        provider.productionCompanies != null
-                            ? provider.productionCompanies!
-                            : provider.genre != null
-                                ? provider.genre!
-                                : 'Discover',
-                      ),
-                      if (_totalResults > 0 && _state == ListState.done)
-                        Text(
-                          "$_totalResults Results",
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: CupertinoColors.systemGrey2,
+                            ),
                           ),
-                        )
-                    ],
-                  ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CupertinoButton(
-                  onPressed: () {
-                    _globalProvider.setContentMode(
+                        if (widget.streamingLogo != null &&
+                            widget.streamingLogo!.isNotEmpty)
+                          const SizedBox(width: 8),
+                        Text(widget.streaming!),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          provider.productionCompanies != null
+                              ? provider.productionCompanies!
+                              : provider.genre != null
+                                  ? provider.genre!
+                                  : 'Discover',
+                        ),
+                        if (_totalResults > 0 && _state == ListState.done)
+                          Text(
+                            "$_totalResults Results",
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: CupertinoColors.systemGrey2,
+                            ),
+                          ),
+                      ],
+                    ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoButton(
+                    onPressed: () {
+                      _globalProvider.setContentMode(
                         _globalProvider.contentMode ==
                                 Constants.ContentUIModes.first
                             ? Constants.ContentUIModes.last
-                            : Constants.ContentUIModes.first);
-                  },
-                  padding: EdgeInsets.zero,
-                  child: Icon(
-                    _globalProvider.contentMode ==
-                            Constants.ContentUIModes.first
-                        ? Icons.grid_view_rounded
-                        : CupertinoIcons.list_bullet,
-                    size: 28,
+                            : Constants.ContentUIModes.first,
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    child: Icon(
+                      _globalProvider.contentMode ==
+                              Constants.ContentUIModes.first
+                          ? Icons.grid_view_rounded
+                          : CupertinoIcons.list_bullet,
+                      size: 28,
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  child: const Icon(Icons.filter_alt_rounded),
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
+                  GestureDetector(
+                    child: provider.isFiltering
+                        ? Stack(
+                            children: [
+                              _filterButton(),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: CupertinoColors.systemRed,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      provider.filteringCount.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: CupertinoColors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : _filterButton(),
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
                         context: context,
-                        builder: (context) =>
-                            MovieDiscoverSheet(_fetchData, provider));
-                  },
-                ),
-              ],
+                        barrierColor: _cupertinoTheme.bgTextColor.withValues(
+                          alpha: 0.1,
+                        ),
+                        builder: (context) => MovieDiscoverSheet(
+                          _fetchData,
+                          provider,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          child: _body(data),
-        );
-      }),
+            child: _body(data),
+          );
+        },
+      ),
     );
   }
+
+  Widget _filterButton() => CircleAvatar(
+        backgroundColor: _cupertinoTheme.bgColor,
+        child: Icon(
+          Icons.filter_alt_rounded,
+          size: 26,
+          color: _cupertinoTheme.primaryColor,
+        ),
+      );
 
   Widget _body(List<BaseContent> data) {
     switch (_state) {
@@ -338,9 +390,14 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 2),
-                        child: ContentCell(content.imageUrl, content.titleEn,
-                            forceRatio: true),
+                          vertical: 3,
+                          horizontal: 2,
+                        ),
+                        child: ContentCell(
+                          content.imageUrl,
+                          content.titleEn,
+                          forceRatio: true,
+                        ),
                       ),
                     );
                   },

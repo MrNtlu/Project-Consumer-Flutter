@@ -41,6 +41,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
   late final ConsumeLaterProvider _provider;
   late final GlobalProvider _globalProvider;
   late final ConsumeLaterSortFilterProvider _sortFilterProvider;
+  late final CupertinoThemeData cupertinoTheme;
 
   void _fetchData() {
     setState(() {
@@ -77,6 +78,7 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
       }
 
       _globalProvider = Provider.of<GlobalProvider>(context);
+      cupertinoTheme = CupertinoTheme.of(context);
       _fetchData();
     }
     super.didChangeDependencies();
@@ -144,8 +146,8 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
               ),
             ),
             child: RefreshIndicator(
-                backgroundColor: CupertinoTheme.of(context).bgTextColor,
-                color: CupertinoTheme.of(context).bgColor,
+                backgroundColor: cupertinoTheme.bgTextColor,
+                color: cupertinoTheme.bgColor,
                 onRefresh: () async {
                   if (_state == ListState.done || _state == ListState.error) {
                     _fetchData();

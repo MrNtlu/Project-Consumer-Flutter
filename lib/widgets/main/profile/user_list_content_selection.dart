@@ -9,10 +9,23 @@ class UserListContentSelection extends StatefulWidget {
   const UserListContentSelection(this.provider, {super.key});
 
   @override
-  State<UserListContentSelection> createState() => _UserListContentSelectionState();
+  State<UserListContentSelection> createState() =>
+      _UserListContentSelectionState();
 }
 
 class _UserListContentSelectionState extends State<UserListContentSelection> {
+  bool didInit = false;
+  late final CupertinoThemeData cupertinoTheme;
+
+  @override
+  void didChangeDependencies() {
+    if (!didInit) {
+      cupertinoTheme = CupertinoTheme.of(context);
+      didInit = true;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,21 +52,21 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: CupertinoTheme.of(context).primaryColor,
+                    color: cupertinoTheme.primaryColor,
                   ),
                 ),
                 const SizedBox(width: 6),
                 Icon(
                   CupertinoIcons.chevron_down_circle_fill,
                   size: 14,
-                  color: CupertinoTheme.of(context).primaryColor,
-                )
+                  color: cupertinoTheme.primaryColor,
+                ),
               ],
             ),
           ),
           onPressed: () {
             _showPickerDialog();
-          }
+          },
         ),
         const SizedBox(width: 3),
         CupertinoButton(
@@ -62,9 +75,14 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
           },
           minSize: 0,
           padding: const EdgeInsets.all(3),
-          child: const Icon(CupertinoIcons.right_chevron, size: 20),
+          child: const Icon(
+            CupertinoIcons.right_chevron,
+            size: 20,
+          ),
         ),
-        const SizedBox(width: 6,)
+        const SizedBox(
+          width: 6,
+        )
       ],
     );
   }
@@ -78,8 +96,10 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
           padding: const EdgeInsets.all(16),
           height: 60 + (ContentType.values.length * 50) + 24,
           decoration: BoxDecoration(
-            color: CupertinoTheme.of(context).onBgColor,
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            color: cupertinoTheme.onBgColor,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(16.0),
+            ),
           ),
           child: Column(
             children: [
@@ -99,25 +119,33 @@ class _UserListContentSelectionState extends State<UserListContentSelection> {
                   itemCount: ContentType.values.length,
                   itemExtent: 50,
                   itemBuilder: (context, index) {
-                    var isSelected = ContentType.values.indexOf(widget.provider.selectedContent) == index;
+                    var isSelected = ContentType.values
+                            .indexOf(widget.provider.selectedContent) ==
+                        index;
 
                     return CupertinoButton(
-                      color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoTheme.of(context).onBgColor,
-                      onPressed: (){
+                      color: isSelected
+                          ? cupertinoTheme.primaryColor
+                          : cupertinoTheme.onBgColor,
+                      onPressed: () {
                         if (!isSelected) {
-                          widget.provider.setContentType(ContentType.values[index]);
+                          widget.provider
+                              .setContentType(ContentType.values[index]);
                         }
                         Navigator.pop(context);
                       },
                       child: Text(
                         ContentType.values[index].value,
                         style: TextStyle(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected
+                              ? CupertinoColors.white
+                              : cupertinoTheme.bgTextColor,
                         ),
                       ),
                     );
-                  }
+                  },
                 ),
               ),
             ],

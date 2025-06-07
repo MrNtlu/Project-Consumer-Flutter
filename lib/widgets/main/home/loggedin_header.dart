@@ -23,13 +23,14 @@ class LoggedinHeader extends StatelessWidget {
     final image = authenticationProvider.basicUserInfo?.image;
     final streak = authenticationProvider.basicUserInfo?.streak;
     final isUrlValid = image != null && Uri.tryParse(image) != null;
+    final cupertinoTheme = CupertinoTheme.of(context);
 
     return Row(
       children: [
         PopupMenuButton(
           icon: const Icon(CupertinoIcons.ellipsis_vertical),
           iconSize: 26,
-          color: CupertinoTheme.of(context).bgColor,
+          color: cupertinoTheme.bgColor,
           itemBuilder: (context) => [
             PopupMenuItem(
               onTap: () {
@@ -45,13 +46,12 @@ class LoggedinHeader extends StatelessWidget {
                 children: [
                   Text(
                     "Custom Lists",
-                    style: TextStyle(
-                        color: CupertinoTheme.of(context).bgTextColor),
+                    style: TextStyle(color: cupertinoTheme.bgTextColor),
                   ),
                   const Spacer(),
                   Icon(
                     CupertinoIcons.folder_fill,
-                    color: CupertinoTheme.of(context).bgTextColor,
+                    color: cupertinoTheme.bgTextColor,
                     size: 18,
                   ),
                 ],
@@ -68,13 +68,12 @@ class LoggedinHeader extends StatelessWidget {
                 children: [
                   Text(
                     "User List",
-                    style: TextStyle(
-                        color: CupertinoTheme.of(context).bgTextColor),
+                    style: TextStyle(color: cupertinoTheme.bgTextColor),
                   ),
                   const Spacer(),
                   Icon(
                     CupertinoIcons.list_bullet_below_rectangle,
-                    color: CupertinoTheme.of(context).bgTextColor,
+                    color: cupertinoTheme.bgTextColor,
                     size: 18,
                   ),
                 ],
@@ -93,11 +92,10 @@ class LoggedinHeader extends StatelessWidget {
               child: Row(
                 children: [
                   Text("Watch Later",
-                      style: TextStyle(
-                          color: CupertinoTheme.of(context).bgTextColor)),
+                      style: TextStyle(color: cupertinoTheme.bgTextColor)),
                   const Spacer(),
                   Icon(CupertinoIcons.time,
-                      color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                      color: cupertinoTheme.bgTextColor, size: 18),
                 ],
               ),
             ),
@@ -115,13 +113,12 @@ class LoggedinHeader extends StatelessWidget {
                 children: [
                   Text(
                     "Statistics",
-                    style: TextStyle(
-                        color: CupertinoTheme.of(context).bgTextColor),
+                    style: TextStyle(color: cupertinoTheme.bgTextColor),
                   ),
                   const Spacer(),
                   Icon(
                     CupertinoIcons.chart_bar_alt_fill,
-                    color: CupertinoTheme.of(context).bgTextColor,
+                    color: cupertinoTheme.bgTextColor,
                     size: 18,
                   ),
                 ],
@@ -141,12 +138,14 @@ class LoggedinHeader extends StatelessWidget {
                 children: [
                   Text(
                     "AI Recommendations",
-                    style: TextStyle(
-                        color: CupertinoTheme.of(context).bgTextColor),
+                    style: TextStyle(color: cupertinoTheme.bgTextColor),
                   ),
                   const Spacer(),
-                  Icon(FontAwesomeIcons.robot,
-                      color: CupertinoTheme.of(context).bgTextColor, size: 18),
+                  Icon(
+                    FontAwesomeIcons.robot,
+                    color: cupertinoTheme.bgTextColor,
+                    size: 18,
+                  ),
                 ],
               ),
             ),
@@ -171,12 +170,11 @@ class LoggedinHeader extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
-                    color:
-                        CupertinoTheme.brightnessOf(context) == Brightness.dark
-                            ? CupertinoColors.systemGrey.withOpacity(0.35)
-                            : CupertinoColors.black.withValues(
-                                alpha: 0.35,
-                              ),
+                    color: cupertinoTheme.brightness == Brightness.dark
+                        ? CupertinoColors.systemGrey.withOpacity(0.35)
+                        : CupertinoColors.black.withValues(
+                            alpha: 0.35,
+                          ),
                     spreadRadius: 1.35,
                     blurRadius: 3,
                     offset: const Offset(0, 0),

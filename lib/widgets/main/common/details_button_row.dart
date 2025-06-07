@@ -20,17 +20,27 @@ class DetailsButtonRow extends StatelessWidget {
   final String id;
   final VoidCallback onRecommendationsPressed;
 
-  const DetailsButtonRow(this.title, this.isAuthenticated, this.trailers,
-      this.contentType, this.id, this.onRecommendationsPressed,
-      {this.trailer, super.key});
+  const DetailsButtonRow(
+    this.title,
+    this.isAuthenticated,
+    this.trailers,
+    this.contentType,
+    this.id,
+    this.onRecommendationsPressed, {
+    this.trailer,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final width = mediaQuery.size.width;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width - 24,
+          minWidth: width - 24,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -63,28 +73,37 @@ class DetailsButtonRow extends StatelessWidget {
             }),
             if ((trailers != null && trailers!.isNotEmpty) ||
                 (trailer != null && trailer!.isNotEmpty))
-              DetailsAvatarButton("Trailers", FontAwesomeIcons.youtube,
-                  CupertinoColors.systemRed, () {
-                HapticFeedback.lightImpact();
+              DetailsAvatarButton(
+                "Trailers",
+                FontAwesomeIcons.youtube,
+                CupertinoColors.systemRed,
+                () {
+                  HapticFeedback.lightImpact();
 
-                if (trailers != null && trailers!.isNotEmpty) {
-                  showCupertinoModalBottomSheet(
-                      context: context,
-                      barrierColor: CupertinoColors.black.withOpacity(0.75),
-                      builder: (_) => TrailerSheet(trailers!));
-                } else {
-                  Navigator.of(context, rootNavigator: true)
-                      .push(CupertinoPageRoute(builder: (_) {
-                    return TrailerPage(trailerURL: trailer!);
-                  }));
-                }
-              }),
+                  if (trailers != null && trailers!.isNotEmpty) {
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        barrierColor: CupertinoColors.black.withValues(
+                          alpha: 0.75,
+                        ),
+                        builder: (_) => TrailerSheet(trailers!));
+                  } else {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(
+                        builder: (_) {
+                          return TrailerPage(trailerURL: trailer!);
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
             DetailsAvatarButton(
               "Recommends",
               FontAwesomeIcons.solidLightbulb,
               CupertinoColors.systemYellow,
               onRecommendationsPressed,
-            )
+            ),
           ],
         ),
       ),

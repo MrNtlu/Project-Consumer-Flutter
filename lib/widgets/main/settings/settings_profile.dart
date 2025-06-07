@@ -15,8 +15,11 @@ class SettingsProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final width = mediaQuery.size.width;
+
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: width,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: SizedBox(
@@ -38,20 +41,22 @@ class SettingsProfile extends StatelessWidget {
                       onPressed: () {
                         showCupertinoModalBottomSheet(
                           context: context,
-                          barrierColor: CupertinoColors.black.withOpacity(0.75),
+                          barrierColor: CupertinoColors.black.withValues(
+                            alpha: 0.75,
+                          ),
                           builder: (_) {
-
                             return ChangeImageSheet(
                               currentImage: _userInfo.image,
                               _changeImage,
                             );
-                          }
+                          },
                         );
                       },
                       child: CircleAvatar(
                         radius: 11,
                         backgroundColor: AppColors().primaryColor,
-                        child: const Icon(Icons.edit, size: 14, color: CupertinoColors.white),
+                        child: const Icon(Icons.edit,
+                            size: 14, color: CupertinoColors.white),
                       ),
                     ),
                   ),
@@ -69,9 +74,7 @@ class SettingsProfile extends StatelessWidget {
                         _userInfo.username,
                         minFontSize: 14,
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -80,22 +83,18 @@ class SettingsProfile extends StatelessWidget {
                       child: Text(
                         _userInfo.email,
                         style: TextStyle(
-                          color: CupertinoTheme.brightnessOf(context) == Brightness.dark
-                          ? CupertinoColors.systemGrey2
-                          : CupertinoColors.systemGrey
-                        ),
+                            color: CupertinoTheme.brightnessOf(context) ==
+                                    Brightness.dark
+                                ? CupertinoColors.systemGrey2
+                                : CupertinoColors.systemGrey),
                       ),
                     ),
                   ],
                 ),
               ),
               if (_userInfo.isPremium)
-              Lottie.asset(
-                "assets/lottie/premium.json",
-                height: 36,
-                width: 36,
-                frameRate: const FrameRate(60)
-              ),
+                Lottie.asset("assets/lottie/premium.json",
+                    height: 36, width: 36, frameRate: const FrameRate(60)),
             ],
           ),
         ),

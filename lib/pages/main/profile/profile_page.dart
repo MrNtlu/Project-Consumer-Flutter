@@ -47,6 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _error;
 
   late final ProfileDetailsProvider _provider;
+  late final CupertinoThemeData cupertinoTheme;
 
   void _fetchData() {
     setState(() {
@@ -69,6 +70,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void didChangeDependencies() {
     if (_state == DetailState.init) {
+      cupertinoTheme = CupertinoTheme.of(context);
+
       final authProvider =
           Provider.of<AuthenticationProvider>(context, listen: false);
       if (!authProvider.isAuthenticated) {
@@ -197,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: ColoredBox(
-                    color: CupertinoTheme.of(context).profileButton,
+                    color: cupertinoTheme.profileButton,
                     child: Column(
                       children: [
                         Row(
@@ -233,12 +236,20 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 16),
               ProfileStats(item),
-              SeeAllTitle("🕒 Watch Later", () {
-                Navigator.of(context, rootNavigator: true)
-                    .push(CupertinoPageRoute(builder: (_) {
-                  return const ConsumeLaterPage();
-                })).then((value) => _fetchData());
-              }),
+              SeeAllTitle(
+                "🕒 Watch Later",
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (_) {
+                        return const ConsumeLaterPage();
+                      },
+                    ),
+                  ).then(
+                    (value) => _fetchData(),
+                  );
+                },
+              ),
               SizedBox(
                 height: 165,
                 child: _provider.isLoading

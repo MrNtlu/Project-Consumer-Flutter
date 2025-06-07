@@ -12,6 +12,7 @@ New Features & QoL Improvements 🎉
 
 - AI Recommendation fixed and improved.
 - AI Recommendation consistency improved.
+- Accidental adult content removed and fixed.
 - Redesign started.
 - UI changes.
 - UI improvements.
@@ -24,20 +25,24 @@ New Features & QoL Improvements 🎉
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
+    final height = mediaQuery.height * 0.4;
+
     return Platform.isAndroid
         ? AlertDialog(
-            backgroundColor: CupertinoTheme.of(context).onBgColor,
+            backgroundColor: cupertinoTheme.onBgColor,
             title: Text(
               "What's New (v$version)",
               style: TextStyle(
-                color: CupertinoTheme.of(context).bgTextColor,
+                color: cupertinoTheme.bgTextColor,
               ),
             ),
             content: Padding(
               padding: const EdgeInsets.only(top: 12),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.sizeOf(context).height * 0.4,
+                  maxHeight: height,
                 ),
                 child: SingleChildScrollView(
                   child: UnconstrainedBox(
@@ -45,7 +50,7 @@ New Features & QoL Improvements 🎉
                     child: Text(
                       patchNotes,
                       style: TextStyle(
-                        color: CupertinoTheme.of(context).bgTextColor,
+                        color: cupertinoTheme.bgTextColor,
                       ),
                     ),
                   ),
@@ -79,7 +84,9 @@ New Features & QoL Improvements 🎉
             ],
           )
         : CupertinoAlertDialog(
-            title: Text("What's New (v$version)"),
+            title: Text(
+              "What's New (v$version",
+            ),
             content: Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Text(

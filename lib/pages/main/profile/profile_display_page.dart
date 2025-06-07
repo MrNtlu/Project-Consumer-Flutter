@@ -196,7 +196,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
               const SizedBox(height: 32),
               ProfileStats(item),
               const SizedBox(height: 8),
-              SeeAllTitle("💬 Reviews", () {}, shouldHideSeeAllButton: true),
+              const SeeAllTitle("💬 Reviews"),
               SizedBox(
                 height: item.reviews.isEmpty ? 100 : 200,
                 child: Padding(
@@ -227,7 +227,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                   ),
                 ),
               ),
-              SeeAllTitle("🗂️ Lists", () {}, shouldHideSeeAllButton: true),
+              const SeeAllTitle("🗂️ Lists"),
               SizedBox(
                 height: item.customLists.isEmpty ? 100 : 125,
                 child: Padding(

@@ -1,19 +1,17 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
-import 'package:watchlistfy/pages/main/content_list_page.dart';
 import 'package:watchlistfy/pages/main/search_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
-import 'package:watchlistfy/static/ads_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
-import 'package:watchlistfy/static/interstitial_ad_handler.dart';
 import 'package:watchlistfy/widgets/common/banner_ad_widget.dart';
 import 'package:watchlistfy/widgets/common/content_selection_chips.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
@@ -40,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   late final AuthenticationProvider authenticationProvider;
   late final ContentProvider contentProvider;
   late final GlobalProvider globalProvider;
+  late final CupertinoThemeData cupertinoTheme;
   PreviewProvider? previewProvider;
 
   @override
@@ -49,6 +48,7 @@ class _HomePageState extends State<HomePage> {
       contentProvider = Provider.of<ContentProvider>(context);
       globalProvider = Provider.of<GlobalProvider>(context);
       previewProvider = Provider.of<PreviewProvider>(context, listen: false);
+      cupertinoTheme = CupertinoTheme.of(context);
 
       contentProvider.initContentType(globalProvider.contentType);
 
@@ -82,16 +82,19 @@ class _HomePageState extends State<HomePage> {
           children: [
             IconButton(
               onPressed: () {
-                // TODO Later Fix
-                // Navigator.of(context, rootNavigator: true).push(
-                //   CupertinoPageRoute(
-                //     builder: (_) {
-                //       return const SearchListPage(null);
-                //     },
-                //   ),
-                // );
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      return const SearchListPage(null);
+                    },
+                  ),
+                );
               },
-              icon: const Icon(CupertinoIcons.search),
+              icon: FaIcon(
+                FontAwesomeIcons.magnifyingGlass,
+                size: 18,
+                color: cupertinoTheme.primaryColor,
+              ),
             ),
             const Spacer(),
             Align(
@@ -105,8 +108,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        backgroundColor: CupertinoTheme.of(context).bgColor,
-        brightness: CupertinoTheme.of(context).brightness,
+        backgroundColor: cupertinoTheme.bgColor,
+        brightness: cupertinoTheme.brightness,
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -114,27 +117,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 8),
             const ContentSelectionChips(),
             const SizedBox(height: 8),
-            //TODO Change Later
-            SeeAllTitle(
-              "🔥 Popular",
-              () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (_) {
-                      if (AdsTracker().shouldShowAds() && shouldShowAds) {
-                        InterstitialAdHandler().showAds();
-                      }
-
-                      return ContentListPage(
-                        contentProvider.selectedContent,
-                        Constants.ContentTags[0],
-                        "🔥 Popular",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+            const SeeAllTitle("🔥 Popular"),
             SizedBox(
               height: 200,
               child: PreviewList(
@@ -153,70 +136,22 @@ class _HomePageState extends State<HomePage> {
               const BannerAdWidget(),
             ],
             const SizedBox(height: 12),
-            SeeAllTitle(
-              "📆 Upcoming",
-              () {
-                FocusManager.instance.primaryFocus?.unfocus();
-
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (_) {
-                      if (AdsTracker().shouldShowAds() && shouldShowAds) {
-                        InterstitialAdHandler().showAds();
-                      }
-
-                      return ContentListPage(
-                        contentProvider.selectedContent,
-                        Constants.ContentTags[1],
-                        "📆 Upcoming",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+            const SeeAllTitle("📆 Upcoming"),
             SizedBox(
               height: 200,
               child: PreviewList(Constants.ContentTags[1]),
             ),
             if (isMovieOrTVSeries) ...[
               const SizedBox(height: 8),
-              SeeAllTitle(
-                "🌎 Countries",
-                () {},
-                shouldHideSeeAllButton: true,
-              ),
+              const SeeAllTitle("🌎 Countries"),
               PreviewCountryList(
                 isMovie: contentProvider.selectedContent == ContentType.movie,
               ),
-              SeeAllTitle(
-                "🧛‍♂️ Popular Actors",
-                () {},
-                shouldHideSeeAllButton: true,
-              ),
+              const SeeAllTitle("🧛‍♂️ Popular Actors"),
               const PreviewActorList(),
             ],
             const SizedBox(height: 12),
-            SeeAllTitle(
-              "🍿 Top Rated",
-              () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (_) {
-                      if (AdsTracker().shouldShowAds() && shouldShowAds) {
-                        InterstitialAdHandler().showAds();
-                      }
-
-                      return ContentListPage(
-                        contentProvider.selectedContent,
-                        Constants.ContentTags[2],
-                        "🍿 Top Rated",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+            const SeeAllTitle("🍿 Top Rated"),
             SizedBox(
               height: 200,
               child: PreviewList(Constants.ContentTags[2]),
@@ -257,22 +192,6 @@ class _HomePageState extends State<HomePage> {
                 contentProvider.selectedContent == ContentType.movie
                     ? "🎭 In Theaters"
                     : "📺 Airing Today",
-                () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(
-                      builder: (_) {
-                        if (AdsTracker().shouldShowAds() && shouldShowAds) {
-                          InterstitialAdHandler().showAds();
-                        }
-
-                        return ContentListPage(contentProvider.selectedContent,
-                            Constants.ContentTags[3], "🎭 In Theaters");
-                      },
-                    ),
-                  );
-                },
-                shouldHideSeeAllButton:
-                    contentProvider.selectedContent != ContentType.movie,
               ),
               SizedBox(
                 height: 200,
@@ -282,8 +201,6 @@ class _HomePageState extends State<HomePage> {
             ],
             SeeAllTitle(
               "${contentProvider.selectedContent == ContentType.game ? '🎮' : '🎙️'} Popular ${contentProvider.selectedContent == ContentType.game ? 'Publishers' : 'Studios'}",
-              () {},
-              shouldHideSeeAllButton: true,
             ),
             const PreviewCompanyList(),
             const SizedBox(height: 16),

@@ -12,27 +12,27 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    final cupertinoTheme = CupertinoTheme.of(context);
 
     return GestureDetector(
       onTap: () {
         if (!authenticationProvider.isAuthenticated) {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(builder: (_) {
-              return LoginPage();
-            })
-          ); 
+          Navigator.of(context, rootNavigator: true)
+              .push(CupertinoPageRoute(builder: (_) {
+            return LoginPage();
+          }));
         }
       },
       child: SizedBox(
         width: double.infinity,
         height: 50,
         child: Card(
-          color: CupertinoTheme.of(context).bgColor,
+          color: cupertinoTheme.bgColor,
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: CupertinoColors.systemBlue, width: 1.0),
-            borderRadius: BorderRadius.circular(12)
-          ),
-          elevation: 6,
+              side: const BorderSide(
+                  color: CupertinoColors.systemBlue, width: 1.0),
+              borderRadius: BorderRadius.circular(12)),
+          elevation: 3,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Center(
@@ -41,9 +41,12 @@ class InfoCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 authenticationProvider.isAuthenticated
-                ? "Press and hold your username for quick menu."
-                : "Login or Register now to access all features.",
-                style: TextStyle(color: CupertinoTheme.of(context).bgTextColor, fontWeight: FontWeight.bold),
+                    ? "Press and hold your username for quick menu."
+                    : "Login or Register now to access all features.",
+                style: TextStyle(
+                  color: cupertinoTheme.bgTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

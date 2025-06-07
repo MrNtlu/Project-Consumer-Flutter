@@ -139,6 +139,7 @@ flutter:
     - assets/lottie/empty.json
     - assets/lottie/list.json
     - assets/lottie/review.json
+    - assets/lottie/search.json
     - assets/policies/privacy_policy.md
     - assets/policies/terms_conditions.md
     - assets/images/logo.png

@@ -9,6 +9,8 @@ class ProfileLevelBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -21,7 +23,7 @@ class ProfileLevelBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: level.toDouble() / 100,
               minHeight: 6,
-              backgroundColor: CupertinoTheme.of(context).onBgColor,
+              backgroundColor: cupertinoTheme.onBgColor,
               color: AppColors().primaryColor,
               borderRadius: BorderRadius.circular(8),
             ),
@@ -31,7 +33,7 @@ class ProfileLevelBar extends StatelessWidget {
             "$level Lvl",
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w500
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(width: 8),
@@ -44,10 +46,13 @@ class ProfileLevelBar extends StatelessWidget {
                 builder: (_) => const MessageDialog(
                   "Level is calculated based on User List, Watch Later, Reviews and Lists.",
                   title: "Information",
-                )
+                ),
               );
             },
-            child: const Icon(CupertinoIcons.info_circle, size: 17),
+            child: const Icon(
+              CupertinoIcons.info_circle,
+              size: 17,
+            ),
           )
         ],
       ),

@@ -8,16 +8,19 @@ class CustomListPrivateSwitch extends StatefulWidget {
   CustomListPrivateSwitch({this.isPrivate = false, super.key});
 
   @override
-  State<CustomListPrivateSwitch> createState() => _CustomListPrivateSwitchState();
+  State<CustomListPrivateSwitch> createState() =>
+      _CustomListPrivateSwitchState();
 }
 
 class _CustomListPrivateSwitchState extends State<CustomListPrivateSwitch> {
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Row(
       children: [
         CupertinoSwitch(
-          activeColor: CupertinoTheme.of(context).bgTextColor,
+          activeColor: cupertinoTheme.bgTextColor,
           thumbColor: AppColors().primaryColor,
           value: !widget.isPrivate,
           onChanged: (value) {
@@ -27,9 +30,21 @@ class _CustomListPrivateSwitchState extends State<CustomListPrivateSwitch> {
           },
         ),
         const Spacer(),
-        Text(widget.isPrivate ? "Private" : "Public", style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
+        Text(
+          widget.isPrivate ? "Private" : "Public",
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+          ),
+        ),
         const SizedBox(width: 6),
-        Text(widget.isPrivate ? "Only you can see it." : "Everybody can see it.", style: const TextStyle(color: CupertinoColors.systemGrey2, fontSize: 12)),
+        Text(
+          widget.isPrivate ? "Only you can see it." : "Everybody can see it.",
+          style: const TextStyle(
+            color: CupertinoColors.systemGrey2,
+            fontSize: 12,
+          ),
+        ),
       ],
     );
   }

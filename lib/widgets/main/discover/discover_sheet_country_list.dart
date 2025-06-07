@@ -2,51 +2,55 @@ import 'package:country_flags/country_flags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 
-// ignore: must_be_immutable
-class DiscoverSheetCountryList extends StatefulWidget {
-  String? selectedValue;
+class DiscoverSheetCountryList extends StatelessWidget {
+  final String? initialValue;
+  final ValueNotifier<String?> selectedValueNotifier;
   final List<String> list;
   final List<String> countryCodeList;
 
-  DiscoverSheetCountryList(this.selectedValue, this.list, this.countryCodeList, {super.key});
+  DiscoverSheetCountryList(
+    this.initialValue,
+    this.list,
+    this.countryCodeList, {
+    super.key,
+  }) : selectedValueNotifier = ValueNotifier(initialValue);
 
-  @override
-  State<DiscoverSheetCountryList> createState() => _DiscoverSheetCountryListState();
-}
-
-class _DiscoverSheetCountryListState extends State<DiscoverSheetCountryList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: widget.list.length,
+      itemCount: list.length,
       itemBuilder: (context, index) {
-        final data = widget.list[index];
-        final countryCode = widget.countryCodeList[index];
+        final data = list[index];
+        final countryCode = countryCodeList[index];
 
         return Padding(
           padding: EdgeInsets.only(left: index == 0 ? 6 : 0),
-          child: CupertinoChip(
-            isSelected: data == widget.selectedValue,
-            leading: CountryFlag.fromCountryCode(
-              countryCode,
-              width: 25,
-              height: 20,
-              borderRadius: 4,
-            ),
-            label: data,
-            onSelected: (value) {
-              setState(() {
-                if (data != widget.selectedValue) {
-                  widget.selectedValue = data;
-                } else {
-                  widget.selectedValue = null;
-                }
-              });
-            }
+          child: ValueListenableBuilder(
+            valueListenable: selectedValueNotifier,
+            builder: (context, selectedValue, child) {
+              return CupertinoChip(
+                shouldShowBorder: true,
+                isSelected: data == selectedValue,
+                leading: CountryFlag.fromCountryCode(
+                  countryCode,
+                  width: 25,
+                  height: 20,
+                  borderRadius: 4,
+                ),
+                label: data,
+                onSelected: (value) {
+                  if (data != selectedValue) {
+                    selectedValueNotifier.value = data;
+                  } else {
+                    selectedValueNotifier.value = null;
+                  }
+                },
+              );
+            },
           ),
         );
-      }
+      },
     );
   }
 }

@@ -2,10 +2,15 @@ import 'package:flutter/cupertino.dart';
 
 class SeeAllTitle extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool shouldHideSeeAllButton;
 
-  const SeeAllTitle(this.title, this.onTap, {this.shouldHideSeeAllButton = false, super.key});
+  const SeeAllTitle(
+    this.title, {
+    this.onTap,
+    this.shouldHideSeeAllButton = true,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +19,27 @@ class SeeAllTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          )),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           if (!shouldHideSeeAllButton)
-          CupertinoButton(
-            minSize: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-            onPressed: () {
-              onTap();
-            },
-            child: const Icon(CupertinoIcons.chevron_right)
-          )
+            CupertinoButton(
+              minSize: 0,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 7,
+                vertical: 4,
+              ),
+              onPressed: () {
+                onTap?.call();
+              },
+              child: const Icon(
+                CupertinoIcons.chevron_right,
+              ),
+            ),
         ],
       ),
     );

@@ -12,6 +12,7 @@ import 'package:watchlistfy/pages/main/discover/game_discover_sheet.dart';
 import 'package:watchlistfy/providers/main/discover/discover_game_provider.dart';
 import 'package:watchlistfy/providers/main/game/game_list_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
@@ -43,6 +44,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
   late final DiscoverGameProvider _discoverProvider;
   late final GlobalProvider _globalProvider;
   late final ScrollController _scrollController;
+  late final CupertinoThemeData _cupertinoTheme;
 
   int _page = 1;
   bool _canPaginate = false;
@@ -126,6 +128,7 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
   void didChangeDependencies() {
     if (_state == ListState.init) {
       _globalProvider = Provider.of<GlobalProvider>(context);
+      _cupertinoTheme = CupertinoTheme.of(context);
       _scrollController = ScrollController();
       _scrollController.addListener(_scrollHandler);
       _fetchData(true);
@@ -186,10 +189,44 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
                     ),
                   ),
                   GestureDetector(
-                    child: const Icon(Icons.filter_alt_rounded),
+                    child: provider.isFiltering
+                        ? Stack(
+                            children: [
+                              _filterButton(),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: CupertinoColors.systemRed,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      provider.filteringCount.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: CupertinoColors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : _filterButton(),
                     onTap: () {
                       showCupertinoModalBottomSheet(
                         context: context,
+                        barrierColor: _cupertinoTheme.bgTextColor.withValues(
+                          alpha: 0.1,
+                        ),
                         builder: (context) => GameDiscoverSheet(
                           _fetchData,
                           provider,
@@ -206,6 +243,15 @@ class _GameDiscoverListPageState extends State<GameDiscoverListPage> {
       ),
     );
   }
+
+  Widget _filterButton() => CircleAvatar(
+        backgroundColor: _cupertinoTheme.bgColor,
+        child: Icon(
+          Icons.filter_alt_rounded,
+          size: 26,
+          color: _cupertinoTheme.primaryColor,
+        ),
+      );
 
   Widget _body(List<BaseContent> data) {
     switch (_state) {

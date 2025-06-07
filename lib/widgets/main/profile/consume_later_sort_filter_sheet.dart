@@ -13,10 +13,11 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
   final VoidCallback _fetchData;
   final ConsumeLaterSortFilterProvider _provider;
 
-  const ConsumeLaterSortFilterSheet(this._fetchData, this._provider, {super.key});
+  const ConsumeLaterSortFilterSheet(this._fetchData, this._provider,
+      {super.key});
 
   List<String> combineUniqueLists<String>(List<List<String>> lists) {
-   final Set<String> uniqueValues = <String>{};
+    final Set<String> uniqueValues = <String>{};
 
     for (List<String> list in lists) {
       uniqueValues.addAll(list);
@@ -27,48 +28,63 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     final filterList = DiscoverSheetList(
-      ContentType.values.where(
-        (element) => element == _provider.filterContent
-      ).firstOrNull?.value,
-      ContentType.values.map((e) => e.value).toList(),
+      ContentType.values
+          .where(
+            (element) => element == _provider.filterContent,
+          )
+          .firstOrNull
+          ?.value,
+      ContentType.values
+          .map(
+            (e) => e.value,
+          )
+          .toList(),
     );
 
-    final combinedGenres = combineUniqueLists(
-      [
-        Constants.MovieGenreList.map((e) => e.name).toList(),
-        Constants.GameGenreList.map((e) => e.name).toList(),
-        Constants.AnimeGenreList.map((e) => e.name).toList(),
-      ]
-    );
+    final combinedGenres = combineUniqueLists([
+      Constants.MovieGenreList.map((e) => e.name).toList(),
+      Constants.GameGenreList.map((e) => e.name).toList(),
+      Constants.AnimeGenreList.map((e) => e.name).toList(),
+    ]);
     combinedGenres.removeAt(0);
 
     final genreList = DiscoverSheetList(
-      combinedGenres.where(
-        (element) => element == _provider.genre
-      ).firstOrNull,
+      combinedGenres
+          .where(
+            (element) => element == _provider.genre,
+          )
+          .firstOrNull,
       combinedGenres,
     );
 
     final streamingPlatformList = DiscoverSheetImageList(
       Constants.StreamingPlatformList.where(
-        (element) => element.request == _provider.streaming
+        (element) => element.request == _provider.streaming,
       ).firstOrNull?.name,
-      Constants.StreamingPlatformList.map((e) => e.name).toList(),
-      Constants.StreamingPlatformList.map((e) => e.image).toList(),
+      Constants.StreamingPlatformList.map(
+        (e) => e.name,
+      ).toList(),
+      Constants.StreamingPlatformList.map(
+        (e) => e.image,
+      ).toList(),
     );
 
     final sortList = DiscoverSheetList(
       Constants.SortConsumeLaterRequests.where(
-        (element) => element.request == _provider.sort
+        (element) => element.request == _provider.sort,
       ).first.name,
-      Constants.SortConsumeLaterRequests.map((e) => e.name).toList(),
+      Constants.SortConsumeLaterRequests.map(
+        (e) => e.name,
+      ).toList(),
       allowUnSelect: false,
     );
 
     return SafeArea(
       child: ColoredBox(
-        color: CupertinoTheme.of(context).bgColor,
+        color: cupertinoTheme.bgColor,
         child: Column(
           children: [
             Expanded(
@@ -80,9 +96,11 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
                     DiscoverSheetFilterBody("Type", filterList),
                     DiscoverSheetFilterBody("Genre", genreList),
                     ChangeNotifierProvider(
-                      create: (_) => StreamingPlatformStateProvider(),
-                      child: DiscoverSheetImageFilterBody("Streaming Platforms", streamingPlatformList)
-                    ),
+                        create: (_) => StreamingPlatformStateProvider(),
+                        child: DiscoverSheetImageFilterBody(
+                          "Streaming Platforms",
+                          streamingPlatformList,
+                        )),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -93,27 +111,52 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CupertinoButton(
-                  child: const Text("Reset", style: TextStyle(color: CupertinoColors.destructiveRed, fontSize: 14)),
-                  onPressed: () {
-                    Navigator.pop(context);
+                    child: const Text(
+                      "Reset",
+                      style: TextStyle(
+                        color: CupertinoColors.destructiveRed,
+                        fontSize: 14,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
 
-                    _provider.reset();
-                    _fetchData();
-                  }
-                ),
+                      _provider.reset();
+                      _fetchData();
+                    }),
                 CupertinoButton.filled(
                   onPressed: () {
                     Navigator.pop(context);
 
-                    final newSort = Constants.SortConsumeLaterRequests.where((element) => element.name == sortList.selectedValue!).first.request;
-                    final newFilter = ContentType.values.where((element) => element.value == filterList.selectedValue).firstOrNull;
-                    final newGenre = combinedGenres.where((element) => element == genreList.selectedValue).firstOrNull;
-                    final newStreaming = Constants.StreamingPlatformList.where((element) => element.name == streamingPlatformList.selectedValue).firstOrNull?.request;
+                    final newSort = Constants.SortConsumeLaterRequests.where(
+                      (element) =>
+                          element.name == sortList.selectedValueNotifier.value!,
+                    ).first.request;
 
-                    final shouldFetchData = _provider.sort != newSort
-                      || _provider.filterContent != newFilter
-                      || _provider.genre != newGenre
-                      || _provider.streaming != newStreaming;
+                    final newFilter = ContentType.values
+                        .where(
+                          (element) =>
+                              element.value ==
+                              filterList.selectedValueNotifier.value,
+                        )
+                        .firstOrNull;
+
+                    final newGenre = combinedGenres
+                        .where(
+                          (element) =>
+                              element == genreList.selectedValueNotifier.value,
+                        )
+                        .firstOrNull;
+
+                    final newStreaming = Constants.StreamingPlatformList.where(
+                      (element) =>
+                          element.name == streamingPlatformList.selectedValue,
+                    ).firstOrNull?.request;
+
+                    final shouldFetchData = _provider.sort != newSort ||
+                        _provider.filterContent != newFilter ||
+                        _provider.genre != newGenre ||
+                        _provider.streaming != newStreaming;
 
                     _provider.setSort(newSort);
                     _provider.setContentType(newFilter);
@@ -126,15 +169,19 @@ class ConsumeLaterSortFilterSheet extends StatelessWidget {
                   },
                   child: const Text(
                     "Done",
-                    style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold, fontSize: 16)
+                    style: TextStyle(
+                      color: CupertinoColors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: 6)
           ],
         ),
-      )
+      ),
     );
   }
 }

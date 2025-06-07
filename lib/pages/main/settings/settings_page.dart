@@ -262,7 +262,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text("Settings"),
-        backgroundColor: CupertinoTheme.of(context).bgColor,
+        backgroundColor: cupertinoTheme.bgColor,
         brightness: cupertinoTheme.brightness,
       ),
       child: _state == DetailState.loading
@@ -477,11 +477,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         "Logos provided by Logo.dev",
                         style: TextStyle(
                           fontSize: 12, // Discreet font size
-                          color: CupertinoTheme.of(context)
-                              .textTheme
-                              .tabLabelTextStyle
-                              .color
-                              ?.withOpacity(0.7), // Discreet color
+                          color: cupertinoTheme
+                              .textTheme.tabLabelTextStyle.color
+                              ?.withValues(alpha: 0.7), // Discreet color
                           decoration:
                               TextDecoration.underline, // Indicate it's a link
                         ),

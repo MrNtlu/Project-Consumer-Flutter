@@ -10,10 +10,12 @@ class ProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Expanded(
       child: CupertinoButton(
-        color: CupertinoTheme.of(context).profileButton,
-        padding: EdgeInsets.zero, 
+        color: cupertinoTheme.profileButton,
+        padding: EdgeInsets.zero,
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -24,15 +26,19 @@ class ProfileButton extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 3),
-                  child: Icon(icon, color: AppColors().primaryColor, size: 20),
-                )
+                  child: Icon(
+                    icon,
+                    color: AppColors().primaryColor,
+                    size: 20,
+                  ),
+                ),
               ),
               Text(
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors().primaryColor,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

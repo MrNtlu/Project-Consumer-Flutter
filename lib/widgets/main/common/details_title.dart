@@ -10,14 +10,12 @@ class DetailsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 24, bottom: 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: AppColors().primaryColor,
-        )
-      ),
+      child: Text(title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors().primaryColor,
+          )),
     );
   }
 }
@@ -29,6 +27,8 @@ class DetailsSubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 24, bottom: 8),
       child: Text(
@@ -36,8 +36,8 @@ class DetailsSubTitle extends StatelessWidget {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
-          color: CupertinoTheme.of(context).bgTextColor,
-        )
+          color: cupertinoTheme.bgTextColor,
+        ),
       ),
     );
   }

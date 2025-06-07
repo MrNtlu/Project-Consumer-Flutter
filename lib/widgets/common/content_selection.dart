@@ -14,12 +14,14 @@ class ContentSelection extends StatefulWidget {
 
 class _ContentSelectionState extends State<ContentSelection> {
   late final ContentProvider contentProvider;
+  late final CupertinoThemeData cupertinoTheme;
   var isInit = false;
 
   @override
   void didChangeDependencies() {
     if (!isInit) {
       contentProvider = Provider.of<ContentProvider>(context);
+      cupertinoTheme = CupertinoTheme.of(context);
       isInit = true;
     }
     super.didChangeDependencies();
@@ -51,14 +53,14 @@ class _ContentSelectionState extends State<ContentSelection> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: CupertinoTheme.of(context).primaryColor,
+                      color: cupertinoTheme.primaryColor,
                     ),
                   ),
                   const SizedBox(width: 6),
                   Icon(
                     FontAwesomeIcons.solidHandPointer,
                     size: 12,
-                    color: CupertinoTheme.of(context).primaryColor,
+                    color: cupertinoTheme.primaryColor,
                   )
                 ],
               ),
@@ -89,7 +91,7 @@ class _ContentSelectionState extends State<ContentSelection> {
           padding: const EdgeInsets.all(16),
           height: 60 + (ContentType.values.length * 50) + 24,
           decoration: BoxDecoration(
-            color: CupertinoTheme.of(context).onBgColor,
+            color: cupertinoTheme.onBgColor,
             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
           ),
           child: Column(
@@ -107,37 +109,38 @@ class _ContentSelectionState extends State<ContentSelection> {
               const SizedBox(height: 32),
               Expanded(
                 child: ListView.builder(
-                    itemCount: ContentType.values.length,
-                    itemExtent: 50,
-                    itemBuilder: (context, index) {
-                      var isSelected = ContentType.values
-                              .indexOf(contentProvider.selectedContent) ==
-                          index;
+                  itemCount: ContentType.values.length,
+                  itemExtent: 50,
+                  itemBuilder: (context, index) {
+                    var isSelected = ContentType.values
+                            .indexOf(contentProvider.selectedContent) ==
+                        index;
 
-                      return CupertinoButton(
-                        color: isSelected
-                            ? CupertinoTheme.of(context).primaryColor
-                            : CupertinoTheme.of(context).onBgColor,
-                        onPressed: () {
-                          if (!isSelected) {
-                            contentProvider
-                                .setContentType(ContentType.values[index]);
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          ContentType.values[index].value,
-                          style: TextStyle(
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: isSelected
-                                ? CupertinoColors.white
-                                : CupertinoTheme.of(context).bgTextColor,
-                          ),
+                    return CupertinoButton(
+                      color: isSelected
+                          ? cupertinoTheme.primaryColor
+                          : cupertinoTheme.onBgColor,
+                      onPressed: () {
+                        if (!isSelected) {
+                          contentProvider.setContentType(
+                            ContentType.values[index],
+                          );
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        ContentType.values[index].value,
+                        style: TextStyle(
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected
+                              ? CupertinoColors.white
+                              : cupertinoTheme.bgTextColor,
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

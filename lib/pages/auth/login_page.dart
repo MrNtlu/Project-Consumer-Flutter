@@ -212,6 +212,10 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
+    final screenHeight = mediaQuery.height;
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
@@ -228,7 +232,7 @@ class LoginPage extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.sizeOf(context).height,
+          height: screenHeight,
           child: SingleChildScrollView(
             child: Center(
               child: Padding(
@@ -240,9 +244,7 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(height: 32),
                     Image.asset(
                       "assets/images/logo.png",
-                      height: MediaQuery.sizeOf(context).height > 400
-                          ? MediaQuery.sizeOf(context).height * 0.125
-                          : 110,
+                      height: screenHeight > 400 ? screenHeight * 0.125 : 110,
                     ),
                     const SizedBox(height: 16),
                     EmailField(_emailTextController),
@@ -304,7 +306,7 @@ class LoginPage extends StatelessWidget {
                             vertical: 12,
                             horizontal: 6,
                           ),
-                          color: CupertinoTheme.of(context).bgTextColor,
+                          color: cupertinoTheme.bgTextColor,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -315,7 +317,7 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 child: FaIcon(
                                   FontAwesomeIcons.apple,
-                                  color: CupertinoTheme.of(context).bgColor,
+                                  color: cupertinoTheme.bgColor,
                                 ),
                               ),
                               Expanded(
@@ -323,7 +325,7 @@ class LoginPage extends StatelessWidget {
                                   child: Text(
                                     "Sign in with Apple",
                                     style: TextStyle(
-                                      color: CupertinoTheme.of(context).bgColor,
+                                      color: cupertinoTheme.bgColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),

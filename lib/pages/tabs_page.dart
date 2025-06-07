@@ -252,12 +252,14 @@ class _TabsPageState extends State<TabsPage> {
       child: ValueListenableBuilder(
         valueListenable: _selectedPageIndexNotifier,
         builder: (context, selectedPageIndex, child) {
+          final cupertinoTheme = CupertinoTheme.of(context);
+
           return CupertinoTabScaffold(
             tabBar: CupertinoTabBar(
               onTap: _selectPage,
               currentIndex: selectedPageIndex,
-              backgroundColor: CupertinoTheme.of(context).barBackgroundColor,
-              activeColor: CupertinoTheme.of(context).primaryColor,
+              backgroundColor: cupertinoTheme.barBackgroundColor,
+              activeColor: cupertinoTheme.primaryColor,
               inactiveColor: CupertinoColors.systemGrey,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(

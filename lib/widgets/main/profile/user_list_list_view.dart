@@ -21,17 +21,21 @@ class UserListListView extends StatelessWidget {
   final Function(UserListContent) updateData;
 
   const UserListListView(
-      this.isEmpty,
-      this.length,
-      this.dataList,
-      this.provider,
-      this.userListProvider,
-      this.globalProvider,
-      this.updateData,
-      {super.key});
+    this.isEmpty,
+    this.length,
+    this.dataList,
+    this.provider,
+    this.userListProvider,
+    this.globalProvider,
+    this.updateData, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final height = mediaQuery.size.height;
+
     return ListView.builder(
       itemCount: provider.isSearching
           ? (isEmpty ? 1 : provider.searchList.length)
@@ -44,11 +48,17 @@ class UserListListView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Lottie.asset("assets/lottie/empty.json",
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      frameRate: const FrameRate(60)),
-                  const Text("Nothing here.",
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  Lottie.asset(
+                    "assets/lottie/empty.json",
+                    height: height * 0.5,
+                    frameRate: const FrameRate(60),
+                  ),
+                  const Text(
+                    "Nothing here.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             ),

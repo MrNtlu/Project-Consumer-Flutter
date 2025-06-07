@@ -19,6 +19,8 @@ class PreviewCompanyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     final ContentProvider contentProvider =
         Provider.of<ContentProvider>(context);
 
@@ -97,7 +99,7 @@ class PreviewCompanyList extends StatelessWidget {
                           maxWidthDiskCache: isMovieOrTVSeries ? 300 : 150,
                           errorWidget: (context, _, __) {
                             return ColoredBox(
-                              color: CupertinoTheme.of(context).bgTextColor,
+                              color: cupertinoTheme.bgTextColor,
                               child: SizedBox(
                                 height: 65,
                                 width: 65,
@@ -108,10 +110,10 @@ class PreviewCompanyList extends StatelessWidget {
                                       company.name,
                                       minFontSize: 13,
                                       style: TextStyle(
-                                          color: CupertinoTheme.of(context)
-                                              .bgColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                        color: cupertinoTheme.bgColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),

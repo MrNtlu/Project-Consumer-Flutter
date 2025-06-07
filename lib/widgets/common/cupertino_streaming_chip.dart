@@ -9,12 +9,17 @@ class CupertinoStreamingChip extends StatelessWidget {
   final EdgeInsets padding;
   final Widget? leading;
   final double size;
+  final bool shouldShowBorder;
 
   const CupertinoStreamingChip({
-    required this.isSelected, required this.onSelected,
-    required this.label, this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    required this.isSelected,
+    required this.onSelected,
+    required this.label,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
     this.size = 14,
-    this.leading, super.key,
+    this.leading,
+    this.shouldShowBorder = false,
+    super.key,
   });
 
   @override
@@ -22,27 +27,33 @@ class CupertinoStreamingChip extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onSelected != null
-      ? () {
-        onSelected!(isSelected);
-      }
-      : null,
+          ? () {
+              onSelected!(isSelected);
+            }
+          : null,
       child: Container(
         alignment: Alignment.center,
         padding: padding,
         margin: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors().primaryColor : CupertinoTheme.of(context).onBgColor,
+          color: isSelected
+              ? AppColors().primaryColor
+              : CupertinoTheme.of(context).onBgColor,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: shouldShowBorder
+              ? Border.all(
+                  color: CupertinoColors.white.withValues(alpha: 0.1),
+                  width: 1,
+                )
+              : null,
         ),
         child: Align(
           alignment: Alignment.centerLeft,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (leading != null)
-              leading!,
-              if (leading != null)
-              const SizedBox(width: 8),
+              if (leading != null) leading!,
+              if (leading != null) const SizedBox(width: 8),
               AutoSizeText(
                 label,
                 maxLines: 1,
@@ -50,7 +61,9 @@ class CupertinoStreamingChip extends StatelessWidget {
                 textAlign: TextAlign.start,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: isSelected ? CupertinoColors.white : CupertinoTheme.of(context).bgTextColor,
+                  color: isSelected
+                      ? CupertinoColors.white
+                      : CupertinoTheme.of(context).bgTextColor,
                   fontSize: size,
                   fontWeight: FontWeight.w500,
                 ),

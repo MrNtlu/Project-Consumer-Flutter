@@ -12,6 +12,9 @@ class DetailsCarouselSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final width = mediaQuery.size.width;
+
     return CarouselSlider(
       items: images.map(
         (i) {
@@ -28,7 +31,7 @@ class DetailsCarouselSlider extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: width,
                   margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),

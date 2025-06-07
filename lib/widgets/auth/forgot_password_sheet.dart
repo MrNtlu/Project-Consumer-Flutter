@@ -11,18 +11,20 @@ import 'package:http/http.dart' as http;
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 
 class ForgotPasswordSheet extends StatelessWidget {
-  
   const ForgotPasswordSheet({super.key});
 
   void onSendEmailPressed(BuildContext context, String email) async {
     final isValid = email.isNotEmpty && email.isEmailValid();
     if (!isValid) {
-      showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Invalid email address."));
+      showCupertinoDialog(
+          context: context,
+          builder: (_) => const ErrorDialog("Invalid email address."));
       return;
     }
-    
-    showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
-    
+
+    showCupertinoDialog(
+        context: context, builder: (_) => const LoadingDialog());
+
     try {
       final response = await http.post(
         Uri.parse(APIRoutes().userRoutes.forgotPassword),
@@ -33,27 +35,27 @@ class ForgotPasswordSheet extends StatelessWidget {
       if (context.mounted) {
         Navigator.pop(context);
 
-        if (response.getBaseMessageResponse().error != null){
+        if (response.getBaseMessageResponse().error != null) {
           showCupertinoDialog(
-            context: context, 
-            builder: (ctx) => ErrorDialog(response.getBaseMessageResponse().error!)
-          ); 
+              context: context,
+              builder: (ctx) =>
+                  ErrorDialog(response.getBaseMessageResponse().error!));
           return;
         }
 
         Navigator.pop(context);
-        
+
         showCupertinoDialog(
-          context: context, 
-          builder: (ctx) => MessageDialog(response.getBaseMessageResponse().message ?? "Please check your inbox. Don't forget to check your spams too.")
-        );
+            context: context,
+            builder: (ctx) => MessageDialog(response
+                    .getBaseMessageResponse()
+                    .message ??
+                "Please check your inbox. Don't forget to check your spams too."));
       }
-    } catch(error) {
+    } catch (error) {
       if (context.mounted) {
         showCupertinoDialog(
-          context: context, 
-          builder: (ctx) => ErrorDialog(error.toString())
-        );
+            context: context, builder: (ctx) => ErrorDialog(error.toString()));
       }
     }
   }
@@ -61,12 +63,15 @@ class ForgotPasswordSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final emailTextEditingController = TextEditingController();
+    final cupertinoTheme = CupertinoTheme.of(context);
 
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
         padding: const EdgeInsets.all(12),
-        color: CupertinoTheme.of(context).bgColor,
+        color: cupertinoTheme.bgColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -78,18 +83,22 @@ class ForgotPasswordSheet extends StatelessWidget {
                 "Please enter your email address. You'll receive password reset email if you have an account.",
                 softWrap: true,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: CupertinoColors.systemGrey
-                ),
-              )
+                style:
+                    TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+              ),
             ),
             CupertinoButton.filled(
-              child: const Text("Send Mail", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold)), 
+              child: const Text(
+                "Send Mail",
+                style: TextStyle(
+                  color: CupertinoColors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 onSendEmailPressed(context, emailTextEditingController.text);
-              }
-            )
+              },
+            ),
           ],
         ),
       ),

@@ -3,28 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
 
-// ignore: must_be_immutable
-class DiscoverSheetSlider extends StatefulWidget {
+class DiscoverSheetSlider extends StatelessWidget {
   final int max;
   final int min;
   final int div;
-  int? value;
+  final ValueNotifier<int?> valueNotifier;
+  final int? initialValue;
 
   DiscoverSheetSlider({
     this.max = 8,
     this.min = 4,
     this.div = 4,
-    this.value,
+    this.initialValue,
     super.key,
-  });
+  }) : valueNotifier = ValueNotifier(initialValue);
 
-  @override
-  State<DiscoverSheetSlider> createState() => _DiscoverSheetSliderState();
-}
-
-class _DiscoverSheetSliderState extends State<DiscoverSheetSlider> {
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Column(
@@ -41,44 +38,56 @@ class _DiscoverSheetSliderState extends State<DiscoverSheetSlider> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Material(
-                    color: CupertinoTheme.of(context).bgColor,
+                    color: cupertinoTheme.bgColor,
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                         trackHeight: 9.5,
                         thumbColor: AppColors().primaryColor,
-                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12, elevation: 3),
-                        activeTickMarkColor: CupertinoTheme.of(context).bgTextColor,
-                        inactiveTickMarkColor: CupertinoTheme.of(context).bgColor,
-                        inactiveTrackColor: CupertinoTheme.of(context).bgTextColor,
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 12,
+                          elevation: 3,
+                        ),
+                        activeTickMarkColor: cupertinoTheme.bgTextColor,
+                        inactiveTickMarkColor: cupertinoTheme.bgColor,
+                        inactiveTrackColor: cupertinoTheme.bgTextColor,
                       ),
-                      child: Slider(
-                        activeColor: AppColors().primaryColor,
-                        label: widget.value != null ? "${widget.value}+" : "Not Selected",
-                        value: widget.value != null ? widget.value!.toDouble() : widget.min.toDouble(),
-                        min: widget.min.toDouble(),
-                        max: widget.max.toDouble(),
-                        divisions: widget.div,
-                        onChanged: (val) {
-                          setState(() {
-                            if (val > widget.min) {
-                              widget.value = val.toInt();
-                            } else {
-                              widget.value = null;
-                            }
-                          });
-                        },
-                      ),
+                      child: ValueListenableBuilder(
+                          valueListenable: valueNotifier,
+                          builder: (context, value, child) {
+                            return Slider(
+                              activeColor: AppColors().primaryColor,
+                              label: value != null ? "$value+" : "Not Selected",
+                              value: value != null
+                                  ? value.toDouble()
+                                  : min.toDouble(),
+                              min: min.toDouble(),
+                              max: max.toDouble(),
+                              divisions: div,
+                              onChanged: (val) {
+                                if (val > min) {
+                                  valueNotifier.value = val.toInt();
+                                } else {
+                                  valueNotifier.value = null;
+                                }
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ),
                 SizedBox(
                   width: 75,
-                  child: Text(
-                    widget.value != null ? "${widget.value}+" : "Not Selected",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: ValueListenableBuilder(
+                    valueListenable: valueNotifier,
+                    builder: (context, value, child) {
+                      return Text(
+                        value != null ? "$value+" : "Not Selected",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),

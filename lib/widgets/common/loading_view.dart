@@ -12,36 +12,46 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait || Platform.isMacOS || Platform.isWindows;
+    final mediaQuery = MediaQuery.of(context);
+    final isPortrait = mediaQuery.orientation == Orientation.portrait ||
+        Platform.isMacOS ||
+        Platform.isWindows;
+    final height = mediaQuery.size.height;
 
     return Padding(
       padding: const EdgeInsets.all(8),
       child: isPortrait
-        ? _body(context)
-        : SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: _body(context)
-        ),
+          ? _body(context)
+          : SizedBox(
+              height: height,
+              child: _body(context),
+            ),
     );
   }
 
   Widget _body(BuildContext context) => Stack(
-    fit: StackFit.expand,
-    children: [
-      Align(
-        alignment: Alignment.center,
-        child: Lottie.asset(
-          "assets/lottie/loading.json",
-          frameRate: const FrameRate(60),
-        ),
-      ),
-      Align(
-        alignment: Alignment.center,
-        child: Text(
-          _text,
-          style: TextStyle(color: textColor == Colors.black ? CupertinoTheme.of(context).bgTextColor : textColor, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      )
-    ]
-  );
+        fit: StackFit.expand,
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Lottie.asset(
+              "assets/lottie/loading.json",
+              frameRate: const FrameRate(60),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              _text,
+              style: TextStyle(
+                color: textColor == Colors.black
+                    ? CupertinoTheme.of(context).bgTextColor
+                    : textColor,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
 }

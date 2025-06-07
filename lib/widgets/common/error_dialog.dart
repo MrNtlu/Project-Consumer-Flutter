@@ -11,38 +11,51 @@ class ErrorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
     return Platform.isAndroid
-    ? AlertDialog(
-      backgroundColor: CupertinoTheme.of(context).onBgColor,
-      title: Text("Error", style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-      content: Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: Text(_error, style: TextStyle(color: CupertinoTheme.of(context).bgTextColor)),
-      ),
-      actions: [
-        TextButton(
-          child: const Text("Gotcha!", style: TextStyle(color: Colors.red)),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ],
-    )
-    : CupertinoAlertDialog(
-      title: const Text("Error"),
-      content: Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: Text(_error),
-      ),
-      actions: [
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          child: const Text("Gotcha!"),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ],
-    );
+        ? AlertDialog(
+            backgroundColor: cupertinoTheme.onBgColor,
+            title: Text(
+              "Error",
+              style: TextStyle(color: cupertinoTheme.bgTextColor),
+            ),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Text(
+                _error,
+                style: TextStyle(
+                  color: cupertinoTheme.bgTextColor,
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text(
+                  "Gotcha!",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          )
+        : CupertinoAlertDialog(
+            title: const Text("Error"),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Text(_error),
+            ),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text("Gotcha!"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
   }
 }

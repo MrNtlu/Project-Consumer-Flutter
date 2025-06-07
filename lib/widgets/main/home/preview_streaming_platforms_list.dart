@@ -18,6 +18,10 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final width = mediaQuery.size.width;
+
     final ContentProvider contentProvider =
         Provider.of<ContentProvider>(context);
 
@@ -37,7 +41,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
           if ((isMovie && Constants.MovieStreamingPlatformList.isEmpty) ||
               (isTV && Constants.TVStreamingPlatformList.isEmpty)) {
             return SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: width,
               child: const Center(
                 child: Text("Not available in your region."),
               ),
@@ -107,7 +111,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                         errorListener: (_) {},
                         placeholder: (context, _) {
                           return ColoredBox(
-                            color: CupertinoTheme.of(context).bgTextColor,
+                            color: cupertinoTheme.bgTextColor,
                             child: SizedBox(
                               height: 65,
                               width: 65,
@@ -119,9 +123,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                                         animeStreamingPlatform!.name,
                                     minFontSize: 13,
                                     style: TextStyle(
-                                      color: CupertinoTheme.of(
-                                        context,
-                                      ).bgColor,
+                                      color: cupertinoTheme.bgColor,
                                       fontSize: 16,
                                     ),
                                     textAlign: TextAlign.center,
@@ -133,7 +135,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                         },
                         errorWidget: (context, _, __) {
                           return ColoredBox(
-                            color: CupertinoTheme.of(context).bgTextColor,
+                            color: cupertinoTheme.bgTextColor,
                             child: SizedBox(
                               height: 65,
                               width: 65,
@@ -145,7 +147,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                                         animeStreamingPlatform!.name,
                                     minFontSize: 13,
                                     style: TextStyle(
-                                      color: CupertinoTheme.of(context).bgColor,
+                                      color: cupertinoTheme.bgColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
