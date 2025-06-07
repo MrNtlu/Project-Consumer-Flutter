@@ -10,6 +10,10 @@
 - Add logs for charts
 - Pinecone Search
 
+## Replace Dialog
+
+Replace dialogs with in app top notification
+
 ## Tabs Page
 
 Authenticated
