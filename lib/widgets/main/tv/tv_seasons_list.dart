@@ -30,7 +30,11 @@ class TVSeasonList extends StatelessWidget {
                     !season.imageURL.contains("null")) {
                   Navigator.of(context, rootNavigator: true)
                       .push(CupertinoPageRoute(builder: (_) {
-                    return ImagePage(season.imageURL);
+                    return ImagePage(
+                      season.imageURL,
+                      heroTag: 'tv_season_${season.seasonNum}_$index',
+                      fit: BoxFit.contain,
+                    );
                   }));
                 }
               },
@@ -43,14 +47,18 @@ class TVSeasonList extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                            height: 120,
+                          height: 120,
+                          child: Hero(
+                            tag: 'tv_season_${season.seasonNum}_$index',
                             child: ContentCell(
-                              season.imageURL,
+                              season.imageURL.replaceFirst("original", "w300"),
                               season.seasonNum.toString(),
                               cacheHeight: 265,
                               cacheWidth: 225,
                               forceRatio: true,
-                            )),
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         Text("Season ${season.seasonNum}",
                             style: const TextStyle(

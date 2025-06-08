@@ -15,34 +15,75 @@ import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 
 abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
-  bool isLoading = false;
-  bool isUserListLoading = false;
-  DetailState state = DetailState.init;
-  String? error;
+  bool _isLoading = false;
+  bool _isUserListLoading = false;
+  DetailState _state = DetailState.init;
+  String? _error;
   String? _currentId;
 
   @protected
   T? _item;
 
+  // Performance optimization: Cache frequently accessed properties
+  bool get isLoading => _isLoading;
+  bool get isUserListLoading => _isUserListLoading;
+  DetailState get state => _state;
+  String? get error => _error;
   T? get item => _item;
+
+  // Optimized setters with change detection
+  set _setIsLoading(bool value) {
+    if (_isLoading != value) {
+      _isLoading = value;
+      notifyListeners();
+    }
+  }
+
+  set _setIsUserListLoading(bool value) {
+    if (_isUserListLoading != value) {
+      _isUserListLoading = value;
+      notifyListeners();
+    }
+  }
+
+  set _setState(DetailState value) {
+    if (_state != value) {
+      _state = value;
+      notifyListeners();
+    }
+  }
+
+  set _setError(String? value) {
+    if (_error != value) {
+      _error = value;
+      notifyListeners();
+    }
+  }
 
   set setItem(T item) {
     _item = item;
+    _setState = DetailState.view;
   }
 
   /// Initialize and fetch data with ads handling
   void initializeAndFetch(String id, AuthenticationProvider authProvider) {
     // Only fetch if we don't have data for this ID or if state is init
-    if (_currentId != id || state == DetailState.init) {
+    if (_currentId != id || _state == DetailState.init) {
       _currentId = id;
       fetchData(id);
 
-      final shouldShowAds = authProvider.basicUserInfo == null ||
-          authProvider.basicUserInfo?.isPremium == false;
-      if (AdsTracker().shouldShowAds() && shouldShowAds) {
+      // Optimize ads check
+      if (_shouldShowAds(authProvider)) {
         InterstitialAdHandler().showAds();
       }
     }
+  }
+
+  // Extracted method for better performance
+  bool _shouldShowAds(AuthenticationProvider authProvider) {
+    return AdsTracker().shouldShowAds() &&
+        (authProvider.basicUserInfo == null ||
+            authProvider.basicUserInfo?.isPremium == false);
   }
 
   /// Abstract method to be implemented by specific providers
@@ -57,10 +98,8 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
   @protected
   Future<BaseNullableResponse<T>> getDetails({required String url}) async {
     try {
-      state = DetailState.loading;
-      notifyListeners();
+      _setState = DetailState.loading;
 
-      print("URL: $url");
       final response = await http.get(
         Uri.parse(url),
         headers: UserToken().getBearerToken(),
@@ -75,21 +114,18 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
       var data = baseItemResponse.data;
 
       if (data != null) {
-        state = DetailState.view;
         _item = data;
-
-        notifyListeners();
+        _setState = DetailState.view;
+        _setError = null;
       } else {
-        state = DetailState.error;
-        this.error = baseItemResponse.error ?? "Unknown error";
-        notifyListeners();
+        _setState = DetailState.error;
+        _setError = baseItemResponse.error ?? "Unknown error";
       }
 
       return baseItemResponse;
     } catch (error) {
-      state = DetailState.error;
-      this.error = error.toString();
-      notifyListeners();
+      _setState = DetailState.error;
+      _setError = error.toString();
       return BaseNullableResponse(
         message: error.toString(),
         error: error.toString(),
@@ -103,8 +139,7 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
     Request request, {
     required String url,
   }) async {
-    isLoading = true;
-    notifyListeners();
+    _setIsLoading = true;
 
     try {
       final response = await http.post(Uri.parse(url),
@@ -116,23 +151,20 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
         response.body,
       ) as Map<String, dynamic>;
 
-      isLoading = false;
       var baseItemResponse =
           decodedResponse.getBaseItemResponse<ConsumeLater>();
       var data = baseItemResponse.data;
 
       if (data != null && _item != null) {
         _item!.consumeLater = data;
-      } else if (baseItemResponse.error != null) {
-        isLoading = false;
+        // Only notify listeners once for the combined change
+        notifyListeners();
       }
-      notifyListeners();
 
+      _setIsLoading = false;
       return baseItemResponse;
     } catch (error) {
-      isLoading = false;
-      notifyListeners();
-
+      _setIsLoading = false;
       return BaseNullableResponse(message: error.toString());
     }
   }
@@ -142,8 +174,7 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
     IDBody body, {
     required String url,
   }) async {
-    isLoading = true;
-    notifyListeners();
+    _setIsLoading = true;
 
     try {
       final response = await http.delete(
@@ -159,19 +190,18 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
         response.body,
       ) as Map<String, dynamic>;
 
-      isLoading = false;
       var messageResponse = decodedResponse.getBaseMessageResponse();
 
-      if (messageResponse.error == null) {
+      if (messageResponse.error == null && _item != null) {
         _item!.consumeLater = null;
+        // Only notify listeners once for the combined change
+        notifyListeners();
       }
-      notifyListeners();
 
+      _setIsLoading = false;
       return messageResponse;
     } catch (error) {
-      isLoading = false;
-      notifyListeners();
-
+      _setIsLoading = false;
       return BaseMessageResponse(error.toString(), error.toString());
     }
   }
@@ -182,8 +212,7 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
     Request request, {
     required String url,
   }) async {
-    isUserListLoading = true;
-    notifyListeners();
+    _setIsUserListLoading = true;
 
     try {
       final response = await http.post(
@@ -199,22 +228,19 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
         response.body,
       ) as Map<String, dynamic>;
 
-      isUserListLoading = false;
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserList>();
       var data = baseItemResponse.data;
 
       if (data != null && _item != null) {
         _item!.userList = data;
-      } else if (baseItemResponse.error != null) {
-        isUserListLoading = false;
+        // Only notify listeners once for the combined change
+        notifyListeners();
       }
-      notifyListeners();
 
+      _setIsUserListLoading = false;
       return baseItemResponse;
     } catch (error) {
-      isUserListLoading = false;
-      notifyListeners();
-
+      _setIsUserListLoading = false;
       return BaseNullableResponse(message: error.toString());
     }
   }
@@ -225,8 +251,7 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
     Request request, {
     required String url,
   }) async {
-    isUserListLoading = true;
-    notifyListeners();
+    _setIsUserListLoading = true;
 
     try {
       final response = await http.patch(
@@ -242,22 +267,19 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
         response.body,
       ) as Map<String, dynamic>;
 
-      isUserListLoading = false;
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserList>();
       var data = baseItemResponse.data;
 
       if (data != null && _item != null) {
         _item!.userList = data;
-      } else if (baseItemResponse.error != null) {
-        isUserListLoading = false;
+        // Only notify listeners once for the combined change
+        notifyListeners();
       }
-      notifyListeners();
 
+      _setIsUserListLoading = false;
       return baseItemResponse;
     } catch (error) {
-      isUserListLoading = false;
-      notifyListeners();
-
+      _setIsUserListLoading = false;
       return BaseNullableResponse(message: error.toString());
     }
   }
@@ -267,8 +289,7 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
     DeleteUserListBody body, {
     required String url,
   }) async {
-    isUserListLoading = true;
-    notifyListeners();
+    _setIsUserListLoading = true;
 
     try {
       final response = await http.delete(
@@ -284,21 +305,18 @@ abstract class BaseDetailsProvider<T extends DetailsModel> with ChangeNotifier {
         response.body,
       ) as Map<String, dynamic>;
 
-      isUserListLoading = false;
       var messageResponse = decodedResponse.getBaseMessageResponse();
 
-      if (messageResponse.error == null) {
+      if (messageResponse.error == null && _item != null) {
         _item!.userList = null;
-      } else if (messageResponse.error != null) {
-        isUserListLoading = false;
+        // Only notify listeners once for the combined change
+        notifyListeners();
       }
-      notifyListeners();
 
+      _setIsUserListLoading = false;
       return messageResponse;
     } catch (error) {
-      isUserListLoading = false;
-      notifyListeners();
-
+      _setIsUserListLoading = false;
       return BaseMessageResponse(error.toString(), error.toString());
     }
   }

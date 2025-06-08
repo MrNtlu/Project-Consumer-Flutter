@@ -79,7 +79,7 @@ class ContentList extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
               child: ContentCell(
-                content.imageUrl,
+                content.imageUrl.replaceFirst("original", "w400"),
                 content.titleEn,
                 forceRatio: true,
               ),

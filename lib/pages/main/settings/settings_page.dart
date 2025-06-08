@@ -471,7 +471,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        top: 0, bottom: 0), // Adjust padding
+                      top: 0,
+                      bottom: 0,
+                    ),
                     child: CupertinoButton(
                       child: Text(
                         "Logos provided by Logo.dev",
@@ -496,8 +498,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             showCupertinoDialog(
                               context: context,
                               builder: (ctx) => const MessageDialog(
-                                  "Could not launch https://logo.dev",
-                                  title: "Error"),
+                                "Could not launch https://logo.dev",
+                                title: "Error",
+                              ),
                             );
                           }
                         }
@@ -505,20 +508,30 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   if (authProvider?.isAuthenticated == true)
-                    CupertinoButton(
-                      child: const Text('Delete Account',
-                          style: TextStyle(color: CupertinoColors.systemRed)),
-                      onPressed: () {
-                        showCupertinoDialog(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: CupertinoButton(
+                        child: const Text(
+                          'Delete Account',
+                          style: TextStyle(
+                            color: CupertinoColors.systemGrey,
+                            fontSize: 11,
+                          ),
+                        ),
+                        onPressed: () {
+                          showCupertinoDialog(
                             context: context,
                             builder: (_) {
                               return SureDialog(
-                                  "Do you want to delete your account? This action cannot be reversed!",
-                                  () {
-                                _deleteUserAccount();
-                              });
-                            });
-                      },
+                                "Do you want to delete your account? This action cannot be reversed!",
+                                () {
+                                  _deleteUserAccount();
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                 ],
               ),

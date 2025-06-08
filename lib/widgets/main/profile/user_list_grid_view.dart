@@ -76,7 +76,7 @@ class UserListGridView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
               child: ContentCell(
-                content.imageUrl ?? '',
+                content.imageUrl?.replaceFirst("original", "w300") ?? '',
                 content.title.isEmpty ? content.titleOriginal : content.title,
                 cacheWidth: 500,
                 cacheHeight: 700,

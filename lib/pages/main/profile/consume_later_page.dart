@@ -301,7 +301,8 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
                           SizedBox(
                             height: 135,
                             child: ContentCell(
-                              content.content.imageUrl,
+                              content.content.imageUrl
+                                  .replaceFirst("original", "w400"),
                               content.content.titleEn,
                               cornerRadius: 8,
                               forceRatio: true,

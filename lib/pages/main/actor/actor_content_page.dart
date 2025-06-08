@@ -25,9 +25,10 @@ class ActorContentPage extends StatefulWidget {
   const ActorContentPage(
     this.id,
     this.name,
-    this.image,
-    {this.isMovie = true, super.key}
-  );
+    this.image, {
+    this.isMovie = true,
+    super.key,
+  });
 
   @override
   State<ActorContentPage> createState() => _ActorContentPageState();
@@ -55,11 +56,13 @@ class _ActorContentPageState extends State<ActorContentPage> {
       _isPaginating = true;
     }
 
-    _provider.getContentByActor(
+    _provider
+        .getContentByActor(
       id: widget.id,
       isMovie: widget.isMovie,
       page: _page,
-    ).then((response) {
+    )
+        .then((response) {
       _error = response.error;
       _canPaginate = response.canNextPage;
       _isPaginating = false;
@@ -67,24 +70,21 @@ class _ActorContentPageState extends State<ActorContentPage> {
       if (_state != ListState.disposed) {
         setState(() {
           _state = response.error != null && _page <= 1
-            ? ListState.error
-            : (
-              response.data.isEmpty && _page == 1
-                ? ListState.empty
-                : ListState.done
-            );
+              ? ListState.error
+              : (response.data.isEmpty && _page == 1
+                  ? ListState.empty
+                  : ListState.done);
         });
       }
     });
   }
 
   void _scrollHandler() {
-    if (
-      _canPaginate
-      && _scrollController.offset >= _scrollController.position.maxScrollExtent / 2
-      && !_scrollController.position.outOfRange
-    ) {
-      _page ++;
+    if (_canPaginate &&
+        _scrollController.offset >=
+            _scrollController.position.maxScrollExtent / 2 &&
+        !_scrollController.position.outOfRange) {
+      _page++;
       _fetchData();
     }
   }
@@ -122,50 +122,52 @@ class _ActorContentPageState extends State<ActorContentPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.image != null && widget.image!.isNotEmpty)
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(builder: (_) {
-                    return ImagePage(widget.image!);
-                  })
-                );
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(18),
-                child: CachedNetworkImage(
-                  imageUrl: widget.image!,
-                  key: ValueKey<String>(widget.image!),
-                  cacheKey: widget.image,
-                  fit: BoxFit.cover,
-                  height: 36,
-                  width: 36,
-                  cacheManager: CustomCacheManager(),
-                  maxHeightDiskCache: 100,
-                  maxWidthDiskCache: 100,
-                )
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (_) {
+                        return ImagePage(
+                          widget.image!,
+                          fit: BoxFit.contain,
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.image!,
+                    key: ValueKey<String>(widget.image!),
+                    cacheKey: widget.image,
+                    fit: BoxFit.cover,
+                    height: 36,
+                    width: 36,
+                    cacheManager: CustomCacheManager(),
+                    maxHeightDiskCache: 100,
+                    maxWidthDiskCache: 100,
+                  ),
+                ),
               ),
-            ),
             if (widget.image != null && widget.image!.isNotEmpty)
-            const SizedBox(width: 6),
+              const SizedBox(width: 6),
             Text(widget.name),
           ],
         ),
         trailing: CupertinoButton(
-          onPressed: () {
-            _globalProvider.setContentMode(
-              _globalProvider.contentMode == Constants.ContentUIModes.first
-              ? Constants.ContentUIModes.last
-              : Constants.ContentUIModes.first
-            );
-          },
-          padding: EdgeInsets.zero,
-          child: Icon(
-            _globalProvider.contentMode == Constants.ContentUIModes.first
-            ? Icons.grid_view_rounded
-            : CupertinoIcons.list_bullet,
-            size: 28
-          )
-        ),
+            onPressed: () {
+              _globalProvider.setContentMode(
+                  _globalProvider.contentMode == Constants.ContentUIModes.first
+                      ? Constants.ContentUIModes.last
+                      : Constants.ContentUIModes.first);
+            },
+            padding: EdgeInsets.zero,
+            child: Icon(
+                _globalProvider.contentMode == Constants.ContentUIModes.first
+                    ? Icons.grid_view_rounded
+                    : CupertinoIcons.list_bullet,
+                size: 28)),
       ),
       child: ChangeNotifierProvider(
         create: (_) => _provider,
@@ -181,37 +183,32 @@ class _ActorContentPageState extends State<ActorContentPage> {
   Widget _body(List<BaseContent> data) {
     switch (_state) {
       case ListState.done:
-        final isGridView = _globalProvider.contentMode == Constants.ContentUIModes.first;
+        final isGridView =
+            _globalProvider.contentMode == Constants.ContentUIModes.first;
 
         return isGridView
-        ? ContentList(
-          _scrollController,
-          _canPaginate,
-          _isPaginating,
-          widget.isMovie,
-          data
-        )
-        : Padding(
-          padding: const EdgeInsets.only(left: 3, right: 1),
-          child: ListView.builder(
-            itemCount: _canPaginate ? data.length + 1 : data.length,
-            controller: _scrollController,
-            itemBuilder: (context, index) {
-              if ((_canPaginate || _isPaginating) && index >= data.length) {
-                return ContentListShimmerCell(
-                  widget.isMovie ? ContentType.movie : ContentType.tv
-                );
-              }
+            ? ContentList(_scrollController, _canPaginate, _isPaginating,
+                widget.isMovie, data)
+            : Padding(
+                padding: const EdgeInsets.only(left: 3, right: 1),
+                child: ListView.builder(
+                  itemCount: _canPaginate ? data.length + 1 : data.length,
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    if ((_canPaginate || _isPaginating) &&
+                        index >= data.length) {
+                      return ContentListShimmerCell(
+                          widget.isMovie ? ContentType.movie : ContentType.tv);
+                    }
 
-              final content = data[index];
+                    final content = data[index];
 
-              return ContentListCell(
-                widget.isMovie ? ContentType.movie : ContentType.tv,
-                content: content
+                    return ContentListCell(
+                        widget.isMovie ? ContentType.movie : ContentType.tv,
+                        content: content);
+                  },
+                ),
               );
-            },
-          ),
-        );
       case ListState.empty:
         return const EmptyView("assets/lottie/empty.json", "Nothing here.");
       case ListState.error:
@@ -224,7 +221,7 @@ class _ActorContentPageState extends State<ActorContentPage> {
       case ListState.loading:
         return const LoadingView("Loading");
       default:
-       return const LoadingView("Loading");
+        return const LoadingView("Loading");
     }
   }
 }

@@ -12,39 +12,52 @@ class ProfileLegendCell extends StatelessWidget {
 
   const ProfileLegendCell(
     this.url,
-    this.title,
-    {
-      this.timesFinished,
-      this.hoursPlayed,
-      this.isGame = false,
-      super.key,
-    }
-  );
+    this.title, {
+    this.timesFinished,
+    this.hoursPlayed,
+    this.isGame = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 2/3,
+      aspectRatio: 2 / 3,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
             SizedBox(
-              height: double.infinity,
-              child: ContentCell(url, title, forceRatio: true, cacheHeight: 350, cacheWidth: isGame ? 450 : 270)
-            ),
+                height: double.infinity,
+                child: ContentCell(
+                  url.replaceFirst(
+                    "original",
+                    "w400",
+                  ),
+                  title,
+                  forceRatio: true,
+                  cacheHeight: 350,
+                  cacheWidth: isGame ? 450 : 270,
+                )),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
                 width: double.infinity,
                 child: ColoredBox(
-                  color: CupertinoColors.black.withOpacity(0.8),
+                  color: CupertinoColors.black.withValues(
+                    alpha: 0.8,
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     child: Row(
                       children: [
                         Icon(
-                          hoursPlayed == null ? CupertinoIcons.flag_fill : CupertinoIcons.time_solid,
+                          hoursPlayed == null
+                              ? CupertinoIcons.flag_fill
+                              : CupertinoIcons.time_solid,
                           size: 16,
                           color: AppColors().primaryColor,
                         ),
@@ -57,7 +70,7 @@ class ProfileLegendCell extends StatelessWidget {
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
-                              color: CupertinoColors.white
+                              color: CupertinoColors.white,
                             ),
                           ),
                         ),
@@ -66,15 +79,15 @@ class ProfileLegendCell extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: CupertinoColors.white,
-                            fontSize: 13
+                            fontSize: 13,
                           ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

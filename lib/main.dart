@@ -13,6 +13,7 @@ import 'package:watchlistfy/pages/main/profile/custom_list_share_details_page.da
 import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
+import 'package:watchlistfy/providers/common/notification_ui_view_model.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/static/interstitial_ad_handler.dart';
@@ -88,9 +89,16 @@ class MyApp extends StatelessWidget {
 
   final GoRouter _goRouter = GoRouter(
     observers: [MyNavigatorObserver()],
+    initialLocation: TabsPage.routePath,
     routes: [
       GoRoute(
-        path: TabsPage.routeName,
+        path: OnboardingPage.routePath,
+        name: OnboardingPage.routeName,
+        builder: (context, state) => const OnboardingPage(),
+      ),
+      GoRoute(
+        path: TabsPage.routePath,
+        name: TabsPage.routeName,
         builder: (context, state) => const TabsPage(),
         routes: [
           GoRoute(
@@ -131,13 +139,17 @@ class MyApp extends StatelessWidget {
             builder: (context, state) =>
                 CustomListShareDetailsPage(state.pathParameters['id']!),
           ),
-          GoRoute(
-            path: OnboardingPage.routeName,
-            builder: (context, state) => const OnboardingPage(),
-          )
         ],
-      )
+      ),
     ],
+    redirect: (context, state) {
+      if (state.fullPath == TabsPage.routePath &&
+          !SharedPref().getIsIntroductionPresented()) {
+        return OnboardingPage.routePath;
+      }
+
+      return null;
+    },
   );
 
   @override
@@ -148,6 +160,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ContentProvider()),
         ChangeNotifierProvider(create: (context) => GlobalProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => NotificationUIViewModel()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {

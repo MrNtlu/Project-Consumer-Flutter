@@ -21,7 +21,7 @@ New Features & QoL Improvements 🎉
 - Premium prices decreased.
 """;
 
-  final String version = "1.7.0";
+  final String version = "1.7.1";
 
   @override
   Widget build(BuildContext context) {

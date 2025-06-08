@@ -62,7 +62,7 @@ class SharedPref {
     return _sharedPreference.getBool(Constants.WHATSNEW_PREF) ?? true;
   }
 
-  final newVersion = "1_7_0";
+  final newVersion = "1_7_1";
   final oldVersion = "1_6_9";
 
   void setDidShowVersionPatch(bool didShow) {

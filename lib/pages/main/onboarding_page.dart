@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:watchlistfy/pages/tabs_page.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 
 class OnboardingPage extends StatelessWidget {
   static const routeName = "onboarding";
+  static const routePath = "/onboarding";
 
   const OnboardingPage({super.key});
 
@@ -84,7 +87,7 @@ class OnboardingPage extends StatelessWidget {
                               curve: Curves.ease);
                         } else {
                           SharedPref().setIsIntroductionPresented(true);
-                          Navigator.pop(context);
+                          context.goNamed(TabsPage.routeName);
                         }
                       },
                     ),

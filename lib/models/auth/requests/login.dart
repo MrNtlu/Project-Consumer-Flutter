@@ -14,13 +14,11 @@ class Login implements JSONConverter {
 
   Future<TokenResponse> login() async {
     try {
-      var response = await http.post(
-        Uri.parse(APIRoutes().authRoutes.login),
-        body: json.encode(convertToJson()),
-        headers: {
-          "Content-Type": "application/json",
-        }
-      );
+      var response = await http.post(Uri.parse(APIRoutes().authRoutes.login),
+          body: json.encode(convertToJson()),
+          headers: {
+            "Content-Type": "application/json",
+          });
 
       return TokenResponse(
         code: json.decode(response.body)["code"],
@@ -28,18 +26,13 @@ class Login implements JSONConverter {
         token: json.decode(response.body)["access_token"],
       );
     } catch (error) {
-      return TokenResponse(
-        code: 400,
-        message: error.toString()
-      );
+      return TokenResponse(code: 400, message: error.toString());
     }
   }
 
   @override
-  Map<String, Object> convertToJson() => {
-    "email_address": emailAddress,
-    "password": password
-  }; 
+  Map<String, Object> convertToJson() =>
+      {"email_address": emailAddress, "password": password};
 }
 
 class Register implements JSONConverter {
@@ -49,19 +42,24 @@ class Register implements JSONConverter {
   String username;
   String image;
 
-  Register(this.emailAddress, this.password, this.fcmToken, this.username, this.image,);
+  Register(
+    this.emailAddress,
+    this.password,
+    this.fcmToken,
+    this.username,
+    this.image,
+  );
 
   Future<BaseMessageResponse> register() async {
     try {
-      var response = await http.post(
-        Uri.parse(APIRoutes().authRoutes.register),
-        body: json.encode(convertToJson()),
-        headers: {
-          "Content-Type": "application/json",
-        }
-      );
+      var response = await http.post(Uri.parse(APIRoutes().authRoutes.register),
+          body: json.encode(convertToJson()),
+          headers: {
+            "Content-Type": "application/json",
+          });
 
-      return BaseMessageResponse(jsonDecode(response.body)["message"], jsonDecode(response.body)["error"]);
+      return BaseMessageResponse(jsonDecode(response.body)["message"],
+          jsonDecode(response.body)["error"]);
     } catch (error) {
       return BaseMessageResponse(error.toString(), null);
     }
@@ -69,12 +67,12 @@ class Register implements JSONConverter {
 
   @override
   Map<String, Object> convertToJson() => {
-     "email_address": emailAddress, 
-     "fcm_token": fcmToken,
-     "password": password,
-     "image": image,
-     "username": username
-  };
+        "email_address": emailAddress,
+        "fcm_token": fcmToken,
+        "password": password,
+        "image": image,
+        "username": username
+      };
 }
 
 class RefreshToken {
@@ -84,13 +82,11 @@ class RefreshToken {
 
   Future<TokenResponse> refresh() async {
     try {
-      var response = await http.get(
-        Uri.parse(APIRoutes().authRoutes.refresh),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        }
-      );
+      var response = await http.get(Uri.parse(APIRoutes().authRoutes.refresh),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token"
+          });
 
       return TokenResponse(
         code: json.decode(response.body)["code"],
@@ -98,10 +94,7 @@ class RefreshToken {
         token: json.decode(response.body)["access_token"],
       );
     } catch (error) {
-      return TokenResponse(
-        code: 400,
-        message: error.toString()
-      );
+      return TokenResponse(code: 400, message: error.toString());
     }
   }
 }

@@ -7,24 +7,23 @@ class ProfileConsumeLaterCell extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const ProfileConsumeLaterCell(
-    this.url,
-    this.title,
-    this.onTap,
-    {
-      super.key
-    }
-  );
+  const ProfileConsumeLaterCell(this.url, this.title, this.onTap, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 2/3,
+      aspectRatio: 2 / 3,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            ContentCell(url, title, forceRatio: true, cacheWidth: 300, cacheHeight: 400),
+            ContentCell(
+              url.replaceFirst("original", "w300"),
+              title,
+              forceRatio: true,
+              cacheWidth: 300,
+              cacheHeight: 400,
+            ),
             Positioned(
               top: -3,
               right: 0,
@@ -34,17 +33,21 @@ class ProfileConsumeLaterCell extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: CupertinoColors.black.withOpacity(0.5),
+                        color: CupertinoColors.black.withValues(alpha: 0.5),
                         spreadRadius: 2.3,
                         blurRadius: 10,
                         offset: const Offset(0, 2),
                       ),
                     ],
                   ),
-                  child: Icon(CupertinoIcons.bookmark_fill, size: 32, color: AppColors().primaryColor)
-                )
+                  child: Icon(
+                    CupertinoIcons.bookmark_fill,
+                    size: 32,
+                    color: AppColors().primaryColor,
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

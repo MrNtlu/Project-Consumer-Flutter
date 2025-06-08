@@ -22,12 +22,11 @@ class ProfileDetailsProvider with ChangeNotifier {
 
   Future<BaseNullableResponse<UserInfo>> getProfileDetails() async {
     try {
-      final response = await http.get(
-        Uri.parse(APIRoutes().userRoutes.info),
-        headers: UserToken().getBearerToken()
-      );
+      final response = await http.get(Uri.parse(APIRoutes().userRoutes.info),
+          headers: UserToken().getBearerToken());
 
-      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      final decodedResponse =
+          await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserInfo>();
       var data = baseItemResponse.data;
@@ -40,7 +39,8 @@ class ProfileDetailsProvider with ChangeNotifier {
 
       return baseItemResponse;
     } catch (error) {
-      return BaseNullableResponse(message: error.toString(), error: error.toString());
+      return BaseNullableResponse(
+          message: error.toString(), error: error.toString());
     }
   }
 
@@ -50,12 +50,12 @@ class ProfileDetailsProvider with ChangeNotifier {
 
     try {
       final response = await http.delete(
-        Uri.parse(APIRoutes().userInteractionRoutes.consumeLater),
-        body: json.encode(body.convertToJson()),
-        headers: UserToken().getBearerToken()
-      );
+          Uri.parse(APIRoutes().userInteractionRoutes.consumeLater),
+          body: json.encode(body.convertToJson()),
+          headers: UserToken().getBearerToken());
 
-      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      final decodedResponse =
+          await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
       isLoading = false;
       var messageResponse = decodedResponse.getBaseMessageResponse();

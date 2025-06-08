@@ -190,7 +190,8 @@ class LoggedinHeader extends StatelessWidget {
                         width: 30,
                         cacheKey: authenticationProvider.basicUserInfo!.image!,
                         key: ValueKey<String>(
-                            authenticationProvider.basicUserInfo!.image!),
+                          authenticationProvider.basicUserInfo!.image!,
+                        ),
                         fit: BoxFit.cover,
                         cacheManager: CustomCacheManager(),
                         maxWidthDiskCache: 400,

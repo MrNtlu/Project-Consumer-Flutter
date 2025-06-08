@@ -60,7 +60,7 @@ class ContentListCell extends StatelessWidget {
             SizedBox(
               height: 135,
               child: ContentCell(
-                content.imageUrl,
+                content.imageUrl.replaceFirst("original", "w300"),
                 content.titleEn,
                 cornerRadius: 8,
                 forceRatio: true,

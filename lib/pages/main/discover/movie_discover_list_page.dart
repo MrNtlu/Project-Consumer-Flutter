@@ -394,7 +394,7 @@ class _MovieDiscoverListPageState extends State<MovieDiscoverListPage> {
                           horizontal: 2,
                         ),
                         child: ContentCell(
-                          content.imageUrl,
+                          content.imageUrl.replaceFirst("original", "w400"),
                           content.titleEn,
                           forceRatio: true,
                         ),

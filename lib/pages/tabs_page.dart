@@ -10,13 +10,13 @@ import 'package:watchlistfy/models/auth/requests/login.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/pages/home_page.dart';
 import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
-import 'package:watchlistfy/pages/main/onboarding_page.dart';
+
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
 import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/settings/settings_page.dart';
-import 'package:watchlistfy/pages/social_page.dart';
+
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
@@ -29,7 +29,8 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:watchlistfy/widgets/common/whats_new_dialog.dart';
 
 class TabsPage extends StatefulWidget {
-  static const routeName = "/";
+  static const routeName = "tabs";
+  static const routePath = "/";
 
   const TabsPage({super.key});
 
@@ -43,12 +44,18 @@ class _TabsPageState extends State<TabsPage> {
 
   final QuickActions quickActions = const QuickActions();
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    // const SocialPage(),
-    const AIRecommendationPage(),
-    const SettingsPage(),
+  // Cache pages to prevent recreation on every build
+  static const List<Widget> _pages = [
+    HomePage(),
+    AIRecommendationPage(),
+    SettingsPage(),
   ];
+
+  // Cache shared preferences values
+  String? _cachedToken;
+  bool? _cachedIsIntroductionPresented;
+  bool? _cachedCanShowWhatsNewDialog;
+  bool? _cachedDidShowVersionPatch;
 
   void _selectPage(int index) {
     if (state != BaseState.disposed && state != BaseState.init) {
@@ -82,167 +89,181 @@ class _TabsPageState extends State<TabsPage> {
     return false;
   }
 
-  initializeQuickActions() {
+  void _initializeQuickActions() {
     quickActions.initialize((String shortcutType) async {
       await Future.delayed(const Duration(milliseconds: 1010));
-      if (context.mounted) {
-        if (shortcutType == 'action_user_list') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(
-              builder: (_) {
-                return const UserListPage();
-              },
-            ),
-          );
-        } else if (shortcutType == 'action_consume_later') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(
-              builder: (_) {
-                return const ConsumeLaterPage();
-              },
-            ),
-          );
-        } else if (shortcutType == 'action_profile') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(
-              builder: (_) {
-                return const ProfilePage();
-              },
-            ),
-          );
-        } else if (shortcutType == 'action_stats') {
-          Navigator.of(context, rootNavigator: true).push(
-            CupertinoPageRoute(
-              builder: (_) {
-                return const ProfileStatsPage();
-              },
-            ),
-          );
-        }
+      if (!mounted) return;
+
+      Widget? targetPage;
+      switch (shortcutType) {
+        case 'action_user_list':
+          targetPage = const UserListPage();
+          break;
+        case 'action_consume_later':
+          targetPage = const ConsumeLaterPage();
+          break;
+        case 'action_profile':
+          targetPage = const ProfilePage();
+          break;
+        case 'action_stats':
+          targetPage = const ProfileStatsPage();
+          break;
+      }
+
+      if (targetPage != null) {
+        Navigator.of(context, rootNavigator: true).push(
+          CupertinoPageRoute(builder: (_) => targetPage!),
+        );
       }
     });
 
-    quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(type: 'action_profile', localizedTitle: 'Profile'),
-      const ShortcutItem(type: 'action_user_list', localizedTitle: 'User List'),
-      const ShortcutItem(
-          type: 'action_consume_later', localizedTitle: 'Watch Later'),
-      const ShortcutItem(type: 'action_stats', localizedTitle: 'Statistics')
+    quickActions.setShortcutItems(const <ShortcutItem>[
+      ShortcutItem(type: 'action_profile', localizedTitle: 'Profile'),
+      ShortcutItem(type: 'action_user_list', localizedTitle: 'User List'),
+      ShortcutItem(type: 'action_consume_later', localizedTitle: 'Watch Later'),
+      ShortcutItem(type: 'action_stats', localizedTitle: 'Statistics')
     ]);
+  }
+
+  Future<void> _cacheSharedPreferences() async {
+    final sharedPref = SharedPref();
+    _cachedToken = sharedPref.getTokenCredentials();
+    _cachedIsIntroductionPresented = sharedPref.getIsIntroductionPresented();
+    _cachedCanShowWhatsNewDialog = sharedPref.getShouldShowWhatsNewDialog();
+    _cachedDidShowVersionPatch = sharedPref.getDidShowVersionPatch();
+  }
+
+  Future<void> _initializeApp() async {
+    if (state != BaseState.init || !mounted) return;
+
+    try {
+      // Initialize global provider first
+      if (mounted) {
+        Provider.of<GlobalProvider>(context, listen: false).initValues();
+      }
+
+      // Initialize SharedPreferences and cache values
+      await SharedPref().init();
+      await _cacheSharedPreferences();
+
+      if (!mounted) return;
+
+      final authProvider =
+          Provider.of<AuthenticationProvider>(context, listen: false);
+      UserToken().setToken(_cachedToken);
+
+      // Check internet connection and handle authentication in parallel where possible
+      final isInternetAvailable =
+          await InternetConnectionChecker().hasConnection;
+
+      if (_cachedToken == null) {
+        authProvider.initAuthentication(false, null);
+      } else if (isInternetAvailable) {
+        await _handleTokenRefresh(authProvider);
+      } else {
+        if (mounted) {
+          _showNoInternetDialog();
+        }
+        return;
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        state = BaseState.view;
+      });
+
+      // Show what's new dialog if needed
+      _showWhatsNewDialogIfNeeded();
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          state = BaseState.view;
+        });
+      }
+    }
+  }
+
+  Future<void> _handleTokenRefresh(AuthenticationProvider authProvider) async {
+    try {
+      final refreshResult = await RefreshToken(_cachedToken!).refresh();
+
+      if (refreshResult.token != null) {
+        await PurchaseApi().userInit();
+
+        if (PurchaseApi().userInfo != null &&
+            PurchaseApi().userInfo?.email.isNotEmpty == true) {
+          authProvider.initAuthentication(true, PurchaseApi().userInfo);
+        } else {
+          _clearUserData();
+          authProvider.initAuthentication(false, null);
+        }
+      } else {
+        _clearUserData();
+        authProvider.initAuthentication(false, null);
+      }
+    } catch (error) {
+      _clearUserData();
+      authProvider.initAuthentication(false, null);
+    }
+  }
+
+  void _clearUserData() {
+    PurchaseApi().userInfo = null;
+    UserToken().setToken(null);
+    SharedPref().deleteTokenCredentials();
+  }
+
+  void _showNoInternetDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => const ErrorDialog(
+        "No internet connection! You need internet access to use the app.",
+      ),
+    );
+  }
+
+  void _showWhatsNewDialogIfNeeded() {
+    if (_cachedIsIntroductionPresented == true &&
+        _cachedCanShowWhatsNewDialog == true &&
+        _cachedDidShowVersionPatch == false) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          try {
+            showCupertinoDialog(
+              context: context,
+              builder: (_) => const WhatsNewDialog(),
+            );
+          } catch (_) {}
+        }
+      });
+    }
   }
 
   @override
   void initState() {
-    initializeQuickActions();
     super.initState();
+    _initializeQuickActions();
+
     if (Platform.isAndroid) {
       BackButtonInterceptor.add(androidInterceptor);
     }
+
+    // Start initialization immediately
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeApp();
+    });
   }
 
   @override
   void dispose() {
     state = BaseState.disposed;
+    _selectedPageIndexNotifier.dispose();
+
     if (Platform.isAndroid) {
       BackButtonInterceptor.remove(androidInterceptor);
     }
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    //TODO FirebaseMessaging Init, create FCM
-    if (state == BaseState.init) {
-      Provider.of<GlobalProvider>(context, listen: false).initValues();
-
-      await SharedPref().init().then(
-        (_) async {
-          final token = SharedPref().getTokenCredentials();
-          final isIntroductionPresented =
-              SharedPref().getIsIntroductionPresented();
-          final canShowWhatsNewDialog =
-              SharedPref().getShouldShowWhatsNewDialog();
-          final didShowVersionPatch = SharedPref().getDidShowVersionPatch();
-          final authProvider = Provider.of<AuthenticationProvider>(
-            context,
-            listen: false,
-          );
-          UserToken().setToken(token);
-
-          bool isInternetAvailable =
-              await InternetConnectionChecker().hasConnection;
-
-          if (token == null) {
-            authProvider.initAuthentication(false, null);
-          } else if (isInternetAvailable) {
-            await RefreshToken(token).refresh().then((value) async {
-              if (value.token != null) {
-                await PurchaseApi().userInit();
-                if (PurchaseApi().userInfo != null &&
-                    PurchaseApi().userInfo?.email.isNotEmpty == true) {
-                  authProvider.initAuthentication(true, PurchaseApi().userInfo);
-                  state = BaseState.view;
-                } else {
-                  PurchaseApi().userInfo = null;
-                  UserToken().setToken(null);
-                  SharedPref().deleteTokenCredentials();
-                  authProvider.initAuthentication(false, null);
-                }
-              } else {
-                //Failed to login
-                PurchaseApi().userInfo = null;
-                UserToken().setToken(null);
-                SharedPref().deleteTokenCredentials();
-                authProvider.initAuthentication(false, null);
-              }
-            });
-          } else {
-            if (context.mounted) {
-              showCupertinoDialog(
-                context: context,
-                builder: (_) => const ErrorDialog(
-                  "No internet connection! You need internet access to use the app.",
-                ),
-              );
-            }
-          }
-
-          setState(() {
-            state = BaseState.view;
-          });
-
-          if (!isIntroductionPresented) {
-            await Future.delayed(const Duration(milliseconds: 300));
-            if (context.mounted) {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                  builder: (_) {
-                    return const OnboardingPage();
-                  },
-                ),
-              );
-            }
-          }
-
-          if (isIntroductionPresented &&
-              canShowWhatsNewDialog &&
-              !didShowVersionPatch) {
-            await Future.delayed(
-              const Duration(milliseconds: 300),
-            );
-            if (context.mounted) {
-              try {
-                showCupertinoDialog(
-                  context: context,
-                  builder: (_) => const WhatsNewDialog(),
-                );
-              } catch (_) {}
-            }
-          }
-        },
-      );
-    }
   }
 
   @override
@@ -266,10 +287,6 @@ class _TabsPageState extends State<TabsPage> {
                   icon: FaIcon(FontAwesomeIcons.house, size: 24),
                   label: "Home",
                 ),
-                // BottomNavigationBarItem(
-                //   icon: Icon(CupertinoIcons.person_2_fill),
-                //   label: "Socials",
-                // ),
                 BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.robot, size: 24),
                   label: "Recommendations",

@@ -10,24 +10,20 @@ class ConsumeLaterGridCell extends StatelessWidget {
   final VoidCallback onMarkButton;
 
   const ConsumeLaterGridCell(
-    this.url,
-    this.title,
-    this.onRemoveButton,
-    this.onMarkButton,
-    {super.key}
-  );
+      this.url, this.title, this.onRemoveButton, this.onMarkButton,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 2/3,
+      aspectRatio: 2 / 3,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
             ContentCell(
-              url, 
-              title, 
+              url.replaceFirst("original", "w400"),
+              title,
               forceRatio: true,
               cacheHeight: 550,
               cacheWidth: 425,
@@ -43,15 +39,19 @@ class ConsumeLaterGridCell extends StatelessWidget {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: CupertinoColors.black.withOpacity(0.9),
+                            color: CupertinoColors.black.withValues(alpha: 0.9),
                             spreadRadius: 2,
                             blurRadius: 7,
                             offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.check_circle, size: 32, color: CupertinoColors.systemGreen)
-                    )
+                      child: const Icon(
+                        Icons.check_circle,
+                        size: 32,
+                        color: CupertinoColors.systemGreen,
+                      ),
+                    ),
                   ),
                   GestureDetector(
                     onTap: onRemoveButton,
@@ -59,15 +59,19 @@ class ConsumeLaterGridCell extends StatelessWidget {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: CupertinoColors.black.withOpacity(0.9),
+                            color: CupertinoColors.black.withValues(alpha: 0.9),
                             spreadRadius: 2,
                             blurRadius: 7,
                             offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                      child: Icon(CupertinoIcons.bookmark_fill, size: 32, color: AppColors().primaryColor)
-                    )
+                      child: Icon(
+                        CupertinoIcons.bookmark_fill,
+                        size: 32,
+                        color: AppColors().primaryColor,
+                      ),
+                    ),
                   ),
                 ],
               ),
