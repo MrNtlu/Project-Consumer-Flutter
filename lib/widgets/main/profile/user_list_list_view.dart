@@ -7,6 +7,7 @@ import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_compact.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_expanded.dart';
 import 'package:watchlistfy/widgets/main/profile/user_list_shimmer_cell.dart';
@@ -34,7 +35,7 @@ class UserListListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final height = mediaQuery.size.height;
+    final height = mediaQuery.size.height * 0.5;
 
     return ListView.builder(
       itemCount: provider.isSearching
@@ -50,8 +51,10 @@ class UserListListView extends StatelessWidget {
                 children: [
                   Lottie.asset(
                     "assets/lottie/empty.json",
-                    height: height * 0.5,
-                    frameRate: const FrameRate(60),
+                    height: height,
+                    frameRate: FrameRate(
+                      RefreshRateHelper().getRefreshRate(),
+                    ),
                   ),
                   const Text(
                     "Nothing here.",
@@ -70,8 +73,16 @@ class UserListListView extends StatelessWidget {
         return Padding(
           padding:
               globalProvider.userListMode == Constants.UserListUIModes.first
-                  ? const EdgeInsets.only(left: 6, right: 3, top: 4, bottom: 4)
-                  : const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
+                  ? const EdgeInsets.only(
+                      left: 6,
+                      right: 3,
+                      top: 4,
+                      bottom: 4,
+                    )
+                  : const EdgeInsets.symmetric(
+                      horizontal: 3,
+                      vertical: 2,
+                    ),
           child: data.isLoading
               ? UserListShimmerCell(data.title, provider.selectedContent,
                   data.totalSeasons, data.totalEpisodes)

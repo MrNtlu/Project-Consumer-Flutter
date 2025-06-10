@@ -17,6 +17,7 @@ import 'package:watchlistfy/pages/main/discover/tv_discover_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_stats_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
@@ -489,7 +490,9 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                   "assets/lottie/premium.json",
                   height: 32,
                   width: 32,
-                  frameRate: const FrameRate(60),
+                  frameRate: FrameRate(
+                    RefreshRateHelper().getRefreshRate(),
+                  ),
                 ),
                 const Text(
                   "You need premium membership to access this.",

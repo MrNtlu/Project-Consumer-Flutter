@@ -12,6 +12,7 @@ import 'package:watchlistfy/pages/main/profile/profile_display_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
@@ -60,13 +61,16 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
-                          CupertinoPageRoute(
-                              builder: (_) {
-                                return ProfileDisplayPage(
-                                    widget.item.author.username);
-                              },
-                              maintainState:
-                                  NavigationTracker().shouldMaintainState()));
+                        CupertinoPageRoute(
+                          builder: (_) {
+                            return ProfileDisplayPage(
+                              widget.item.author.username,
+                            );
+                          },
+                          maintainState:
+                              NavigationTracker().shouldMaintainState(),
+                        ),
+                      );
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -83,7 +87,8 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                     ? CachedNetworkImage(
                                         imageUrl: widget.item.author.image,
                                         key: ValueKey<String>(
-                                            widget.item.author.image),
+                                          widget.item.author.image,
+                                        ),
                                         cacheKey: widget.item.author.image,
                                         height: 40,
                                         width: 40,
@@ -116,10 +121,13 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                 bottom: -6,
                                 right: -6,
                                 child: Lottie.asset(
-                                    "assets/lottie/premium.json",
-                                    height: 30,
-                                    width: 30,
-                                    frameRate: const FrameRate(60)),
+                                  "assets/lottie/premium.json",
+                                  height: 30,
+                                  width: 30,
+                                  frameRate: FrameRate(
+                                    RefreshRateHelper().getRefreshRate(),
+                                  ),
+                                ),
                               ),
                           ],
                         ),
@@ -130,14 +138,17 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                             Text(
                               widget.item.author.username,
                               style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text(
                               DateTime.parse(widget.item.createdAt)
                                   .dateToHumanDate(),
                               style: const TextStyle(
-                                  fontSize: 13,
-                                  color: CupertinoColors.systemGrey2),
+                                fontSize: 13,
+                                color: CupertinoColors.systemGrey2,
+                              ),
                             ),
                           ],
                         ),
@@ -148,7 +159,9 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                   Text(
                     widget.item.star.toString(),
                     style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 16),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(width: 3),
                   const Icon(
@@ -164,8 +177,9 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                   child: Text(
                     widget.item.review,
                     style: TextStyle(
-                        fontSize: 15,
-                        color: CupertinoTheme.of(context).bgTextColor),
+                      fontSize: 15,
+                      color: CupertinoTheme.of(context).bgTextColor,
+                    ),
                   ),
                 ),
               ),
@@ -190,9 +204,11 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                                 showCupertinoDialog(
                                   context: context,
                                   builder: (_) {
-                                    return ErrorDialog(value.error ??
-                                        value.message ??
-                                        "Unknown error!");
+                                    return ErrorDialog(
+                                      value.error ??
+                                          value.message ??
+                                          "Unknown error!",
+                                    );
                                   },
                                 );
                               } else {
@@ -210,7 +226,8 @@ class _ReviewDetailsPageState extends State<ReviewDetailsPage> {
                         showCupertinoDialog(
                           context: context,
                           builder: (_) => const ErrorDialog(
-                              "You need to login to do this action."),
+                            "You need to login to do this action.",
+                          ),
                         );
                       }
                     },

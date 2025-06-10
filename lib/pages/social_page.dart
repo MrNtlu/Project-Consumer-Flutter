@@ -12,6 +12,7 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/social/social_provider.dart';
 import 'package:watchlistfy/providers/main/social/social_tab_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/main/common/author_image.dart';
 import 'package:watchlistfy/widgets/main/social/social_custom_list_cell.dart';
@@ -258,10 +259,13 @@ class _SocialPageState extends State<SocialPage> {
                                   bottom: -6,
                                   right: -6,
                                   child: Lottie.asset(
-                                      "assets/lottie/premium.json",
-                                      height: 30,
-                                      width: 30,
-                                      frameRate: const FrameRate(60)),
+                                    "assets/lottie/premium.json",
+                                    height: 30,
+                                    width: 30,
+                                    frameRate: FrameRate(
+                                      RefreshRateHelper().getRefreshRate(),
+                                    ),
+                                  ),
                                 ),
                             ],
                           ),

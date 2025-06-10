@@ -23,7 +23,7 @@ class PreviewCountryList extends StatelessWidget {
     final cupertinoTheme = CupertinoTheme.of(context);
 
     return SizedBox(
-      height: 102,
+      height: 105,
       child: ListView.builder(
         itemCount: (isMovie
                 ? Constants.MoviePopularCountries

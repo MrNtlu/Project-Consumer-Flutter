@@ -8,6 +8,7 @@ import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
@@ -64,12 +65,11 @@ class _OffersSheetState extends State<OffersSheet> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text("Premium Plans"),
-      ),
-      child: SafeArea(child: _portraitBody())
-    );
+        resizeToAvoidBottomInset: false,
+        navigationBar: const CupertinoNavigationBar(
+          middle: Text("Premium Plans"),
+        ),
+        child: SafeArea(child: _portraitBody()));
   }
 
   Widget _portraitBody() {
@@ -80,7 +80,8 @@ class _OffersSheetState extends State<OffersSheet> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: SizedBox(
                   width: double.infinity,
                   child: Column(
@@ -91,7 +92,9 @@ class _OffersSheetState extends State<OffersSheet> {
                           "assets/lottie/premium.json",
                           height: 128,
                           width: 128,
-                          frameRate: const FrameRate(60)
+                          frameRate: FrameRate(
+                            RefreshRateHelper().getRefreshRate(),
+                          ),
                         ),
                       ),
                       const Row(
@@ -100,9 +103,18 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.all_inclusive_rounded, color: CupertinoColors.white),
+                            child: Icon(
+                              Icons.all_inclusive_rounded,
+                              color: CupertinoColors.white,
+                            ),
                           ),
-                          Text("Unlimited User List", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "Unlimited User List",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          )
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -112,9 +124,16 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.all_inclusive_rounded, color: CupertinoColors.white),
+                            child: Icon(Icons.all_inclusive_rounded,
+                                color: CupertinoColors.white),
                           ),
-                          Text("Unlimited Watch Later", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "Unlimited Watch Later",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -124,9 +143,16 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.stars_rounded, color: CupertinoColors.white),
+                            child: Icon(Icons.stars_rounded,
+                                color: CupertinoColors.white),
                           ),
-                          Text("AI Suggestions better and more frequent", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "AI Suggestions better and more frequent",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -136,9 +162,18 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(CupertinoIcons.folder_fill_badge_plus, color: CupertinoColors.white),
+                            child: Icon(
+                              CupertinoIcons.folder_fill_badge_plus,
+                              color: CupertinoColors.white,
+                            ),
                           ),
-                          Text("20 Custom Lists with 25 Entries each", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "20 Custom Lists with 25 Entries each",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -148,9 +183,18 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.workspace_premium_rounded, color: CupertinoColors.white),
+                            child: Icon(
+                              Icons.workspace_premium_rounded,
+                              color: CupertinoColors.white,
+                            ),
                           ),
-                          Text("Premium Badge", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "Premium Badge",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -160,9 +204,18 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.line_axis_rounded, color: CupertinoColors.white),
+                            child: Icon(
+                              Icons.line_axis_rounded,
+                              color: CupertinoColors.white,
+                            ),
                           ),
-                          Text("Detailed and More Statistics", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "Detailed and More Statistics",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -172,9 +225,18 @@ class _OffersSheetState extends State<OffersSheet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8),
-                            child: Icon(Icons.more_horiz_rounded, color: CupertinoColors.white),
+                            child: Icon(
+                              Icons.more_horiz_rounded,
+                              color: CupertinoColors.white,
+                            ),
                           ),
-                          Text("More soon...", style: TextStyle(color: CupertinoColors.white, fontSize: 16))
+                          Text(
+                            "More soon...",
+                            style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -182,9 +244,7 @@ class _OffersSheetState extends State<OffersSheet> {
                 ),
               ),
               ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minHeight: 250
-                ),
+                constraints: const BoxConstraints(minHeight: 250),
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (_, index) {
@@ -210,15 +270,27 @@ class _OffersSheetState extends State<OffersSheet> {
 
                             showCupertinoDialog(
                               context: context,
-                              builder: (_) => const MessageDialog("✨ Successfuly purchased. Thank you for becoming a premium member. Please wait little bit longer while we update your account.")
+                              builder: (_) => const MessageDialog(
+                                "✨ Successfuly purchased. Thank you for becoming a premium member. Please wait little bit longer while we update your account.",
+                              ),
                             );
 
-                            showCupertinoDialog(context: context, builder: (_) => const LoadingDialog());
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (_) => const LoadingDialog(),
+                            );
 
-                            PurchaseApi().checkUserPremiumStatus().then((_) {
-                              authProvider.setBasicUserInfo(PurchaseApi().userInfo);
-                              Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-                            });
+                            PurchaseApi().checkUserPremiumStatus().then(
+                              (_) {
+                                authProvider
+                                    .setBasicUserInfo(PurchaseApi().userInfo);
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/',
+                                  (_) => false,
+                                );
+                              },
+                            );
                           }
                         } on PlatformException catch (e) {
                           if (_state != ListState.disposed) {
@@ -228,11 +300,13 @@ class _OffersSheetState extends State<OffersSheet> {
                           }
 
                           var errorCode = PurchasesErrorHelper.getErrorCode(e);
-                          if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
+                          if (errorCode !=
+                              PurchasesErrorCode.purchaseCancelledError) {
                             if (context.mounted) {
                               showCupertinoDialog(
                                 context: context,
-                                builder: (_) => ErrorDialog(e.message ?? "Failed to purchase.")
+                                builder: (_) => ErrorDialog(
+                                    e.message ?? "Failed to purchase."),
                               );
                             }
                           }
@@ -243,9 +317,18 @@ class _OffersSheetState extends State<OffersSheet> {
                           decoration: BoxDecoration(
                             color: AppColors().onDarkBackgroundColor,
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(width: 2, color: (product.identifier == "watchlistfy_premium_1mo" || product.identifier == "watchlistfy_premium_1mo:monthly-autorenewing") ? CupertinoColors.activeGreen : CupertinoColors.systemBlue)
+                            border: Border.all(
+                              width: 2,
+                              color: (product.identifier ==
+                                          "watchlistfy_premium_1mo" ||
+                                      product.identifier ==
+                                          "watchlistfy_premium_1mo:monthly-autorenewing")
+                                  ? CupertinoColors.activeGreen
+                                  : CupertinoColors.systemBlue,
+                            ),
                           ),
-                          margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 6),
                           padding: const EdgeInsets.all(6),
                           child: Column(
                             children: [
@@ -253,46 +336,62 @@ class _OffersSheetState extends State<OffersSheet> {
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 6),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           product.title,
                                           style: const TextStyle(
                                             fontSize: 14,
-                                            color: CupertinoColors.white
+                                            color: CupertinoColors.white,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  if(!(product.identifier == "watchlistfy_premium_supporter_1mo" || product.identifier == "watchlistfy_premium_supporter_1mo:monthly-autorenewing"))
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: (product.identifier == "watchlistfy_premium_supporter_annual" || product.identifier == "watchlistfy_premium_supporter_annual:annual-autorenewing")
-                                      ? AppColors().primaryColor
-                                      : CupertinoColors.activeGreen,
-                                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                                    ),
-                                    padding: const EdgeInsets.all(4),
-                                    child: Text(
-                                      !(product.identifier == "watchlistfy_premium_supporter_annual" || product.identifier == "watchlistfy_premium_supporter_annual:annual-autorenewing")
-                                      ? "Better Price"
-                                      : "Best Offer",
-                                      style: const TextStyle(
-                                        color: CupertinoColors.white,
-                                        fontSize: 12,
+                                  if (!(product.identifier ==
+                                          "watchlistfy_premium_supporter_1mo" ||
+                                      product.identifier ==
+                                          "watchlistfy_premium_supporter_1mo:monthly-autorenewing"))
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: (product.identifier ==
+                                                    "watchlistfy_premium_supporter_annual" ||
+                                                product.identifier ==
+                                                    "watchlistfy_premium_supporter_annual:annual-autorenewing")
+                                            ? AppColors().primaryColor
+                                            : CupertinoColors.activeGreen,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(4),
+                                        ),
                                       ),
-                                    ),
-                                  )
+                                      padding: const EdgeInsets.all(4),
+                                      child: Text(
+                                        !(product.identifier ==
+                                                    "watchlistfy_premium_supporter_annual" ||
+                                                product.identifier ==
+                                                    "watchlistfy_premium_supporter_annual:annual-autorenewing")
+                                            ? "Better Price"
+                                            : "Best Offer",
+                                        style: const TextStyle(
+                                          color: CupertinoColors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    )
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    product.priceString + _identifierToString(product.identifier),
+                                    product.priceString +
+                                        _identifierToString(product.identifier),
                                     style: const TextStyle(
                                       color: CupertinoColors.white,
                                       fontWeight: FontWeight.bold,
@@ -309,7 +408,7 @@ class _OffersSheetState extends State<OffersSheet> {
                                     "Cancel anytime",
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: CupertinoColors.systemGrey
+                                      color: CupertinoColors.systemGrey,
                                     ),
                                   ),
                                 ),
@@ -339,9 +438,9 @@ class _OffersSheetState extends State<OffersSheet> {
   }
 
   String _identifierToString(String identifier) {
-    if(identifier.contains("1mo")) {
+    if (identifier.contains("1mo")) {
       return "/month";
-    } else if(identifier.contains("annual")) {
+    } else if (identifier.contains("annual")) {
       return "/year";
     } else {
       return "";

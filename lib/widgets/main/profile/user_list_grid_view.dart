@@ -4,6 +4,7 @@ import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/models/main/userlist/user_list_content.dart';
 import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 
 class UserListGridView extends StatelessWidget {
@@ -41,8 +42,13 @@ class UserListGridView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Lottie.asset("assets/lottie/empty.json",
-                        height: height * 0.5, frameRate: const FrameRate(60)),
+                    Lottie.asset(
+                      "assets/lottie/empty.json",
+                      height: height * 0.5,
+                      frameRate: FrameRate(
+                        RefreshRateHelper().getRefreshRate(),
+                      ),
+                    ),
                     const Text(
                       "Nothing here.",
                       style: TextStyle(

@@ -9,7 +9,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/services/cache_manager_service.dart';
 
-// Ultra-optimized content cell - maximum performance for heavy usage
 class ContentCell extends StatelessWidget {
   final String url;
   final String title;
@@ -79,36 +78,29 @@ class ContentCell extends StatelessWidget {
     String cacheKey,
   ) {
     return Stack(
+      fit: StackFit.expand,
       children: [
-        _buildOptimizedImage(aspectRatio, borderRadius, cacheKey),
-        // Const background overlay for better performance
-        const Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: double.infinity,
-            child: ColoredBox(
-              color: CupertinoColors.black,
-              child: SizedBox(height: 40), // Placeholder height
-            ),
-          ),
+        Positioned.fill(
+          child: _buildOptimizedImage(aspectRatio, borderRadius, cacheKey),
         ),
-        // Game title overlay
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: double.infinity,
-            child: Container(
-              color: const Color(0xB3000000), // Optimized opacity
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: CupertinoColors.white,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            color: const Color(0xB3000000),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                color: CupertinoColors.white,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),

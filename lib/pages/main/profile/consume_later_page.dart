@@ -15,6 +15,7 @@ import 'package:watchlistfy/providers/main/profile/consume_later_provider.dart';
 import 'package:watchlistfy/providers/main/profile/consume_later_sort_filter_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
@@ -515,10 +516,20 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.asset("assets/lottie/discover.json",
-                  height: 128, width: 128, frameRate: FrameRate(60)),
-              const Text("Nothing here.",
-                  style: TextStyle(fontWeight: FontWeight.w500)),
+              Lottie.asset(
+                "assets/lottie/discover.json",
+                height: 128,
+                width: 128,
+                frameRate: FrameRate(
+                  RefreshRateHelper().getRefreshRate(),
+                ),
+              ),
+              const Text(
+                "Nothing here.",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),

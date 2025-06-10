@@ -170,16 +170,20 @@ class _DetailsPageState extends State<DetailsPage> {
   void initState() {
     super.initState();
     _provider = _createProvider();
-
-    // Listen to provider changes and update notifiers
     _provider.addListener(_onProviderChanged);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _authProvider = Provider.of<AuthenticationProvider>(context);
-    _provider.initializeAndFetch(widget.id, _authProvider);
+    _authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+
+    // Defer heavy network call to avoid blocking navigation animation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _provider.initializeAndFetch(widget.id, _authProvider);
+      }
+    });
   }
 
   @override
@@ -195,8 +199,8 @@ class _DetailsPageState extends State<DetailsPage> {
       _isLoadingNotifier.value = _provider.isLoading;
       _isUserListLoadingNotifier.value = _provider.isUserListLoading;
 
-      // Update adapter when item changes
-      if (_provider.item != null) {
+      // Update adapter only once when item first becomes available
+      if (_provider.item != null && _itemAdapter == null) {
         _itemAdapter = DetailsItemAdapter(_provider.item!, widget.contentType);
       }
     }
@@ -223,6 +227,8 @@ class _DetailsPageState extends State<DetailsPage> {
         builder: (context, provider, child) {
           return CupertinoPageScaffold(
             child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              cacheExtent: 0,
               slivers: [
                 _buildNavigationBar(provider),
                 _buildBody(provider),

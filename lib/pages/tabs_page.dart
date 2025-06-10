@@ -21,6 +21,7 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
 import 'package:watchlistfy/providers/main/preview_provider.dart';
 import 'package:watchlistfy/static/purchase_api.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/static/shared_pref.dart';
 import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
@@ -56,6 +57,7 @@ class _TabsPageState extends State<TabsPage> {
   bool? _cachedIsIntroductionPresented;
   bool? _cachedCanShowWhatsNewDialog;
   bool? _cachedDidShowVersionPatch;
+  double? _cachedRefreshRate;
 
   void _selectPage(int index) {
     if (state != BaseState.disposed && state != BaseState.init) {
@@ -131,9 +133,11 @@ class _TabsPageState extends State<TabsPage> {
     _cachedIsIntroductionPresented = sharedPref.getIsIntroductionPresented();
     _cachedCanShowWhatsNewDialog = sharedPref.getShouldShowWhatsNewDialog();
     _cachedDidShowVersionPatch = sharedPref.getDidShowVersionPatch();
+    _cachedRefreshRate = sharedPref.getRefreshRate();
   }
 
-  Future<void> _initializeApp() async {
+  Future<void> _initializeApp(
+      {required WidgetsBinding widgetsBindingInstance}) async {
     if (state != BaseState.init || !mounted) return;
 
     try {
@@ -146,10 +150,21 @@ class _TabsPageState extends State<TabsPage> {
       await SharedPref().init();
       await _cacheSharedPreferences();
 
+      if (_cachedRefreshRate == 0) {
+        final display =
+            widgetsBindingInstance.platformDispatcher.displays.first;
+        RefreshRateHelper().setRefreshRate(display.refreshRate);
+        SharedPref().setRefreshRate(display.refreshRate);
+      } else {
+        RefreshRateHelper().setRefreshRate(_cachedRefreshRate!);
+      }
+
       if (!mounted) return;
 
-      final authProvider =
-          Provider.of<AuthenticationProvider>(context, listen: false);
+      final authProvider = Provider.of<AuthenticationProvider>(
+        context,
+        listen: false,
+      );
       UserToken().setToken(_cachedToken);
 
       // Check internet connection and handle authentication in parallel where possible
@@ -251,7 +266,7 @@ class _TabsPageState extends State<TabsPage> {
 
     // Start initialization immediately
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeApp();
+      _initializeApp(widgetsBindingInstance: WidgetsBinding.instance);
     });
   }
 

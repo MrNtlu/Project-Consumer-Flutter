@@ -133,29 +133,33 @@ class _PreviewListState extends State<PreviewList> {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
+                  // Cache values to avoid provider access during navigation
+                  final contentId = data.id;
+                  final contentType = _contentProvider.selectedContent;
+
                   Navigator.of(context, rootNavigator: true).push(
                     CupertinoPageRoute(
-                      builder: (_) {
-                        return DetailsPage(
-                          id: data.id,
-                          contentType: _contentProvider.selectedContent,
-                        );
-                      },
+                      builder: (_) => DetailsPage(
+                        id: contentId,
+                        contentType: contentType,
+                      ),
                       maintainState: NavigationTracker().shouldMaintainState(),
                     ),
                   );
                 },
-                child: Padding(
-                  padding: index == 0
-                      ? const EdgeInsets.only(left: 8, right: 3)
-                      : const EdgeInsets.symmetric(horizontal: 3),
-                  child: SizedBox(
-                    height: 200,
-                    child: ContentCell(
-                      data.imageUrl.replaceFirst("original", "w300"),
-                      data.titleEn,
-                      cacheHeight: 700,
-                      cacheWidth: 550,
+                child: RepaintBoundary(
+                  child: Padding(
+                    padding: index == 0
+                        ? const EdgeInsets.only(left: 8, right: 3)
+                        : const EdgeInsets.symmetric(horizontal: 3),
+                    child: SizedBox(
+                      height: 200,
+                      child: ContentCell(
+                        data.imageUrl.replaceFirst("original", "w300"),
+                        data.titleEn,
+                        cacheHeight: 700,
+                        cacheWidth: 550,
+                      ),
                     ),
                   ),
                 ),

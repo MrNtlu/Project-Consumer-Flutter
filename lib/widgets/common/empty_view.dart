@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 
 class EmptyView extends StatelessWidget {
   final String asset;
   final String emptyText;
-  const EmptyView(this.asset, this.emptyText, {super.key});
+
+  const EmptyView(
+    this.asset,
+    this.emptyText, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,9 @@ class EmptyView extends StatelessWidget {
                 asset,
                 height: 250,
                 width: 250,
-                frameRate: const FrameRate(60),
+                frameRate: FrameRate(
+                  RefreshRateHelper().getRefreshRate(),
+                ),
               ),
               const SizedBox(height: 12),
               Text(

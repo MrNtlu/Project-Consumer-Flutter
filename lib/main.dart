@@ -36,13 +36,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
     _trackingTransparencyRequest();
   });
+
+  // Parallel initialization for better performance
+  await Future.wait([
+    dotenv.load(fileName: ".env"),
+    PurchaseApi().init(),
+    SharedPref().init(),
+    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
+  ]);
+
+  // Initialize ads after core services
   MobileAds.instance.initialize();
-  await dotenv.load(fileName: ".env");
-  await PurchaseApi().init();
-  await SharedPref().init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   if (kReleaseMode) {
     FlutterError.onError = (errorDetails) {
@@ -53,9 +57,10 @@ void main() async {
       return true;
     };
   }
+
   InterstitialAdHandler().loadAds();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 Future<void> _trackingTransparencyRequest() async {
@@ -85,9 +90,10 @@ Future<void> _trackingTransparencyRequest() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
-  final GoRouter _goRouter = GoRouter(
+  // Cache router instance to prevent recreation
+  static final GoRouter _goRouter = GoRouter(
     observers: [MyNavigatorObserver()],
     initialLocation: TabsPage.routePath,
     routes: [
@@ -156,21 +162,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
-        ChangeNotifierProvider(create: (context) => ContentProvider()),
-        ChangeNotifierProvider(create: (context) => GlobalProvider()),
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => NotificationUIViewModel()),
+        ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (_) => ContentProvider()),
+        ChangeNotifierProvider(create: (_) => GlobalProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationUIViewModel()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
+          // Cache theme values to prevent repeated SharedPref calls
+          final isDarkTheme = SharedPref().isDarkTheme();
+
           if (Platform.isAndroid) {
             SystemChrome.setSystemUIOverlayStyle(
               SystemUiOverlayStyle(
-                statusBarColor: SharedPref().isDarkTheme()
+                statusBarColor: isDarkTheme
                     ? const Color(0xFF121212)
                     : const Color(0xFFFAFAFA),
-                systemNavigationBarColor: SharedPref().isDarkTheme()
+                systemNavigationBarColor: isDarkTheme
                     ? const Color(0xFF212121)
                     : const Color(0xFFFAFAFA),
               ),
@@ -180,20 +189,15 @@ class MyApp extends StatelessWidget {
           return CupertinoApp.router(
             title: 'Watchlistfy',
             debugShowCheckedModeBanner: false,
+            // Remove performance overlay in production for better performance
+            showPerformanceOverlay: kDebugMode,
             localizationsDelegates: const [
               DefaultMaterialLocalizations.delegate,
               DefaultCupertinoLocalizations.delegate,
               DefaultWidgetsLocalizations.delegate,
             ],
-            theme: SharedPref().isDarkTheme()
-                ? AppColors().darkTheme
-                : AppColors().lightTheme,
+            theme: isDarkTheme ? AppColors().darkTheme : AppColors().lightTheme,
             routerConfig: _goRouter,
-            // initialRoute: '/',
-            // routes: {
-            //   "/onboarding": (context) => const OnboardingPage(),
-            //   TabsPage.routeName: (context) => const TabsPage(),
-            // },
           );
         },
       ),

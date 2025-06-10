@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:watchlistfy/models/auth/basic_user_info.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/main/common/author_image.dart';
 import 'package:watchlistfy/widgets/main/settings/change_image_sheet.dart';
 
@@ -83,18 +84,25 @@ class SettingsProfile extends StatelessWidget {
                       child: Text(
                         _userInfo.email,
                         style: TextStyle(
-                            color: CupertinoTheme.brightnessOf(context) ==
-                                    Brightness.dark
-                                ? CupertinoColors.systemGrey2
-                                : CupertinoColors.systemGrey),
+                          color: CupertinoTheme.brightnessOf(context) ==
+                                  Brightness.dark
+                              ? CupertinoColors.systemGrey2
+                              : CupertinoColors.systemGrey,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
               if (_userInfo.isPremium)
-                Lottie.asset("assets/lottie/premium.json",
-                    height: 36, width: 36, frameRate: const FrameRate(60)),
+                Lottie.asset(
+                  "assets/lottie/premium.json",
+                  height: 36,
+                  width: 36,
+                  frameRate: FrameRate(
+                    RefreshRateHelper().getRefreshRate(),
+                  ),
+                ),
             ],
           ),
         ),

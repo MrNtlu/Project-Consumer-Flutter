@@ -293,6 +293,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
                           const SizedBox(height: 8),
                           const Text(
                             "You need to be logged in to get recommendations.",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16,
                               color: CupertinoColors.systemGrey,

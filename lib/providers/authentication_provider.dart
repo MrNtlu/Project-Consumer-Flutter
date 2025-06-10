@@ -11,8 +11,10 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   void setAuthentication(bool isAuthenticated) {
-    this.isAuthenticated = isAuthenticated;
-    notifyListeners();
+    if (this.isAuthenticated != isAuthenticated) {
+      this.isAuthenticated = isAuthenticated;
+      notifyListeners();
+    }
   }
 
   void setBasicUserInfo(BasicUserInfo? basicUserInfo) {

@@ -156,4 +156,13 @@ class SharedPref {
   bool getIsAskedForReview() {
     return _sharedPreference.getBool("is_asked_for_review") ?? false;
   }
+
+  //Refresh Rate
+  void setRefreshRate(double refreshRate) {
+    sharedPref?.setDouble("refresh_rate", refreshRate);
+  }
+
+  double getRefreshRate() {
+    return _sharedPreference.getDouble("refresh_rate") ?? 0;
+  }
 }

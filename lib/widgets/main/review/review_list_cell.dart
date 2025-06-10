@@ -9,6 +9,7 @@ import 'package:watchlistfy/pages/main/review/review_create_page.dart';
 import 'package:watchlistfy/pages/main/review/review_details_page.dart';
 import 'package:watchlistfy/providers/main/review/review_list_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
@@ -89,10 +90,14 @@ class ReviewListCell extends StatelessWidget {
                           Positioned(
                             bottom: -6,
                             right: -6,
-                            child: Lottie.asset("assets/lottie/premium.json",
-                                height: 30,
-                                width: 30,
-                                frameRate: const FrameRate(60)),
+                            child: Lottie.asset(
+                              "assets/lottie/premium.json",
+                              height: 30,
+                              width: 30,
+                              frameRate: FrameRate(
+                                RefreshRateHelper().getRefreshRate(),
+                              ),
+                            ),
                           ),
                       ],
                     ),

@@ -11,8 +11,10 @@ class ContentProvider with ChangeNotifier {
   }
 
   void setContentType(ContentType contentType) {
-    _selectedContent = contentType;
-    notifyListeners();
+    if (_selectedContent != contentType) {
+      _selectedContent = contentType;
+      notifyListeners();
+    }
   }
 
   void incrementContentType() {
@@ -21,8 +23,11 @@ class ContentProvider with ChangeNotifier {
       newContentTypeIndex = 0;
     }
 
-    _selectedContent = ContentType.values[newContentTypeIndex];
-    notifyListeners();
+    final newContentType = ContentType.values[newContentTypeIndex];
+    if (_selectedContent != newContentType) {
+      _selectedContent = newContentType;
+      notifyListeners();
+    }
   }
 
   void decrementContentType() {
@@ -31,7 +36,10 @@ class ContentProvider with ChangeNotifier {
       newContentTypeIndex = ContentType.values.length - 1;
     }
 
-    _selectedContent = ContentType.values[newContentTypeIndex];
-    notifyListeners();
+    final newContentType = ContentType.values[newContentTypeIndex];
+    if (_selectedContent != newContentType) {
+      _selectedContent = newContentType;
+      notifyListeners();
+    }
   }
 }

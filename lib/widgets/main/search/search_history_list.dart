@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 
 class SearchHistoryList extends StatelessWidget {
   final List<String> searchHistory;
@@ -30,7 +31,9 @@ class SearchHistoryList extends StatelessWidget {
               Lottie.asset(
                 "assets/lottie/search.json",
                 height: mediaQuery.size.height * 0.3,
-                frameRate: const FrameRate(60),
+                frameRate: FrameRate(
+                  RefreshRateHelper().getRefreshRate(),
+                ),
               ),
               const Text(
                 "No search history yet.",

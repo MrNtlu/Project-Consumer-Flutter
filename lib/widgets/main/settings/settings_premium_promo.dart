@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
 import 'package:watchlistfy/static/colors.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/main/settings/offers_sheet.dart';
 
 class SettingsPremiumPromo extends StatelessWidget {
@@ -42,7 +43,9 @@ class SettingsPremiumPromo extends StatelessWidget {
                   "assets/lottie/premium.json",
                   height: 52,
                   width: 52,
-                  frameRate: const FrameRate(60),
+                  frameRate: FrameRate(
+                    RefreshRateHelper().getRefreshRate(),
+                  ),
                 ),
                 const SizedBox(width: 4),
                 Expanded(

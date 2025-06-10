@@ -9,6 +9,7 @@ import 'package:watchlistfy/pages/details_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_display_details_provider.dart';
 import 'package:watchlistfy/static/navigation_provider.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
@@ -137,10 +138,14 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                           Positioned(
                             bottom: -6,
                             right: -6,
-                            child: Lottie.asset("assets/lottie/premium.json",
-                                height: 45,
-                                width: 45,
-                                frameRate: const FrameRate(60)),
+                            child: Lottie.asset(
+                              "assets/lottie/premium.json",
+                              height: 45,
+                              width: 45,
+                              frameRate: FrameRate(
+                                RefreshRateHelper().getRefreshRate(),
+                              ),
+                            ),
                           ),
                       ],
                     ),
@@ -148,15 +153,20 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 16, top: 16),
+                      padding: const EdgeInsets.only(
+                        right: 16,
+                        top: 16,
+                      ),
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           showCupertinoDialog(
-                              context: context,
-                              builder: (_) => const MessageDialog(
-                                  title: "Streak",
-                                  "Streaks are counted based on your activity. When you add or make changes on your user list, watch later or reviews."));
+                            context: context,
+                            builder: (_) => const MessageDialog(
+                              title: "Streak",
+                              "Streaks are counted based on your activity. When you add or make changes on your user list, watch later or reviews.",
+                            ),
+                          );
                         },
                         child: Align(
                           alignment: Alignment.bottomRight,
@@ -278,13 +288,16 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                     CupertinoButton(
                       minSize: 0,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 4),
+                        horizontal: 7,
+                        vertical: 4,
+                      ),
                       onPressed: () {
                         showCupertinoDialog(
-                            context: context,
-                            builder: (_) => const MessageDialog(
-                                title: "Information",
-                                "Legend content refers to movies, animes, games and tv series that users have watched and enjoyed multiple times."));
+                          context: context,
+                          builder: (_) => const MessageDialog(
+                              title: "Information",
+                              "Legend content refers to movies, animes, games and tv series that users have watched and enjoyed multiple times."),
+                        );
                       },
                       child: const Icon(
                         CupertinoIcons.info_circle,

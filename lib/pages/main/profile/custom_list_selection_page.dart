@@ -9,6 +9,7 @@ import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_create_provider.dart';
 import 'package:watchlistfy/providers/main/profile/custom_list_search_provider.dart';
 import 'package:watchlistfy/providers/main/profile/user_list_content_selection_provider.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/main/profile/custom_list_entry_cell.dart';
@@ -17,8 +18,11 @@ import 'package:watchlistfy/widgets/main/profile/user_list_content_selection.dar
 class CustomListSelectionPage extends StatefulWidget {
   final bool isRecommendation;
   final ContentType? contentType;
-  const CustomListSelectionPage(
-      {this.isRecommendation = false, this.contentType, super.key});
+  const CustomListSelectionPage({
+    this.isRecommendation = false,
+    this.contentType,
+    super.key,
+  });
 
   @override
   State<CustomListSelectionPage> createState() =>
@@ -33,6 +37,7 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
   late final CustomListSearchProvider _searchProvider;
   late final CustomListCreateProvider _customListCreateProvider;
   late final AuthenticationProvider authProvider;
+  late final double emptyHeight;
   TextEditingController? searchController;
 
   int _page = 1;
@@ -98,6 +103,8 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
           Provider.of<CustomListCreateProvider>(context);
       searchController = TextEditingController();
       _scrollController = ScrollController();
+      emptyHeight = MediaQuery.of(context).size.height * 0.35;
+
       _scrollController.addListener(_scrollHandler);
     }
     super.didChangeDependencies();
@@ -233,11 +240,19 @@ class _CustomListSelectionPageState extends State<CustomListSelectionPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Lottie.asset("assets/lottie/empty.json",
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    frameRate: const FrameRate(60)),
-                const Text("Couldn't find anything.",
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+                Lottie.asset(
+                  "assets/lottie/empty.json",
+                  height: emptyHeight,
+                  frameRate: FrameRate(
+                    RefreshRateHelper().getRefreshRate(),
+                  ),
+                ),
+                const Text(
+                  "Couldn't find anything.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ),

@@ -25,6 +25,7 @@ import 'package:watchlistfy/providers/main/search_provider.dart';
 import 'package:watchlistfy/providers/main/tv/tv_list_provider.dart';
 import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
+import 'package:watchlistfy/static/refresh_rate_helper.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_cell.dart';
 import 'package:watchlistfy/widgets/common/content_list_shimmer_cell.dart';
@@ -451,9 +452,9 @@ class _SearchListPageState extends State<SearchListPage> {
       case ListState.error:
         return _buildErrorState();
       case ListState.loading:
-        return const LoadingView("Searching...");
+        return const LoadingView("Searching");
       default:
-        return const LoadingView("Loading...");
+        return const LoadingView("Loading");
     }
   }
 
@@ -467,7 +468,9 @@ class _SearchListPageState extends State<SearchListPage> {
             Lottie.asset(
               "assets/lottie/search.json",
               height: MediaQuery.of(context).size.height * 0.4,
-              frameRate: const FrameRate(60),
+              frameRate: FrameRate(
+                RefreshRateHelper().getRefreshRate(),
+              ),
             ),
             const Text(
               "No results found.",

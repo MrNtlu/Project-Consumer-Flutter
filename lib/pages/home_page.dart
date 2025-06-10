@@ -112,6 +112,7 @@ class _HomePageState extends State<HomePage> {
         brightness: cupertinoTheme.brightness,
       ),
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             const SizedBox(height: 8),
@@ -154,7 +155,9 @@ class _HomePageState extends State<HomePage> {
             const SeeAllTitle("🍿 Top Rated"),
             SizedBox(
               height: 200,
-              child: PreviewList(Constants.ContentTags[2]),
+              child: PreviewList(
+                Constants.ContentTags[2],
+              ),
             ),
             const SizedBox(height: 12),
             if (!isGame) ...[
