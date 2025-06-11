@@ -189,8 +189,7 @@ class MyApp extends StatelessWidget {
           return CupertinoApp.router(
             title: 'Watchlistfy',
             debugShowCheckedModeBanner: false,
-            // Remove performance overlay in production for better performance
-            showPerformanceOverlay: kDebugMode,
+            // showPerformanceOverlay: kDebugMode,
             localizationsDelegates: const [
               DefaultMaterialLocalizations.delegate,
               DefaultCupertinoLocalizations.delegate,

@@ -17,7 +17,7 @@ import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:http/http.dart' as http;
-import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/notification_overlay.dart';
 
 class RecommendationCreatePage extends StatelessWidget {
   final String _contentID;
@@ -71,10 +71,12 @@ class RecommendationCreatePage extends StatelessWidget {
         if (context.mounted) {
           Navigator.pop(context);
 
-          showCupertinoDialog(
-              context: context,
-              builder: (ctx) =>
-                  MessageDialog(baseMessage.message ?? "Unkwown error!"));
+          NotificationOverlay().show(
+            context,
+            title: "Recommendation Posted",
+            message: baseMessage.message ??
+                "Your recommendation has been posted successfully!",
+          );
 
           _fetchData();
         }

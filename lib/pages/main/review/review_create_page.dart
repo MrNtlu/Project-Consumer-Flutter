@@ -10,7 +10,7 @@ import 'package:watchlistfy/static/token.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
-import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/notification_overlay.dart';
 import 'package:watchlistfy/widgets/main/review/spoiler_switch.dart';
 import 'package:http/http.dart' as http;
 
@@ -70,19 +70,22 @@ class ReviewCreatePage extends StatelessWidget {
 
         if (baseMessage.error != null && context.mounted) {
           showCupertinoDialog(
-              context: context,
-              builder: (ctx) =>
-                  ErrorDialog(response.getBaseMessageResponse().error!));
+            context: context,
+            builder: (ctx) =>
+                ErrorDialog(response.getBaseMessageResponse().error!),
+          );
           return;
         }
 
         if (context.mounted) {
           Navigator.pop(context);
 
-          showCupertinoDialog(
-              context: context,
-              builder: (ctx) =>
-                  MessageDialog(baseMessage.message ?? "Unkwown error!"));
+          NotificationOverlay().show(
+            context,
+            title: "Review Posted",
+            message: baseMessage.message ??
+                "Your review has been posted successfully!",
+          );
 
           _fetchData();
           if (updateReviewData != null) {

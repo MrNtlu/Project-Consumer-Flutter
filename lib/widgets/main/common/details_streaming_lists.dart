@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/services/cache_manager_service.dart';
@@ -7,124 +6,337 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:watchlistfy/models/main/common/streaming.dart';
 import 'package:watchlistfy/models/main/common/streaming_platform.dart';
 import 'package:watchlistfy/providers/main/global_provider.dart';
+import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
-import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 
-class DetailsStreamingLists extends StatelessWidget {
+enum StreamingType { stream, buy, rent }
+
+class DetailsStreamingLists extends StatefulWidget {
   final List<Streaming> streaming;
   final String tmdbId;
   final String contentType;
 
-  const DetailsStreamingLists(this.streaming, this.tmdbId, this.contentType, {super.key});
+  const DetailsStreamingLists(
+    this.streaming,
+    this.tmdbId,
+    this.contentType, {
+    super.key,
+  });
+
+  @override
+  State<DetailsStreamingLists> createState() => _DetailsStreamingListsState();
+}
+
+class _DetailsStreamingListsState extends State<DetailsStreamingLists> {
+  StreamingType _selectedType = StreamingType.stream;
+  late final List<StreamingType> _availableTypes;
+  late final Streaming? _data;
+  late final String _countryCode;
+  late final AppColors _appColors;
+
+  @override
+  void initState() {
+    super.initState();
+    _appColors = AppColors();
+    _initializeData();
+  }
+
+  void _initializeData() {
+    final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
+    _countryCode = globalProvider.selectedCountryCode;
+
+    _data = widget.streaming
+        .where((element) => element.countryCode == _countryCode)
+        .firstOrNull;
+
+    _availableTypes = _computeAvailableTypes();
+
+    if (_availableTypes.isNotEmpty &&
+        !_availableTypes.contains(_selectedType)) {
+      _selectedType = _availableTypes.first;
+    }
+  }
+
+  List<StreamingType> _computeAvailableTypes() {
+    final types = <StreamingType>[];
+    if (_data?.streamingPlatforms?.isNotEmpty ?? false) {
+      types.add(StreamingType.stream);
+    }
+    if (_data?.buyOptions?.isNotEmpty ?? false) {
+      types.add(StreamingType.buy);
+    }
+    if (_data?.rentOptions?.isNotEmpty ?? false) {
+      types.add(StreamingType.rent);
+    }
+    return types;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final globalProvider = Provider.of<GlobalProvider>(context);
-    final data = streaming.where((element) => element.countryCode == globalProvider.selectedCountryCode).firstOrNull;
+    if (!_hasAnyContent) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: _buildNoContentAvailable(context),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const DetailsSubTitle("Streaming"),
-        SizedBox(
-          height: data != null && data.streamingPlatforms != null ? 90 : 50,
-          child: _streamingList(
-            data != null && data.streamingPlatforms != null,
-            data?.streamingPlatforms,
-            globalProvider.selectedCountryCode,
-          ),
-        ),
-        const DetailsSubTitle("Buy"),
-        SizedBox(
-          height: data != null && data.buyOptions != null ? 90 : 50,
-          child: _streamingList(
-            data != null && data.buyOptions != null,
-            data?.buyOptions,
-            globalProvider.selectedCountryCode,
-          ),
-        ),
-        const DetailsSubTitle("Rent"),
-        SizedBox(
-          height: data != null && data.rentOptions != null ? 90 : 50,
-          child: _streamingList(
-            data != null && data.rentOptions != null,
-            data?.rentOptions,
-            globalProvider.selectedCountryCode,
-          ),
-        ),
+        const SizedBox(height: 6),
+        _buildTypeSelector(context),
+        const SizedBox(height: 16),
+        _buildSelectedContent(context),
       ],
     );
   }
 
-  Widget _streamingList(
-    bool isNotNull,
-    List<StreamingPlatform>? data,
-    String countryCode,
-  ) => isNotNull
-  ? ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: data!.length,
-    itemBuilder: (context, index) {
-      final item = data[index];
+  bool get _hasAnyContent {
+    if (_data == null) return false;
 
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () async {
-          if (tmdbId.isNotEmpty) {
-            final url = Uri.parse(platformURL(contentType, countryCode));
-            if (!await launchUrl(url)) {
-              if (context.mounted) {
-                showCupertinoDialog(context: context, builder: (_) => const ErrorDialog("Not available, sorry."));
-              }
-            }
-          }
-        },
-        child: _streamingCell(item),
-      );
-    },
-  )
-  : const Center(child: Text("Not available in your region."));
+    return (_data.streamingPlatforms?.isNotEmpty ?? false) ||
+        (_data.buyOptions?.isNotEmpty ?? false) ||
+        (_data.rentOptions?.isNotEmpty ?? false);
+  }
 
-  Widget _streamingCell(StreamingPlatform item) => Padding(
-    padding: const EdgeInsets.only(right: 8),
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 100,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: CachedNetworkImage(
-              imageUrl: item.logo,
-              fit: BoxFit.cover,
-              key: ValueKey<String>(item.logo),
-              cacheKey: item.logo,
-              height: 64,
-              width: 64,
-              cacheManager: CustomCacheManager(),
-              maxHeightDiskCache: 190,
-              maxWidthDiskCache: 190,
-              errorListener: (_) {},
+  Widget _buildTypeSelector(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
+    return SizedBox(
+      height: 50,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _availableTypes.length,
+        itemBuilder: (context, index) {
+          final type = _availableTypes[index];
+          return Padding(
+            padding: EdgeInsets.only(left: index == 0 ? 0 : 3, right: 3),
+            child: CupertinoChip(
+              isSelected: type == _selectedType,
+              size: 14,
+              cornerRadius: 12,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              selectedBGColor: cupertinoTheme.profileButton,
+              selectedTextColor: _appColors.primaryColor,
+              onSelected: (_) => _onTypeSelected(type),
+              label: _getTypeLabel(type),
             ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _onTypeSelected(StreamingType type) {
+    if (type != _selectedType) {
+      setState(() {
+        _selectedType = type;
+      });
+    }
+  }
+
+  String _getTypeLabel(StreamingType type) {
+    return switch (type) {
+      StreamingType.stream => 'Stream',
+      StreamingType.buy => 'Buy',
+      StreamingType.rent => 'Rent',
+    };
+  }
+
+  Widget _buildSelectedContent(BuildContext context) {
+    final platforms = _getCurrentPlatforms();
+
+    if (platforms.isEmpty) {
+      return _buildEmptySection(context);
+    }
+
+    return _buildHorizontalPlatformList(platforms, context);
+  }
+
+  List<StreamingPlatform> _getCurrentPlatforms() {
+    if (_data == null) return [];
+
+    return switch (_selectedType) {
+      StreamingType.stream => _data.streamingPlatforms ?? [],
+      StreamingType.buy => _data.buyOptions ?? [],
+      StreamingType.rent => _data.rentOptions ?? [],
+    };
+  }
+
+  Widget _buildEmptySection(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Icon(
+            CupertinoIcons.tv,
+            size: 24,
+            color: cupertinoTheme.bgTextColor.withValues(alpha: 0.5),
           ),
-          const SizedBox(height: 6),
-          AutoSizeText(
-            item.name,
-            maxLines: 1,
-            maxFontSize: 16,
-            minFontSize: 13,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+          const SizedBox(height: 8),
+          Text(
+            "No ${_getTypeLabel(_selectedType).toLowerCase()} options available",
+            style: TextStyle(
+              fontSize: 14,
+              color: cupertinoTheme.bgTextColor.withValues(alpha: 0.7),
             ),
           ),
         ],
       ),
-    ),
-  );
+    );
+  }
 
-  String platformURL(String contentType, String countryCode) => "https://www.themoviedb.org/$contentType/$tmdbId/watch?locale=$countryCode";
+  Widget _buildNoContentAvailable(BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
+    return Center(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cupertinoTheme.onBgColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: cupertinoTheme.bgTextColor.withValues(alpha: 0.1),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              CupertinoIcons.tv,
+              size: 32,
+              color: cupertinoTheme.bgTextColor.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "No streaming options available",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: cupertinoTheme.bgTextColor,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "Not available in your region",
+              style: TextStyle(
+                fontSize: 14,
+                color: cupertinoTheme.bgTextColor.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalPlatformList(
+      List<StreamingPlatform> platforms, BuildContext context) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
+    return SizedBox(
+      height: 60,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: platforms.length,
+        itemBuilder: (context, index) {
+          final platform = platforms[index];
+          return Padding(
+            padding: EdgeInsets.only(left: index == 0 ? 0 : 8, right: 8),
+            child: _buildStreamingPlatformCard(platform, cupertinoTheme),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildStreamingPlatformCard(
+      StreamingPlatform platform, CupertinoThemeData cupertinoTheme) {
+    return GestureDetector(
+      onTap: _launchPlatformURL,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: cupertinoTheme.onBgColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: cupertinoTheme.bgTextColor.withValues(alpha: 0.15),
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildPlatformLogo(platform, cupertinoTheme),
+            const SizedBox(width: 8),
+            Text(
+              platform.name,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: cupertinoTheme.bgTextColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlatformLogo(
+      StreamingPlatform platform, CupertinoThemeData theme) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: CachedNetworkImage(
+        imageUrl: platform.logo,
+        fit: BoxFit.cover,
+        key: ValueKey<String>(platform.logo),
+        cacheKey: platform.logo,
+        height: 28,
+        width: 28,
+        cacheManager: CustomCacheManager(),
+        maxHeightDiskCache: 84,
+        maxWidthDiskCache: 84,
+        errorListener: (_) {},
+        errorWidget: (context, url, error) => Container(
+          height: 28,
+          width: 28,
+          decoration: BoxDecoration(
+            color: theme.bgTextColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            CupertinoIcons.tv,
+            size: 16,
+            color: theme.bgTextColor.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _launchPlatformURL() async {
+    if (widget.tmdbId.isNotEmpty) {
+      final url = Uri.parse(_buildPlatformURL());
+      if (!await launchUrl(url)) {
+        if (mounted) {
+          showCupertinoDialog(
+            context: context,
+            builder: (_) => const ErrorDialog("Not available, sorry."),
+          );
+        }
+      }
+    }
+  }
+
+  String _buildPlatformURL() {
+    return "https://www.themoviedb.org/${widget.contentType}/${widget.tmdbId}/watch?locale=$_countryCode";
+  }
 }

@@ -9,7 +9,11 @@ class LoadingView extends StatefulWidget {
   final String _text;
   final Color textColor;
 
-  const LoadingView(this._text, {this.textColor = Colors.black, super.key});
+  const LoadingView(
+    this._text, {
+    this.textColor = Colors.black,
+    super.key,
+  });
 
   @override
   State<LoadingView> createState() => _LoadingViewState();
@@ -46,7 +50,7 @@ class _LoadingViewState extends State<LoadingView>
 
     final baseStyle = TextStyle(
       color: _effectiveTextColor,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: FontWeight.w600,
       letterSpacing: 1.2,
       height: 1.3,
@@ -98,20 +102,23 @@ class _LoadingViewState extends State<LoadingView>
   }
 
   Widget _body(BuildContext context) {
-    return Center(
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(bottom: 80),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           RepaintBoundary(
             child: SizedBox(
-              width: 240,
-              height: 240,
+              width: 220,
+              height: 220,
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {
                   return CustomPaint(
                     painter: _WatchlistfyLoadingPainter(_controller.value),
-                    size: const Size(240, 240),
+                    size: const Size(220, 220),
                     child: child,
                   );
                 },
@@ -159,7 +166,7 @@ class _LoadingViewState extends State<LoadingView>
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           RepaintBoundary(
             child: AnimatedBuilder(
               animation: _controller,
@@ -248,7 +255,7 @@ class _WatchlistfyLoadingPainter extends CustomPainter {
 
       // Draw icon background circle
       final iconBgPaint = Paint()
-        ..color = color.withOpacity(0.2)
+        ..color = color.withValues(alpha: 0.2)
         ..style = PaintingStyle.fill;
       canvas.drawCircle(iconCenter, 20, iconBgPaint);
 

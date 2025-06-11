@@ -13,7 +13,7 @@ import 'package:watchlistfy/widgets/auth/or_with_line.dart';
 import 'package:watchlistfy/widgets/auth/password_field.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
-import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/notification_overlay.dart';
 import 'package:watchlistfy/widgets/common/profile_image_list.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -79,10 +79,11 @@ class _RegisterPageState extends State<RegisterPage> {
           } else {
             Navigator.pop(context);
 
-            showCupertinoDialog(
-              context: context,
-              builder: (_) =>
-                  MessageDialog(value.message ?? "Successfully registered."),
+            NotificationOverlay().show(
+              context,
+              title: "Account Created",
+              message:
+                  value.message ?? "You have been registered successfully!",
             );
           }
         }

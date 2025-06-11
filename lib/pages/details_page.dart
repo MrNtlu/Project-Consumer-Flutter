@@ -29,7 +29,6 @@ import 'package:watchlistfy/providers/main/tv/tv_details_provider.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
-import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
@@ -317,27 +316,55 @@ class _DetailsPageState extends State<DetailsPage> {
     switch (widget.contentType) {
       case ContentType.movie:
         (provider as MovieDetailsProvider)
-            .createConsumeLaterObject(ConsumeLaterBody(
-                itemId, externalId, widget.contentType.request))
-            .then((response) => _handleConsumerLaterResponse(response));
+            .createConsumeLaterObject(
+              ConsumeLaterBody(
+                itemId,
+                externalId,
+                widget.contentType.request,
+              ),
+            )
+            .then(
+              (response) => _handleConsumerLaterResponse(response),
+            );
         break;
       case ContentType.tv:
         (provider as TVDetailsProvider)
-            .createConsumeLaterObject(ConsumeLaterBody(
-                itemId, externalId, widget.contentType.request))
-            .then((response) => _handleConsumerLaterResponse(response));
+            .createConsumeLaterObject(
+              ConsumeLaterBody(
+                itemId,
+                externalId,
+                widget.contentType.request,
+              ),
+            )
+            .then(
+              (response) => _handleConsumerLaterResponse(response),
+            );
         break;
       case ContentType.anime:
         (provider as AnimeDetailsProvider)
-            .createConsumeLaterObject(ConsumeLaterBody(
-                itemId, externalId, widget.contentType.request))
-            .then((response) => _handleConsumerLaterResponse(response));
+            .createConsumeLaterObject(
+              ConsumeLaterBody(
+                itemId,
+                externalId,
+                widget.contentType.request,
+              ),
+            )
+            .then(
+              (response) => _handleConsumerLaterResponse(response),
+            );
         break;
       case ContentType.game:
         (provider as GameDetailsProvider)
-            .createConsumeLaterObject(ConsumeLaterBody(
-                itemId, externalId, widget.contentType.request))
-            .then((response) => _handleConsumerLaterResponse(response));
+            .createConsumeLaterObject(
+              ConsumeLaterBody(
+                itemId,
+                externalId,
+                widget.contentType.request,
+              ),
+            )
+            .then(
+              (response) => _handleConsumerLaterResponse(response),
+            );
         break;
     }
   }
@@ -505,19 +532,27 @@ class _DetailsPageState extends State<DetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _OptimizedMainInfo(
-                item: item, adapter: adapter, contentType: widget.contentType),
+              item: item,
+              adapter: adapter,
+              contentType: widget.contentType,
+            ),
             const SizedBox(height: 12),
             _OptimizedButtonRow(
-                item: item,
-                adapter: adapter,
-                contentType: widget.contentType,
-                onRecommendationsTap: () =>
-                    _navigateToRecommendations(adapter)),
+              item: item,
+              adapter: adapter,
+              contentType: widget.contentType,
+              onRecommendationsTap: () => _navigateToRecommendations(
+                adapter,
+              ),
+            ),
             const CustomDivider(height: 0.75, opacity: 0.35),
             _OptimizedContentWidgets(
-                item: item,
-                contentType: widget.contentType,
-                onRefresh: () => provider.refreshData(widget.id)),
+              item: item,
+              contentType: widget.contentType,
+              onRefresh: () => provider.refreshData(
+                widget.id,
+              ),
+            ),
             const SizedBox(height: 32),
           ],
         ),
@@ -734,15 +769,24 @@ class _OptimizedContentWidgets extends StatelessWidget {
     switch (contentType) {
       case ContentType.movie:
         return _MovieDetailsContent(
-            item: item as MovieDetails, onRefresh: onRefresh);
+          item: item as MovieDetails,
+          onRefresh: onRefresh,
+        );
       case ContentType.tv:
-        return _TVDetailsContent(item: item as TVDetails, onRefresh: onRefresh);
+        return _TVDetailsContent(
+          item: item as TVDetails,
+          onRefresh: onRefresh,
+        );
       case ContentType.anime:
         return _AnimeDetailsContent(
-            item: item as AnimeDetails, onRefresh: onRefresh);
+          item: item as AnimeDetails,
+          onRefresh: onRefresh,
+        );
       case ContentType.game:
         return _GameDetailsContent(
-            item: item as GameDetails, onRefresh: onRefresh);
+          item: item as GameDetails,
+          onRefresh: onRefresh,
+        );
     }
   }
 }
@@ -764,8 +808,12 @@ class _MovieDetailsContent extends StatelessWidget {
       children: [
         const DetailsTitle("Genres"),
         DetailsGenreList(
-            item.genres, (genre) => MovieDiscoverListPage(genre: genre)),
-        const DetailsTitle("Description"),
+          item.genres,
+          (genre) => MovieDiscoverListPage(
+            genre: genre,
+          ),
+        ),
+        const DetailsTitle("Synopsis"),
         ExpandableText(
           item.description,
           maxLines: 3,
@@ -776,31 +824,26 @@ class _MovieDetailsContent extends StatelessWidget {
           linkStyle: const TextStyle(fontSize: 14),
         ),
         if (item.actors.isNotEmpty) ...[
-          const DetailsTitle("Actors"),
-          SizedBox(
-            height: 115,
-            child: DetailsCommonList(
-              true,
-              item.actors.length,
-              (index) => item.actors[index].tmdbID,
-              (index) => item.actors[index].image,
-              (index) => item.actors[index].name,
-              (index) => item.actors[index].character,
-              true,
-            ),
+          const DetailsTitle("Cast"),
+          DetailsCommonList(
+            true,
+            item.actors.length,
+            (index) => item.actors[index].tmdbID,
+            (index) => item.actors[index].image,
+            (index) => item.actors[index].name,
+            (index) => item.actors[index].character,
+            true,
           ),
         ],
         if (item.recommendations.isNotEmpty) ...[
           const DetailsTitle("Recommendations"),
-          SizedBox(
-            height: 150,
-            child: DetailsRecommendationList(
-              item.recommendations.length,
-              (index) => item.recommendations[index].imageURL,
-              (index) => item.recommendations[index].title,
-              (index) => DetailsPage(
-                  id: item.recommendations[index].tmdbID,
-                  contentType: ContentType.movie),
+          DetailsRecommendationList(
+            item.recommendations.length,
+            (index) => item.recommendations[index].imageURL,
+            (index) => item.recommendations[index].title,
+            (index) => DetailsPage(
+              id: item.recommendations[index].tmdbID,
+              contentType: ContentType.movie,
             ),
           ),
         ],
@@ -819,33 +862,35 @@ class _MovieDetailsContent extends StatelessWidget {
         ],
         if (item.productionCompanies != null) ...[
           const DetailsTitle("Production"),
-          SizedBox(
-            height: 135,
-            child: DetailsCommonList(
-              false,
-              item.productionCompanies!.length,
-              null,
-              onClick: (index) {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                      builder: (_) => MovieDiscoverListPage(
-                          productionCompanies:
-                              item.productionCompanies![index].name)),
-                );
-              },
-              (index) => item.productionCompanies![index].logo,
-              (index) => item.productionCompanies![index].name,
-              (index) => item.productionCompanies![index].originCountry,
-              true,
-              placeHolderIcon: Icons.business_rounded,
-            ),
+          DetailsCommonList(
+            false,
+            item.productionCompanies!.length,
+            null,
+            onClick: (index) {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (_) => MovieDiscoverListPage(
+                    productionCompanies: item.productionCompanies![index].name,
+                  ),
+                ),
+              );
+            },
+            (index) => item.productionCompanies![index].logo,
+            (index) => item.productionCompanies![index].name,
+            (index) => item.productionCompanies![index].originCountry,
+            true,
+            placeHolderIcon: Icons.business_rounded,
           ),
         ],
         _PlatformsSection(
-            countryCode: () =>
-                Provider.of<GlobalProvider>(context, listen: false)
-                    .selectedCountryCode),
-        DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "movie"),
+          countryCode: () => Provider.of<GlobalProvider>(context, listen: false)
+              .selectedCountryCode,
+        ),
+        DetailsStreamingLists(
+          item.streaming ?? [],
+          item.tmdbID,
+          "movie",
+        ),
       ],
     );
   }
@@ -855,7 +900,10 @@ class _TVDetailsContent extends StatelessWidget {
   final TVDetails item;
   final VoidCallback onRefresh;
 
-  const _TVDetailsContent({required this.item, required this.onRefresh});
+  const _TVDetailsContent({
+    required this.item,
+    required this.onRefresh,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -864,45 +912,52 @@ class _TVDetailsContent extends StatelessWidget {
       children: [
         const DetailsTitle("Genres"),
         DetailsGenreList(
-            item.genres, (genre) => TVDiscoverListPage(genre: genre)),
+          item.genres,
+          (genre) => TVDiscoverListPage(
+            genre: genre,
+          ),
+        ),
         if (item.description.isNotEmpty) ...[
-          const DetailsTitle("Description"),
-          ExpandableText(item.description,
-              maxLines: 3,
-              expandText: "Read More",
-              collapseText: "Read Less",
-              linkColor: CupertinoColors.systemBlue,
-              style: const TextStyle(fontSize: 16),
-              linkStyle: const TextStyle(fontSize: 14)),
+          const DetailsTitle("Synopsis"),
+          ExpandableText(
+            item.description,
+            maxLines: 3,
+            expandText: "Read More",
+            collapseText: "Read Less",
+            linkColor: CupertinoColors.systemBlue,
+            style: const TextStyle(fontSize: 16),
+            linkStyle: const TextStyle(
+              fontSize: 14,
+            ),
+          ),
         ],
         if (item.actors.isNotEmpty) ...[
-          const DetailsTitle("Actors"),
-          SizedBox(
-              height: 115,
-              child: DetailsCommonList(
-                  true,
-                  item.actors.length,
-                  (index) => item.actors[index].tmdbID,
-                  (index) => item.actors[index].image,
-                  (index) => item.actors[index].name,
-                  (index) => item.actors[index].character,
-                  false)),
+          const DetailsTitle("Cast"),
+          DetailsCommonList(
+            true,
+            item.actors.length,
+            (index) => item.actors[index].tmdbID,
+            (index) => item.actors[index].image,
+            (index) => item.actors[index].name,
+            (index) => item.actors[index].character,
+            false,
+          ),
         ],
         if (item.seasons.isNotEmpty) ...[
           const DetailsTitle("Seasons"),
-          SizedBox(height: 190, child: TVSeasonList(item.seasons)),
+          TVSeasonList(item.seasons),
         ],
         if (item.recommendations.isNotEmpty) ...[
           const DetailsTitle("Recommendations"),
-          SizedBox(
-              height: 150,
-              child: DetailsRecommendationList(
-                  item.recommendations.length,
-                  (index) => item.recommendations[index].imageURL,
-                  (index) => item.recommendations[index].title,
-                  (index) => DetailsPage(
-                      id: item.recommendations[index].tmdbID,
-                      contentType: ContentType.tv))),
+          DetailsRecommendationList(
+            item.recommendations.length,
+            (index) => item.recommendations[index].imageURL,
+            (index) => item.recommendations[index].title,
+            (index) => DetailsPage(
+              id: item.recommendations[index].tmdbID,
+              contentType: ContentType.tv,
+            ),
+          ),
         ],
         DetailsReviewSummary(
             item.title.isNotEmpty ? item.title : item.titleOriginal,
@@ -918,42 +973,47 @@ class _TVDetailsContent extends StatelessWidget {
         ],
         if (item.productionCompanies != null) ...[
           const DetailsTitle("Production"),
-          SizedBox(
-              height: 135,
-              child: DetailsCommonList(
-                  false,
-                  item.productionCompanies!.length,
-                  null,
-                  onClick: (index) => Navigator.of(context, rootNavigator: true)
-                      .push(CupertinoPageRoute(
-                          builder: (_) => TVDiscoverListPage(
-                              productionCompanies:
-                                  item.productionCompanies![index].name))),
-                  (index) => item.productionCompanies![index].logo,
-                  (index) => item.productionCompanies![index].name,
-                  (index) => item.productionCompanies![index].originCountry,
-                  false,
-                  placeHolderIcon: Icons.business_rounded)),
+          DetailsCommonList(
+            false,
+            item.productionCompanies!.length,
+            null,
+            onClick: (index) => Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                builder: (_) => TVDiscoverListPage(
+                    productionCompanies: item.productionCompanies![index].name),
+              ),
+            ),
+            (index) => item.productionCompanies![index].logo,
+            (index) => item.productionCompanies![index].name,
+            (index) => item.productionCompanies![index].originCountry,
+            false,
+            placeHolderIcon: Icons.business_rounded,
+          ),
         ],
         if (item.networks != null) ...[
           const DetailsTitle("Networks"),
-          SizedBox(
-              height: 135,
-              child: DetailsCommonList(
-                  false,
-                  item.networks!.length,
-                  null,
-                  (index) => item.networks![index].logo,
-                  (index) => item.networks![index].name,
-                  (index) => item.networks![index].originCountry ?? "",
-                  false,
-                  placeHolderIcon: Icons.business_rounded)),
+          DetailsCommonList(
+            false,
+            item.networks!.length,
+            null,
+            (index) => item.networks![index].logo,
+            (index) => item.networks![index].name,
+            (index) => item.networks![index].originCountry ?? "",
+            false,
+            placeHolderIcon: Icons.business_rounded,
+          ),
         ],
         _PlatformsSection(
-            countryCode: () =>
-                Provider.of<GlobalProvider>(context, listen: false)
-                    .selectedCountryCode),
-        DetailsStreamingLists(item.streaming ?? [], item.tmdbID, "tv"),
+          countryCode: () => Provider.of<GlobalProvider>(
+            context,
+            listen: false,
+          ).selectedCountryCode,
+        ),
+        DetailsStreamingLists(
+          item.streaming ?? [],
+          item.tmdbID,
+          "tv",
+        ),
       ],
     );
   }
@@ -963,61 +1023,81 @@ class _AnimeDetailsContent extends StatelessWidget {
   final AnimeDetails item;
   final VoidCallback onRefresh;
 
-  const _AnimeDetailsContent({required this.item, required this.onRefresh});
+  const _AnimeDetailsContent({
+    required this.item,
+    required this.onRefresh,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final animeRelations =
-        groupBy(item.relations, (element) => element.relation);
+    final animeRelations = groupBy(
+      item.relations,
+      (element) => element.relation,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const DetailsTitle("Genres"),
-        DetailsGenreList(item.genres?.map((e) => e.name).toList() ?? [],
-            (genre) => AnimeDiscoverListPage(genre: genre)),
+        DetailsGenreList(
+          item.genres?.map((e) => e.name).toList() ?? [],
+          (genre) => AnimeDiscoverListPage(
+            genre: genre,
+          ),
+        ),
         if (item.demographics?.isNotEmpty == true) ...[
           const DetailsTitle("Demographics"),
-          DetailsGenreList(item.demographics!.map((e) => e.name).toList(),
-              (demographic) => AnimeDiscoverListPage(demographic: demographic)),
+          DetailsGenreList(
+            item.demographics!.map((e) => e.name).toList(),
+            (demographic) => AnimeDiscoverListPage(
+              demographic: demographic,
+            ),
+          ),
         ],
         if (item.themes?.isNotEmpty == true) ...[
           const DetailsTitle("Themes"),
-          DetailsGenreList(item.themes!.map((e) => e.name).toList(),
-              (theme) => AnimeDiscoverListPage(theme: theme)),
+          DetailsGenreList(
+            item.themes!.map((e) => e.name).toList(),
+            (theme) => AnimeDiscoverListPage(
+              theme: theme,
+            ),
+          ),
         ],
-        const DetailsTitle("Description"),
-        ExpandableText(item.description,
-            maxLines: 3,
-            expandText: "Read More",
-            collapseText: "Read Less",
-            linkColor: CupertinoColors.systemBlue,
-            style: const TextStyle(fontSize: 16),
-            linkStyle: const TextStyle(fontSize: 14)),
+        const DetailsTitle("Synopsis"),
+        ExpandableText(
+          item.description,
+          maxLines: 3,
+          expandText: "Read More",
+          collapseText: "Read Less",
+          linkColor: CupertinoColors.systemBlue,
+          style: const TextStyle(fontSize: 16),
+          linkStyle: const TextStyle(
+            fontSize: 14,
+          ),
+        ),
         if (item.characters.isNotEmpty) ...[
           const DetailsTitle("Characters"),
-          SizedBox(
-              height: 115,
-              child: DetailsCommonList(
-                  true,
-                  item.characters.length,
-                  null,
-                  (index) => item.characters[index].image,
-                  (index) => item.characters[index].name,
-                  (index) => item.characters[index].role,
-                  false)),
+          DetailsCommonList(
+            true,
+            item.characters.length,
+            null,
+            (index) => item.characters[index].image,
+            (index) => item.characters[index].name,
+            (index) => item.characters[index].role,
+            false,
+          ),
         ],
         if (item.recommendations.isNotEmpty) ...[
           const DetailsTitle("Recommendations"),
-          SizedBox(
-              height: 150,
-              child: DetailsRecommendationList(
-                  item.recommendations.length,
-                  (index) => item.recommendations[index].imageURL,
-                  (index) => item.recommendations[index].title,
-                  (index) => DetailsPage(
-                      id: item.recommendations[index].malId.toString(),
-                      contentType: ContentType.anime))),
+          DetailsRecommendationList(
+            item.recommendations.length,
+            (index) => item.recommendations[index].imageURL,
+            (index) => item.recommendations[index].title,
+            (index) => DetailsPage(
+              id: item.recommendations[index].malId.toString(),
+              contentType: ContentType.anime,
+            ),
+          ),
         ],
         DetailsReviewSummary(
             item.title.isNotEmpty ? item.title : item.titleOriginal,
@@ -1029,24 +1109,81 @@ class _AnimeDetailsContent extends StatelessWidget {
             onRefresh),
         if (item.streaming?.isNotEmpty == true) ...[
           const DetailsTitle("Streaming Platforms"),
-          AnimeDetailsStreamingPlatformsList(item.streaming!),
+          AnimeDetailsStreamingPlatformsList(
+            item.streaming!,
+          ),
         ],
         if (animeRelations.isNotEmpty) ...[
           const DetailsTitle("Related Anime"),
-          ...animeRelations.values
-              .map((animeList) => _RelationListWidget(relationList: animeList)),
+          ...animeRelations.values.map(
+            (animeList) => _RelationListWidget(
+              relationList: animeList,
+            ),
+          ),
         ],
         if (item.producers?.isNotEmpty == true) ...[
           const DetailsTitle("Producers"),
-          Text(item.producers!.map((e) => e.name).join(" • "),
-              style: const TextStyle(fontWeight: FontWeight.w500)),
+          _buildProducersDisplay(context, item.producers!),
         ],
         if (item.studios?.isNotEmpty == true) ...[
           const DetailsTitle("Studios"),
-          DetailsGenreList(item.studios!.map((e) => e.name).toList(),
-              (studios) => AnimeDiscoverListPage(studios: studios)),
+          DetailsGenreList(
+            item.studios!.map((e) => e.name).toList(),
+            (studios) => AnimeDiscoverListPage(
+              studios: studios,
+            ),
+          ),
         ],
       ],
+    );
+  }
+
+  Widget _buildProducersDisplay(BuildContext context, List<dynamic> producers) {
+    final cupertinoTheme = CupertinoTheme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            cupertinoTheme.barBackgroundColor,
+            cupertinoTheme.barBackgroundColor.withValues(alpha: 0.7),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: cupertinoTheme.primaryColor.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: producers.map((producer) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: cupertinoTheme.primaryColor.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: cupertinoTheme.primaryColor.withValues(alpha: 0.15),
+                width: 0.5,
+              ),
+            ),
+            child: Text(
+              producer.name,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: cupertinoTheme.textTheme.textStyle.color,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
@@ -1063,16 +1200,20 @@ class _GameDetailsContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const DetailsTitle("Description"),
-        ExpandableText(item.description.removeAllHtmlTags(),
-            maxLines: 3,
-            expandText: "Read More",
-            collapseText: "Read Less",
-            linkColor: CupertinoColors.systemBlue,
-            style: const TextStyle(fontSize: 16),
-            linkStyle: const TextStyle(fontSize: 14)),
+        ExpandableText(
+          item.description.removeAllHtmlTags(),
+          maxLines: 3,
+          expandText: "Read More",
+          collapseText: "Read Less",
+          linkColor: CupertinoColors.systemBlue,
+          style: const TextStyle(fontSize: 16),
+          linkStyle: const TextStyle(fontSize: 14),
+        ),
         const DetailsTitle("Genres"),
         DetailsGenreList(
-            item.genres, (genre) => GameDiscoverListPage(genre: genre)),
+          item.genres,
+          (genre) => GameDiscoverListPage(genre: genre),
+        ),
         if (item.developers.isNotEmpty) ...[
           const DetailsTitle("Developers"),
           Text(item.developers.join(" • "),
@@ -1080,34 +1221,30 @@ class _GameDetailsContent extends StatelessWidget {
         ],
         if (item.publishers.isNotEmpty) ...[
           const DetailsTitle("Publishers"),
-          SizedBox(
-              height: 40,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: item.publishers.length,
-                  itemBuilder: (context, index) => CupertinoChip(
-                      isSelected: false,
-                      onSelected: (_) =>
-                          Navigator.of(context, rootNavigator: true).push(
-                              CupertinoPageRoute(
-                                  builder: (_) => GameDiscoverListPage(
-                                      publisher: item.publishers[index]))),
-                      label: item.publishers[index]))),
+          DetailsGenreList(
+            item.publishers,
+            (publisher) => GameDiscoverListPage(
+              publisher: publisher,
+            ),
+          ),
         ],
         const DetailsTitle("Platforms"),
-        DetailsGenreList(item.platforms,
-            (platform) => GameDiscoverListPage(platform: platform)),
+        DetailsGenreList(
+          item.platforms,
+          (platform) => GameDiscoverListPage(platform: platform),
+        ),
         if (item.relatedGames.isNotEmpty) ...[
           const DetailsTitle("Related Games"),
-          SizedBox(
-              height: 150,
-              child: DetailsRecommendationList(
-                  item.relatedGames.length,
-                  (index) => item.relatedGames[index].imageURL,
-                  (index) => item.relatedGames[index].title,
-                  (index) => DetailsPage(
-                      id: item.relatedGames[index].rawgId.toString(),
-                      contentType: ContentType.game))),
+          DetailsRecommendationList(
+            isGame: true,
+            item.relatedGames.length,
+            (index) => item.relatedGames[index].imageURL,
+            (index) => item.relatedGames[index].title,
+            (index) => DetailsPage(
+              id: item.relatedGames[index].rawgId.toString(),
+              contentType: ContentType.game,
+            ),
+          ),
         ],
         DetailsReviewSummary(
             item.title.isNotEmpty ? item.title : item.titleOriginal,
@@ -1137,7 +1274,7 @@ class _PlatformsSection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const DetailsTitle("Platforms"),
+        const DetailsTitle("Where to Watch"),
         CupertinoButton(
           child: const Icon(CupertinoIcons.info_circle),
           onPressed: () => showCupertinoDialog(
@@ -1161,26 +1298,93 @@ class _RelationListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DetailsSubTitle(relationList.first.relation),
-        SizedBox(
-          height: 115,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 3),
+    final cupertinoTheme = CupertinoTheme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            cupertinoTheme.barBackgroundColor,
+            cupertinoTheme.barBackgroundColor.withValues(alpha: 0.8),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: cupertinoTheme.primaryColor.withValues(alpha: 0.1),
+          width: 1.5,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: cupertinoTheme.primaryColor.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  CupertinoIcons.link,
+                  size: 16,
+                  color: cupertinoTheme.primaryColor,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    relationList.first.relation,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: cupertinoTheme.primaryColor,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: cupertinoTheme.primaryColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${relationList.length}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: cupertinoTheme.primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: DetailsRecommendationList(
               relationList.length,
               (index) => relationList[index].imageURL,
               (index) => relationList[index].title,
               (index) => DetailsPage(
-                  id: relationList[index].animeID.toString(),
-                  contentType: ContentType.anime),
+                id: relationList[index].animeID.toString(),
+                contentType: ContentType.anime,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

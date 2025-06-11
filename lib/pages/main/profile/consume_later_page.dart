@@ -22,7 +22,7 @@ import 'package:watchlistfy/widgets/common/cupertino_chip.dart';
 import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_dialog.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
-import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/notification_overlay.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
 import 'package:watchlistfy/widgets/main/profile/consume_later_action_sheet.dart';
 import 'package:watchlistfy/widgets/main/profile/consume_later_grid_cell.dart';
@@ -538,15 +538,17 @@ class _ConsumeLaterPageState extends State<ConsumeLaterPage> {
   void handleMessageResponse(BuildContext context, BaseMessageResponse value) {
     Navigator.pop(context);
 
-    showCupertinoDialog(
+    if (value.error != null) {
+      showCupertinoDialog(
         context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          if (value.error != null) {
-            return ErrorDialog(value.error!);
-          } else {
-            return MessageDialog(value.message ?? "Successfully moved.");
-          }
-        });
+        builder: (context) => ErrorDialog(value.error!),
+      );
+    } else {
+      NotificationOverlay().show(
+        context,
+        title: "Success",
+        message: value.message ?? "Successfully moved.",
+      );
+    }
   }
 }

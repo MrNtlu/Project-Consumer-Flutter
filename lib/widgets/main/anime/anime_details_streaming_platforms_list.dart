@@ -17,121 +17,137 @@ class AnimeDetailsStreamingPlatformsList extends StatelessWidget {
     final cupertinoTheme = CupertinoTheme.of(context);
 
     return SizedBox(
-      height: 100,
+      height: 120,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: data.length,
         itemBuilder: (context, index) {
           final item = data[index];
+          return Padding(
+            padding: EdgeInsets.only(
+              left: index == 0 ? 0 : 8,
+              right: index == data.length - 1 ? 0 : 8,
+            ),
+            child: _buildPlatformCard(context, item, cupertinoTheme),
+          );
+        },
+      ),
+    );
+  }
 
-          final logoBaseUrl = item.url
-              .replaceAll(RegExp(r'^(?:https?:\/\/)?(?:www\.)?'), '')
-              .split('/')[0];
+  Widget _buildPlatformCard(
+    BuildContext context,
+    AnimeNameUrl item,
+    CupertinoThemeData theme,
+  ) {
+    final logoBaseUrl = item.url
+        .replaceAll(RegExp(r'^(?:https?:\/\/)?(?:www\.)?'), '')
+        .split('/')[0];
 
-          final streamingLogoUrl =
-              'https://img.logo.dev/$logoBaseUrl?token=pk_C1fcC0OuSJS-HB9jCN0LIg';
+    final streamingLogoUrl =
+        'https://img.logo.dev/$logoBaseUrl?token=pk_C1fcC0OuSJS-HB9jCN0LIg';
 
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () async {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                  builder: (_) {
-                    return AnimeDiscoverListPage(
-                      streaming: item.name,
-                      streamingLogo: streamingLogoUrl,
-                    );
-                  },
-                  maintainState: NavigationTracker().shouldMaintainState(),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 100,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(
-                        imageUrl: streamingLogoUrl,
-                        fit: BoxFit.cover,
-                        key: ValueKey<String>(item.name),
-                        cacheKey: item.name,
-                        height: 64,
-                        width: 64,
-                        cacheManager: CustomCacheManager(),
-                        maxHeightDiskCache: 190,
-                        maxWidthDiskCache: 190,
-                        errorWidget: (context, _, __) {
-                          return ColoredBox(
-                            color: cupertinoTheme.bgTextColor,
-                            child: SizedBox(
-                              height: 64,
-                              width: 64,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Center(
-                                    child: AutoSizeText(
-                                      item.name,
-                                      minFontSize: 13,
-                                      style: TextStyle(
-                                        color: cupertinoTheme.bgColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )),
-                            ),
-                          );
-                        },
-                        placeholder: (context, _) {
-                          return ColoredBox(
-                            color: cupertinoTheme.bgTextColor,
-                            child: SizedBox(
-                              height: 64,
-                              width: 64,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Center(
-                                    child: AutoSizeText(
-                                      item.name,
-                                      minFontSize: 13,
-                                      style: TextStyle(
-                                        color: cupertinoTheme.bgColor,
-                                        fontSize: 16,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    AutoSizeText(
-                      item.name,
-                      maxLines: 1,
-                      maxFontSize: 16,
-                      minFontSize: 13,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _navigateToDiscover(context, item, streamingLogoUrl),
+      child: Container(
+        width: 110,
+        decoration: BoxDecoration(
+          color: theme.onBgColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: theme.bgTextColor.withValues(alpha: 0.12),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildPlatformImage(item, streamingLogoUrl, theme),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: AutoSizeText(
+                item.name,
+                maxLines: 1,
+                maxFontSize: 14,
+                minFontSize: 12,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: theme.bgTextColor,
                 ),
               ),
             ),
-          );
-        },
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlatformImage(
+    AnimeNameUrl item,
+    String streamingLogoUrl,
+    CupertinoThemeData theme,
+  ) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: CachedNetworkImage(
+          imageUrl: streamingLogoUrl,
+          fit: BoxFit.cover,
+          key: ValueKey<String>(item.name),
+          cacheKey: item.name,
+          height: 64,
+          width: 64,
+          cacheManager: CustomCacheManager(),
+          maxHeightDiskCache: 190,
+          maxWidthDiskCache: 190,
+          errorWidget: (context, _, __) => _buildFallbackWidget(item, theme),
+          placeholder: (context, _) => _buildFallbackWidget(item, theme),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFallbackWidget(AnimeNameUrl item, CupertinoThemeData theme) {
+    return Container(
+      height: 64,
+      width: 64,
+      decoration: BoxDecoration(
+        color: theme.bgTextColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Center(
+        child: AutoSizeText(
+          item.name,
+          minFontSize: 10,
+          maxFontSize: 13,
+          style: TextStyle(
+            color: theme.bgTextColor,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToDiscover(
+    BuildContext context,
+    AnimeNameUrl item,
+    String streamingLogoUrl,
+  ) {
+    Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+        builder: (_) => AnimeDiscoverListPage(
+          streaming: item.name,
+          streamingLogo: streamingLogoUrl,
+        ),
+        maintainState: NavigationTracker().shouldMaintainState(),
       ),
     );
   }
