@@ -15,11 +15,9 @@ class UserListActionSheet extends StatelessWidget {
   final UserListProvider provider;
   final VoidCallback onViewTap;
 
-  const UserListActionSheet(
-    this.index, this.id, this.title, this.contentType,
-    this.userList, this.provider, this.onViewTap,
-    {super.key}
-  );
+  const UserListActionSheet(this.index, this.id, this.title, this.contentType,
+      this.userList, this.provider, this.onViewTap,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +37,10 @@ class UserListActionSheet extends StatelessWidget {
 
             onViewTap();
           },
-          child: const Text(
-            'View',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: CupertinoColors.activeBlue)
-          ),
+          child: const Text('View',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: CupertinoColors.activeBlue)),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -52,16 +48,15 @@ class UserListActionSheet extends StatelessWidget {
             Navigator.pop(context);
 
             showCupertinoModalPopup(
-              context: context,
-              builder: (context) {
-                return UserListEditSheet(
-                  index,
-                  provider,
-                  contentType,
-                  userList,
-                );
-              }
-            );
+                context: context,
+                builder: (context) {
+                  return UserListEditSheet(
+                    index,
+                    provider,
+                    contentType,
+                    userList,
+                  );
+                });
           },
           child: const Text('Edit',
               style: TextStyle(color: CupertinoColors.activeBlue)),
@@ -70,17 +65,16 @@ class UserListActionSheet extends StatelessWidget {
           isDestructiveAction: true,
           onPressed: () {
             showCupertinoDialog(
-              context: context, 
-              builder: (_) {
-                return SureDialog("Do you want to remove it from your list?", () {
-                  Navigator.pop(context);
-                  
-                  provider.deleteUserList(
-                    index, DeleteUserListBody(id, contentType.request));
-                  }
-                );
-              }
-            );
+                context: context,
+                builder: (_) {
+                  return SureDialog("Do you want to remove it from your list?",
+                      () {
+                    Navigator.pop(context);
+
+                    provider.deleteUserList(
+                        index, DeleteUserListBody(id, contentType.request));
+                  });
+                });
           },
           child: const Text('Remove'),
         ),

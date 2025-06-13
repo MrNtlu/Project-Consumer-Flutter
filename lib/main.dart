@@ -170,21 +170,26 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
-          // Cache theme values to prevent repeated SharedPref calls
-          final isDarkTheme = SharedPref().isDarkTheme();
+          final isDarkTheme = themeProvider.isDarkTheme;
 
-          if (Platform.isAndroid) {
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarColor: isDarkTheme
-                    ? const Color(0xFF121212)
-                    : const Color(0xFFFAFAFA),
-                systemNavigationBarColor: isDarkTheme
-                    ? const Color(0xFF212121)
-                    : const Color(0xFFFAFAFA),
-              ),
-            );
-          }
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarColor: Platform.isIOS
+                  ? Colors.transparent
+                  : (isDarkTheme
+                      ? const Color(0xFF121212)
+                      : const Color(0xFFFAFAFA)),
+              systemNavigationBarColor: isDarkTheme
+                  ? const Color(0xFF212121)
+                  : const Color(0xFFFAFAFA),
+              statusBarBrightness:
+                  isDarkTheme ? Brightness.dark : Brightness.light,
+              statusBarIconBrightness:
+                  isDarkTheme ? Brightness.light : Brightness.dark,
+              systemNavigationBarIconBrightness:
+                  isDarkTheme ? Brightness.light : Brightness.dark,
+            ),
+          );
 
           return CupertinoApp.router(
             title: 'Watchlistfy',

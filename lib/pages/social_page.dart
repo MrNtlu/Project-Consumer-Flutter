@@ -86,7 +86,7 @@ class _SocialPageState extends State<SocialPage> {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: const Text("Socials"),
-              backgroundColor: cupertinoTheme.bgColor,
+              backgroundColor: cupertinoTheme.barBackgroundColor,
               brightness: cupertinoTheme.brightness,
               trailing: tabProvider.selectedIndex != socialTabs.length - 1
                   ? CupertinoButton(

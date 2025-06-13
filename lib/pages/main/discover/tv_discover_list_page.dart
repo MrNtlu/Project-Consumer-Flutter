@@ -301,8 +301,10 @@ class _TVDiscoverListPageState extends State<TVDiscoverListPage> {
                       barrierColor: _cupertinoTheme.bgTextColor.withValues(
                         alpha: 0.1,
                       ),
-                      builder: (context) =>
-                          TVDiscoverSheet(_fetchData, provider),
+                      builder: (context) => TVDiscoverSheet(
+                        _fetchData,
+                        provider,
+                      ),
                     );
                   },
                 ),

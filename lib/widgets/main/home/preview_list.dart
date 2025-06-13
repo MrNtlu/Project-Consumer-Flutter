@@ -150,8 +150,8 @@ class _PreviewListState extends State<PreviewList> {
                 child: RepaintBoundary(
                   child: Padding(
                     padding: index == 0
-                        ? const EdgeInsets.only(left: 8, right: 3)
-                        : const EdgeInsets.symmetric(horizontal: 3),
+                        ? const EdgeInsets.only(left: 8, right: 6)
+                        : const EdgeInsets.symmetric(horizontal: 6),
                     child: SizedBox(
                       height: 200,
                       child: ContentCell(
@@ -172,8 +172,8 @@ class _PreviewListState extends State<PreviewList> {
               listCount,
               (index) => Padding(
                 padding: index == 0
-                    ? const EdgeInsets.only(left: 8, right: 3)
-                    : const EdgeInsets.symmetric(horizontal: 3),
+                    ? const EdgeInsets.only(left: 8, right: 6)
+                    : const EdgeInsets.symmetric(horizontal: 6),
                 child: SizedBox(
                   height: 200,
                   child: AspectRatio(
@@ -182,13 +182,15 @@ class _PreviewListState extends State<PreviewList> {
                             ? 2 / 3
                             : 16 / 9,
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Shimmer.fromColors(
-                            baseColor: CupertinoColors.systemGrey,
-                            highlightColor: CupertinoColors.systemGrey3,
-                            child: const ColoredBox(
-                              color: CupertinoColors.systemGrey,
-                            ))),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Shimmer.fromColors(
+                        baseColor: CupertinoColors.systemGrey,
+                        highlightColor: CupertinoColors.systemGrey3,
+                        child: const ColoredBox(
+                          color: CupertinoColors.systemGrey,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

@@ -195,23 +195,22 @@ class PreviewActorList extends StatelessWidget {
       children: List.generate(
         20,
         (index) => Padding(
-          padding: EdgeInsets.only(
-            left: index == 0 ? 0 : 8,
-            right: index == 19 ? 0 : 8,
-          ),
+          padding: index == 0
+              ? const EdgeInsets.only(left: 8, right: 6)
+              : const EdgeInsets.symmetric(horizontal: 6),
           child: Container(
             width: 140,
             decoration: BoxDecoration(
               color: theme.onBgColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: theme.bgTextColor.withValues(alpha: 0.12),
+                color: CupertinoColors.systemGrey,
                 width: 1,
               ),
             ),
             child: Shimmer.fromColors(
-              baseColor: theme.bgTextColor.withValues(alpha: 0.1),
-              highlightColor: theme.bgTextColor.withValues(alpha: 0.05),
+              baseColor: CupertinoColors.systemGrey,
+              highlightColor: CupertinoColors.systemGrey3,
               child: Column(
                 children: [
                   Expanded(
@@ -219,7 +218,7 @@ class PreviewActorList extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: theme.bgTextColor.withValues(alpha: 0.1),
+                        color: CupertinoColors.systemGrey,
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
@@ -228,9 +227,11 @@ class PreviewActorList extends StatelessWidget {
                     flex: 1,
                     child: Container(
                       margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: theme.bgTextColor.withValues(alpha: 0.1),
+                        color: CupertinoColors.systemGrey,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),

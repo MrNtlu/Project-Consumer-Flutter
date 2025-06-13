@@ -6,9 +6,30 @@ class DetailsMainInfo extends StatelessWidget {
 
   const DetailsMainInfo(
     this.vote,
-    this.status,
-    {super.key}
-  );
+    this.status, {
+    super.key,
+  });
+
+  Color _getStatusColor() {
+    final statusLower = status.toLowerCase();
+    if (statusLower.contains('released') ||
+        statusLower.contains('ended') ||
+        statusLower.contains('finished')) {
+      return CupertinoColors.activeGreen;
+    } else if (statusLower.contains('upcoming') ||
+        statusLower.contains('planned') ||
+        statusLower.contains('tba')) {
+      return CupertinoColors.systemOrange;
+    } else if (statusLower.contains('airing') ||
+        statusLower.contains('ongoing') ||
+        statusLower.contains('current')) {
+      return CupertinoColors.activeBlue;
+    } else if (statusLower.contains('cancelled') ||
+        statusLower.contains('canceled')) {
+      return CupertinoColors.systemRed;
+    }
+    return CupertinoColors.systemGrey;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,18 +50,32 @@ class DetailsMainInfo extends StatelessWidget {
                 const SizedBox(width: 3),
                 Text(
                   vote,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
-            Text(
-              status,
-              textAlign: TextAlign.end,
-              style: const TextStyle(
-                fontSize: 16,
-                color: CupertinoColors.activeGreen,
-                fontWeight: FontWeight.bold
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _getStatusColor().withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: _getStatusColor().withValues(alpha: 0.3),
+                  width: 1,
+                ),
+              ),
+              child: Text(
+                status,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: _getStatusColor(),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],

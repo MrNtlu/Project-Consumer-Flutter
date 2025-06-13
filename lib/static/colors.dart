@@ -1,11 +1,22 @@
 import 'package:flutter/cupertino.dart';
 
 extension ColorSchemeExt on CupertinoThemeData {
-  Color get bottomNavBgColor => brightness == Brightness.dark ? const Color(0xFF212121) : const Color(0xFFFAFAFA);
-  Color get bgColor => brightness == Brightness.dark ? const Color(0xFF121212) : const Color(0xFFFAFAFA);
-  Color get onBgColor => brightness == Brightness.dark ? const Color(0xFF212121) : const Color(0xFFFFFFFF);
-  Color get bgTextColor => brightness == Brightness.dark ? CupertinoColors.white : CupertinoColors.black;
-  Color get profileButton => brightness == Brightness.dark ? const Color(0xFF1C2129) : const Color(0xFFedf3fd);
+  Color get bottomNavBgColor => brightness == Brightness.dark
+      ? const Color(0xFF212121)
+      : const Color(0xFFFAFAFA);
+  Color get bgColor => brightness == Brightness.dark
+      ? const Color(0xFF121212)
+      : const Color(0xFFFAFAFA);
+  Color get onBgColor => brightness == Brightness.dark
+      ? const Color(0xFF212121)
+      : const Color(0xFFFFFFFF);
+  Color get bgTextColor => brightness == Brightness.dark
+      ? CupertinoColors.white
+      : CupertinoColors.black;
+  Color get profileButton => brightness == Brightness.dark
+      ? const Color(0xFF1C2129)
+      : const Color(0xFFedf3fd);
+  Color get navigationBarBackgroundColor => barBackgroundColor;
 }
 
 class AppColors {
@@ -36,9 +47,8 @@ class AppColors {
     barBackgroundColor: CupertinoColors.white,
     scaffoldBackgroundColor: Color(0xFFFAFAFA),
     textTheme: CupertinoTextThemeData(
-      textStyle: TextStyle(
-        color: CupertinoColors.black,
-      )
-    ),
+        textStyle: TextStyle(
+      color: CupertinoColors.black,
+    )),
   );
 }

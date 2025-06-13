@@ -92,7 +92,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: const Text("Smart Recommendations"),
-              backgroundColor: cupertinoTheme.bgColor,
+              backgroundColor: cupertinoTheme.barBackgroundColor,
               brightness: cupertinoTheme.brightness,
             ),
             child: Column(

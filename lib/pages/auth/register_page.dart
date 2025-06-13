@@ -84,13 +84,16 @@ class _RegisterPageState extends State<RegisterPage> {
               title: "Account Created",
               message:
                   value.message ?? "You have been registered successfully!",
+              isError: true,
             );
           }
         }
       }).catchError((error) {
         Navigator.pop(context);
         showCupertinoDialog(
-            context: context, builder: (_) => ErrorDialog(error));
+          context: context,
+          builder: (_) => ErrorDialog(error),
+        );
       });
     } else {
       showCupertinoDialog(

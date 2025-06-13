@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/providers/common/notification_ui_view_model.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/widgets/common/notification_overlay.dart';
 
 class NotificationBanner extends StatefulWidget {
-  const NotificationBanner({super.key});
+  final bool isError;
+
+  const NotificationBanner({
+    this.isError = false,
+    super.key,
+  });
 
   @override
   State<NotificationBanner> createState() => _NotificationBannerState();
@@ -25,7 +29,9 @@ class _NotificationBannerState extends State<NotificationBanner>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: animationDurationMilliseconds),
+      duration: const Duration(
+        milliseconds: animationDurationMilliseconds,
+      ),
       vsync: this,
     );
 
@@ -81,6 +87,7 @@ class _NotificationBannerState extends State<NotificationBanner>
   @override
   Widget build(BuildContext context) {
     final notificationUIVM = Provider.of<NotificationUIViewModel>(context);
+    final mediaQuery = MediaQuery.of(context);
 
     if (notificationUIVM.shouldShowNotification()) {
       _showBanner();
@@ -100,12 +107,16 @@ class _NotificationBannerState extends State<NotificationBanner>
                     ),
                     child: SizedBox(
                       height: 80,
-                      width: MediaQuery.sizeOf(context).width - 18,
+                      width: mediaQuery.size.width - 18,
                       child: Card(
                         clipBehavior: Clip.antiAlias,
-                        color: AppColors().primaryColor.withValues(
-                              alpha: 0.95,
-                            ),
+                        color: widget.isError
+                            ? CupertinoColors.destructiveRed.withValues(
+                                alpha: 0.95,
+                              )
+                            : CupertinoColors.activeGreen.withValues(
+                                alpha: 0.95,
+                              ),
                         elevation: 6,
                         child: Padding(
                           padding: const EdgeInsets.all(6),
@@ -126,6 +137,7 @@ class _NotificationBannerState extends State<NotificationBanner>
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
+                                          color: CupertinoColors.white,
                                         ),
                                       ),
                                     ),
@@ -140,6 +152,7 @@ class _NotificationBannerState extends State<NotificationBanner>
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 12,
+                                          color: CupertinoColors.white,
                                         ),
                                       ),
                                     ),
@@ -161,11 +174,12 @@ class _NotificationBannerState extends State<NotificationBanner>
                                           return CircularProgressIndicator(
                                             value: value,
                                             strokeWidth: 2,
-                                            backgroundColor: Colors.grey[300],
+                                            backgroundColor:
+                                                CupertinoColors.systemGrey2,
                                             valueColor:
                                                 const AlwaysStoppedAnimation<
                                                     Color>(
-                                              Colors.redAccent,
+                                              CupertinoColors.white,
                                             ),
                                           );
                                         },
@@ -176,7 +190,7 @@ class _NotificationBannerState extends State<NotificationBanner>
                                         onPressed: _hideBanner,
                                         icon: const Icon(
                                           Icons.close_rounded,
-                                          color: Colors.black,
+                                          color: CupertinoColors.white,
                                           size: 20,
                                         ),
                                       ),

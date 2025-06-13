@@ -16,6 +16,7 @@ class NotificationOverlay {
     BuildContext context, {
     required String title,
     required String message,
+    bool isError = false,
   }) {
     if (_isShowing) {
       hide();
@@ -30,11 +31,13 @@ class NotificationOverlay {
     );
 
     _overlayEntry = OverlayEntry(
-      builder: (context) => const Positioned(
+      builder: (context) => Positioned(
         top: 0,
         left: 0,
         right: 0,
-        child: NotificationBanner(),
+        child: NotificationBanner(
+          isError: isError,
+        ),
       ),
     );
 

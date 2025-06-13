@@ -2,6 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
@@ -30,16 +31,15 @@ import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/utils/extensions.dart';
 import 'package:watchlistfy/widgets/common/content_cell.dart';
 import 'package:watchlistfy/widgets/common/custom_divider.dart';
-import 'package:watchlistfy/widgets/common/error_dialog.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
+import 'package:watchlistfy/widgets/common/notification_overlay.dart';
 import 'package:watchlistfy/widgets/common/unauthorized_dialog.dart';
 import 'package:watchlistfy/widgets/common/user_list_view_sheet.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_details_streaming_platforms_list.dart';
 import 'package:watchlistfy/widgets/main/anime/anime_watch_list_sheet.dart';
-import 'package:watchlistfy/widgets/main/common/details_button_row.dart';
 import 'package:watchlistfy/widgets/main/common/details_carousel_slider.dart';
 import 'package:watchlistfy/widgets/main/common/details_character_list.dart';
 import 'package:watchlistfy/widgets/main/common/details_genre_list.dart';
@@ -50,6 +50,7 @@ import 'package:watchlistfy/widgets/main/common/details_recommendation_list.dart
 import 'package:watchlistfy/widgets/main/common/details_review_summary.dart';
 import 'package:watchlistfy/widgets/main/common/details_streaming_lists.dart';
 import 'package:watchlistfy/widgets/main/common/details_title.dart';
+import 'package:watchlistfy/widgets/main/common/details_user_action_row.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_info_column.dart';
 import 'package:watchlistfy/widgets/main/game/game_details_play_list_sheet.dart';
 import 'package:watchlistfy/widgets/main/movie/movie_watch_list_sheet.dart';
@@ -247,17 +248,16 @@ class _DetailsPageState extends State<DetailsPage> {
           valueListenable: _isUserListLoadingNotifier,
           builder: (context, isUserListLoading, child) {
             final title = _itemAdapter?.title ?? '';
+            final adapter = _itemAdapter;
 
             return DetailsNavigationBar(
               title,
               widget.contentType.request,
+              widget.id,
+              adapter?.trailers,
+              adapter?.trailer,
               provider.item == null,
-              provider.item?.userList == null,
-              provider.item?.consumeLater == null,
-              isUserListLoading,
-              isLoading,
-              onBookmarkTap: () => _handleBookmarkTap(provider),
-              onListTap: () => _handleListTap(provider),
+              () => _navigateToRecommendations(adapter!),
             );
           },
         );
@@ -286,7 +286,9 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   void _deleteConsumeLater(
-      BaseDetailsProvider provider, String consumeLaterID) {
+    BaseDetailsProvider provider,
+    String consumeLaterID,
+  ) {
     switch (widget.contentType) {
       case ContentType.movie:
         (provider as MovieDetailsProvider)
@@ -312,7 +314,10 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   void _createConsumeLater(
-      BaseDetailsProvider provider, String itemId, String externalId) {
+    BaseDetailsProvider provider,
+    String itemId,
+    String externalId,
+  ) {
     switch (widget.contentType) {
       case ContentType.movie:
         (provider as MovieDetailsProvider)
@@ -371,9 +376,11 @@ class _DetailsPageState extends State<DetailsPage> {
 
   void _handleConsumerLaterResponse(response) {
     if (response.error != null && mounted) {
-      showCupertinoDialog(
-        context: context,
-        builder: (_) => ErrorDialog(response.error!),
+      NotificationOverlay().show(
+        context,
+        title: "Error",
+        message: response.error!,
+        isError: true,
       );
     }
   }
@@ -466,9 +473,11 @@ class _DetailsPageState extends State<DetailsPage> {
   void _showCreateListSheet(BaseDetailsProvider provider, dynamic item) {
     final adapter = _itemAdapter!;
 
-    showCupertinoModalPopup(
+    showCupertinoModalBottomSheet(
       context: context,
-      barrierDismissible: false,
+      isDismissible: false,
+      enableDrag: false,
+      barrierColor: CupertinoColors.white.withValues(alpha: 0.2),
       builder: (context) {
         switch (widget.contentType) {
           case ContentType.movie:
@@ -537,13 +546,11 @@ class _DetailsPageState extends State<DetailsPage> {
               contentType: widget.contentType,
             ),
             const SizedBox(height: 12),
-            _OptimizedButtonRow(
+            _OptimizedUserActionRow(
               item: item,
-              adapter: adapter,
-              contentType: widget.contentType,
-              onRecommendationsTap: () => _navigateToRecommendations(
-                adapter,
-              ),
+              provider: provider,
+              onListTap: () => _handleListTap(provider),
+              onBookmarkTap: () => _handleBookmarkTap(provider),
             ),
             const CustomDivider(height: 0.75, opacity: 0.35),
             _OptimizedContentWidgets(
@@ -723,17 +730,17 @@ class _OptimizedMainInfo extends StatelessWidget {
   }
 }
 
-class _OptimizedButtonRow extends StatelessWidget {
+class _OptimizedUserActionRow extends StatelessWidget {
   final dynamic item;
-  final DetailsItemAdapter adapter;
-  final ContentType contentType;
-  final VoidCallback onRecommendationsTap;
+  final BaseDetailsProvider provider;
+  final VoidCallback onListTap;
+  final VoidCallback onBookmarkTap;
 
-  const _OptimizedButtonRow({
+  const _OptimizedUserActionRow({
     required this.item,
-    required this.adapter,
-    required this.contentType,
-    required this.onRecommendationsTap,
+    required this.provider,
+    required this.onListTap,
+    required this.onBookmarkTap,
   });
 
   @override
@@ -741,14 +748,14 @@ class _OptimizedButtonRow extends StatelessWidget {
     final authProvider =
         Provider.of<AuthenticationProvider>(context, listen: false);
 
-    return DetailsButtonRow(
-      adapter.title,
-      authProvider.isAuthenticated,
-      adapter.trailers,
-      contentType.request,
-      adapter.id,
-      onRecommendationsTap,
-      trailer: adapter.trailer,
+    return DetailsUserActionRow(
+      isAuthenticated: authProvider.isAuthenticated,
+      isUserListNull: item?.userList == null,
+      isBookmarkNull: item?.consumeLater == null,
+      isUserListLoading: provider.isUserListLoading,
+      isBookmarkLoading: provider.isLoading,
+      onListTap: onListTap,
+      onBookmarkTap: onBookmarkTap,
     );
   }
 }

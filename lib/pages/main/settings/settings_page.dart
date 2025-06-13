@@ -262,7 +262,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text("Settings"),
-        backgroundColor: cupertinoTheme.bgColor,
+        backgroundColor: cupertinoTheme.barBackgroundColor,
         brightness: cupertinoTheme.brightness,
       ),
       child: _state == DetailState.loading
