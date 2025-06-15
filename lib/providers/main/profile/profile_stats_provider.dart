@@ -24,11 +24,12 @@ class ProfileStatsProvider with ChangeNotifier {
   Future<BaseNullableResponse<UserStats>> getProfileStatistics() async {
     try {
       final response = await http.get(
-        Uri.parse("${APIRoutes().userRoutes.statistics}?interval=${interval.request}"),
-        headers: UserToken().getBearerToken()
-      );
+          Uri.parse(
+              "${APIRoutes().userRoutes.statistics}?interval=${interval.request}"),
+          headers: UserToken().getBearerToken());
 
-      final decodedResponse = await compute(jsonDecode, response.body) as Map<String, dynamic>;
+      final decodedResponse =
+          await compute(jsonDecode, response.body) as Map<String, dynamic>;
 
       var baseItemResponse = decodedResponse.getBaseItemResponse<UserStats>();
       var data = baseItemResponse.data;
@@ -41,7 +42,8 @@ class ProfileStatsProvider with ChangeNotifier {
 
       return baseItemResponse;
     } catch (error) {
-      return BaseNullableResponse(message: error.toString(), error: error.toString());
+      return BaseNullableResponse(
+          message: error.toString(), error: error.toString());
     }
   }
 }

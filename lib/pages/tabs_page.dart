@@ -136,8 +136,9 @@ class _TabsPageState extends State<TabsPage> {
     _cachedRefreshRate = sharedPref.getRefreshRate();
   }
 
-  Future<void> _initializeApp(
-      {required WidgetsBinding widgetsBindingInstance}) async {
+  Future<void> _initializeApp({
+    required WidgetsBinding widgetsBindingInstance,
+  }) async {
     if (state != BaseState.init || !mounted) return;
 
     try {
@@ -165,6 +166,7 @@ class _TabsPageState extends State<TabsPage> {
         context,
         listen: false,
       );
+
       UserToken().setToken(_cachedToken);
 
       // Check internet connection and handle authentication in parallel where possible

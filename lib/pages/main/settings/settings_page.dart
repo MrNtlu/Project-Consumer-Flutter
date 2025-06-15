@@ -417,10 +417,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               final url = Uri.parse('mailto:mrntlu@gmail.com');
                               if (!await launchUrl(url) && context.mounted) {
                                 showCupertinoDialog(
-                                    context: context,
-                                    builder: (_) => const MessageDialog(
-                                        "You can send email to, mrntlu@gmail.com",
-                                        title: "Contact Us"));
+                                  context: context,
+                                  builder: (_) => const MessageDialog(
+                                    "You can send email to, mrntlu@gmail.com",
+                                    title: "Contact Us",
+                                  ),
+                                );
                               }
                             },
                           ),
@@ -432,7 +434,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   InAppReview.instance;
 
                               inAppReview.openStoreListing(
-                                  appStoreId: 'id6476311748');
+                                appStoreId: 'id6476311748',
+                              );
                             },
                           ),
                           SettingsTile.navigation(
@@ -494,7 +497,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         } else {
                           // Optional: show an error message if the URL can't be launched
                           if (mounted) {
-                            // Ensure context is still valid if in a StatefulWidget
                             showCupertinoDialog(
                               context: context,
                               builder: (ctx) => const MessageDialog(

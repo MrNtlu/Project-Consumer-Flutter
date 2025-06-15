@@ -12,22 +12,18 @@ import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
-import 'package:watchlistfy/pages/main/profile/profile_stats_page.dart';
-import 'package:watchlistfy/pages/main/profile/user_list_page.dart';
 import 'package:watchlistfy/pages/main/recommendation/recommendation_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/recommendation/recommendation_profile_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_interaction_list_page.dart';
 import 'package:watchlistfy/pages/main/review/review_profile_list_page.dart';
 import 'package:watchlistfy/providers/authentication_provider.dart';
 import 'package:watchlistfy/providers/main/profile/profile_details_provider.dart';
-import 'package:watchlistfy/static/colors.dart';
 import 'package:watchlistfy/static/constants.dart';
 import 'package:watchlistfy/widgets/common/error_view.dart';
 import 'package:watchlistfy/widgets/common/loading_view.dart';
 import 'package:watchlistfy/widgets/common/message_dialog.dart';
 import 'package:watchlistfy/widgets/common/see_all_title.dart';
 import 'package:watchlistfy/widgets/common/sure_dialog.dart';
-import 'package:watchlistfy/widgets/main/profile/profile_avatar_button.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_consume_later_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_legend_cell.dart';
 import 'package:watchlistfy/widgets/main/profile/profile_level_bar.dart';
@@ -167,75 +163,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       alignment: Alignment.center,
                       child: ProfileUserImage(image),
                     ),
-                    // GestureDetector(
-                    //   behavior: HitTestBehavior.opaque,
-                    //   onTap: () {
-                    //     showCupertinoDialog(
-                    //       context: context,
-                    //       builder: (_) => const MessageDialog(
-                    //         title: "Streak",
-                    //         "Streaks are counted based on your activity. When you add or make changes on your user list, watch later, recommendations or reviews."
-                    //       )
-                    //     );
-                    //   },
-                    //   child: Align(
-                    //     alignment: Alignment.bottomRight,
-                    //     child: Row(
-                    //       mainAxisSize: MainAxisSize.min,
-                    //       children: [
-                    //         const FaIcon(FontAwesomeIcons.fire, size: 22),
-                    //         const SizedBox(width: 6),
-                    //         Text(item.streak.toString(), style: const TextStyle(fontWeight: FontWeight.w500)),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
-              ProfileLevelBar(item.level),
               const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: ColoredBox(
-                    color: cupertinoTheme.profileButton,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ProfileAvatarButton(
-                                "User List", FontAwesomeIcons.listUl, () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(CupertinoPageRoute(builder: (_) {
-                                return const UserListPage();
-                              }));
-                            }),
-                            ProfileAvatarButton(
-                                "Watch Later", FontAwesomeIcons.solidClock, () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(CupertinoPageRoute(builder: (_) {
-                                return const ConsumeLaterPage();
-                              })).then((value) => _fetchData());
-                            }),
-                            ProfileAvatarButton("Detailed Stats",
-                                FontAwesomeIcons.squarePollVertical, () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(CupertinoPageRoute(builder: (_) {
-                                return const ProfileStatsPage();
-                              }));
-                            }),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              ProfileLevelBar(item.level, streak: item.streak),
               const SizedBox(height: 16),
-              ProfileStats(item),
+              ProfileStats(item, onRefresh: _fetchData),
               SeeAllTitle(
                 "🕒 Watch Later",
                 onTap: () {

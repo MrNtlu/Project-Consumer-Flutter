@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/providers/content_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -191,7 +190,7 @@ class _UltraOptimizedShimmerLoader extends StatelessWidget {
         borderRadius: borderRadius,
         child: progress?.totalSize != null
             ? _buildProgressIndicator()
-            : _buildShimmerAnimation(),
+            : _buildHighPerformanceLoadingAnimation(),
       ),
     );
   }
@@ -216,19 +215,29 @@ class _UltraOptimizedShimmerLoader extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmerAnimation() {
-    return const Shimmer(
-      gradient: LinearGradient(
-        colors: [
-          CupertinoColors.systemGrey6,
-          CupertinoColors.systemGrey4,
-          CupertinoColors.systemGrey6,
-        ],
-        stops: [0.1, 0.3, 0.4],
-        begin: Alignment(-1.0, -0.3),
-        end: Alignment(1.0, 0.3),
+  Widget _buildHighPerformanceLoadingAnimation() {
+    return RepaintBoundary(
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CupertinoColors.systemGrey6,
+              CupertinoColors.systemGrey5,
+              CupertinoColors.systemGrey4,
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: const Center(
+          child: Icon(
+            CupertinoIcons.photo,
+            size: 20,
+            color: CupertinoColors.systemGrey3,
+          ),
+        ),
       ),
-      child: ColoredBox(color: CupertinoColors.systemGrey6),
     );
   }
 }

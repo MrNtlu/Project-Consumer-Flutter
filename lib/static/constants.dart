@@ -15,7 +15,7 @@ class Constants {
   static const TERMS_CONDITIONS_URL = "$BASE_DOMAIN_URL/terms-conditions.html";
 
   static const THEME_PREF = "theme";
-  static const INTRODUCTION_PREF = "is_introduction_presented";
+  static const INTRODUCTION_PREF = "is_introduction_presented_v2";
   static const WHATSNEW_PREF = "whats_new";
   static const FEEDBACK_PREF = "feedback";
   static const TOKEN_PREF = "refresh_token";

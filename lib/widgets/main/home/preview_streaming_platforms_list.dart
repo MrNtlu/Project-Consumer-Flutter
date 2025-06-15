@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/discover/anime_discover_list_page.dart';
 import 'package:watchlistfy/pages/main/discover/movie_discover_list_page.dart';
@@ -121,10 +120,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: ColoredBox(
-                    color: CupertinoColors.white,
-                    child: _buildPlatformImage(platform, theme),
-                  ),
+                  child: _buildPlatformImage(platform, theme),
                 ),
               ),
             ),
@@ -167,7 +163,7 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
       maxHeightDiskCache: 200,
       maxWidthDiskCache: 200,
       errorListener: (_) {},
-      placeholder: (context, _) => _buildLoadingWidget(theme),
+      placeholder: (context, _) => _buildHighPerformanceLoadingWidget(theme),
       errorWidget: (context, _, __) => _buildErrorWidget(platform, theme),
     );
   }
@@ -195,14 +191,30 @@ class PreviewStreamingPlatformsList extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingWidget(CupertinoThemeData theme) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Shimmer.fromColors(
-        baseColor: theme.bgTextColor.withValues(alpha: 0.1),
-        highlightColor: theme.bgTextColor.withValues(alpha: 0.05),
+  Widget _buildHighPerformanceLoadingWidget(CupertinoThemeData theme) {
+    return RepaintBoundary(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
         child: Container(
-          color: theme.bgTextColor.withValues(alpha: 0.1),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.bgTextColor.withValues(alpha: 0.1),
+                theme.bgTextColor.withValues(alpha: 0.05),
+                theme.bgTextColor.withValues(alpha: 0.08),
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              CupertinoIcons.tv,
+              size: 20,
+              color: theme.bgTextColor.withValues(alpha: 0.3),
+            ),
+          ),
         ),
       ),
     );

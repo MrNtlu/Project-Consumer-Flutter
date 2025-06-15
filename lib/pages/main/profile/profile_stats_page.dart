@@ -112,14 +112,17 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                 },
               ),
             ),
-            child: _body(provider),
+            child: _body(provider, context),
           );
         },
       ),
     );
   }
 
-  Widget _body(ProfileStatsProvider provider) {
+  Widget _body(ProfileStatsProvider provider, BuildContext context) {
+    final theme = CupertinoTheme.of(context);
+    final primaryColor = AppColors().primaryColor;
+
     switch (_state) {
       case DetailState.view:
         final data = provider.item!;
@@ -129,243 +132,32 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
             children: [
               // Interval Stats
               SeeAllTitle("📊 ${provider.interval.name} Stats"),
-              if (data.stats.isNotEmpty) _statsBody(data.stats),
+              if (data.stats.isNotEmpty)
+                _statsBody(data.stats, theme, primaryColor),
               if (data.stats.isEmpty) _noDataText(),
               const SizedBox(height: 16),
 
               // Genres
               const SeeAllTitle("🎭 Genres"),
               for (MostLikedGenres genre in data.genres)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 3,
-                  ),
-                  child: Row(
-                    children: [
-                      CupertinoChip(
-                        isSelected: true,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 6,
-                        ),
-                        label: genre.genre,
-                        onSelected: (_) {
-                          Navigator.of(
-                            context,
-                            rootNavigator: true,
-                          ).push(
-                            CupertinoPageRoute(
-                              builder: (_) {
-                                switch (ContentType.values
-                                    .where(
-                                      (element) =>
-                                          element.request == genre.type,
-                                    )
-                                    .first) {
-                                  case ContentType.movie:
-                                    return MovieDiscoverListPage(
-                                      genre: genre.genre,
-                                    );
-                                  case ContentType.tv:
-                                    return TVDiscoverListPage(
-                                      genre: genre.genre,
-                                    );
-                                  case ContentType.anime:
-                                    return AnimeDiscoverListPage(
-                                      genre: genre.genre,
-                                    );
-                                  case ContentType.game:
-                                    return GameDiscoverListPage(
-                                      genre: genre.genre,
-                                    );
-                                }
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      const Flexible(
-                        fit: FlexFit.loose,
-                        child: AutoSizeText(
-                          " is your most liked genre in ",
-                          minFontSize: 12,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "${ContentType.values.where((element) => element.request == genre.type).first.value}.",
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: AppColors().primaryColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _buildGenreItem(genre, theme, primaryColor),
               if (data.genres.isNotEmpty) const SizedBox(height: 16),
               if (data.genres.isEmpty) _noDataText(),
 
               // Country
               const SeeAllTitle("🌍 Country"),
               for (MostLikedCountry country in data.countries)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 3,
-                  ),
-                  child: Row(
-                    children: [
-                      CupertinoChip(
-                        isSelected: true,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 6,
-                        ),
-                        leading: country.type != "anime"
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: 3),
-                                child: CountryFlag.fromCountryCode(
-                                  country.country,
-                                  width: 20,
-                                  height: 15,
-                                  borderRadius: 3,
-                                ),
-                              )
-                            : null,
-                        label: country.country,
-                        onSelected: (_) {
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(
-                              builder: (_) {
-                                switch (ContentType.values
-                                    .where((element) =>
-                                        element.request == country.type)
-                                    .first) {
-                                  case ContentType.movie:
-                                    return MovieDiscoverListPage(
-                                      country: country.country,
-                                    );
-                                  case ContentType.tv:
-                                    return TVDiscoverListPage(
-                                      country: country.country,
-                                    );
-                                  case ContentType.anime:
-                                    return AnimeDiscoverListPage(
-                                      demographic: country.country,
-                                    );
-                                  default:
-                                    return MovieDiscoverListPage(
-                                      country: country.country,
-                                    );
-                                }
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: AutoSizeText(
-                          " is your favourite ${country.type == "anime" ? "demographics" : "country"} in ",
-                          minFontSize: 12,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      Text(
-                        "${ContentType.values.where((element) => element.request == country.type).first.value}.",
-                        maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: AppColors().primaryColor,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
+                _buildCountryItem(country, theme, primaryColor),
               if (data.countries.isEmpty) _noDataText(),
               const SizedBox(height: 16),
 
               // Actors
               const SeeAllTitle("🧛‍♂️ Actors"),
               for (MostWatchedActors actors in data.actors)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Your favourite actors in ${ContentType.values.where((element) => element.request == actors.type).first.value}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: CupertinoColors.systemGrey2),
-                      ),
-                      const SizedBox(height: 3),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 40,
-                              child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: List.generate(actors.actors.length,
-                                      (index) {
-                                    final actor = actors.actors[index];
-
-                                    return CupertinoChip(
-                                        isSelected: true,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 6),
-                                        leading: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(18),
-                                            child: CachedNetworkImage(
-                                              imageUrl: actor.image,
-                                              key:
-                                                  ValueKey<String>(actor.image),
-                                              cacheKey: actor.image,
-                                              fit: BoxFit.cover,
-                                              height: 24,
-                                              width: 24,
-                                              cacheManager:
-                                                  CustomCacheManager(),
-                                              maxHeightDiskCache: 100,
-                                              maxWidthDiskCache: 100,
-                                            )),
-                                        label: actor.name,
-                                        onSelected: (_) {
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .push(CupertinoPageRoute(
-                                                  builder: (_) {
-                                            return ActorContentPage(
-                                              actor.id,
-                                              actor.name,
-                                              actor.image,
-                                              isMovie: actors.type == "movie",
-                                            );
-                                          }));
-                                        });
-                                  })),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                _buildActorsSection(actors, theme, primaryColor),
               if (_authProvider.basicUserInfo?.isPremium == false &&
                   data.actors.isEmpty)
-                _premiumError(),
+                _premiumError(theme, primaryColor),
               if (_authProvider.basicUserInfo?.isPremium == true &&
                   data.actors.isEmpty)
                 _noDataText(),
@@ -374,72 +166,44 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
               // Studios
               const SeeAllTitle("🎙️ Studios"),
               for (MostLikedStudios studio in data.studios)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Your favourite studios in ${ContentType.values.where((element) => element.request == studio.type).first.value}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: CupertinoColors.systemGrey2),
-                      ),
-                      const SizedBox(height: 3),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 40,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: List.generate(
-                                  studio.studios.length,
-                                  (index) {
-                                    final studioName = studio.studios[index];
-
-                                    return CupertinoChip(
-                                      isSelected: true,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 6),
-                                      label: studioName,
-                                      onSelected: (_) {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .push(
-                                          CupertinoPageRoute(
-                                            builder: (_) {
-                                              if (studio.type == "game") {
-                                                return GameDiscoverListPage(
-                                                    publisher: studioName);
-                                              } else {
-                                                return AnimeDiscoverListPage(
-                                                    studios: studioName);
-                                              }
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                _buildStudiosSection(studio, theme, primaryColor),
               if (_authProvider.basicUserInfo?.isPremium == false &&
                   data.actors.isEmpty)
-                _premiumError(),
+                _premiumError(theme, primaryColor),
               if (_authProvider.basicUserInfo?.isPremium == true &&
                   data.actors.isEmpty)
                 _noDataText(),
               const SizedBox(height: 16),
+
+              // Content Distribution
+              if (data.contentTypeDistribution.isNotEmpty) ...[
+                const SeeAllTitle("📊 Content Distribution"),
+                _buildStandardContainer(
+                  theme,
+                  child: SizedBox(
+                    height: 250,
+                    child: ProfileChart([],
+                        contentTypeDistribution: data.contentTypeDistribution),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // Completion Rate
+              if (data.completionRate.totalContent > 0) ...[
+                const SeeAllTitle("✅ Completion Stats"),
+                _buildCompletionRateSection(
+                    data.completionRate, theme, primaryColor),
+                const SizedBox(height: 16),
+              ],
+
+              // Average Ratings
+              if (data.averageRatingByType.isNotEmpty) ...[
+                const SeeAllTitle("⭐ Average Ratings"),
+                _buildAverageRatingsSection(
+                    data.averageRatingByType, theme, primaryColor),
+                const SizedBox(height: 16),
+              ],
 
               // Stats Chart
               Row(
@@ -457,7 +221,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                 ],
               ),
               if (data.logs.isNotEmpty)
-                SizedBox(height: 250, child: ProfileChart(data.logs)),
+                _buildActivityChartContainer(data, provider, theme),
               if (data.logs.isEmpty) _noDataText(),
               const SizedBox(height: 16),
             ],
@@ -476,51 +240,160 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
     }
   }
 
-  Widget _premiumError() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildStandardContainer(CupertinoThemeData theme,
+      {required Widget child}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.barBackgroundColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: CupertinoColors.systemGrey.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildActivityChartContainer(
+      UserStats data, ProfileStatsProvider provider, CupertinoThemeData theme) {
+    final isScrollable =
+        data.logs.length > 7; // More data points for 3-month intervals
+    final isThreeMonthInterval =
+        provider.interval.name.toLowerCase().contains('3') ||
+            provider.interval.name.toLowerCase().contains('month');
+
+    return Column(
+      children: [
+        if (isScrollable || isThreeMonthInterval)
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.barBackgroundColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: CupertinoColors.systemBlue.withValues(alpha: 0.3),
+                width: 1,
+              ),
+            ),
+            child: Row(
               children: [
-                Lottie.asset(
-                  "assets/lottie/premium.json",
-                  height: 32,
-                  width: 32,
-                  frameRate: FrameRate(
-                    RefreshRateHelper().getRefreshRate(),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemBlue.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    CupertinoIcons.hand_draw,
+                    size: 16,
+                    color: CupertinoColors.systemBlue,
                   ),
                 ),
-                const Text(
-                  "You need premium membership to access this.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Scrollable Chart",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: CupertinoColors.systemBlue,
+                        ),
+                      ),
+                      Text(
+                        isThreeMonthInterval
+                            ? "Swipe horizontally to explore your activity timeline"
+                            : "Swipe left and right to see more data points",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: CupertinoColors.systemGrey,
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
+                const Icon(
+                  CupertinoIcons.arrow_left_right,
+                  size: 18,
+                  color: CupertinoColors.systemBlue,
+                ),
               ],
             ),
-            const SizedBox(height: 8),
-            CupertinoButton(
-              child: const Text(
-                "Purchase",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (_) {
-                      return const OffersSheet();
-                    },
+          ),
+        if (isScrollable || isThreeMonthInterval) const SizedBox(height: 12),
+        SizedBox(
+          height: 300,
+          child: ProfileChart(
+            data.logs,
+            contentTypeDistribution: data.contentTypeDistribution,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _premiumError(CupertinoThemeData theme, Color primaryColor) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: _buildStandardContainer(
+          theme,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    "assets/lottie/premium.json",
+                    height: 32,
+                    width: 32,
+                    frameRate: FrameRate(
+                      RefreshRateHelper().getRefreshRate(),
+                    ),
                   ),
-                );
-              },
-            ),
-          ],
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      "You need premium membership to access this.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              CupertinoButton.filled(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: const Text(
+                  "Purchase Premium",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (_) => const OffersSheet(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       );
 
@@ -529,106 +402,615 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
         child: Text("No data yet!"),
       );
 
-  Widget _statsBody(List<FinishedLogStats> stats) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: SizedBox(
-        height: stats.length * 40,
-        child: ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          itemExtent: 40,
-          children: List.generate(
-            stats.length,
-            (index) {
-              final stat = stats[index];
-              final contentType = ContentType.values
-                  .where((element) => element.request == stat.contentType)
-                  .first;
+  Widget _buildCompletionRateSection(CompletionRate completionRate,
+      CupertinoThemeData theme, Color primaryColor) {
+    return _buildStandardContainer(
+      theme,
+      child: Column(
+        children: [
+          // Progress bars
+          _buildProgressBar(
+            "Completed",
+            completionRate.finishedContent,
+            completionRate.totalContent,
+            completionRate.completionRate,
+            CupertinoColors.systemGreen,
+            theme,
+          ),
+          const SizedBox(height: 12),
+          _buildProgressBar(
+            "Active",
+            completionRate.activeContent,
+            completionRate.totalContent,
+            (completionRate.activeContent / completionRate.totalContent) * 100,
+            CupertinoColors.systemBlue,
+            theme,
+          ),
+          const SizedBox(height: 12),
+          _buildProgressBar(
+            "Dropped",
+            completionRate.droppedContent,
+            completionRate.totalContent,
+            completionRate.dropRate,
+            CupertinoColors.systemRed,
+            theme,
+          ),
+          const SizedBox(height: 16),
+          // Summary
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: theme.scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: CupertinoColors.systemGrey4.withValues(alpha: 0.3),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem("Total", completionRate.totalContent.toString(),
+                    primaryColor),
+                _buildStatItem(
+                    "Completion",
+                    "${completionRate.completionRate.toStringAsFixed(1)}%",
+                    primaryColor),
+                _buildStatItem(
+                    "Drop Rate",
+                    "${completionRate.dropRate.toStringAsFixed(1)}%",
+                    primaryColor),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-              final String actionText;
-              const String gameExtraText = "with avg Metacritic of";
-              final String statText;
-              switch (contentType) {
-                case ContentType.game:
-                  statText = (stat.metacriticScore > 0 && stat.count > 0
-                          ? stat.metacriticScore / stat.count
-                          : 0)
-                      .round()
-                      .toString();
-                  actionText = "played";
+  Widget _buildProgressBar(String label, int value, int total,
+      double percentage, Color color, CupertinoThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            Text(
+              "$value / $total (${percentage.toStringAsFixed(1)}%)",
+              style: const TextStyle(
+                fontSize: 12,
+                color: CupertinoColors.systemGrey,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Container(
+          height: 10,
+          decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+              color: CupertinoColors.systemGrey4.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: percentage / 100,
+            child: Container(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-                  break;
-                case ContentType.movie:
-                  statText = "${(stat.length / 60).round()} hrs of";
-                  actionText = "watched";
+  Widget _buildStatItem(String label, String value, Color primaryColor) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: primaryColor,
+          ),
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: CupertinoColors.systemGrey,
+          ),
+        ),
+      ],
+    );
+  }
 
-                  break;
-                case ContentType.tv:
-                  statText =
-                      "${stat.totalSeasons} seasons and ${stat.totalEpisodes} eps of";
-                  actionText = "watched";
+  Widget _buildAverageRatingsSection(List<AverageRatingByType> ratings,
+      CupertinoThemeData theme, Color primaryColor) {
+    return _buildStandardContainer(
+      theme,
+      child: Column(
+        children: ratings.asMap().entries.map((entry) {
+          final index = entry.key;
+          final rating = entry.value;
+          final contentType = ContentType.values
+              .where((e) => e.request == rating.contentType)
+              .firstOrNull;
 
-                  break;
-                case ContentType.anime:
-                  statText = "${stat.totalEpisodes} eps of";
-                  actionText = "watched";
-
-                  break;
-              }
-
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                child: contentType != ContentType.game
-                    ? Row(
+          return Column(
+            children: [
+              if (index > 0) const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: theme.scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: CupertinoColors.systemGrey4.withValues(alpha: 0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Content type icon and name
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        contentType?.value ?? rating.contentType,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    // Rating
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: AutoSizeText("You $actionText $statText ",
-                                minFontSize: 14,
-                                maxLines: 2,
-                                style: const TextStyle(fontSize: 15)),
+                          const Icon(
+                            CupertinoIcons.star_fill,
+                            color: CupertinoColors.systemYellow,
+                            size: 16,
                           ),
+                          const SizedBox(width: 4),
                           Text(
-                            "${contentType.value}.",
-                            maxLines: 1,
+                            rating.averageRating.toStringAsFixed(1),
                             style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors().primaryColor,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: primaryColor,
                             ),
-                          ),
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          AutoSizeText(
-                            "You $actionText ",
-                            minFontSize: 13,
-                            maxLines: 1,
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                          AutoSizeText(
-                            "${contentType.value} ",
-                            minFontSize: 13,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors().primaryColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          AutoSizeText(
-                            "$gameExtraText $statText.",
-                            minFontSize: 13,
-                            maxLines: 1,
-                            style: const TextStyle(fontSize: 15),
                           ),
                         ],
                       ),
-              );
-            },
-          ),
+                    ),
+                    // Count
+                    Expanded(
+                      child: Text(
+                        "${rating.totalRated} rated",
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: CupertinoColors.systemGrey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _statsBody(List<FinishedLogStats> stats, CupertinoThemeData theme,
+      Color primaryColor) {
+    return _buildStandardContainer(
+      theme,
+      child: Column(
+        children: List.generate(
+          stats.length,
+          (index) {
+            final stat = stats[index];
+            final contentType = ContentType.values
+                .where((element) => element.request == stat.contentType)
+                .first;
+
+            final String actionText;
+            const String gameExtraText = "with avg Metacritic of";
+            final String statText;
+            switch (contentType) {
+              case ContentType.game:
+                statText = (stat.metacriticScore > 0 && stat.count > 0
+                        ? stat.metacriticScore / stat.count
+                        : 0)
+                    .round()
+                    .toString();
+                actionText = "played";
+
+                break;
+              case ContentType.movie:
+                statText = "${(stat.length / 60).round()} hrs of";
+                actionText = "watched";
+
+                break;
+              case ContentType.tv:
+                statText =
+                    "${stat.totalSeasons} seasons and ${stat.totalEpisodes} eps of";
+                actionText = "watched";
+
+                break;
+              case ContentType.anime:
+                statText = "${stat.totalEpisodes} eps of";
+                actionText = "watched";
+
+                break;
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: contentType != ContentType.game
+                  ? Row(
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: AutoSizeText("You $actionText $statText ",
+                              minFontSize: 14,
+                              maxLines: 2,
+                              style: const TextStyle(fontSize: 15)),
+                        ),
+                        Text(
+                          "${contentType.value}.",
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        AutoSizeText(
+                          "You $actionText ",
+                          minFontSize: 13,
+                          maxLines: 1,
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        AutoSizeText(
+                          "${contentType.value} ",
+                          minFontSize: 13,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        AutoSizeText(
+                          "$gameExtraText $statText.",
+                          minFontSize: 13,
+                          maxLines: 1,
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGenreItem(
+      MostLikedGenres genre, CupertinoThemeData theme, Color primaryColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.barBackgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: CupertinoColors.systemGrey.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            CupertinoChip(
+              isSelected: true,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              label: genre.genre,
+              onSelected: (_) {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      switch (ContentType.values
+                          .where((element) => element.request == genre.type)
+                          .first) {
+                        case ContentType.movie:
+                          return MovieDiscoverListPage(genre: genre.genre);
+                        case ContentType.tv:
+                          return TVDiscoverListPage(genre: genre.genre);
+                        case ContentType.anime:
+                          return AnimeDiscoverListPage(genre: genre.genre);
+                        case ContentType.game:
+                          return GameDiscoverListPage(genre: genre.genre);
+                      }
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: AutoSizeText(
+                " is your most liked genre in ",
+                minFontSize: 12,
+                maxLines: 1,
+                style: const TextStyle(fontSize: 15),
+              ),
+            ),
+            Text(
+              "${ContentType.values.where((element) => element.request == genre.type).first.value}.",
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 15,
+                color: primaryColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCountryItem(
+      MostLikedCountry country, CupertinoThemeData theme, Color primaryColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.barBackgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: CupertinoColors.systemGrey.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            CupertinoChip(
+              isSelected: true,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              leading: country.type != "anime"
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 3),
+                      child: CountryFlag.fromCountryCode(
+                        country.country,
+                        width: 20,
+                        height: 15,
+                        borderRadius: 3,
+                      ),
+                    )
+                  : null,
+              label: country.country,
+              onSelected: (_) {
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (_) {
+                      switch (ContentType.values
+                          .where((element) => element.request == country.type)
+                          .first) {
+                        case ContentType.movie:
+                          return MovieDiscoverListPage(
+                              country: country.country);
+                        case ContentType.tv:
+                          return TVDiscoverListPage(country: country.country);
+                        case ContentType.anime:
+                          return AnimeDiscoverListPage(
+                              demographic: country.country);
+                        default:
+                          return MovieDiscoverListPage(
+                              country: country.country);
+                      }
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: AutoSizeText(
+                " is your favourite ${country.type == "anime" ? "demographics" : "country"} in ",
+                minFontSize: 12,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 15),
+              ),
+            ),
+            Text(
+              "${ContentType.values.where((element) => element.request == country.type).first.value}.",
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 15,
+                color: primaryColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActorsSection(
+      MostWatchedActors actors, CupertinoThemeData theme, Color primaryColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.barBackgroundColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: CupertinoColors.systemGrey.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Your favourite actors in ${ContentType.values.where((element) => element.request == actors.type).first.value}",
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: CupertinoColors.systemGrey2,
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 40,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: actors.actors.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final actor = actors.actors[index];
+                  return CupertinoChip(
+                    isSelected: true,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: CachedNetworkImage(
+                        imageUrl: actor.image,
+                        key: ValueKey<String>(actor.image),
+                        cacheKey: actor.image,
+                        fit: BoxFit.cover,
+                        height: 24,
+                        width: 24,
+                        cacheManager: CustomCacheManager(),
+                        maxHeightDiskCache: 100,
+                        maxWidthDiskCache: 100,
+                      ),
+                    ),
+                    label: actor.name,
+                    onSelected: (_) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(
+                          builder: (_) => ActorContentPage(
+                            actor.id,
+                            actor.name,
+                            actor.image,
+                            isMovie: actors.type == "movie",
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStudiosSection(
+      MostLikedStudios studio, CupertinoThemeData theme, Color primaryColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.barBackgroundColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: CupertinoColors.systemGrey.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Your favourite studios in ${ContentType.values.where((element) => element.request == studio.type).first.value}",
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: CupertinoColors.systemGrey2,
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 40,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: studio.studios.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final studioName = studio.studios[index];
+                  return CupertinoChip(
+                    isSelected: true,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    label: studioName,
+                    onSelected: (_) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(
+                          builder: (_) {
+                            if (studio.type == "game") {
+                              return GameDiscoverListPage(
+                                  publisher: studioName);
+                            } else {
+                              return AnimeDiscoverListPage(studios: studioName);
+                            }
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

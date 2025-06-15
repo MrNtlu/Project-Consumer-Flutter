@@ -63,6 +63,9 @@ class LoginPage extends StatelessWidget {
       if (context.mounted) {
         Navigator.pop(context);
 
+        print("Message: ${value.message}");
+        print("value.token: ${value.token}");
+
         if (value.message == null) {
           SharedPref().setTokenCredentials(value.token ?? '');
 
@@ -133,15 +136,18 @@ class LoginPage extends StatelessWidget {
         } else {
           Navigator.pop(context);
           showCupertinoDialog(
-              context: context,
-              builder: (_) => const ErrorDialog("Failed to login!"));
+            context: context,
+            builder: (_) => const ErrorDialog("Failed to login!"),
+          );
         }
       }
     }).catchError((err) {
       if (context.mounted) {
         Navigator.pop(context);
         showCupertinoDialog(
-            context: context, builder: (_) => ErrorDialog(err.toString()));
+          context: context,
+          builder: (_) => ErrorDialog(err.toString()),
+        );
       }
     });
   }

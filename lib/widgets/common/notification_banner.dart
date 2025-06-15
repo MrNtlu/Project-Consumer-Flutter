@@ -114,9 +114,7 @@ class _NotificationBannerState extends State<NotificationBanner>
                             ? CupertinoColors.destructiveRed.withValues(
                                 alpha: 0.95,
                               )
-                            : CupertinoColors.activeGreen.withValues(
-                                alpha: 0.95,
-                              ),
+                            : Colors.green,
                         elevation: 6,
                         child: Padding(
                           padding: const EdgeInsets.all(6),
@@ -153,6 +151,7 @@ class _NotificationBannerState extends State<NotificationBanner>
                                         style: const TextStyle(
                                           fontSize: 12,
                                           color: CupertinoColors.white,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),

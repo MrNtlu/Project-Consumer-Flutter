@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
@@ -127,83 +126,55 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        ProfileUserImage(image, isProfileDisplay: true),
-                        if (item.isPremium)
-                          Positioned(
-                            bottom: -6,
-                            right: -6,
-                            child: Lottie.asset(
-                              "assets/lottie/premium.json",
-                              height: 45,
-                              width: 45,
-                              frameRate: FrameRate(
-                                RefreshRateHelper().getRefreshRate(),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 16,
-                        top: 16,
-                      ),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          showCupertinoDialog(
-                            context: context,
-                            builder: (_) => const MessageDialog(
-                              title: "Streak",
-                              "Streaks are counted based on your activity. When you add or make changes on your user list, watch later or reviews.",
-                            ),
-                          );
-                        },
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const FaIcon(FontAwesomeIcons.fire, size: 22),
-                              const SizedBox(width: 6),
-                              Text(
-                                item.streak.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
+              SizedBox(
+                height: 110,
+                width: 115,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          ProfileUserImage(image, isProfileDisplay: true),
+                          if (item.isPremium)
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: Lottie.asset(
+                                "assets/lottie/premium.json",
+                                height: 36,
+                                width: 36,
+                                frameRate: FrameRate(
+                                  RefreshRateHelper().getRefreshRate(),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                        ],
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16, top: 16),
-                      child: Text(
-                        "Since ${DateTime.parse(item.createdAt).dateToHumanDate()}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              ProfileLevelBar(item.level),
-              const SizedBox(height: 32),
+              const SizedBox(height: 8),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.systemGrey6.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  "Member since ${DateTime.parse(item.createdAt).dateToHumanDate()}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ProfileLevelBar(item.level, streak: item.streak),
+              const SizedBox(height: 16),
               ProfileStats(item),
               const SizedBox(height: 8),
               const SeeAllTitle("💬 Reviews"),

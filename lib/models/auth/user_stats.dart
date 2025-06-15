@@ -6,7 +6,22 @@ class UserStats {
   final List<MostLikedStudios> studios;
   final List<Logs> logs;
 
-  UserStats(this.genres, this.countries, this.stats, this.actors, this.studios, this.logs);
+  // New fields from updated response
+  final List<ContentTypeDistribution> contentTypeDistribution;
+  final CompletionRate completionRate;
+  final List<AverageRatingByType> averageRatingByType;
+
+  UserStats(
+    this.genres,
+    this.countries,
+    this.stats,
+    this.actors,
+    this.studios,
+    this.logs,
+    this.contentTypeDistribution,
+    this.completionRate,
+    this.averageRatingByType,
+  );
 }
 
 class MostLikedGenres {
@@ -54,8 +69,12 @@ class FinishedLogStats {
   final int count;
 
   FinishedLogStats(
-    this.contentType, this.length, this.totalEpisodes,
-    this.totalSeasons, this.metacriticScore, this.count,
+    this.contentType,
+    this.length,
+    this.totalEpisodes,
+    this.totalSeasons,
+    this.metacriticScore,
+    this.count,
   );
 }
 
@@ -65,4 +84,39 @@ class Logs {
   final int dayOfWeek;
 
   Logs(this.count, this.createdAt, this.dayOfWeek);
+}
+
+// New classes for additional stats
+class ContentTypeDistribution {
+  final String contentType;
+  final int count;
+  final double percentage;
+
+  ContentTypeDistribution(this.contentType, this.count, this.percentage);
+}
+
+class CompletionRate {
+  final int totalContent;
+  final int finishedContent;
+  final int activeContent;
+  final int droppedContent;
+  final double completionRate;
+  final double dropRate;
+
+  CompletionRate(
+    this.totalContent,
+    this.finishedContent,
+    this.activeContent,
+    this.droppedContent,
+    this.completionRate,
+    this.dropRate,
+  );
+}
+
+class AverageRatingByType {
+  final String contentType;
+  final double averageRating;
+  final int totalRated;
+
+  AverageRatingByType(this.contentType, this.averageRating, this.totalRated);
 }

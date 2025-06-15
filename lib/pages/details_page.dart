@@ -166,11 +166,17 @@ class _DetailsPageState extends State<DetailsPage> {
   final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _isUserListLoadingNotifier = ValueNotifier(false);
 
+  // Cache method references to avoid repeated lookups
+  late final VoidCallback _onProviderChangedCallback;
+
   @override
   void initState() {
     super.initState();
     _provider = _createProvider();
-    _provider.addListener(_onProviderChanged);
+
+    // Cache the callback to avoid creating new instances
+    _onProviderChangedCallback = _onProviderChanged;
+    _provider.addListener(_onProviderChangedCallback);
   }
 
   @override
@@ -188,7 +194,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   void dispose() {
-    _provider.removeListener(_onProviderChanged);
+    _provider.removeListener(_onProviderChangedCallback);
     _isLoadingNotifier.dispose();
     _isUserListLoadingNotifier.dispose();
     super.dispose();
@@ -196,8 +202,17 @@ class _DetailsPageState extends State<DetailsPage> {
 
   void _onProviderChanged() {
     if (mounted) {
-      _isLoadingNotifier.value = _provider.isLoading;
-      _isUserListLoadingNotifier.value = _provider.isUserListLoading;
+      // Batch updates to reduce rebuilds
+      final isLoading = _provider.isLoading;
+      final isUserListLoading = _provider.isUserListLoading;
+
+      if (_isLoadingNotifier.value != isLoading) {
+        _isLoadingNotifier.value = isLoading;
+      }
+
+      if (_isUserListLoadingNotifier.value != isUserListLoading) {
+        _isUserListLoadingNotifier.value = isUserListLoading;
+      }
 
       // Update adapter only once when item first becomes available
       if (_provider.item != null && _itemAdapter == null) {

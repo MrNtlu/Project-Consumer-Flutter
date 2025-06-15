@@ -5,7 +5,6 @@ import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:watchlistfy/pages/main/ai/ai_recommendation_page.dart';
 import 'package:watchlistfy/pages/main/profile/consume_later_page.dart';
 import 'package:watchlistfy/pages/main/profile/custom_list_page.dart';
 import 'package:watchlistfy/pages/main/profile/profile_page.dart';
@@ -118,31 +117,6 @@ class LoggedinHeader extends StatelessWidget {
                   const Spacer(),
                   Icon(
                     CupertinoIcons.chart_bar_alt_fill,
-                    color: cupertinoTheme.bgTextColor,
-                    size: 18,
-                  ),
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (_) {
-                      return const AIRecommendationPage();
-                    },
-                  ),
-                );
-              },
-              child: Row(
-                children: [
-                  Text(
-                    "AI Recommendations",
-                    style: TextStyle(color: cupertinoTheme.bgTextColor),
-                  ),
-                  const Spacer(),
-                  Icon(
-                    FontAwesomeIcons.robot,
                     color: cupertinoTheme.bgTextColor,
                     size: 18,
                   ),

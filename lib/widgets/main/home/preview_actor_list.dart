@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:watchlistfy/services/cache_manager_service.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:watchlistfy/models/common/base_states.dart';
 import 'package:watchlistfy/models/common/content_type.dart';
 import 'package:watchlistfy/pages/main/actor/actor_content_page.dart';
@@ -31,7 +30,7 @@ class PreviewActorList extends StatelessWidget {
               contentProvider,
               cupertinoTheme,
             )
-          : _buildLoadingList(cupertinoTheme),
+          : _buildHighPerformanceLoadingList(cupertinoTheme),
     );
   }
 
@@ -158,7 +157,8 @@ class PreviewActorList extends StatelessWidget {
       maxWidthDiskCache: 300,
       errorListener: (_) {},
       errorWidget: (context, _, __) => _buildPlaceholderImage(theme),
-      progressIndicatorBuilder: (_, __, ___) => _buildLoadingImage(theme),
+      progressIndicatorBuilder: (_, __, ___) =>
+          _buildHighPerformanceLoadingImage(theme),
     );
   }
 
@@ -176,20 +176,36 @@ class PreviewActorList extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingImage(CupertinoThemeData theme) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Shimmer.fromColors(
-        baseColor: theme.bgTextColor.withValues(alpha: 0.1),
-        highlightColor: theme.bgTextColor.withValues(alpha: 0.05),
+  Widget _buildHighPerformanceLoadingImage(CupertinoThemeData theme) {
+    return RepaintBoundary(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          color: theme.bgTextColor.withValues(alpha: 0.1),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.bgTextColor.withValues(alpha: 0.1),
+                theme.bgTextColor.withValues(alpha: 0.05),
+                theme.bgTextColor.withValues(alpha: 0.08),
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              CupertinoIcons.person_crop_circle,
+              size: 24,
+              color: theme.bgTextColor.withValues(alpha: 0.3),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLoadingList(CupertinoThemeData theme) {
+  Widget _buildHighPerformanceLoadingList(CupertinoThemeData theme) {
     return ListView(
       scrollDirection: Axis.horizontal,
       children: List.generate(
@@ -198,19 +214,17 @@ class PreviewActorList extends StatelessWidget {
           padding: index == 0
               ? const EdgeInsets.only(left: 8, right: 6)
               : const EdgeInsets.symmetric(horizontal: 6),
-          child: Container(
-            width: 140,
-            decoration: BoxDecoration(
-              color: theme.onBgColor,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: CupertinoColors.systemGrey,
-                width: 1,
+          child: RepaintBoundary(
+            child: Container(
+              width: 140,
+              decoration: BoxDecoration(
+                color: theme.onBgColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: CupertinoColors.systemGrey.withValues(alpha: 0.3),
+                  width: 1,
+                ),
               ),
-            ),
-            child: Shimmer.fromColors(
-              baseColor: CupertinoColors.systemGrey,
-              highlightColor: CupertinoColors.systemGrey3,
               child: Column(
                 children: [
                   Expanded(
@@ -218,8 +232,24 @@ class PreviewActorList extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: CupertinoColors.systemGrey,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            CupertinoColors.systemGrey6,
+                            CupertinoColors.systemGrey5,
+                            CupertinoColors.systemGrey4,
+                          ],
+                          stops: const [0.0, 0.5, 1.0],
+                        ),
                         borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          CupertinoIcons.person_crop_circle,
+                          size: 28,
+                          color: CupertinoColors.systemGrey3,
+                        ),
                       ),
                     ),
                   ),
@@ -231,7 +261,12 @@ class PreviewActorList extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: CupertinoColors.systemGrey,
+                        gradient: const LinearGradient(
+                          colors: [
+                            CupertinoColors.systemGrey6,
+                            CupertinoColors.systemGrey5,
+                          ],
+                        ),
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
