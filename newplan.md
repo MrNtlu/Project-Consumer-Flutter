@@ -10,13 +10,11 @@
 - Add logs for charts
 - Pinecone Search
 
-## Backend, decrease the ai recommendation time
-
-Decrease to 1 day for premium, 1 week to normal users and change in frontend and pages
-
 ## Mobile, stats page finish and improve
 
 Implement stats page, if necessary add more data!
+
+- Add import options
 
 ## Replace Dialog
 
